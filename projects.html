@@ -2,97 +2,85 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kirk Automations — Projects</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0a0a14;color:#e0e0e0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;min-height:100vh;overflow-x:hidden}
-
 .hero{text-align:center;padding:60px 20px 40px;background:linear-gradient(180deg,#111128 0%,#0a0a14 100%)}
-.hero h1{
-  font-size:clamp(28px,8vw,52px);font-weight:700;letter-spacing:-1px;margin-bottom:8px;
-  background:linear-gradient(135deg,#e94560,#ff7eb3);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
+.hero h1{font-size:clamp(28px,8vw,52px);font-weight:700;letter-spacing:-1px;margin-bottom:8px;background:linear-gradient(135deg,#e94560,#ff7eb3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero p{font-size:clamp(14px,3.5vw,18px);color:#666;max-width:500px;margin:0 auto}
-
 .content{max-width:900px;margin:0 auto;padding:0 20px 60px}
-
 .section{margin-bottom:40px}
 .section-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.06)}
 .section-header .icon{font-size:24px}
 .section-header h2{font-size:clamp(16px,4vw,20px);font-weight:600;color:#ccc}
-
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:14px}
-.card{
-  display:flex;align-items:center;gap:16px;
-  background:linear-gradient(145deg,#141428,#0f0f20);
-  border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:18px 20px;
-  text-decoration:none;color:#fff;transition:transform .2s,box-shadow .2s,border-color .2s;
-  touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-height:80px;
-}
-.card:hover,.card:active{
-  transform:translateY(-2px);box-shadow:0 6px 20px rgba(233,69,96,.15);
-  border-color:rgba(233,69,96,.25);
-}
+.card{display:flex;align-items:center;gap:16px;background:linear-gradient(145deg,#141428,#0f0f20);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:18px 20px;text-decoration:none;color:#fff;transition:transform .2s,box-shadow .2s,border-color .2s;min-height:80px}
+.card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(233,69,96,.15);border-color:rgba(233,69,96,.25)}
 .card .card-icon{font-size:36px;flex-shrink:0;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
 .card .card-info{flex:1;min-width:0}
 .card .card-info h3{font-size:clamp(14px,3.5vw,17px);font-weight:600;margin-bottom:3px;line-height:1.3}
 .card .card-info p{font-size:clamp(12px,2.8vw,13px);color:#777;line-height:1.4}
 .card .arrow{color:#444;font-size:18px;flex-shrink:0;transition:color .2s,transform .2s}
 .card:hover .arrow{color:#e94560;transform:translateX(3px)}
-
 .tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px;margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
-.tag-site{background:rgba(233,69,96,.15);color:#e94560}
+.tag-featured{background:rgba(233,69,96,.15);color:#e94560}
 .tag-games{background:rgba(233,69,96,.15);color:#e94560}
 .tag-tools{background:rgba(59,130,246,.15);color:#3b82f6}
 .tag-fun{background:rgba(168,85,247,.15);color:#a855f7}
-.tag-phone{background:rgba(34,197,94,.15);color:#22c55e}
-.tag-client{background:rgba(251,191,36,.15);color:#fbbf24}
-
+.tag-client{background:rgba(34,197,94,.15);color:#22c55e}
 .footer{text-align:center;padding:30px 20px;color:#444;font-size:13px;border-top:1px solid rgba(255,255,255,.04)}
-.footer a{color:#666;text-decoration:none}
-.footer a:hover{color:#e94560}
+.footer a{color:#e94560;text-decoration:none}
+.footer a:hover{text-decoration:underline}
 </style>
 </head>
 <body>
+
 <div class="hero">
   <h1>Kirk Automations</h1>
-  <p>Projects, games, tools, and experiments</p>
+  <p>Projects, games, tools, and demos — all built by our team.</p>
 </div>
+
 <div class="content">
 
-  <!-- Featured -->
+  <!-- FEATURED -->
   <div class="section">
-    <div class="section-header"><span class="icon">⭐</span><h2>Featured</h2></div>
+    <div class="section-header">
+      <span class="icon">⭐</span>
+      <h2>Featured</h2>
+    </div>
     <div class="cards">
-      <a class="card" href="./">
-        <span class="card-icon">🏢</span>
+      <a class="card" href="index.html">
+        <div class="card-icon">🏢</div>
         <div class="card-info">
-          <h3>Kirk Automations</h3>
-          <p>Our main site — custom automation software & AI agents</p>
-          <span class="tag tag-site">Website</span>
+          <h3>Kirk Automations Website</h3>
+          <p>Our main site — services, OpenClaw AI agents, contact</p>
+          <span class="tag tag-featured">Main Site</span>
         </div>
         <span class="arrow">→</span>
       </a>
     </div>
   </div>
 
-  <!-- Games -->
+  <!-- GAMES -->
   <div class="section">
-    <div class="section-header"><span class="icon">🎮</span><h2>Games</h2></div>
+    <div class="section-header">
+      <span class="icon">🎮</span>
+      <h2>Games</h2>
+    </div>
     <div class="cards">
       <a class="card" href="https://kirkautomations.github.io/eie-games/">
-        <span class="card-icon">⚡</span>
+        <div class="card-icon">⚡</div>
         <div class="card-info">
-          <h3>EIE Games</h3>
-          <p>15 games that pay for themselves — learn to save $2,000+/yr</p>
+          <h3>EIE Games — 15 Games</h3>
+          <p>Learn to save $2,000+/yr and 600+ hrs/yr — through games</p>
           <span class="tag tag-games">15 Games</span>
         </div>
         <span class="arrow">→</span>
       </a>
       <a class="card" href="games/automation-quiz.html">
-        <span class="card-icon">💰</span>
+        <div class="card-icon">💰</div>
         <div class="card-info">
           <h3>The Automation Price Is Right</h3>
           <p>Guess how many hours each automation saves per year</p>
@@ -101,7 +89,7 @@ body{background:#0a0a14;color:#e0e0e0;font-family:'Segoe UI',system-ui,-apple-sy
         <span class="arrow">→</span>
       </a>
       <a class="card" href="games/savings-snake.html">
-        <span class="card-icon">🐍</span>
+        <div class="card-icon">🐍</div>
         <div class="card-info">
           <h3>Savings Snake</h3>
           <p>Classic snake — eat automations, rack up hours saved</p>
@@ -110,55 +98,64 @@ body{background:#0a0a14;color:#e0e0e0;font-family:'Segoe UI',system-ui,-apple-sy
         <span class="arrow">→</span>
       </a>
       <a class="card" href="games/automation-match.html">
-        <span class="card-icon">🧠</span>
+        <div class="card-icon">🧠</div>
         <div class="card-info">
           <h3>Automation Match</h3>
-          <p>Memory game — match automations to descriptions</p>
+          <p>Memory card game — match automations to descriptions</p>
           <span class="tag tag-games">Memory</span>
         </div>
         <span class="arrow">→</span>
       </a>
       <a class="card" href="games/hours-stacker.html">
-        <span class="card-icon">🧱</span>
+        <div class="card-icon">🧱</div>
         <div class="card-info">
           <h3>Hours Stacker</h3>
-          <p>Tetris-style — stack automation blocks</p>
+          <p>Tetris-style — stack automation blocks, clear rows</p>
           <span class="tag tag-games">Puzzle</span>
         </div>
         <span class="arrow">→</span>
       </a>
       <a class="card" href="games/pipeline-builder.html">
-        <span class="card-icon">🔗</span>
+        <div class="card-icon">🔗</div>
         <div class="card-info">
           <h3>Pipeline Builder</h3>
-          <p>Build real automation workflows step by step</p>
-          <span class="tag tag-games">Strategy</span>
+          <p>Connect the automation workflow in the right order</p>
+          <span class="tag tag-games">Puzzle</span>
         </div>
         <span class="arrow">→</span>
       </a>
       <a class="card" href="https://kirkautomations.github.io/ankle-hero/">
-        <span class="card-icon">🦶</span>
+        <div class="card-icon">🦶</div>
         <div class="card-info">
           <h3>Ankle Hero</h3>
-          <p>Therapeutic ankle game for pediatric toe walkers — 12 games</p>
-          <span class="tag tag-phone">Phone Game</span>
+          <p>Therapeutic ankle dorsiflexion game — 12 mini-games</p>
+          <span class="tag tag-games">Health</span>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://kirkautomations.github.io/game-vault/">
+        <div class="card-icon">🎰</div>
+        <div class="card-info">
+          <h3>Game Vault</h3>
+          <p>AI-powered games collection</p>
+          <span class="tag tag-games">Collection</span>
         </div>
         <span class="arrow">→</span>
       </a>
       <a class="card" href="https://kirkautomations.github.io/mario-spanish-games/">
-        <span class="card-icon">🃏</span>
+        <div class="card-icon">🇪🇸</div>
         <div class="card-info">
           <h3>Mario's Spanish Academy</h3>
-          <p>Spider Solitaire + Sudoku with forced Spanish learning</p>
-          <span class="tag tag-fun">Learning</span>
+          <p>Spider Solitaire + Sudoku with Spanish learning gates</p>
+          <span class="tag tag-games">Education</span>
         </div>
         <span class="arrow">→</span>
       </a>
       <a class="card" href="https://kirkautomations.github.io/swirlybrew/">
-        <span class="card-icon">🍺</span>
+        <div class="card-icon">🍺</div>
         <div class="card-info">
           <h3>SwirlyBrew</h3>
-          <p>Idle drink tycoon — 3 editions</p>
+          <p>Idle drink tycoon — three editions</p>
           <span class="tag tag-fun">Idle</span>
         </div>
         <span class="arrow">→</span>
@@ -166,33 +163,27 @@ body{background:#0a0a14;color:#e0e0e0;font-family:'Segoe UI',system-ui,-apple-sy
     </div>
   </div>
 
-  <!-- Tools -->
+  <!-- TOOLS & APPS -->
   <div class="section">
-    <div class="section-header"><span class="icon">🛠️</span><h2>Tools & Apps</h2></div>
+    <div class="section-header">
+      <span class="icon">🛠️</span>
+      <h2>Tools & Apps</h2>
+    </div>
     <div class="cards">
       <a class="card" href="https://kirkautomations.github.io/eie-food-lab/">
-        <span class="card-icon">🧪</span>
+        <div class="card-icon">🧪</div>
         <div class="card-info">
           <h3>EIE Food Lab</h3>
           <p>Food rankings, recipes, meal planner, budget calculator</p>
-          <span class="tag tag-tools">App</span>
-        </div>
-        <span class="arrow">→</span>
-      </a>
-      <a class="card" href="https://kirkautomations.github.io/game-vault/">
-        <span class="card-icon">🎲</span>
-        <div class="card-info">
-          <h3>Game Vault</h3>
-          <p>Video game collection tracker</p>
-          <span class="tag tag-tools">Tool</span>
+          <span class="tag tag-tools">Web App</span>
         </div>
         <span class="arrow">→</span>
       </a>
       <a class="card" href="https://kirkautomations.github.io/voice-to-text-chrome-extension/">
-        <span class="card-icon">🎤</span>
+        <div class="card-icon">🎤</div>
         <div class="card-info">
           <h3>Voice-to-Text Extension</h3>
-          <p>Chrome extension — smart capitalization & punctuation</p>
+          <p>Chrome extension — smart voice input for any website</p>
           <span class="tag tag-tools">Extension</span>
         </div>
         <span class="arrow">→</span>
@@ -200,33 +191,36 @@ body{background:#0a0a14;color:#e0e0e0;font-family:'Segoe UI',system-ui,-apple-sy
     </div>
   </div>
 
-  <!-- Fun -->
+  <!-- FUN STUFF -->
   <div class="section">
-    <div class="section-header"><span class="icon">✨</span><h2>Fun Stuff</h2></div>
+    <div class="section-header">
+      <span class="icon">🎨</span>
+      <h2>Fun Stuff</h2>
+    </div>
     <div class="cards">
       <a class="card" href="https://kirkautomations.github.io/advisor-memes/">
-        <span class="card-icon">🎭</span>
+        <div class="card-icon">🧠</div>
         <div class="card-info">
-          <h3>AI Advisor Memes</h3>
-          <p>80 memes from the Calliclean Advisory Panel</p>
+          <h3>AI Advisory Panel Memes</h3>
+          <p>80 memes from 31 philosopher/advisor characters</p>
           <span class="tag tag-fun">Memes</span>
         </div>
         <span class="arrow">→</span>
       </a>
       <a class="card" href="https://kirkautomations.github.io/eie-memes/">
-        <span class="card-icon">😂</span>
+        <div class="card-icon">😂</div>
         <div class="card-info">
           <h3>EIE Memes</h3>
-          <p>130 memes from EfficiencyIsEverything.com</p>
+          <p>130 efficiency memes — gallery with search & filter</p>
           <span class="tag tag-fun">Memes</span>
         </div>
         <span class="arrow">→</span>
       </a>
       <a class="card" href="https://kirkautomations.github.io/eie-social-v2/">
-        <span class="card-icon">📱</span>
+        <div class="card-icon">📱</div>
         <div class="card-info">
-          <h3>EIE Social Media</h3>
-          <p>33 social media assets — gallery</p>
+          <h3>EIE Social Media Gallery</h3>
+          <p>33 social media assets for Efficiency Is Everything</p>
           <span class="tag tag-fun">Gallery</span>
         </div>
         <span class="arrow">→</span>
@@ -234,25 +228,28 @@ body{background:#0a0a14;color:#e0e0e0;font-family:'Segoe UI',system-ui,-apple-sy
     </div>
   </div>
 
-  <!-- Client Work -->
+  <!-- CLIENT WORK -->
   <div class="section">
-    <div class="section-header"><span class="icon">💼</span><h2>Client Demos</h2></div>
+    <div class="section-header">
+      <span class="icon">💼</span>
+      <h2>Client Demos</h2>
+    </div>
     <div class="cards">
       <a class="card" href="https://kirkautomations.github.io/luxmichigan-redesign/">
-        <span class="card-icon">🏠</span>
+        <div class="card-icon">✨</div>
         <div class="card-info">
           <h3>Lux Michigan Redesign</h3>
-          <p>Website modernization demo</p>
-          <span class="tag tag-client">Client</span>
+          <p>Modern website redesign demo</p>
+          <span class="tag tag-client">Redesign</span>
         </div>
         <span class="arrow">→</span>
       </a>
       <a class="card" href="https://kirkautomations.github.io/michiganmoms-redesign/">
-        <span class="card-icon">👩‍👧</span>
+        <div class="card-icon">👩‍👧</div>
         <div class="card-info">
           <h3>Michigan Moms Redesign</h3>
-          <p>Website modernization demo</p>
-          <span class="tag tag-client">Client</span>
+          <p>Modern website redesign demo</p>
+          <span class="tag tag-client">Redesign</span>
         </div>
         <span class="arrow">→</span>
       </a>
@@ -260,8 +257,10 @@ body{background:#0a0a14;color:#e0e0e0;font-family:'Segoe UI',system-ui,-apple-sy
   </div>
 
 </div>
+
 <div class="footer">
-  <p>&copy; 2023–2026 Kirk Automations &nbsp;|&nbsp; <a href="./">Main Site</a> &nbsp;|&nbsp; <a href="mailto:michael.kirk@kirkautomations.com">Contact</a></p>
+  <p>Kirk Automations — <a href="index.html">Main Site</a> — <a href="mailto:michael.kirk@kirkautomations.com">Contact</a></p>
 </div>
+
 </body>
 </html>
