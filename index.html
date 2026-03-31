@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="midnight">
+<html lang="en" data-theme="arctic">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,80 +13,87 @@
 /* ═══════════════════════════════════════════════════════
    THEME ENGINE — 10 Professional Color Themes
    ═══════════════════════════════════════════════════════ */
-:root {
-  --transition-speed: 0.45s;
-  --glow-intensity: 0.5;
-}
+:root{--transition-speed:.45s;--glow-intensity:.45}
 
-[data-theme="midnight"] {
-  --bg-primary: #0a0a0f; --bg-secondary: #12121a; --bg-card: #1a1a2e;
-  --bg-card-hover: #22223a; --text-primary: #f0f0f5; --text-secondary: #8888aa;
-  --accent: #6c63ff; --accent-glow: rgba(108,99,255,0.35); --accent-secondary: #ff6b9d;
-  --gradient-start: #6c63ff; --gradient-end: #ff6b9d;
-  --border-color: rgba(108,99,255,0.15); --particle-color: 108,99,255;
+/* 1. Midnight — Deep navy + amber/gold instrument panel */
+[data-theme="midnight"]{
+  --bg-primary:#080c18;--bg-secondary:#0e1428;--bg-card:#141c32;
+  --bg-card-hover:#1a2540;--text-primary:#e8ecf4;--text-secondary:#7a8aaa;
+  --accent:#f0b429;--accent-glow:rgba(240,180,41,.3);--accent-secondary:#ff9f43;
+  --gradient-start:#f0b429;--gradient-end:#ff9f43;
+  --border-color:rgba(240,180,41,.12);--particle-color:240,180,41;
 }
-[data-theme="cyberteal"] {
-  --bg-primary: #050d10; --bg-secondary: #0a1a1f; --bg-card: #0f2a30;
-  --bg-card-hover: #153a42; --text-primary: #e0f7fa; --text-secondary: #80cbc4;
-  --accent: #00e5ff; --accent-glow: rgba(0,229,255,0.35); --accent-secondary: #1de9b6;
-  --gradient-start: #00e5ff; --gradient-end: #1de9b6;
-  --border-color: rgba(0,229,255,0.15); --particle-color: 0,229,255;
+/* 2. Cyber Teal — Teal core + magenta pop */
+[data-theme="cyberteal"]{
+  --bg-primary:#04090d;--bg-secondary:#081620;--bg-card:#0c2230;
+  --bg-card-hover:#123040;--text-primary:#d8f4f8;--text-secondary:#6cc4d0;
+  --accent:#00ddb5;--accent-glow:rgba(0,221,181,.3);--accent-secondary:#f050a0;
+  --gradient-start:#00ddb5;--gradient-end:#f050a0;
+  --border-color:rgba(0,221,181,.14);--particle-color:0,221,181;
 }
-[data-theme="solarflare"] {
-  --bg-primary: #0f0800; --bg-secondary: #1a1005; --bg-card: #2a1a0a;
-  --bg-card-hover: #3a2510; --text-primary: #fff3e0; --text-secondary: #ffab40;
-  --accent: #ff6d00; --accent-glow: rgba(255,109,0,0.35); --accent-secondary: #ffd740;
-  --gradient-start: #ff6d00; --gradient-end: #ffd740;
-  --border-color: rgba(255,109,0,0.15); --particle-color: 255,109,0;
+/* 3. Solar Flare — Hot orange amber */
+[data-theme="solarflare"]{
+  --bg-primary:#0f0800;--bg-secondary:#1a1005;--bg-card:#2a1a0a;
+  --bg-card-hover:#3a2510;--text-primary:#fff3e0;--text-secondary:#ffab40;
+  --accent:#ff6d00;--accent-glow:rgba(255,109,0,.3);--accent-secondary:#ffd740;
+  --gradient-start:#ff6d00;--gradient-end:#ffd740;
+  --border-color:rgba(255,109,0,.12);--particle-color:255,109,0;
 }
-[data-theme="arctic"] {
-  --bg-primary: #f5f7ff; --bg-secondary: #e8edff; --bg-card: #ffffff;
-  --bg-card-hover: #f0f4ff; --text-primary: #1a1a2e; --text-secondary: #556688;
-  --accent: #2962ff; --accent-glow: rgba(41,98,255,0.2); --accent-secondary: #0091ea;
-  --gradient-start: #2962ff; --gradient-end: #0091ea;
-  --border-color: rgba(41,98,255,0.12); --particle-color: 41,98,255;
+/* 4. Arctic — Clean light (DEFAULT) */
+[data-theme="arctic"]{
+  --bg-primary:#f5f7ff;--bg-secondary:#e6ecfa;--bg-card:#ffffff;
+  --bg-card-hover:#eef2ff;--text-primary:#141830;--text-secondary:#4a5578;
+  --accent:#2558d9;--accent-glow:rgba(37,88,217,.18);--accent-secondary:#0094e8;
+  --gradient-start:#2558d9;--gradient-end:#0094e8;
+  --border-color:rgba(37,88,217,.10);--particle-color:37,88,217;
 }
-[data-theme="emerald"] {
-  --bg-primary: #050f0a; --bg-secondary: #0a1a10; --bg-card: #102a18;
-  --bg-card-hover: #153a22; --text-primary: #e8f5e9; --text-secondary: #81c784;
-  --accent: #00e676; --accent-glow: rgba(0,230,118,0.35); --accent-secondary: #69f0ae;
-  --gradient-start: #00e676; --gradient-end: #69f0ae;
-  --border-color: rgba(0,230,118,0.15); --particle-color: 0,230,118;
+/* 5. Emerald — Industrial green-gold */
+[data-theme="emerald"]{
+  --bg-primary:#040d08;--bg-secondary:#081a0f;--bg-card:#0e2a18;
+  --bg-card-hover:#143a22;--text-primary:#e2f5e8;--text-secondary:#6ecf8a;
+  --accent:#00e676;--accent-glow:rgba(0,230,118,.3);--accent-secondary:#ffd600;
+  --gradient-start:#00e676;--gradient-end:#b2ff59;
+  --border-color:rgba(0,230,118,.14);--particle-color:0,230,118;
 }
-[data-theme="royal"] {
-  --bg-primary: #0a0510; --bg-secondary: #140a20; --bg-card: #1e1030;
-  --bg-card-hover: #2a1842; --text-primary: #f3e5f5; --text-secondary: #ce93d8;
-  --accent: #d500f9; --accent-glow: rgba(213,0,249,0.35); --accent-secondary: #ea80fc;
-  --gradient-start: #d500f9; --gradient-end: #ea80fc;
-  --border-color: rgba(213,0,249,0.15); --particle-color: 213,0,249;
+/* 6. Royal — Deep amethyst + rose gold */
+[data-theme="royal"]{
+  --bg-primary:#0c0616;--bg-secondary:#140a24;--bg-card:#1e1038;
+  --bg-card-hover:#28184a;--text-primary:#efe0ff;--text-secondary:#b08cd8;
+  --accent:#b388ff;--accent-glow:rgba(179,136,255,.3);--accent-secondary:#ff80ab;
+  --gradient-start:#b388ff;--gradient-end:#ff80ab;
+  --border-color:rgba(179,136,255,.14);--particle-color:179,136,255;
 }
-[data-theme="crimson"] {
-  --bg-primary: #0f0508; --bg-secondary: #1a0a10; --bg-card: #2a1018;
-  --bg-card-hover: #3a1522; --text-primary: #fce4ec; --text-secondary: #ef9a9a;
-  --accent: #ff1744; --accent-glow: rgba(255,23,68,0.35); --accent-secondary: #ff5252;
-  --gradient-start: #ff1744; --gradient-end: #ff5252;
-  --border-color: rgba(255,23,68,0.15); --particle-color: 255,23,68;
+/* 7. Crimson — Industrial red + chrome */
+[data-theme="crimson"]{
+  --bg-primary:#100408;--bg-secondary:#1c0810;--bg-card:#2c0e1a;
+  --bg-card-hover:#3c1424;--text-primary:#ffe0e8;--text-secondary:#d88898;
+  --accent:#ff2d55;--accent-glow:rgba(255,45,85,.3);--accent-secondary:#b0bec5;
+  --gradient-start:#ff2d55;--gradient-end:#ff6b81;
+  --border-color:rgba(255,45,85,.14);--particle-color:255,45,85;
 }
-[data-theme="sand"] {
-  --bg-primary: #faf8f5; --bg-secondary: #f0ece5; --bg-card: #ffffff;
-  --bg-card-hover: #faf5ee; --text-primary: #2a2520; --text-secondary: #8a7a6a;
-  --accent: #c17900; --accent-glow: rgba(193,121,0,0.2); --accent-secondary: #e6a030;
-  --gradient-start: #c17900; --gradient-end: #e6a030;
-  --border-color: rgba(193,121,0,0.12); --particle-color: 193,121,0;
+/* 8. Warm Sand — Light warm */
+[data-theme="sand"]{
+  --bg-primary:#faf8f5;--bg-secondary:#f0ece5;--bg-card:#ffffff;
+  --bg-card-hover:#faf5ee;--text-primary:#2a2520;--text-secondary:#8a7a6a;
+  --accent:#c17900;--accent-glow:rgba(193,121,0,.18);--accent-secondary:#e6a030;
+  --gradient-start:#c17900;--gradient-end:#e6a030;
+  --border-color:rgba(193,121,0,.10);--particle-color:193,121,0;
 }
-[data-theme="neonnoir"] {
-  --bg-primary: #000000; --bg-secondary: #0a0a0a; --bg-card: #111111;
-  --bg-card-hover: #1a1a1a; --text-primary: #ffffff; --text-secondary: #666666;
-  --accent: #39ff14; --accent-glow: rgba(57,255,20,0.4); --accent-secondary: #ff073a;
-  --gradient-start: #39ff14; --gradient-end: #ff073a;
-  --border-color: rgba(57,255,20,0.15); --particle-color: 57,255,20;
+/* 9. Neon Noir — Industrial cyan on pitch black (CNC screen) */
+[data-theme="neonnoir"]{
+  --bg-primary:#000000;--bg-secondary:#060808;--bg-card:#0c1214;
+  --bg-card-hover:#121c20;--text-primary:#e0f8f0;--text-secondary:#508888;
+  --accent:#00ffcc;--accent-glow:rgba(0,255,204,.35);--accent-secondary:#ff3366;
+  --gradient-start:#00ffcc;--gradient-end:#00ccff;
+  --border-color:rgba(0,255,204,.12);--particle-color:0,255,204;
 }
-[data-theme="ocean"] {
-  --bg-primary: #020810; --bg-secondary: #051020; --bg-card: #0a1a30;
-  --bg-card-hover: #102540; --text-primary: #e3f2fd; --text-secondary: #64b5f6;
-  --accent: #2979ff; --accent-glow: rgba(41,121,255,0.35); --accent-secondary: #00b0ff;
-  --gradient-start: #2979ff; --gradient-end: #00b0ff;
-  --border-color: rgba(41,121,255,0.15); --particle-color: 41,121,255;
+/* 10. Ocean Depth — Deep sea + bioluminescence */
+[data-theme="ocean"]{
+  --bg-primary:#020610;--bg-secondary:#040c1c;--bg-card:#081430;
+  --bg-card-hover:#0c1e44;--text-primary:#d0e8ff;--text-secondary:#5090c0;
+  --accent:#00b8d4;--accent-glow:rgba(0,184,212,.3);--accent-secondary:#18ffff;
+  --gradient-start:#00b8d4;--gradient-end:#18ffff;
+  --border-color:rgba(0,184,212,.14);--particle-color:0,184,212;
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -101,7 +108,7 @@ body{
   transition:background var(--transition-speed),color var(--transition-speed);
 }
 a{color:var(--accent);text-decoration:none;transition:all .3s}
-a:hover{filter:brightness(1.3)}
+a:hover{filter:brightness(1.2)}
 ::selection{background:var(--accent);color:var(--bg-primary)}
 ::-webkit-scrollbar{width:8px}
 ::-webkit-scrollbar-track{background:var(--bg-secondary)}
@@ -110,46 +117,48 @@ a:hover{filter:brightness(1.3)}
 /* ═══════════════════════════════════════════════════════
    PARTICLE CANVAS + CURSOR GLOW
    ═══════════════════════════════════════════════════════ */
-#particle-canvas{
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  z-index:0;pointer-events:none;
-}
+#particle-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
 #cursor-glow{
-  position:fixed;width:500px;height:500px;border-radius:50%;
-  background:radial-gradient(circle,var(--accent-glow) 0%,transparent 70%);
+  position:fixed;width:700px;height:700px;border-radius:50%;
+  background:radial-gradient(circle,var(--accent-glow) 0%,transparent 65%);
   pointer-events:none;z-index:1;transform:translate(-50%,-50%);
-  opacity:0;transition:opacity .4s;mix-blend-mode:screen;
+  opacity:0;transition:opacity .5s;
 }
-body:hover #cursor-glow{opacity:var(--glow-intensity)}
+body:hover #cursor-glow{opacity:.7}
+
+/* Light themes: softer glow */
+[data-theme="arctic"] #cursor-glow,[data-theme="sand"] #cursor-glow{
+  width:600px;height:600px;
+}
+[data-theme="arctic"] body:hover #cursor-glow,[data-theme="sand"] body:hover #cursor-glow{opacity:.4}
 
 /* ═══════════════════════════════════════════════════════
-   THEME SWITCHER — Fixed right rail
+   THEME SWITCHER
    ═══════════════════════════════════════════════════════ */
 #themeSwitcher{
   position:fixed;top:50%;right:16px;transform:translateY(-50%);
   z-index:9999;display:flex;flex-direction:column;gap:6px;
-  padding:10px 6px;background:rgba(20,20,30,0.7);
+  padding:10px 6px;background:rgba(20,20,30,.75);
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  border-radius:30px;border:1px solid rgba(255,255,255,0.08);
+  border-radius:30px;border:1px solid rgba(255,255,255,.06);
 }
-[data-theme="arctic"] #themeSwitcher,
-[data-theme="sand"] #themeSwitcher{
-  background:rgba(255,255,255,0.8);
-  border-color:rgba(0,0,0,0.08);
+[data-theme="arctic"] #themeSwitcher,[data-theme="sand"] #themeSwitcher{
+  background:rgba(255,255,255,.82);border-color:rgba(0,0,0,.06);
 }
 .theme-dot{
   width:18px;height:18px;border-radius:50%;cursor:pointer;
-  border:2px solid transparent;transition:all .25s;
-  display:block;position:relative;
+  border:2px solid transparent;transition:all .25s;display:block;position:relative;
 }
-.theme-dot:hover{transform:scale(1.35);border-color:rgba(255,255,255,0.8)}
-.theme-dot.active{border-color:#fff;box-shadow:0 0 10px currentColor;transform:scale(1.25)}
+.theme-dot:hover{transform:scale(1.35);border-color:rgba(255,255,255,.8)}
+[data-theme="arctic"] .theme-dot:hover,[data-theme="sand"] .theme-dot:hover{border-color:rgba(0,0,0,.4)}
+.theme-dot.active{border-color:#fff;box-shadow:0 0 8px rgba(255,255,255,.5);transform:scale(1.25)}
+[data-theme="arctic"] .theme-dot.active,[data-theme="sand"] .theme-dot.active{border-color:#333;box-shadow:0 0 8px rgba(0,0,0,.2)}
 .theme-dot[data-label]::after{
   content:attr(data-label);position:absolute;right:30px;top:50%;
   transform:translateY(-50%);background:var(--bg-card);color:var(--text-primary);
   padding:4px 10px;border-radius:6px;font-size:11px;white-space:nowrap;
   opacity:0;pointer-events:none;transition:opacity .2s;
-  border:1px solid var(--border-color);
+  border:1px solid var(--border-color);box-shadow:0 2px 8px rgba(0,0,0,.15);
 }
 .theme-dot:hover::after{opacity:1}
 
@@ -162,25 +171,26 @@ nav{
   background:transparent;transition:all .35s;
 }
 nav.scrolled{
-  background:rgba(10,10,15,0.88);
+  background:rgba(10,10,15,.88);
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border-color);padding:12px 40px;
 }
-[data-theme="arctic"] nav.scrolled,
-[data-theme="sand"] nav.scrolled{background:rgba(245,247,255,0.92)}
+[data-theme="arctic"] nav.scrolled,[data-theme="sand"] nav.scrolled{background:rgba(245,247,255,.92)}
 
-.nav-logo{
-  font-size:1.4rem;font-weight:800;letter-spacing:-.5px;
+.nav-logo{font-size:1.4rem;font-weight:800;letter-spacing:-.5px;display:flex;gap:0}
+.nav-logo-kirk{
   background:linear-gradient(135deg,var(--gradient-start),var(--gradient-end));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-.nav-logo span{font-weight:400;opacity:.7}
+.nav-logo-auto{
+  color:var(--text-secondary);font-weight:400;
+  -webkit-text-fill-color:var(--text-secondary);
+}
 
 .nav-links{display:flex;gap:28px;align-items:center}
 .nav-links a{
   color:var(--text-secondary);font-size:.85rem;font-weight:500;
-  letter-spacing:.5px;text-transform:uppercase;
-  transition:color .3s;position:relative;
+  letter-spacing:.5px;text-transform:uppercase;transition:color .3s;position:relative;
 }
 .nav-links a::after{
   content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;
@@ -200,10 +210,7 @@ nav.scrolled{
 .nav-cta:hover{transform:translateY(-2px)!important;box-shadow:0 8px 25px var(--accent-glow)!important}
 .nav-cta::after{display:none!important}
 
-.mobile-menu-btn{
-  display:none;background:none;border:none;color:var(--text-primary);
-  font-size:1.5rem;cursor:pointer;
-}
+.mobile-menu-btn{display:none;background:none;border:none;color:var(--text-primary);font-size:1.5rem;cursor:pointer}
 
 /* ═══════════════════════════════════════════════════════
    HERO
@@ -212,49 +219,52 @@ nav.scrolled{
   min-height:100vh;display:flex;align-items:center;justify-content:center;
   text-align:center;padding:120px 40px 80px;position:relative;z-index:2;
 }
-.hero-content{max-width:900px;position:relative;z-index:2}
+.hero-content{max-width:920px;position:relative;z-index:2}
 
-/* Animated grid behind hero */
-.hero-grid{
-  position:absolute;inset:0;overflow:hidden;opacity:.07;pointer-events:none;
-}
-.hero-grid svg{width:100%;height:100%}
+.hero-grid{position:absolute;inset:0;overflow:hidden;opacity:.06;pointer-events:none}
 
+/* OpenClaw badge — BIGGER */
 .hero-badge{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:8px 20px;background:var(--bg-card);
-  border:1px solid var(--accent);border-radius:50px;
-  font-size:.85rem;font-weight:600;color:var(--accent);
-  margin-bottom:28px;cursor:pointer;transition:all .3s;
+  display:inline-flex;align-items:center;gap:10px;
+  padding:12px 28px;background:var(--bg-card);
+  border:2px solid var(--accent);border-radius:50px;
+  font-size:1rem;font-weight:600;color:var(--accent);
+  margin-bottom:32px;cursor:pointer;transition:all .3s;
   animation:pulse-border 2s ease-in-out infinite;
 }
 .hero-badge:hover{background:var(--accent);color:var(--bg-primary);transform:scale(1.05)}
+.hero-badge .badge-new{
+  font-weight:800;font-size:1.1rem;letter-spacing:1px;
+}
 .hero-badge .dot{
-  width:8px;height:8px;background:var(--accent);border-radius:50%;
-  animation:blink 1.4s ease-in-out infinite;
+  width:10px;height:10px;background:var(--accent);border-radius:50%;
+  animation:blink 1.4s ease-in-out infinite;flex-shrink:0;
 }
 .hero-badge:hover .dot{background:var(--bg-primary)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-@keyframes pulse-border{0%,100%{box-shadow:0 0 0 0 var(--accent-glow)}50%{box-shadow:0 0 0 8px transparent}}
+@keyframes pulse-border{0%,100%{box-shadow:0 0 0 0 var(--accent-glow)}50%{box-shadow:0 0 0 10px transparent}}
 
 .hero h1{
-  font-size:clamp(2.5rem,6vw,4.8rem);font-weight:900;
-  line-height:1.08;letter-spacing:-2px;margin-bottom:24px;
+  font-size:clamp(2.5rem,5.5vw,4.5rem);font-weight:900;
+  line-height:1.1;letter-spacing:-2px;margin-bottom:24px;
 }
+.hero h1 .line-static{display:block}
 .gradient-text{
   background:linear-gradient(135deg,var(--gradient-start),var(--gradient-end));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 .typing-cursor{
-  display:inline-block;width:3px;height:.85em;background:var(--accent);
-  margin-left:4px;animation:cblink 1s step-end infinite;vertical-align:baseline;
+  display:inline-block;width:3px;height:.8em;background:var(--accent);
+  margin-left:2px;animation:cblink 1s step-end infinite;vertical-align:baseline;
 }
 @keyframes cblink{0%,100%{opacity:1}50%{opacity:0}}
 
 .hero-sub{
-  font-size:clamp(1rem,2vw,1.25rem);color:var(--text-secondary);
+  font-size:clamp(1rem,1.8vw,1.2rem);color:var(--text-secondary);
   max-width:640px;margin:0 auto 36px;line-height:1.7;
 }
+.hero-sub strong{color:var(--text-primary)}
+
 .hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
 
 .btn{
@@ -269,10 +279,7 @@ nav.scrolled{
   color:#fff;box-shadow:0 4px 20px var(--accent-glow);
 }
 .btn-primary:hover{transform:translateY(-3px);box-shadow:0 8px 30px var(--accent-glow)}
-.btn-secondary{
-  background:var(--bg-card);color:var(--text-primary);
-  border:1px solid var(--border-color);
-}
+.btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border-color)}
 .btn-secondary:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 4px 20px var(--accent-glow)}
 
 .btn .ripple{
@@ -317,15 +324,11 @@ section{position:relative;z-index:2;padding:100px 40px}
   display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:3px;
   text-transform:uppercase;color:var(--accent);margin-bottom:12px;
 }
-.section-title{
-  font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-1px;margin-bottom:14px;
-}
-.section-desc{
-  font-size:1.05rem;color:var(--text-secondary);max-width:600px;margin:0 auto;
-}
+.section-title{font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-1px;margin-bottom:14px}
+.section-desc{font-size:1.05rem;color:var(--text-secondary);max-width:600px;margin:0 auto}
 
 /* ═══════════════════════════════════════════════════════
-   SCROLL REVEAL (starts hidden, animates in)
+   SCROLL REVEAL
    ═══════════════════════════════════════════════════════ */
 .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
@@ -333,7 +336,6 @@ section{position:relative;z-index:2;padding:100px 40px}
 .reveal-left.visible{opacity:1;transform:translateX(0)}
 .reveal-right{opacity:0;transform:translateX(30px);transition:opacity .7s ease,transform .7s ease}
 .reveal-right.visible{opacity:1;transform:translateX(0)}
-/* Stagger */
 .stagger .reveal:nth-child(2){transition-delay:.08s}
 .stagger .reveal:nth-child(3){transition-delay:.16s}
 .stagger .reveal:nth-child(4){transition-delay:.24s}
@@ -359,9 +361,7 @@ section{position:relative;z-index:2;padding:100px 40px}
 /* ═══════════════════════════════════════════════════════
    SERVICES GRID
    ═══════════════════════════════════════════════════════ */
-.services-grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:24px;
-}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:24px}
 .service-card{
   background:var(--bg-card);border:1px solid var(--border-color);
   border-radius:16px;padding:36px 28px;transition:all .35s;
@@ -378,17 +378,28 @@ section{position:relative;z-index:2;padding:100px 40px}
   box-shadow:0 8px 35px var(--accent-glow);transform:translateY(-5px);
 }
 .service-icon{font-size:2.4rem;margin-bottom:18px;display:inline-block;transition:transform .35s}
-.service-card:hover .service-icon{transform:scale(1.15) rotate(-5deg)}
+.service-card:hover .service-icon{transform:scale(1.12)}
 .service-card h3{font-size:1.2rem;font-weight:700;margin-bottom:10px}
 .service-card p{color:var(--text-secondary);font-size:.92rem;line-height:1.7}
 
+/* Game hint on hover */
+.game-hint{
+  display:inline-flex;align-items:center;gap:5px;
+  margin-top:14px;font-size:.78rem;font-weight:600;
+  color:var(--accent);opacity:0;transform:translateY(6px);
+  transition:opacity .3s,transform .3s;cursor:pointer;
+}
+.game-hint .hint-icon{font-size:1rem}
+.service-card:hover .game-hint{opacity:1;transform:translateY(0)}
+.game-hint:hover{text-decoration:underline}
+
 /* ═══════════════════════════════════════════════════════
-   OPENCLAW ANNOUNCEMENT
+   OPENCLAW SECTION
    ═══════════════════════════════════════════════════════ */
 .openclaw-section{padding:100px 40px;position:relative;overflow:hidden}
 .openclaw-section::before{
   content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,var(--accent-glow),transparent 60%);opacity:.08;
+  background:linear-gradient(135deg,var(--accent-glow),transparent 60%);opacity:.06;
 }
 .openclaw-card{
   max-width:800px;margin:0 auto;background:var(--bg-card);
@@ -398,10 +409,8 @@ section{position:relative;z-index:2;padding:100px 40px}
 }
 .openclaw-icon{font-size:3rem;margin-bottom:18px;display:inline-block;animation:floaty 3s ease-in-out infinite}
 @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-
 .openclaw-card h2{font-size:2.1rem;font-weight:800;margin-bottom:14px}
 .openclaw-card>p{color:var(--text-secondary);font-size:1.05rem;margin-bottom:28px;line-height:1.7}
-
 .signup-form{display:flex;gap:12px;max-width:480px;margin:0 auto 14px}
 .signup-form input[type="email"]{
   flex:1;padding:14px 18px;background:var(--bg-primary);border:1px solid var(--border-color);
@@ -420,30 +429,7 @@ section{position:relative;z-index:2;padding:100px 40px}
 .signup-success{display:none;color:var(--accent);font-weight:600;font-size:1.1rem;margin-top:16px}
 
 /* ═══════════════════════════════════════════════════════
-   PROCESS TIMELINE
-   ═══════════════════════════════════════════════════════ */
-.process-timeline{max-width:700px;margin:0 auto;position:relative}
-.process-timeline::before{
-  content:'';position:absolute;top:0;bottom:0;left:30px;width:2px;
-  background:linear-gradient(to bottom,var(--gradient-start),var(--gradient-end));
-}
-.process-step{
-  display:flex;gap:24px;margin-bottom:40px;align-items:flex-start;position:relative;
-}
-.step-num{
-  width:60px;height:60px;min-width:60px;border-radius:50%;
-  background:var(--bg-card);border:2px solid var(--accent);
-  display:flex;align-items:center;justify-content:center;
-  font-weight:800;font-size:1.2rem;color:var(--accent);z-index:1;transition:all .3s;
-}
-.process-step:hover .step-num{
-  background:var(--accent);color:var(--bg-primary);box-shadow:0 0 20px var(--accent-glow);
-}
-.step-content h3{font-size:1.15rem;font-weight:700;margin-bottom:6px}
-.step-content p{color:var(--text-secondary);font-size:.92rem;line-height:1.6}
-
-/* ═══════════════════════════════════════════════════════
-   VALUE PROPS (alternating)
+   VALUE PROPS
    ═══════════════════════════════════════════════════════ */
 .value-section{padding:80px 40px}
 .value-block{
@@ -453,7 +439,7 @@ section{position:relative;z-index:2;padding:100px 40px}
 .value-block:last-child{margin-bottom:0}
 .value-block.reverse{direction:rtl}
 .value-block.reverse>*{direction:ltr}
-.value-text h3{font-size:1.8rem;font-weight:800;margin-bottom:14px;letter-spacing:-.5px}
+.value-text h3{font-size:1.7rem;font-weight:800;margin-bottom:14px;letter-spacing:-.5px}
 .value-text p{color:var(--text-secondary);font-size:1rem;line-height:1.7;margin-bottom:16px}
 .value-visual{
   background:var(--bg-card);border:1px solid var(--border-color);border-radius:16px;
@@ -463,21 +449,35 @@ section{position:relative;z-index:2;padding:100px 40px}
 .value-visual:hover{border-color:var(--accent);box-shadow:0 0 30px var(--accent-glow)}
 
 /* ═══════════════════════════════════════════════════════
+   PROCESS TIMELINE
+   ═══════════════════════════════════════════════════════ */
+.process-timeline{max-width:700px;margin:0 auto;position:relative}
+.process-timeline::before{
+  content:'';position:absolute;top:0;bottom:0;left:30px;width:2px;
+  background:linear-gradient(to bottom,var(--gradient-start),var(--gradient-end));
+}
+.process-step{display:flex;gap:24px;margin-bottom:40px;align-items:flex-start;position:relative}
+.step-num{
+  width:60px;height:60px;min-width:60px;border-radius:50%;
+  background:var(--bg-card);border:2px solid var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:1.2rem;color:var(--accent);z-index:1;transition:all .3s;
+}
+.process-step:hover .step-num{background:var(--accent);color:var(--bg-primary);box-shadow:0 0 20px var(--accent-glow)}
+.step-content h3{font-size:1.15rem;font-weight:700;margin-bottom:6px}
+.step-content p{color:var(--text-secondary);font-size:.92rem;line-height:1.6}
+
+/* ═══════════════════════════════════════════════════════
    TESTIMONIALS
    ═══════════════════════════════════════════════════════ */
-.testimonials-grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;
-}
+.testimonials-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
 .testimonial-card{
   background:var(--bg-card);border:1px solid var(--border-color);
   border-radius:16px;padding:32px;transition:all .3s;
 }
 .testimonial-card:hover{border-color:var(--accent);transform:translateY(-4px)}
 .quote-mark{font-size:3rem;color:var(--accent);opacity:.3;line-height:1;margin-bottom:10px}
-.testimonial-card p{
-  color:var(--text-secondary);font-size:.92rem;line-height:1.7;
-  margin-bottom:16px;font-style:italic;
-}
+.testimonial-card p{color:var(--text-secondary);font-size:.92rem;line-height:1.7;margin-bottom:16px;font-style:italic}
 .testimonial-author{font-weight:700;font-size:.88rem}
 .testimonial-role{font-size:.78rem;color:var(--text-secondary)}
 
@@ -485,9 +485,7 @@ section{position:relative;z-index:2;padding:100px 40px}
    CTA
    ═══════════════════════════════════════════════════════ */
 .cta-section{text-align:center;padding:120px 40px}
-.cta-section h2{
-  font-size:clamp(2rem,4vw,3.2rem);font-weight:900;letter-spacing:-1px;margin-bottom:16px;
-}
+.cta-section h2{font-size:clamp(2rem,4vw,3.2rem);font-weight:900;letter-spacing:-1px;margin-bottom:16px}
 .cta-section p{color:var(--text-secondary);font-size:1.05rem;margin-bottom:36px;max-width:500px;margin-left:auto;margin-right:auto}
 .cta-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
 
@@ -495,17 +493,11 @@ section{position:relative;z-index:2;padding:100px 40px}
    CONTACT
    ═══════════════════════════════════════════════════════ */
 .contact-section{padding:100px 40px}
-.contact-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:60px;max-width:1000px;margin:0 auto;
-}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;max-width:1000px;margin:0 auto}
 .contact-info h3{font-size:1.4rem;font-weight:700;margin-bottom:18px}
 .contact-info p{color:var(--text-secondary);line-height:1.7;margin-bottom:24px}
-.contact-detail{
-  display:flex;align-items:center;gap:12px;margin-bottom:14px;
-  color:var(--text-secondary);font-size:.92rem;
-}
+.contact-detail{display:flex;align-items:center;gap:12px;margin-bottom:14px;color:var(--text-secondary);font-size:.92rem}
 .contact-detail .icon{font-size:1.1rem}
-
 .contact-form{display:flex;flex-direction:column;gap:14px}
 .contact-form input,.contact-form textarea,.contact-form select{
   padding:14px 18px;background:var(--bg-card);border:1px solid var(--border-color);
@@ -525,7 +517,7 @@ footer{
 }
 
 /* ═══════════════════════════════════════════════════════
-   EASTER EGG GAMES
+   GAME PORTAL
    ═══════════════════════════════════════════════════════ */
 .game-portal{
   position:fixed;inset:0;z-index:10000;display:none;align-items:center;
@@ -534,14 +526,15 @@ footer{
 .game-portal.active{display:flex}
 .game-container{
   background:var(--bg-card);border:1px solid var(--accent);border-radius:20px;
-  padding:28px;max-width:600px;width:92%;max-height:80vh;overflow-y:auto;position:relative;
+  padding:28px;max-width:620px;width:92%;max-height:85vh;overflow-y:auto;position:relative;
 }
 .game-close{
   position:absolute;top:12px;right:18px;background:none;border:none;
   color:var(--text-secondary);font-size:1.5rem;cursor:pointer;z-index:1;
 }
 .game-close:hover{color:var(--accent)}
-.game-container h3{font-size:1.3rem;font-weight:700;margin-bottom:14px;text-align:center}
+.game-container h3{font-size:1.3rem;font-weight:700;margin-bottom:6px;text-align:center}
+.game-container .game-subtitle{text-align:center;color:var(--text-secondary);font-size:.82rem;margin-bottom:14px}
 .game-container canvas{width:100%;border-radius:8px;display:block}
 
 .secret-found{
@@ -552,27 +545,6 @@ footer{
   box-shadow:0 4px 20px var(--accent-glow);
 }
 @keyframes secret-pop{0%{transform:translateX(-50%) scale(0)}100%{transform:translateX(-50%) scale(1)}}
-
-/* ═══════════════════════════════════════════════════════
-   GLITCH TEXT
-   ═══════════════════════════════════════════════════════ */
-.glitch{position:relative}
-.glitch::before,.glitch::after{
-  content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%;
-  background:inherit;-webkit-background-clip:text;background-clip:text;
-}
-.glitch::before{
-  animation:g1 3s infinite linear alternate-reverse;
-  clip-path:polygon(0 0,100% 0,100% 33%,0 33%);
-  -webkit-text-fill-color:var(--accent);
-}
-.glitch::after{
-  animation:g2 3s infinite linear alternate-reverse;
-  clip-path:polygon(0 67%,100% 67%,100% 100%,0 100%);
-  -webkit-text-fill-color:var(--accent-secondary);
-}
-@keyframes g1{0%{transform:translate(0)}20%{transform:translate(-2px,2px)}40%{transform:translate(2px,-1px)}60%{transform:translate(-1px,1px)}80%{transform:translate(1px,-2px)}100%{transform:translate(0)}}
-@keyframes g2{0%{transform:translate(0)}20%{transform:translate(2px,-2px)}40%{transform:translate(-2px,1px)}60%{transform:translate(1px,-1px)}80%{transform:translate(-1px,2px)}100%{transform:translate(0)}}
 
 /* ═══════════════════════════════════════════════════════
    MOBILE
@@ -589,6 +561,7 @@ footer{
   section{padding:60px 20px}
   .hero{padding:100px 20px 60px;min-height:auto}
   .hero h1{font-size:2.1rem;letter-spacing:-1px}
+  .hero-badge{font-size:.88rem;padding:10px 20px}
   .stats-bar{grid-template-columns:repeat(2,1fr);gap:12px}
   .services-grid{grid-template-columns:1fr}
   .contact-grid{grid-template-columns:1fr;gap:40px}
@@ -598,32 +571,34 @@ footer{
   .openclaw-card{padding:36px 20px}
   .signup-form{flex-direction:column}
   .scroll-indicator{display:none}
+  .game-hint{opacity:.8!important;transform:none!important}
 }
 </style>
 </head>
 <body>
 
-<!-- Particles -->
 <canvas id="particle-canvas"></canvas>
 <div id="cursor-glow"></div>
 
 <!-- ═══════════════════ THEME SWITCHER ═══════════════════ -->
 <div id="themeSwitcher">
-  <div class="theme-dot active" data-theme="midnight" data-label="Midnight" style="background:#6c63ff"></div>
-  <div class="theme-dot" data-theme="cyberteal" data-label="Cyber Teal" style="background:#00e5ff"></div>
+  <div class="theme-dot" data-theme="midnight" data-label="Midnight" style="background:#f0b429"></div>
+  <div class="theme-dot" data-theme="cyberteal" data-label="Cyber Teal" style="background:#00ddb5"></div>
   <div class="theme-dot" data-theme="solarflare" data-label="Solar Flare" style="background:#ff6d00"></div>
-  <div class="theme-dot" data-theme="arctic" data-label="Arctic" style="background:#2962ff"></div>
+  <div class="theme-dot active" data-theme="arctic" data-label="Arctic" style="background:#2558d9"></div>
   <div class="theme-dot" data-theme="emerald" data-label="Emerald" style="background:#00e676"></div>
-  <div class="theme-dot" data-theme="royal" data-label="Royal Purple" style="background:#d500f9"></div>
-  <div class="theme-dot" data-theme="crimson" data-label="Crimson Steel" style="background:#ff1744"></div>
+  <div class="theme-dot" data-theme="royal" data-label="Royal Purple" style="background:#b388ff"></div>
+  <div class="theme-dot" data-theme="crimson" data-label="Crimson" style="background:#ff2d55"></div>
   <div class="theme-dot" data-theme="sand" data-label="Warm Sand" style="background:#c17900"></div>
-  <div class="theme-dot" data-theme="neonnoir" data-label="Neon Noir" style="background:linear-gradient(135deg,#39ff14,#ff073a)"></div>
-  <div class="theme-dot" data-theme="ocean" data-label="Ocean Depth" style="background:#2979ff"></div>
+  <div class="theme-dot" data-theme="neonnoir" data-label="Neon Noir" style="background:#00ffcc"></div>
+  <div class="theme-dot" data-theme="ocean" data-label="Ocean Depth" style="background:#00b8d4"></div>
 </div>
 
 <!-- ═══════════════════ NAVIGATION ═══════════════════ -->
 <nav id="mainNav">
-  <div class="nav-logo">Kirk<span>Automations</span></div>
+  <div class="nav-logo">
+    <span class="nav-logo-kirk">Kirk</span><span class="nav-logo-auto">Automations</span>
+  </div>
   <div class="nav-links" id="navLinks">
     <a href="#services">Services</a>
     <a href="#openclaw">OpenClaw</a>
@@ -636,29 +611,24 @@ footer{
 
 <!-- ═══════════════════ HERO ═══════════════════ -->
 <section class="hero" id="hero">
-  <!-- Animated dot-grid background -->
   <div class="hero-grid" id="heroGrid"></div>
-
   <div class="hero-content">
     <a href="#openclaw" class="hero-badge">
       <span class="dot"></span>
-      NEW — We Now Deploy OpenClaw AI Agents
+      <span><span class="badge-new">NEW</span> — We Now Deploy OpenClaw AI Agents</span>
     </a>
-
     <h1>
-      Profit Through<br><span class="gradient-text glitch" data-text="Automation.">Automation.</span><span class="typing-cursor"></span>
+      <span class="line-static">Profit Through Automating</span>
+      <span class="gradient-text" id="heroRotate">CAD Checks.</span><span class="typing-cursor"></span>
     </h1>
-
     <p class="hero-sub">
       Work done by humans on a computer can be automated with custom software.
       Eliminate human error. Save time. <strong>More profit.</strong>
     </p>
-
     <div class="hero-actions">
       <a href="#contact" class="btn btn-primary magnetic">Start a Project →</a>
       <a href="#services" class="btn btn-secondary magnetic">Discover Solutions</a>
     </div>
-
     <div class="tech-stack">
       <span class="tech-badge">CATIA V5</span>
       <span class="tech-badge">NX / Siemens</span>
@@ -670,15 +640,11 @@ footer{
       <span class="tech-badge">JavaScript</span>
       <span class="tech-badge">AI / LLM</span>
       <span class="tech-badge">OpenClaw</span>
-      <span class="tech-badge">Excel / VBA</span>
+      <span class="tech-badge">Excel</span>
       <span class="tech-badge">Web Apps</span>
     </div>
   </div>
-
-  <div class="scroll-indicator">
-    <div class="mouse"></div>
-    Scroll
-  </div>
+  <div class="scroll-indicator"><div class="mouse"></div>Scroll</div>
 </section>
 
 <!-- ═══════════════════ STATS ═══════════════════ -->
@@ -686,7 +652,7 @@ footer{
   <div class="container">
     <div class="stats-bar stagger">
       <div class="stat-item reveal">
-        <div class="stat-number" data-target="10000">0</div>
+        <div class="stat-number" data-target="11500" data-suffix="+">0</div>
         <div class="stat-label">Engineering Hours Saved</div>
       </div>
       <div class="stat-item reveal">
@@ -698,8 +664,8 @@ footer{
         <div class="stat-label">Client Savings</div>
       </div>
       <div class="stat-item reveal">
-        <div class="stat-number" data-target="99" data-suffix="%">0</div>
-        <div class="stat-label">Error Reduction</div>
+        <div class="stat-number" data-target="0" data-suffix="" data-final="0 Build Delays">0</div>
+        <div class="stat-label">Plant Build Delays</div>
       </div>
     </div>
   </div>
@@ -714,45 +680,57 @@ footer{
       <p class="section-desc">Custom software specific to your design rules and specs. Save engineering hours year over year.</p>
     </div>
     <div class="services-grid stagger">
-      <div class="service-card reveal egg-trigger" data-game="matrix">
+
+      <div class="service-card reveal" data-game="speccheck">
         <div class="service-icon">⚙️</div>
         <h3>Automated CAD Checks</h3>
-        <p>When using CATIA, NX, AutoCAD, and SolidWorks, engineers spend weeks opening 3D CAD and loading parts for clearance measurement checks. Our automations give you a report of pass/fail per your specs — in minutes, not weeks.</p>
+        <p>CATIA, NX, AutoCAD, SolidWorks — our automations open 3D models, run clearance checks against your specs, and generate pass/fail reports. Weeks of manual work → minutes.</p>
+        <div class="game-hint" data-game="speccheck"><span class="hint-icon">🎮</span> Try the interactive demo →</div>
       </div>
-      <div class="service-card reveal egg-trigger" data-game="pong">
+
+      <div class="service-card reveal" data-game="blueprint">
         <div class="service-icon">📐</div>
         <h3>Automated Drawings</h3>
-        <p>Using 3D CAD and a few selections from an engineer, a 2D drawing is generated, completed, and ready to be sent to the manufacturing plant. No manual dimensioning. No formatting errors.</p>
+        <p>Using 3D CAD and a few selections from an engineer, a 2D drawing is generated — formatted, dimensioned, and ready for the manufacturing plant. Saving 1,200+ hours/year.</p>
+        <div class="game-hint" data-game="blueprint"><span class="hint-icon">🎮</span> Try the interactive demo →</div>
       </div>
-      <div class="service-card reveal egg-trigger" data-game="snake">
+
+      <div class="service-card reveal" data-game="datasort">
         <div class="service-icon">📊</div>
         <h3>Automated Excel &amp; BOM Work</h3>
-        <p>Engineers are combining customer data with internal Parts Lists/BOMs. Our automations combine these documents and calculate Parts Lists, generating Excel files in the exact format you want.</p>
+        <p>Engineers combining customer data with internal Parts Lists/BOMs? Our automations merge documents, calculate quantities, and generate Excel files in your exact format.</p>
+        <div class="game-hint" data-game="datasort"><span class="hint-icon">🎮</span> Try the interactive demo →</div>
       </div>
+
       <div class="service-card reveal">
         <div class="service-icon">🤖</div>
         <h3>AI Agents &amp; OpenClaw</h3>
-        <p>Deploy intelligent AI agents that handle repetitive work, answer questions, process data, and integrate with your existing tools. Your own 24/7 digital workforce — always on, always learning.</p>
+        <p>Deploy intelligent AI agents that handle repetitive work, answer questions, process data, and integrate with your existing tools. Your own 24/7 digital workforce.</p>
       </div>
-      <div class="service-card reveal egg-trigger" data-game="memory">
+
+      <div class="service-card reveal" data-game="specmatch">
         <div class="service-icon">🌐</div>
         <h3>Custom Web Applications</h3>
-        <p>Internal tools, dashboards, client portals — purpose-built web applications that do exactly what your business needs. No bloated SaaS subscriptions. No feature compromises.</p>
+        <p>Internal tools, dashboards, client portals — purpose-built web applications that do exactly what your business needs. No bloated SaaS. No compromises.</p>
+        <div class="game-hint" data-game="specmatch"><span class="hint-icon">🎮</span> Try the interactive demo →</div>
       </div>
-      <div class="service-card reveal egg-trigger" data-game="click">
+
+      <div class="service-card reveal" data-game="pipeline">
         <div class="service-icon">🔗</div>
         <h3>System Integration</h3>
-        <p>Connect your CAD systems, ERP, email, cloud storage, and databases into seamless automated workflows. Data flows where it needs to — automatically.</p>
+        <p>Connect CAD systems, ERP, email, cloud storage, and databases into seamless automated workflows. Data flows where it needs to — automatically.</p>
+        <div class="game-hint" data-game="pipeline"><span class="hint-icon">🎮</span> Try the interactive demo →</div>
       </div>
+
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════ VALUE PROPOSITIONS ═══════════════════ -->
+<!-- ═══════════════════ VALUE PROPS ═══════════════════ -->
 <section class="value-section">
   <div class="value-block reveal">
     <div class="value-text">
-      <h3>Custom Software Specific To Your Design Rules And Specs.</h3>
+      <h3>Custom Software Specific To Your Design Rules And Specs</h3>
       <p>Save engineering hours year over year with automations that perform what was previously tedious, manual engineering work. Your specs. Your rules. Our code.</p>
     </div>
     <div class="value-visual">🏭</div>
@@ -760,20 +738,20 @@ footer{
   <div class="value-block reverse reveal">
     <div class="value-text">
       <h3>Quality Software For High Stakes Decisions</h3>
-      <p>Our experienced programmers and extensive programming libraries eliminate human error and prevent last minute trips to Plant Builds. When the stakes are high, you need software you can trust.</p>
+      <p>Our experienced programmers and extensive libraries eliminate human error and prevent last minute trips to Plant Builds. When the stakes are high, you need software you can trust.</p>
     </div>
     <div class="value-visual">🛡️</div>
   </div>
   <div class="value-block reveal">
     <div class="value-text">
-      <h3>Extend Human Abilities With Computations Only A Computer Can Do.</h3>
-      <p>Unlock new capabilities for your company by using the power of computers to do heavy lifting. Things no human could do manually — at scale, with precision, 24/7.</p>
+      <h3>Extend Human Abilities With Computations Only A Computer Can Do</h3>
+      <p>Unlock new capabilities for your company by using the power of computers to do heavy lifting. Things no human could do manually — at scale, with precision, around the clock.</p>
     </div>
     <div class="value-visual">🚀</div>
   </div>
 </section>
 
-<!-- ═══════════════════ OPENCLAW ANNOUNCEMENT ═══════════════════ -->
+<!-- ═══════════════════ OPENCLAW ═══════════════════ -->
 <section class="openclaw-section" id="openclaw">
   <div class="openclaw-card reveal">
     <div class="openclaw-icon">🐾</div>
@@ -812,21 +790,21 @@ footer{
         <div class="step-num">2</div>
         <div class="step-content">
           <h3>Architecture &amp; Scope</h3>
-          <p>We design the solution, define deliverables, and give you a fixed-price quote. No surprises. No scope creep billing. You know exactly what you're getting.</p>
+          <p>We design the solution, define deliverables, and give you a fixed-price quote. No surprises. No scope creep billing.</p>
         </div>
       </div>
       <div class="process-step reveal">
         <div class="step-num">3</div>
         <div class="step-content">
           <h3>Build &amp; Iterate</h3>
-          <p>Rapid development cycles with your team's input. You see progress weekly — not at the end of a black-box sprint. Feedback is built into the process.</p>
+          <p>Rapid development with your team's input. You see progress weekly — not at the end of a black-box sprint.</p>
         </div>
       </div>
       <div class="process-step reveal">
         <div class="step-num">4</div>
         <div class="step-content">
           <h3>Deploy &amp; Support</h3>
-          <p>Production deployment with documentation and training. We don't disappear after delivery — ongoing support is part of the deal.</p>
+          <p>Production deployment with documentation and training. We don't disappear — ongoing support is part of the deal.</p>
         </div>
       </div>
     </div>
@@ -855,7 +833,7 @@ footer{
       </div>
       <div class="testimonial-card reveal">
         <div class="quote-mark">"</div>
-        <p>Their AI agent handles our weekly data reconciliation that used to take a full-time person two days. It runs overnight and the report is ready by morning. Pays for itself every month.</p>
+        <p>Their AI agent handles our weekly data reconciliation that used to take a full-time person two days. It runs overnight and the report is ready by morning.</p>
         <div class="testimonial-author">Operations VP</div>
         <div class="testimonial-role">Industrial Equipment Company</div>
       </div>
@@ -886,18 +864,9 @@ footer{
       <div class="contact-info reveal-left">
         <h3>Kirk Automations</h3>
         <p>Custom automation software and AI agents for engineering companies and businesses. Based in Michigan, serving clients nationwide.</p>
-        <div class="contact-detail">
-          <span class="icon">📧</span>
-          <a href="mailto:michael.kirk@kirkautomations.com">michael.kirk@kirkautomations.com</a>
-        </div>
-        <div class="contact-detail">
-          <span class="icon">📱</span>
-          <a href="tel:5869145944">(586) 914-5944</a>
-        </div>
-        <div class="contact-detail">
-          <span class="icon">📍</span>
-          <span>Michigan, USA</span>
-        </div>
+        <div class="contact-detail"><span class="icon">📧</span><a href="mailto:michael.kirk@kirkautomations.com">michael.kirk@kirkautomations.com</a></div>
+        <div class="contact-detail"><span class="icon">📱</span><a href="tel:5869145944">(586) 914-5944</a></div>
+        <div class="contact-detail"><span class="icon">📍</span><span>Michigan, USA</span></div>
       </div>
       <form class="contact-form reveal-right" id="contactForm">
         <input type="text" name="name" placeholder="Your Name" required>
@@ -919,597 +888,604 @@ footer{
   </div>
 </section>
 
-<!-- ═══════════════════ FOOTER ═══════════════════ -->
 <footer>
-  <p>&copy; 2023–2026 Kirk Automations. Built with precision. <span class="egg-trigger" data-game="konami" style="cursor:default">⚡</span></p>
+  <p>&copy; 2023–2026 Kirk Automations. Built with precision. ⚡</p>
 </footer>
 
-<!-- ═══════════════════ GAME PORTAL ═══════════════════ -->
+<!-- Game Portal -->
 <div class="game-portal" id="gamePortal">
   <div class="game-container" id="gameContainer">
     <button class="game-close" id="gameClose">&times;</button>
     <h3 id="gameTitle"></h3>
+    <div class="game-subtitle" id="gameSub"></div>
     <canvas id="gameCanvas" width="540" height="400"></canvas>
     <p id="gameInstructions" style="text-align:center;color:var(--text-secondary);margin-top:12px;font-size:.82rem"></p>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════
-     JAVASCRIPT — ALL INTERACTIVE FEATURES
+     JAVASCRIPT
      ═══════════════════════════════════════════════════════ -->
 <script>
 (function(){
 "use strict";
-
 var html = document.documentElement;
 
-/* ──────────────────────────────────────────
-   1. THEME ENGINE (event delegation, robust)
-   ────────────────────────────────────────── */
-var saved = null;
-try { saved = localStorage.getItem('ka-theme'); } catch(e){}
-var currentTheme = saved || 'midnight';
+/* ── 1. THEME ENGINE ── */
+var saved; try{saved=localStorage.getItem('ka-theme')}catch(e){}
+var currentTheme = saved || 'arctic';
 
 function applyTheme(name){
-  html.setAttribute('data-theme', name);
-  currentTheme = name;
-  try { localStorage.setItem('ka-theme', name); } catch(e){}
-  // Update active dot
-  var dots = document.querySelectorAll('#themeSwitcher .theme-dot');
-  for(var i=0;i<dots.length;i++){
-    dots[i].classList.toggle('active', dots[i].getAttribute('data-theme')===name);
-  }
+  html.setAttribute('data-theme',name);
+  currentTheme=name;
+  try{localStorage.setItem('ka-theme',name)}catch(e){}
+  var dots=document.querySelectorAll('#themeSwitcher .theme-dot');
+  for(var i=0;i<dots.length;i++) dots[i].classList.toggle('active',dots[i].getAttribute('data-theme')===name);
 }
 applyTheme(currentTheme);
+document.getElementById('themeSwitcher').addEventListener('click',function(e){
+  var dot=e.target.closest('.theme-dot');
+  if(!dot)return;
+  var t=dot.getAttribute('data-theme');
+  if(t)applyTheme(t);
+});
 
-// Event delegation on the switcher container
-document.getElementById('themeSwitcher').addEventListener('click', function(e){
-  var dot = e.target.closest('.theme-dot');
-  if(!dot) return;
-  var t = dot.getAttribute('data-theme');
-  if(t) applyTheme(t);
-}, false);
+/* ── 2. PARTICLES ── */
+var canvas=document.getElementById('particle-canvas');
+var ctx=canvas.getContext('2d');
+var particles=[];
+var mouseX=-9999,mouseY=-9999;
+var PCOUNT=65,CDIST=140,MRAD=180;
 
-/* ──────────────────────────────────────────
-   2. PARTICLE SYSTEM (mouse + touch reactive)
-   ────────────────────────────────────────── */
-var canvas = document.getElementById('particle-canvas');
-var ctx = canvas.getContext('2d');
-var particles = [];
-var mouseX = -9999, mouseY = -9999;
-var PARTICLE_COUNT = 70;
-var CONNECT_DIST = 140;
-var MOUSE_RADIUS = 180;
+function sizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}
+sizeCanvas();window.addEventListener('resize',sizeCanvas);
 
-function sizeCanvas(){
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-sizeCanvas();
-window.addEventListener('resize', sizeCanvas);
+function getPColor(){return(getComputedStyle(html).getPropertyValue('--particle-color')||'37,88,217').trim()}
+var pColor=getPColor();
 
-function getParticleColor(){
-  var s = getComputedStyle(html);
-  return (s.getPropertyValue('--particle-color')||'108,99,255').trim();
-}
-var pColor = getParticleColor();
+for(var i=0;i<PCOUNT;i++) particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*1.6+.8});
 
-for(var i=0;i<PARTICLE_COUNT;i++){
-  particles.push({
-    x: Math.random()*canvas.width,
-    y: Math.random()*canvas.height,
-    vx:(Math.random()-.5)*.45,
-    vy:(Math.random()-.5)*.45,
-    r: Math.random()*1.8+.8
-  });
-}
-
-function tickParticles(){
-  pColor = getParticleColor();
+function tickP(){
+  pColor=getPColor();
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  var p,dx,dy,dist,force;
-  for(i=0;i<particles.length;i++){
-    p = particles[i];
-    // Mouse interaction
-    dx = p.x - mouseX; dy = p.y - mouseY;
-    dist = Math.sqrt(dx*dx+dy*dy);
-    if(dist < MOUSE_RADIUS && dist > 0){
-      force = (MOUSE_RADIUS - dist)/MOUSE_RADIUS;
-      p.vx += (dx/dist)*force*.4;
-      p.vy += (dy/dist)*force*.4;
-    }
-    p.vx *= .99; p.vy *= .99;
-    p.x += p.vx; p.y += p.vy;
-    if(p.x<0)p.x=canvas.width; if(p.x>canvas.width)p.x=0;
-    if(p.y<0)p.y=canvas.height; if(p.y>canvas.height)p.y=0;
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,6.283);
-    ctx.fillStyle='rgba('+pColor+',0.5)';
-    ctx.fill();
+  for(var i=0;i<particles.length;i++){
+    var p=particles[i];
+    var dx=p.x-mouseX,dy=p.y-mouseY,dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist<MRAD&&dist>0){var f=(MRAD-dist)/MRAD;p.vx+=(dx/dist)*f*.35;p.vy+=(dy/dist)*f*.35}
+    p.vx*=.99;p.vy*=.99;p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0)p.x=canvas.width;if(p.x>canvas.width)p.x=0;
+    if(p.y<0)p.y=canvas.height;if(p.y>canvas.height)p.y=0;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.283);
+    ctx.fillStyle='rgba('+pColor+',.45)';ctx.fill();
   }
-  // Connections
   for(i=0;i<particles.length;i++){
     for(var j=i+1;j<particles.length;j++){
-      dx=particles[i].x-particles[j].x;
-      dy=particles[i].y-particles[j].y;
-      dist=Math.sqrt(dx*dx+dy*dy);
-      if(dist<CONNECT_DIST){
-        ctx.beginPath();
-        ctx.moveTo(particles[i].x,particles[i].y);
+      var dx2=particles[i].x-particles[j].x,dy2=particles[i].y-particles[j].y;
+      var d2=Math.sqrt(dx2*dx2+dy2*dy2);
+      if(d2<CDIST){
+        ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);
         ctx.lineTo(particles[j].x,particles[j].y);
-        ctx.strokeStyle='rgba('+pColor+','+(1-dist/CONNECT_DIST)*.12+')';
-        ctx.lineWidth=.5;
-        ctx.stroke();
+        ctx.strokeStyle='rgba('+pColor+','+(1-d2/CDIST)*.1+')';
+        ctx.lineWidth=.5;ctx.stroke();
       }
     }
   }
-  requestAnimationFrame(tickParticles);
+  requestAnimationFrame(tickP);
 }
-tickParticles();
+tickP();
 
-// Cursor glow
-var glow = document.getElementById('cursor-glow');
-document.addEventListener('mousemove', function(e){
-  mouseX = e.clientX; mouseY = e.clientY;
-  glow.style.left = e.clientX+'px';
-  glow.style.top = e.clientY+'px';
+var glow=document.getElementById('cursor-glow');
+document.addEventListener('mousemove',function(e){
+  mouseX=e.clientX;mouseY=e.clientY;
+  glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px';
 });
-document.addEventListener('touchmove', function(e){
-  mouseX = e.touches[0].clientX;
-  mouseY = e.touches[0].clientY;
-},{passive:true});
-document.addEventListener('touchend', function(){mouseX=mouseY=-9999},{passive:true});
+document.addEventListener('touchmove',function(e){mouseX=e.touches[0].clientX;mouseY=e.touches[0].clientY},{passive:true});
+document.addEventListener('touchend',function(){mouseX=mouseY=-9999},{passive:true});
 
-/* ──────────────────────────────────────────
-   3. HERO GRID BACKGROUND (dot grid, not matrix lines)
-   ────────────────────────────────────────── */
+/* ── 3. HERO GRID BG ── */
 (function(){
-  var grid = document.getElementById('heroGrid');
-  if(!grid)return;
-  var c = document.createElement('canvas');
-  c.style.cssText='width:100%;height:100%';
-  grid.appendChild(c);
-  var cx = c.getContext('2d');
+  var g=document.getElementById('heroGrid');if(!g)return;
+  var c=document.createElement('canvas');c.style.cssText='width:100%;height:100%';g.appendChild(c);
+  var cx=c.getContext('2d');
   function draw(){
-    var w = c.width = grid.offsetWidth;
-    var h = c.height = grid.offsetHeight;
-    var spacing = 40;
+    var w=c.width=g.offsetWidth,h=c.height=g.offsetHeight,sp=40;
     cx.clearRect(0,0,w,h);
-    for(var x=0;x<w;x+=spacing){
-      for(var y=0;y<h;y+=spacing){
-        cx.beginPath();
-        cx.arc(x,y,1,0,6.283);
-        cx.fillStyle='rgba('+pColor+',.35)';
-        cx.fill();
-      }
+    for(var x=0;x<w;x+=sp)for(var y=0;y<h;y+=sp){
+      cx.beginPath();cx.arc(x,y,1.2,0,6.283);cx.fillStyle='rgba('+pColor+',.3)';cx.fill();
     }
   }
-  draw();
-  window.addEventListener('resize',draw);
+  draw();window.addEventListener('resize',draw);
 })();
 
-/* ──────────────────────────────────────────
-   4. SCROLL REVEAL — IntersectionObserver + scroll fallback
-   ────────────────────────────────────────── */
-var revealEls = document.querySelectorAll('.reveal,.reveal-left,.reveal-right');
-
+/* ── 4. SCROLL REVEAL ── */
+var revealEls=document.querySelectorAll('.reveal,.reveal-left,.reveal-right');
 function revealCheck(){
-  var wH = window.innerHeight;
+  var wH=window.innerHeight;
   for(var i=0;i<revealEls.length;i++){
-    var el = revealEls[i];
-    if(el.classList.contains('visible')) continue;
-    var rect = el.getBoundingClientRect();
-    if(rect.top < wH - 60){
-      el.classList.add('visible');
-    }
+    if(revealEls[i].classList.contains('visible'))continue;
+    if(revealEls[i].getBoundingClientRect().top<wH-50) revealEls[i].classList.add('visible');
   }
 }
-
-// Use IntersectionObserver if available, PLUS scroll fallback
 if('IntersectionObserver' in window){
-  var obs = new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      if(entry.isIntersecting) entry.target.classList.add('visible');
-    });
-  },{threshold:0.08, rootMargin:'0px 0px -40px 0px'});
-  for(var i=0;i<revealEls.length;i++) obs.observe(revealEls[i]);
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){if(en.isIntersecting)en.target.classList.add('visible')});
+  },{threshold:.06,rootMargin:'0px 0px -30px 0px'});
+  for(var i=0;i<revealEls.length;i++)obs.observe(revealEls[i]);
 }
-
-// ALWAYS also listen to scroll as a belt-and-suspenders approach
-window.addEventListener('scroll', revealCheck, {passive:true});
-window.addEventListener('resize', revealCheck, {passive:true});
-// Run once on load
+window.addEventListener('scroll',revealCheck,{passive:true});
+window.addEventListener('resize',revealCheck,{passive:true});
 revealCheck();
 
-/* ──────────────────────────────────────────
-   5. COUNTER ANIMATION
-   ────────────────────────────────────────── */
-var counters = document.querySelectorAll('.stat-number[data-target]');
-var counterDone = {};
-
-function animateCounters(){
+/* ── 5. COUNTER ANIMATION ── */
+var counters=document.querySelectorAll('.stat-number[data-target]');
+var cDone={};
+function animC(){
   for(var i=0;i<counters.length;i++){
-    if(counterDone[i]) continue;
-    var el = counters[i];
-    var rect = el.getBoundingClientRect();
-    if(rect.top < window.innerHeight - 20){
-      counterDone[i] = true;
+    if(cDone[i])continue;
+    var el=counters[i];
+    if(el.getBoundingClientRect().top<window.innerHeight-20){
+      cDone[i]=true;
       (function(el){
-        var target = parseInt(el.getAttribute('data-target'));
-        var prefix = el.getAttribute('data-prefix')||'';
-        var suffix = el.getAttribute('data-suffix')||'';
-        var current = 0;
-        var step = target / 60;
-        var iv = setInterval(function(){
-          current += step;
-          if(current >= target){ current = target; clearInterval(iv); }
-          el.textContent = prefix + Math.floor(current).toLocaleString() + suffix;
+        var target=parseInt(el.getAttribute('data-target'));
+        var prefix=el.getAttribute('data-prefix')||'';
+        var suffix=el.getAttribute('data-suffix')||'';
+        var final_text=el.getAttribute('data-final')||'';
+        if(final_text){el.textContent=final_text;return}
+        var cur=0,step=target/60;
+        var iv=setInterval(function(){
+          cur+=step;if(cur>=target){cur=target;clearInterval(iv)}
+          el.textContent=prefix+Math.floor(cur).toLocaleString()+suffix;
         },16);
       })(el);
     }
   }
 }
-window.addEventListener('scroll', animateCounters, {passive:true});
-animateCounters();
+window.addEventListener('scroll',animC,{passive:true});animC();
 
-/* ──────────────────────────────────────────
-   6. NAV SCROLL
-   ────────────────────────────────────────── */
-var nav = document.getElementById('mainNav');
-window.addEventListener('scroll', function(){
-  nav.classList.toggle('scrolled', window.scrollY > 50);
-},{passive:true});
+/* ── 6. NAV SCROLL ── */
+var nav=document.getElementById('mainNav');
+window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',window.scrollY>50)},{passive:true});
 
-/* ──────────────────────────────────────────
-   7. MOBILE MENU
-   ────────────────────────────────────────── */
-document.getElementById('mobileMenuBtn').addEventListener('click', function(){
+/* ── 7. MOBILE MENU ── */
+document.getElementById('mobileMenuBtn').addEventListener('click',function(){
   document.getElementById('navLinks').classList.toggle('mobile-open');
 });
-var navAnchors = document.querySelectorAll('.nav-links a');
-for(i=0;i<navAnchors.length;i++){
-  navAnchors[i].addEventListener('click', function(){
-    document.getElementById('navLinks').classList.remove('mobile-open');
-  });
-}
+document.querySelectorAll('.nav-links a').forEach(function(a){
+  a.addEventListener('click',function(){document.getElementById('navLinks').classList.remove('mobile-open')});
+});
 
-/* ──────────────────────────────────────────
-   8. MAGNETIC BUTTONS + RIPPLE
-   ────────────────────────────────────────── */
+/* ── 8. MAGNETIC + RIPPLE ── */
 document.querySelectorAll('.magnetic').forEach(function(btn){
-  btn.addEventListener('mousemove', function(e){
-    var r = btn.getBoundingClientRect();
-    var x = e.clientX - r.left - r.width/2;
-    var y = e.clientY - r.top - r.height/2;
-    btn.style.transform = 'translate('+x*.12+'px,'+y*.12+'px)';
+  btn.addEventListener('mousemove',function(e){
+    var r=btn.getBoundingClientRect();
+    btn.style.transform='translate('+(e.clientX-r.left-r.width/2)*.1+'px,'+(e.clientY-r.top-r.height/2)*.1+'px)';
   });
-  btn.addEventListener('mouseleave', function(){ btn.style.transform = ''; });
-  btn.addEventListener('click', function(e){
-    var ripple = document.createElement('span');
-    ripple.className='ripple';
-    var r = btn.getBoundingClientRect();
-    var sz = Math.max(r.width,r.height);
-    ripple.style.cssText='left:'+(e.clientX-r.left)+'px;top:'+(e.clientY-r.top)+'px;width:'+sz+'px;height:'+sz+'px';
-    btn.appendChild(ripple);
-    setTimeout(function(){ripple.remove()},600);
+  btn.addEventListener('mouseleave',function(){btn.style.transform=''});
+  btn.addEventListener('click',function(e){
+    var rip=document.createElement('span');rip.className='ripple';
+    var r=btn.getBoundingClientRect(),sz=Math.max(r.width,r.height);
+    rip.style.cssText='left:'+(e.clientX-r.left)+'px;top:'+(e.clientY-r.top)+'px;width:'+sz+'px;height:'+sz+'px';
+    btn.appendChild(rip);setTimeout(function(){rip.remove()},600);
   });
 });
 
-/* ──────────────────────────────────────────
-   9. 3D TILT ON SERVICE CARDS
-   ────────────────────────────────────────── */
-document.querySelectorAll('.service-card').forEach(function(card){
-  card.addEventListener('mousemove', function(e){
-    var r = card.getBoundingClientRect();
-    var x = (e.clientX-r.left)/r.width - .5;
-    var y = (e.clientY-r.top)/r.height - .5;
-    card.style.transform = 'translateY(-5px) perspective(800px) rotateX('+y*-6+'deg) rotateY('+x*6+'deg)';
+/* ── 9. HERO TEXT ROTATION ── */
+var heroWords=['CAD Checks.','Drawing Generation.','Excel Reports.','Data Conversion.','Spec Compliance.','Quality Reviews.','Parts Lists.'];
+var wIdx=0;var rotEl=document.getElementById('heroRotate');
+setInterval(function(){
+  wIdx=(wIdx+1)%heroWords.length;
+  rotEl.style.opacity='0';rotEl.style.transform='translateY(8px)';
+  setTimeout(function(){
+    rotEl.textContent=heroWords[wIdx];
+    rotEl.style.opacity='1';rotEl.style.transform='translateY(0)';
+  },300);
+},3000);
+rotEl.style.transition='opacity .3s,transform .3s';
+
+/* ── 10. SMOOTH SCROLL ── */
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    var tgt=document.querySelector(a.getAttribute('href'));
+    if(tgt){e.preventDefault();tgt.scrollIntoView({behavior:'smooth',block:'start'})}
   });
-  card.addEventListener('mouseleave', function(){ card.style.transform=''; });
 });
 
-/* ──────────────────────────────────────────
-   10. SIGNUP FORM
-   ────────────────────────────────────────── */
-document.getElementById('signupForm').addEventListener('submit', function(e){
+/* ── 11. FORMS ── */
+document.getElementById('signupForm').addEventListener('submit',function(e){
   e.preventDefault();
-  var email = this.querySelector('input[type="email"]').value;
-  // Store locally + attempt Formspree
-  try{
-    var leads = JSON.parse(localStorage.getItem('ka-leads')||'[]');
-    leads.push({email:email,date:new Date().toISOString()});
-    localStorage.setItem('ka-leads',JSON.stringify(leads));
-  }catch(ex){}
-  // Try Formspree (best-effort)
-  try{
-    fetch('https://formspree.io/f/xyzgbkwl',{
-      method:'POST',
-      body:JSON.stringify({email:email,_subject:'Kirk Automations — OpenClaw Interest',source:'kirkautomations.com'}),
-      headers:{'Content-Type':'application/json','Accept':'application/json'}
-    });
-  }catch(ex){}
-  this.style.display='none';
-  document.querySelector('.signup-note').style.display='none';
+  var email=this.querySelector('input[type="email"]').value;
+  try{var leads=JSON.parse(localStorage.getItem('ka-leads')||'[]');leads.push({email:email,date:new Date().toISOString()});localStorage.setItem('ka-leads',JSON.stringify(leads))}catch(ex){}
+  try{fetch('https://formspree.io/f/xyzgbkwl',{method:'POST',body:JSON.stringify({email:email,_subject:'Kirk Automations — OpenClaw Interest',source:'kirkautomations.com'}),headers:{'Content-Type':'application/json','Accept':'application/json'}})}catch(ex){}
+  this.style.display='none';document.querySelector('.signup-note').style.display='none';
   document.getElementById('signupSuccess').style.display='block';
 });
-
-/* ──────────────────────────────────────────
-   11. CONTACT FORM
-   ────────────────────────────────────────── */
-document.getElementById('contactForm').addEventListener('submit', function(e){
+document.getElementById('contactForm').addEventListener('submit',function(e){
   e.preventDefault();
-  var fd = new FormData(this);
-  var data = {};
-  fd.forEach(function(v,k){data[k]=v});
-  data._subject = 'Kirk Automations — New Lead';
-  try{
-    fetch('https://formspree.io/f/xyzgbkwl',{
-      method:'POST',body:JSON.stringify(data),
-      headers:{'Content-Type':'application/json','Accept':'application/json'}
-    });
-  }catch(ex){}
+  var fd=new FormData(this),data={};fd.forEach(function(v,k){data[k]=v});
+  data._subject='Kirk Automations — New Lead';
+  try{fetch('https://formspree.io/f/xyzgbkwl',{method:'POST',body:JSON.stringify(data),headers:{'Content-Type':'application/json','Accept':'application/json'}})}catch(ex){}
   this.innerHTML='<div style="text-align:center;padding:40px"><h3 style="color:var(--accent);margin-bottom:8px">✓ Message Sent!</h3><p style="color:var(--text-secondary)">We\'ll get back to you within 24 hours.</p></div>';
 });
 
-/* ──────────────────────────────────────────
-   12. SMOOTH SCROLL
-   ────────────────────────────────────────── */
-document.querySelectorAll('a[href^="#"]').forEach(function(a){
-  a.addEventListener('click', function(e){
-    var tgt = document.querySelector(a.getAttribute('href'));
-    if(tgt){ e.preventDefault(); tgt.scrollIntoView({behavior:'smooth',block:'start'}); }
-  });
-});
+/* ═══════════════════════════════════════════════════════
+   12. GAMES — Automation-themed, triggered by hover hints
+   ═══════════════════════════════════════════════════════ */
+var gamePortal=document.getElementById('gamePortal');
+var gameCanvas=document.getElementById('gameCanvas');
+var gCtx=gameCanvas.getContext('2d');
+var gameTitle=document.getElementById('gameTitle');
+var gameSub=document.getElementById('gameSub');
+var gameInstr=document.getElementById('gameInstructions');
+var gameInterval=null;
+var activeH=[];
 
-/* ──────────────────────────────────────────
-   13. HERO TEXT ROTATION
-   ────────────────────────────────────────── */
-var heroWords = ['Automation.','CAD Checks.','Drawings.','Excel Work.','Your Workflow.','The Future.'];
-var wordIdx = 0;
-var glitchEl = document.querySelector('.glitch');
-setInterval(function(){
-  wordIdx = (wordIdx+1) % heroWords.length;
-  glitchEl.textContent = heroWords[wordIdx];
-  glitchEl.setAttribute('data-text', heroWords[wordIdx]);
-},3000);
-
-/* ──────────────────────────────────────────
-   14. EASTER EGG GAMES
-   ────────────────────────────────────────── */
-var gamePortal = document.getElementById('gamePortal');
-var gameCanvas = document.getElementById('gameCanvas');
-var gCtx = gameCanvas.getContext('2d');
-var gameTitle = document.getElementById('gameTitle');
-var gameInstructions = document.getElementById('gameInstructions');
-var gameInterval = null;
-var activeGameHandlers = [];
-
-function showNotification(text){
-  var el = document.createElement('div');
-  el.className='secret-found';el.textContent=text;
-  document.body.appendChild(el);
-  setTimeout(function(){el.remove()},3000);
-}
+function getAccent(){return getComputedStyle(html).getPropertyValue('--accent').trim()}
+function getBg(){return getComputedStyle(html).getPropertyValue('--bg-card').trim()}
 
 function cleanupGame(){
   if(gameInterval){clearInterval(gameInterval);gameInterval=null}
-  activeGameHandlers.forEach(function(h){
-    h.el.removeEventListener(h.evt,h.fn);
-  });
-  activeGameHandlers=[];
+  activeH.forEach(function(h){h.el.removeEventListener(h.evt,h.fn)});activeH=[];
+}
+function addH(el,evt,fn,opts){el.addEventListener(evt,fn,opts||false);activeH.push({el:el,evt:evt,fn:fn})}
+function showNotif(text){
+  var el=document.createElement('div');el.className='secret-found';el.textContent=text;
+  document.body.appendChild(el);setTimeout(function(){el.remove()},3000);
 }
 
 function openGame(name){
-  cleanupGame();
-  gamePortal.classList.add('active');
-  document.body.style.overflow='hidden';
-  showNotification('🎮 Easter Egg Found!');
+  cleanupGame();gamePortal.classList.add('active');document.body.style.overflow='hidden';
+  gameCanvas.width=540;gameCanvas.height=400;
   switch(name){
-    case 'matrix': startMatrixGame(); break;
-    case 'pong': startPongGame(); break;
-    case 'snake': startSnakeGame(); break;
-    case 'memory': startMemoryGame(); break;
-    case 'click': startClickGame(); break;
+    case 'speccheck': startSpecCheck();break;
+    case 'blueprint': startBlueprintGame();break;
+    case 'datasort': startDataSort();break;
+    case 'specmatch': startSpecMatch();break;
+    case 'pipeline': startPipeline();break;
   }
 }
-function closeGame(){
-  cleanupGame();
-  gamePortal.classList.remove('active');
-  document.body.style.overflow='';
-}
-document.getElementById('gameClose').addEventListener('click', closeGame);
-gamePortal.addEventListener('click', function(e){if(e.target===gamePortal)closeGame()});
+function closeGame(){cleanupGame();gamePortal.classList.remove('active');document.body.style.overflow=''}
+document.getElementById('gameClose').addEventListener('click',closeGame);
+gamePortal.addEventListener('click',function(e){if(e.target===gamePortal)closeGame()});
 
-function addGameHandler(el,evt,fn,opts){
-  el.addEventListener(evt,fn,opts||false);
-  activeGameHandlers.push({el:el,evt:evt,fn:fn});
-}
-
-// Triple-click triggers
-document.querySelectorAll('.egg-trigger[data-game]').forEach(function(el){
-  var clicks=0,timer=null;
-  el.addEventListener('click',function(){
-    clicks++;
-    clearTimeout(timer);
-    timer=setTimeout(function(){clicks=0},500);
-    if(clicks>=3){clicks=0;openGame(el.getAttribute('data-game'))}
+// Click on game hints to open games
+document.querySelectorAll('.game-hint[data-game]').forEach(function(hint){
+  hint.addEventListener('click',function(e){
+    e.stopPropagation();
+    openGame(hint.getAttribute('data-game'));
   });
 });
 
-/* -- GAME 1: Matrix Dodger -- */
-function startMatrixGame(){
-  gameTitle.textContent='🟢 Matrix Dodger';
-  gameInstructions.textContent='Arrow keys / A-D or tap sides to dodge. Survive!';
-  gameCanvas.width=540;gameCanvas.height=400;
-  var player={x:260,y:360,w:20,h:20,speed:5},drops=[],score=0,alive=true,keys={};
-  var chars='01アイウエオカ{}()<>';
-  function kd(e){keys[e.key]=true} function ku(e){keys[e.key]=false}
-  addGameHandler(document,'keydown',kd);
-  addGameHandler(document,'keyup',ku);
-  var touchSide=0;
-  addGameHandler(gameCanvas,'touchstart',function(e){
+/* ── GAME 1: Spec Check Inspector ──
+   Parts appear with measurements. Click PASS if in spec, FAIL if not.
+   Based on the Spec Check Report automation (800 hrs/yr saved) */
+function startSpecCheck(){
+  gameTitle.textContent='⚙️ Spec Check Inspector';
+  gameSub.textContent='Based on our Automated CAD Checks — saving 800+ hrs/year';
+  gameInstr.textContent='Is the measurement within spec? Click PASS ✓ or FAIL ✗ before time runs out!';
+
+  var parts=[
+    {name:'Panel Thickness',spec:'1.2 – 1.8 mm',val:1.5,unit:'mm',inSpec:true},
+    {name:'Clearance Gap',spec:'> 3.0 mm',val:2.1,unit:'mm',inSpec:false},
+    {name:'Bolt Torque',spec:'25 – 35 Nm',val:30,unit:'Nm',inSpec:true},
+    {name:'Surface Flatness',spec:'< 0.05 mm',val:0.08,unit:'mm',inSpec:false},
+    {name:'Weld Length',spec:'12 – 18 mm',val:15,unit:'mm',inSpec:true},
+    {name:'Hole Diameter',spec:'8.0 ± 0.2 mm',val:8.5,unit:'mm',inSpec:false},
+    {name:'Edge Radius',spec:'> 1.0 mm',val:1.3,unit:'mm',inSpec:true},
+    {name:'Gap Width',spec:'2.0 – 4.0 mm',val:1.5,unit:'mm',inSpec:false},
+    {name:'Flange Angle',spec:'88° – 92°',val:90,unit:'°',inSpec:true},
+    {name:'Wire Gauge',spec:'18 – 22 AWG',val:24,unit:'AWG',inSpec:false},
+    {name:'Rivet Spacing',spec:'20 – 30 mm',val:25,unit:'mm',inSpec:true},
+    {name:'Coating Thickness',spec:'0.5 – 1.0 mm',val:0.3,unit:'mm',inSpec:false},
+  ];
+  var shuffled=parts.sort(function(){return Math.random()-.5});
+  var idx=0,score=0,wrong=0,timer=8,total=10;
+  var tickTimer=null;
+
+  function drawPart(){
+    var accent=getAccent();
+    gCtx.fillStyle=getBg()||'#111';gCtx.fillRect(0,0,540,400);
+    if(idx>=total){
+      gCtx.fillStyle='#fff';gCtx.font='bold 28px Inter';gCtx.textAlign='center';
+      gCtx.fillText('Results: '+score+'/'+total+' correct',270,180);
+      gCtx.font='16px Inter';gCtx.fillStyle=score>=8?'#4caf50':'#ff5252';
+      gCtx.fillText(score>=8?'Excellent QC Inspector!':'Needs more training!',270,215);
+      gCtx.fillStyle='rgba(255,255,255,.4)';gCtx.font='13px Inter';
+      gCtx.fillText('Our automation does this 800+ hrs/year — instantly, zero errors.',270,260);
+      gCtx.textAlign='left';
+      if(tickTimer){clearInterval(tickTimer);tickTimer=null}
+      return;
+    }
+    var part=shuffled[idx%shuffled.length];
+    // Part display
+    gCtx.fillStyle=accent;gCtx.font='bold 14px Inter';gCtx.textAlign='center';
+    gCtx.fillText('Part '+(idx+1)+' of '+total,270,30);
+    gCtx.fillStyle='#fff';gCtx.font='bold 22px Inter';
+    gCtx.fillText(part.name,270,100);
+    gCtx.font='16px JetBrains Mono';gCtx.fillStyle='rgba(255,255,255,.6)';
+    gCtx.fillText('Spec: '+part.spec,270,140);
+    gCtx.font='bold 36px JetBrains Mono';
+    gCtx.fillStyle=accent;
+    gCtx.fillText(part.val+' '+part.unit,270,200);
+    // Timer bar
+    var barW=(timer/8)*400;
+    gCtx.fillStyle='rgba(255,255,255,.1)';gCtx.fillRect(70,240,400,8);
+    gCtx.fillStyle=timer>3?accent:'#ff5252';gCtx.fillRect(70,240,barW,8);
+    // Buttons
+    gCtx.fillStyle='#27ae60';gCtx.fillRect(100,290,150,60);
+    gCtx.fillStyle='#e74c3c';gCtx.fillRect(290,290,150,60);
+    gCtx.fillStyle='#fff';gCtx.font='bold 20px Inter';
+    gCtx.fillText('✓ PASS',175,327);
+    gCtx.fillText('✗ FAIL',365,327);
+    // Score
+    gCtx.font='13px Inter';gCtx.fillStyle='rgba(255,255,255,.4)';
+    gCtx.fillText('Score: '+score+' | Wrong: '+wrong,270,385);
+    gCtx.textAlign='left';
+  }
+
+  function handleClick(e){
+    if(idx>=total)return;
     var r=gameCanvas.getBoundingClientRect();
-    touchSide=(e.touches[0].clientX-r.left)<r.width/2?-1:1;
-  },true);
-  addGameHandler(gameCanvas,'touchend',function(){touchSide=0},true);
+    var mx=((e.clientX||0)-r.left)*(540/r.width);
+    var my=((e.clientY||0)-r.top)*(400/r.height);
+    var part=shuffled[idx%shuffled.length];
+    var clickedPass=mx>=100&&mx<=250&&my>=290&&my<=350;
+    var clickedFail=mx>=290&&mx<=440&&my>=290&&my<=350;
+    if(!clickedPass&&!clickedFail)return;
+    if((clickedPass&&part.inSpec)||(clickedFail&&!part.inSpec))score++;
+    else wrong++;
+    idx++;timer=8;drawPart();
+  }
+  addH(gameCanvas,'click',handleClick);
+
+  timer=8;
+  drawPart();
+  tickTimer=setInterval(function(){
+    if(idx>=total)return;
+    timer-=.1;
+    if(timer<=0){wrong++;idx++;timer=8;}
+    drawPart();
+  },100);
+  gameInterval=tickTimer;
+}
+
+/* ── GAME 2: Blueprint Builder ──
+   Drag labels to correct positions on a simplified drawing.
+   Based on Drawing Generation (1200 hrs/yr saved) */
+function startBlueprintGame(){
+  gameTitle.textContent='📐 Blueprint Builder';
+  gameSub.textContent='Based on our Automated Drawing Generation — saving 1,200+ hrs/year';
+  gameInstr.textContent='Click the correct measurement for each highlighted feature!';
+
+  var questions=[
+    {q:'Overall Length',answers:['450 mm','120 mm','88°'],correct:0},
+    {q:'Hole Diameter',answers:['Ø8.2 mm','450 mm','25 Nm'],correct:0},
+    {q:'Flange Angle',answers:['1.5 mm','88°','Ø8.2 mm'],correct:1},
+    {q:'Wall Thickness',answers:['25 Nm','450 mm','1.5 mm'],correct:2},
+    {q:'Bolt Torque',answers:['88°','25 Nm','1.5 mm'],correct:1},
+    {q:'Fillet Radius',answers:['R3.0 mm','450 mm','88°'],correct:0},
+    {q:'Surface Finish',answers:['Ra 1.6','Ø8.2 mm','25 Nm'],correct:0},
+    {q:'Chamfer',answers:['1.5 mm','1x45°','R3.0 mm'],correct:1},
+  ];
+  var qi=0,score=0;
+
+  function draw(){
+    var accent=getAccent();
+    gCtx.fillStyle=getBg()||'#111';gCtx.fillRect(0,0,540,400);
+    if(qi>=questions.length){
+      gCtx.fillStyle='#fff';gCtx.font='bold 28px Inter';gCtx.textAlign='center';
+      gCtx.fillText('Drawing Complete! '+score+'/'+questions.length,270,180);
+      gCtx.font='14px Inter';gCtx.fillStyle='rgba(255,255,255,.4)';
+      gCtx.fillText('Our automation generates full drawings in seconds.',270,220);
+      gCtx.textAlign='left';return;
+    }
+    var q=questions[qi];
+    // Drawing area (simple outline)
+    gCtx.strokeStyle='rgba(255,255,255,.2)';gCtx.lineWidth=1;
+    gCtx.strokeRect(120,30,300,160);
+    gCtx.beginPath();gCtx.arc(220,110,20,0,6.283);gCtx.stroke();
+    gCtx.strokeRect(160,70,60,80);
+    // Highlight current feature
+    gCtx.strokeStyle=accent;gCtx.lineWidth=2;gCtx.setLineDash([4,4]);
+    gCtx.strokeRect(140,50,240,120);gCtx.setLineDash([]);
+
+    gCtx.fillStyle=accent;gCtx.font='bold 14px Inter';gCtx.textAlign='center';
+    gCtx.fillText('Question '+(qi+1)+'/'+questions.length,270,22);
+    gCtx.fillStyle='#fff';gCtx.font='bold 18px Inter';
+    gCtx.fillText('What is the '+q.q+'?',270,220);
+    // Answer buttons
+    for(var i=0;i<q.answers.length;i++){
+      var bx=60+i*170,by=260;
+      gCtx.fillStyle='rgba(255,255,255,.08)';gCtx.fillRect(bx,by,150,50);
+      gCtx.strokeStyle='rgba(255,255,255,.15)';gCtx.strokeRect(bx,by,150,50);
+      gCtx.fillStyle='#fff';gCtx.font='bold 15px JetBrains Mono';
+      gCtx.fillText(q.answers[i],bx+75,by+30);
+    }
+    gCtx.font='13px Inter';gCtx.fillStyle='rgba(255,255,255,.3)';
+    gCtx.fillText('Score: '+score,270,370);
+    gCtx.textAlign='left';
+  }
+
+  function handleClick(e){
+    if(qi>=questions.length)return;
+    var r=gameCanvas.getBoundingClientRect();
+    var mx=((e.clientX||0)-r.left)*(540/r.width);
+    var my=((e.clientY||0)-r.top)*(400/r.height);
+    if(my<260||my>310)return;
+    var choice=-1;
+    if(mx>=60&&mx<=210)choice=0;
+    else if(mx>=230&&mx<=380)choice=1;
+    else if(mx>=400&&mx<=550)choice=2;
+    if(choice<0)return;
+    if(choice===questions[qi].correct)score++;
+    qi++;draw();
+  }
+  addH(gameCanvas,'click',handleClick);
+  draw();
+}
+
+/* ── GAME 3: Data Sort ──
+   Falling data items — click to sort into correct columns.
+   Based on Commonize Data automation (2000 hrs/yr saved) */
+function startDataSort(){
+  gameTitle.textContent='📊 Data Sort Challenge';
+  gameSub.textContent='Based on our Excel/BOM automation — merging 6+ data sources instantly';
+  gameInstr.textContent='Click falling items to route them to the correct column. Green=Parts, Blue=Specs, Red=Costs';
+
+  var cols=[
+    {name:'Parts',color:'#27ae60',x:0,w:180},
+    {name:'Specs',color:'#2979ff',x:180,w:180},
+    {name:'Costs',color:'#e74c3c',x:360,w:180}
+  ];
+  var items=[
+    {text:'Bolt M8',col:0},{text:'1.5mm',col:1},{text:'$4.20',col:2},
+    {text:'Washer',col:0},{text:'Ra 1.6',col:1},{text:'$12.00',col:2},
+    {text:'Bracket',col:0},{text:'88°',col:1},{text:'$8.50',col:2},
+    {text:'Rivet',col:0},{text:'Ø6.0mm',col:1},{text:'$2.30',col:2},
+    {text:'Gasket',col:0},{text:'25 Nm',col:1},{text:'$15.00',col:2},
+    {text:'Clip',col:0},{text:'0.05mm',col:1},{text:'$1.80',col:2}
+  ];
+  var falling=[];var score=0,missed=0;var speed=1.2;var spawnTimer=0;
+  var pool=items.sort(function(){return Math.random()-.5});var pIdx=0;
+  var selectedCol=-1;var alive=true;
+
+  function spawn(){
+    if(pIdx>=pool.length)pIdx=0;
+    var it=pool[pIdx++];
+    falling.push({text:it.text,col:it.col,x:60+Math.random()*420,y:-20,speed:speed+Math.random()*.5});
+  }
+
+  function handleClick(e){
+    if(!alive)return;
+    var r=gameCanvas.getBoundingClientRect();
+    var mx=((e.clientX||0)-r.left)*(540/r.width);
+    var my=((e.clientY||0)-r.top)*(400/r.height);
+    // Check if clicking a falling item
+    for(var i=falling.length-1;i>=0;i--){
+      var f=falling[i];
+      if(mx>=f.x-30&&mx<=f.x+30&&my>=f.y-12&&my<=f.y+12){
+        // Determine which column it's closest to
+        var closestCol=mx<180?0:mx<360?1:2;
+        if(closestCol===f.col){score++;showNotif('✓ Correct!')}
+        else{missed++;showNotif('✗ Wrong column!')}
+        falling.splice(i,1);
+        return;
+      }
+    }
+  }
+  addH(gameCanvas,'click',handleClick);
 
   gameInterval=setInterval(function(){
     if(!alive)return;
-    if(keys.ArrowLeft||keys.a||touchSide<0)player.x-=player.speed;
-    if(keys.ArrowRight||keys.d||touchSide>0)player.x+=player.speed;
-    player.x=Math.max(0,Math.min(520,player.x));
-    if(Math.random()<.08+score*.001)
-      drops.push({x:Math.random()*540,y:-10,speed:2+Math.random()*3+score*.04,ch:chars[Math.floor(Math.random()*chars.length)]});
-    drops.forEach(function(d){d.y+=d.speed});
-    drops=drops.filter(function(d){return d.y<420});
-    for(var d of drops){
-      if(d.x>player.x-6&&d.x<player.x+player.w+6&&d.y>player.y-6&&d.y<player.y+player.h){alive=false}
+    var accent=getAccent();
+    spawnTimer++;
+    if(spawnTimer%40===0)spawn();
+    // Update
+    for(var i=falling.length-1;i>=0;i--){
+      falling[i].y+=falling[i].speed;
+      if(falling[i].y>420){missed++;falling.splice(i,1)}
     }
-    score+=.1;
-    var accent=getComputedStyle(html).getPropertyValue('--accent').trim();
-    gCtx.fillStyle='#000';gCtx.fillRect(0,0,540,400);
-    gCtx.fillStyle='#0f0';gCtx.font='16px JetBrains Mono';
-    drops.forEach(function(d){gCtx.fillText(d.ch,d.x,d.y)});
-    gCtx.fillStyle=accent;gCtx.fillRect(player.x,player.y,player.w,player.h);
-    gCtx.fillStyle='#fff';gCtx.font='14px Inter';gCtx.fillText('Score: '+Math.floor(score),10,20);
+    if(missed>=5)alive=false;
+    speed=1.2+score*.05;
+
+    // Draw
+    gCtx.fillStyle=getBg()||'#111';gCtx.fillRect(0,0,540,400);
+    // Column labels at bottom
+    for(var c=0;c<cols.length;c++){
+      gCtx.fillStyle=cols[c].color+'22';gCtx.fillRect(cols[c].x,350,cols[c].w,50);
+      gCtx.fillStyle=cols[c].color;gCtx.font='bold 13px Inter';gCtx.textAlign='center';
+      gCtx.fillText(cols[c].name,cols[c].x+cols[c].w/2,380);
+    }
+    // Falling items
+    gCtx.textAlign='center';
+    for(i=0;i<falling.length;i++){
+      var f=falling[i];
+      var itemColor=cols[f.col].color;
+      gCtx.fillStyle=itemColor+'44';
+      gCtx.fillRect(f.x-35,f.y-14,70,28);
+      gCtx.strokeStyle=itemColor;gCtx.strokeRect(f.x-35,f.y-14,70,28);
+      gCtx.fillStyle='#fff';gCtx.font='bold 12px JetBrains Mono';
+      gCtx.fillText(f.text,f.x,f.y+4);
+    }
+    // HUD
+    gCtx.fillStyle='#fff';gCtx.font='14px Inter';gCtx.textAlign='left';
+    gCtx.fillText('Sorted: '+score,10,20);
+    gCtx.fillText('Missed: '+missed+'/5',430,20);
+
     if(!alive){
       gCtx.fillStyle='rgba(0,0,0,.7)';gCtx.fillRect(0,0,540,400);
-      gCtx.fillStyle='#fff';gCtx.font='bold 28px Inter';gCtx.textAlign='center';
-      gCtx.fillText('GAME OVER — '+Math.floor(score)+' pts',270,200);
-      gCtx.font='14px Inter';gCtx.fillText('Close & triple-click to retry',270,235);
+      gCtx.fillStyle='#fff';gCtx.font='bold 26px Inter';gCtx.textAlign='center';
+      gCtx.fillText('Data Sorted: '+score+' items',270,180);
+      gCtx.font='14px Inter';gCtx.fillStyle='rgba(255,255,255,.4)';
+      gCtx.fillText('Our automation merges 2,000+ data items per hour — no errors.',270,220);
       gCtx.textAlign='left';clearInterval(gameInterval);
     }
-  },16);
+  },25);
+  spawn();
 }
 
-/* -- GAME 2: Pong -- */
-function startPongGame(){
-  gameTitle.textContent='🏓 Pong';
-  gameInstructions.textContent='Mouse / touch to move paddle. First to 5 wins!';
-  gameCanvas.width=540;gameCanvas.height=400;
-  var pad={x:250,y:375,w:80,h:10};
-  var ai={x:250,y:15,w:80,h:10};
-  var ball={x:270,y:200,vx:3,vy:3,r:6};
-  var pS=0,aS=0;
-  function mm(e){var r=gameCanvas.getBoundingClientRect();pad.x=(e.clientX-r.left)*(540/r.width)-pad.w/2}
-  function tm(e){var r=gameCanvas.getBoundingClientRect();pad.x=(e.touches[0].clientX-r.left)*(540/r.width)-pad.w/2}
-  addGameHandler(gameCanvas,'mousemove',mm);
-  addGameHandler(gameCanvas,'touchmove',tm,{passive:true});
-  gameInterval=setInterval(function(){
-    var accent=getComputedStyle(html).getPropertyValue('--accent').trim();
-    ai.x+=(ball.x-ai.x-ai.w/2)*.04;
-    ball.x+=ball.vx;ball.y+=ball.vy;
-    if(ball.x<=ball.r||ball.x>=540-ball.r)ball.vx*=-1;
-    if(ball.y+ball.r>=pad.y&&ball.x>=pad.x&&ball.x<=pad.x+pad.w&&ball.vy>0){
-      ball.vy=-Math.abs(ball.vy)*1.02;ball.vx+=(ball.x-(pad.x+pad.w/2))*.1;
-    }
-    if(ball.y-ball.r<=ai.y+ai.h&&ball.x>=ai.x&&ball.x<=ai.x+ai.w&&ball.vy<0){
-      ball.vy=Math.abs(ball.vy)*1.02;
-    }
-    if(ball.y>400){aS++;ball.x=270;ball.y=200;ball.vx=3*(Math.random()>.5?1:-1);ball.vy=-3}
-    if(ball.y<0){pS++;ball.x=270;ball.y=200;ball.vx=3*(Math.random()>.5?1:-1);ball.vy=3}
-    gCtx.fillStyle='#111';gCtx.fillRect(0,0,540,400);
-    gCtx.setLineDash([5,5]);gCtx.strokeStyle='rgba(255,255,255,.1)';
-    gCtx.beginPath();gCtx.moveTo(0,200);gCtx.lineTo(540,200);gCtx.stroke();gCtx.setLineDash([]);
-    gCtx.fillStyle=accent;gCtx.fillRect(pad.x,pad.y,pad.w,pad.h);
-    gCtx.fillStyle='#888';gCtx.fillRect(ai.x,ai.y,ai.w,ai.h);
-    gCtx.beginPath();gCtx.arc(ball.x,ball.y,ball.r,0,6.283);gCtx.fillStyle='#fff';gCtx.fill();
-    gCtx.font='bold 24px Inter';gCtx.textAlign='center';gCtx.fillStyle='rgba(255,255,255,.25)';
-    gCtx.fillText(aS,270,170);gCtx.fillText(pS,270,240);gCtx.textAlign='left';
-    if(pS>=5||aS>=5){
-      gCtx.fillStyle='rgba(0,0,0,.7)';gCtx.fillRect(0,0,540,400);
-      gCtx.fillStyle='#fff';gCtx.font='bold 28px Inter';gCtx.textAlign='center';
-      gCtx.fillText(pS>=5?'YOU WIN!':'AI WINS!',270,200);gCtx.textAlign='left';
-      clearInterval(gameInterval);
-    }
-  },16);
-}
+/* ── GAME 4: Spec Match (Memory) ──
+   Match automation types. Engineering themed. */
+function startSpecMatch(){
+  gameTitle.textContent='🧠 Automation Match';
+  gameSub.textContent='Match each automation to its real-world savings';
+  gameInstr.textContent='Find matching pairs! Each pair is an automation + its annual hours saved.';
 
-/* -- GAME 3: Snake -- */
-function startSnakeGame(){
-  gameTitle.textContent='🐍 Snake';
-  gameInstructions.textContent='Arrow keys or swipe to move. Eat dots!';
-  gameCanvas.width=540;gameCanvas.height=400;
-  var grid=20,cols=27,rows=20;
-  var snake=[{x:10,y:10}],dir={x:1,y:0},food={x:15,y:10},score=0,alive=true;
-  function kd(e){
-    if(e.key==='ArrowUp'&&dir.y!==1)dir={x:0,y:-1};
-    if(e.key==='ArrowDown'&&dir.y!==-1)dir={x:0,y:1};
-    if(e.key==='ArrowLeft'&&dir.x!==1)dir={x:-1,y:0};
-    if(e.key==='ArrowRight'&&dir.x!==-1)dir={x:1,y:0};
-  }
-  addGameHandler(document,'keydown',kd);
-  var tx=null,ty=null;
-  addGameHandler(gameCanvas,'touchstart',function(e){tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
-  addGameHandler(gameCanvas,'touchend',function(e){
-    if(!tx)return;var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;
-    if(Math.abs(dx)>Math.abs(dy)){dir=dx>0&&dir.x!==-1?{x:1,y:0}:dx<0&&dir.x!==1?{x:-1,y:0}:dir}
-    else{dir=dy>0&&dir.y!==-1?{x:0,y:1}:dy<0&&dir.y!==1?{x:0,y:-1}:dir}
-    tx=ty=null;
-  },{passive:true});
-  gameInterval=setInterval(function(){
-    if(!alive)return;
-    var accent=getComputedStyle(html).getPropertyValue('--accent').trim();
-    var head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};
-    if(head.x<0||head.x>=cols||head.y<0||head.y>=rows||snake.some(function(s){return s.x===head.x&&s.y===head.y})){
-      alive=false;
-    }else{
-      snake.unshift(head);
-      if(head.x===food.x&&head.y===food.y){score++;food={x:Math.floor(Math.random()*cols),y:Math.floor(Math.random()*rows)}}
-      else snake.pop();
-    }
-    gCtx.fillStyle='#0a0a0a';gCtx.fillRect(0,0,540,400);
-    gCtx.fillStyle=accent;
-    snake.forEach(function(s,idx){
-      gCtx.globalAlpha=1-idx/snake.length*.5;
-      gCtx.fillRect(s.x*grid+1,s.y*grid+1,grid-2,grid-2);
-    });
-    gCtx.globalAlpha=1;
-    gCtx.fillStyle='#ff4444';gCtx.beginPath();
-    gCtx.arc(food.x*grid+grid/2,food.y*grid+grid/2,grid/2-2,0,6.283);gCtx.fill();
-    gCtx.fillStyle='#fff';gCtx.font='14px Inter';gCtx.fillText('Score: '+score,10,18);
-    if(!alive){
-      gCtx.fillStyle='rgba(0,0,0,.7)';gCtx.fillRect(0,0,540,400);
-      gCtx.fillStyle='#fff';gCtx.font='bold 28px Inter';gCtx.textAlign='center';
-      gCtx.fillText('Game Over — '+score+' pts',270,200);gCtx.textAlign='left';
-      clearInterval(gameInterval);
-    }
-  },100);
-}
-
-/* -- GAME 4: Memory Match -- */
-function startMemoryGame(){
-  gameTitle.textContent='🧠 Memory Match';
-  gameInstructions.textContent='Click cards to find matching pairs!';
-  gameCanvas.width=540;gameCanvas.height=400;
-  var icons=['⚙️','📐','📊','🤖','🌐','🔗','💡','🚀'];
-  var cards=[].concat(icons,icons).sort(function(){return Math.random()-.5});
+  var pairs=[
+    {a:'CAD Checks',b:'3,600 hrs'},
+    {a:'Drawing Gen',b:'1,200 hrs'},
+    {a:'Data Merge',b:'2,000 hrs'},
+    {a:'Spec Calc',b:'1,032 hrs'},
+    {a:'Parts List',b:'800 hrs'},
+    {a:'Clean CAD',b:'75 hrs'},
+    {a:'Fix Drawings',b:'350 hrs'},
+    {a:'Navigate+Email',b:'1,010 hrs'}
+  ];
+  // Create 16 cards: each pair gets 2 cards with same pairId
+  var cards=[];
+  pairs.forEach(function(p,i){
+    cards.push({text:p.a,pairId:i});
+    cards.push({text:p.b,pairId:i});
+  });
+  cards=cards.sort(function(){return Math.random()-.5});
   var revealed=Array(16).fill(false),matched=Array(16).fill(false);
   var first=null,second=null,lockBoard=false,moves=0;
+
   function drawCards(){
-    var accent=getComputedStyle(html).getPropertyValue('--accent').trim();
-    gCtx.fillStyle='#111';gCtx.fillRect(0,0,540,400);
+    var accent=getAccent();
+    gCtx.fillStyle=getBg()||'#111';gCtx.fillRect(0,0,540,400);
     for(var i=0;i<16;i++){
       var col=i%4,row=Math.floor(i/4),x=col*135+2,y=row*100+2;
-      gCtx.fillStyle=matched[i]?'rgba(0,255,0,.1)':revealed[i]?'#1a1a2e':'#222';
+      gCtx.fillStyle=matched[i]?accent+'22':revealed[i]?'rgba(255,255,255,.06)':'rgba(255,255,255,.02)';
       gCtx.fillRect(x,y,131,96);
-      gCtx.strokeStyle=matched[i]?'rgba(0,255,0,.3)':revealed[i]?accent:'#444';
-      gCtx.strokeRect(x,y,131,96);
-      if(revealed[i]||matched[i]){gCtx.font='32px serif';gCtx.textAlign='center';gCtx.fillStyle='#fff';gCtx.fillText(cards[i],x+65,y+58);gCtx.textAlign='left'}
-      else{gCtx.font='bold 20px Inter';gCtx.fillStyle='#555';gCtx.textAlign='center';gCtx.fillText('?',x+65,y+58);gCtx.textAlign='left'}
+      gCtx.strokeStyle=matched[i]?accent:revealed[i]?accent:'rgba(255,255,255,.1)';
+      gCtx.lineWidth=matched[i]?2:1;
+      gCtx.strokeRect(x,y,131,96);gCtx.lineWidth=1;
+      gCtx.textAlign='center';
+      if(revealed[i]||matched[i]){
+        gCtx.fillStyle='#fff';gCtx.font='bold 13px Inter';
+        gCtx.fillText(cards[i].text,x+65,y+52);
+      }else{
+        gCtx.fillStyle='rgba(255,255,255,.2)';gCtx.font='bold 18px Inter';
+        gCtx.fillText('?',x+65,y+54);
+      }
     }
-    gCtx.fillStyle='#fff';gCtx.font='12px Inter';gCtx.fillText('Moves: '+moves,10,395);
+    gCtx.textAlign='left';gCtx.fillStyle='rgba(255,255,255,.3)';gCtx.font='12px Inter';
+    gCtx.fillText('Moves: '+moves,10,395);
     if(matched.every(Boolean)){
       gCtx.fillStyle='rgba(0,0,0,.6)';gCtx.fillRect(0,0,540,400);
-      gCtx.fillStyle='#fff';gCtx.font='bold 28px Inter';gCtx.textAlign='center';
-      gCtx.fillText('🎉 All Matched in '+moves+' moves!',270,200);gCtx.textAlign='left';
+      gCtx.fillStyle='#fff';gCtx.font='bold 24px Inter';gCtx.textAlign='center';
+      gCtx.fillText('🎉 All Matched in '+moves+' moves!',270,190);
+      gCtx.font='14px Inter';gCtx.fillStyle='rgba(255,255,255,.4)';
+      gCtx.fillText('Total savings shown: 10,000+ engineering hours/year',270,225);
+      gCtx.textAlign='left';
     }
   }
+
   function handleClick(e){
-    if(lockBoard)return;
+    if(lockBoard||matched.every(Boolean))return;
     var r=gameCanvas.getBoundingClientRect();
-    var mx=((e.clientX||e.touches&&e.touches[0]&&e.touches[0].clientX||0)-r.left)*(540/r.width);
-    var my=((e.clientY||e.touches&&e.touches[0]&&e.touches[0].clientY||0)-r.top)*(400/r.height);
+    var mx=((e.clientX||0)-r.left)*(540/r.width);
+    var my=((e.clientY||0)-r.top)*(400/r.height);
     var col=Math.floor(mx/135),row=Math.floor(my/100);
     if(col<0||col>=4||row<0||row>=4)return;
     var idx=row*4+col;
@@ -1518,82 +1494,129 @@ function startMemoryGame(){
     if(first===null){first=idx}
     else{
       second=idx;moves++;lockBoard=true;
-      if(cards[first]===cards[second]){matched[first]=matched[second]=true;first=second=null;lockBoard=false;drawCards()}
-      else{setTimeout(function(){revealed[first]=revealed[second]=false;first=second=null;lockBoard=false;drawCards()},800)}
+      if(cards[first].pairId===cards[second].pairId){
+        matched[first]=matched[second]=true;first=second=null;lockBoard=false;drawCards();
+      }else{setTimeout(function(){revealed[first]=revealed[second]=false;first=second=null;lockBoard=false;drawCards()},900)}
     }
   }
-  addGameHandler(gameCanvas,'click',handleClick);
+  addH(gameCanvas,'click',handleClick);
   drawCards();
 }
 
-/* -- GAME 5: Speed Click -- */
-function startClickGame(){
-  gameTitle.textContent='⚡ Speed Click';
-  gameInstructions.textContent='Hit 20 targets as fast as possible!';
-  gameCanvas.width=540;gameCanvas.height=400;
-  var target={x:270,y:200,r:25},clicks=0,total=20,startTime=null,doneTime=null;
-  function newTarget(){target.x=30+Math.random()*480;target.y=30+Math.random()*340;target.r=14+Math.random()*18}
+/* ── GAME 5: Pipeline Rush ──
+   Connect data from sources to destinations.
+   Click nodes in the right order to build the pipeline. */
+function startPipeline(){
+  gameTitle.textContent='🔗 Pipeline Rush';
+  gameSub.textContent='Based on our System Integration work — connecting CAD, ERP, email & cloud';
+  gameInstr.textContent='Click the systems in the correct order to build the data pipeline!';
+
+  var pipelines=[
+    {seq:['3D CAD','Measurement','Excel Report','Email'],desc:'Spec Check Report'},
+    {seq:['CAD Model','Clean Data','Save Format','FTP Upload'],desc:'Customer Data Delivery'},
+    {seq:['Warranty DB','AI Classify','Top 3 Picks','Engineer Review'],desc:'Warranty Classification'},
+    {seq:['6 Sources','Commonize','Merge Data','Final Report'],desc:'Data Commonization'},
+    {seq:['3D Model','Extract Dims','Generate 2D','Plant Drawing'],desc:'Drawing Generation'},
+  ];
+  var pi=0,score=0,clickIdx=0;
+
   function draw(){
-    var accent=getComputedStyle(html).getPropertyValue('--accent').trim();
-    gCtx.fillStyle='#0a0a0a';gCtx.fillRect(0,0,540,400);
-    if(!doneTime){
-      gCtx.shadowColor=accent;gCtx.shadowBlur=20;gCtx.fillStyle=accent;
-      gCtx.beginPath();gCtx.arc(target.x,target.y,target.r,0,6.283);gCtx.fill();
-      gCtx.shadowBlur=0;
-      gCtx.fillStyle='#fff';gCtx.beginPath();gCtx.arc(target.x,target.y,4,0,6.283);gCtx.fill();
+    var accent=getAccent();
+    gCtx.fillStyle=getBg()||'#111';gCtx.fillRect(0,0,540,400);
+    if(pi>=pipelines.length){
+      gCtx.fillStyle='#fff';gCtx.font='bold 24px Inter';gCtx.textAlign='center';
+      gCtx.fillText('🔗 All '+score+' Pipelines Built!',270,180);
+      gCtx.font='14px Inter';gCtx.fillStyle='rgba(255,255,255,.4)';
+      gCtx.fillText('Our integrations process data 24/7 — zero downtime.',270,220);
+      gCtx.textAlign='left';return;
     }
-    gCtx.fillStyle='#fff';gCtx.font='14px Inter';
-    gCtx.fillText(clicks+' / '+total,10,20);
-    if(startTime){
-      var elapsed=((doneTime||Date.now())-startTime)/1000;
-      gCtx.fillText(elapsed.toFixed(1)+'s',470,20);
+    var p=pipelines[pi];
+    gCtx.fillStyle=accent;gCtx.font='bold 14px Inter';gCtx.textAlign='center';
+    gCtx.fillText('Pipeline '+(pi+1)+'/'+pipelines.length+': '+p.desc,270,30);
+
+    // Show nodes in shuffled positions
+    if(!p._positions){
+      p._positions=[];
+      var shuffled=p.seq.map(function(s,i){return{text:s,order:i}}).sort(function(){return Math.random()-.5});
+      p._shuffled=shuffled;
+      var cols=shuffled.length;
+      for(var i=0;i<cols;i++){
+        p._positions.push({x:40+i*(500/cols),y:150+Math.random()*80,w:110,h:50});
+      }
     }
-    if(doneTime){
-      gCtx.fillStyle='rgba(0,0,0,.6)';gCtx.fillRect(0,0,540,400);
-      gCtx.fillStyle='#fff';gCtx.font='bold 28px Inter';gCtx.textAlign='center';
-      gCtx.fillText('⚡ '+((doneTime-startTime)/1000).toFixed(2)+' seconds!',270,200);gCtx.textAlign='left';
+
+    // Draw connecting line for completed nodes
+    gCtx.strokeStyle=accent;gCtx.lineWidth=2;
+    for(var i=0;i<clickIdx-1;i++){
+      var a=null,b=null;
+      for(var j=0;j<p._shuffled.length;j++){
+        if(p._shuffled[j].order===i)a=p._positions[j];
+        if(p._shuffled[j].order===i+1)b=p._positions[j];
+      }
+      if(a&&b){
+        gCtx.beginPath();gCtx.moveTo(a.x+55,a.y+25);gCtx.lineTo(b.x+55,b.y+25);gCtx.stroke();
+      }
     }
-    if(!doneTime)requestAnimationFrame(draw);
+    gCtx.lineWidth=1;
+
+    // Draw nodes
+    for(var i=0;i<p._shuffled.length;i++){
+      var n=p._shuffled[i],pos=p._positions[i];
+      var done=n.order<clickIdx;
+      var isNext=n.order===clickIdx;
+      gCtx.fillStyle=done?accent+'44':isNext?'rgba(255,255,255,.08)':'rgba(255,255,255,.03)';
+      gCtx.fillRect(pos.x,pos.y,pos.w,pos.h);
+      gCtx.strokeStyle=done?accent:isNext?accent:'rgba(255,255,255,.12)';
+      gCtx.strokeRect(pos.x,pos.y,pos.w,pos.h);
+      if(done){gCtx.fillStyle='rgba(255,255,255,.15)';gCtx.font='18px Inter';gCtx.fillText('✓',pos.x+55,pos.y+20)}
+      gCtx.fillStyle=done?accent:'#fff';gCtx.font=(done?'bold ':'')+' 12px Inter';
+      gCtx.fillText(n.text,pos.x+55,pos.y+35);
+    }
+
+    gCtx.fillStyle='rgba(255,255,255,.3)';gCtx.font='13px Inter';
+    gCtx.fillText('Click step '+(clickIdx+1)+': "'+p.seq[clickIdx]+'"',270,350);
+    gCtx.fillText('Score: '+score,270,380);
+    gCtx.textAlign='left';
   }
+
   function handleClick(e){
-    if(doneTime)return;
+    if(pi>=pipelines.length)return;
     var r=gameCanvas.getBoundingClientRect();
     var mx=((e.clientX||0)-r.left)*(540/r.width);
     var my=((e.clientY||0)-r.top)*(400/r.height);
-    var dx=mx-target.x,dy=my-target.y;
-    if(Math.sqrt(dx*dx+dy*dy)<=target.r){
-      if(!startTime)startTime=Date.now();
-      clicks++;
-      if(clicks>=total){doneTime=Date.now();return}
-      newTarget();
+    var p=pipelines[pi];
+    for(var i=0;i<p._shuffled.length;i++){
+      var pos=p._positions[i];
+      if(mx>=pos.x&&mx<=pos.x+pos.w&&my>=pos.y&&my<=pos.y+pos.h){
+        if(p._shuffled[i].order===clickIdx){
+          clickIdx++;
+          if(clickIdx>=p.seq.length){score++;pi++;clickIdx=0;}
+          draw();
+        }else{
+          showNotif('✗ Wrong step! Find: "'+p.seq[clickIdx]+'"');
+        }
+        return;
+      }
     }
   }
-  addGameHandler(gameCanvas,'click',handleClick);
+  addH(gameCanvas,'click',handleClick);
   draw();
 }
 
-/* ──────────────────────────────────────────
-   15. KONAMI CODE
-   ────────────────────────────────────────── */
+/* ── KONAMI CODE ── */
 var kSeq=[];
 var KONAMI=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-document.addEventListener('keydown', function(e){
-  kSeq.push(e.key);
-  if(kSeq.length>KONAMI.length)kSeq.shift();
+document.addEventListener('keydown',function(e){
+  kSeq.push(e.key);if(kSeq.length>KONAMI.length)kSeq.shift();
   if(kSeq.join(',')=== KONAMI.join(',')){
-    kSeq=[];
-    showNotification('🎉 KONAMI CODE! Master secret unlocked!');
+    kSeq=[];showNotif('🎉 KONAMI CODE! Cycling all themes!');
     var names=['midnight','cyberteal','solarflare','arctic','emerald','royal','crimson','sand','neonnoir','ocean'];
-    var ci=0;
-    var cyc=setInterval(function(){applyTheme(names[ci%names.length]);ci++;if(ci>=names.length*2)clearInterval(cyc)},200);
+    var ci=0;var cyc=setInterval(function(){applyTheme(names[ci%names.length]);ci++;if(ci>=names.length*2)clearInterval(cyc)},200);
   }
 });
 
-/* ──────────────────────────────────────────
-   16. CONSOLE GREETING
-   ────────────────────────────────────────── */
-console.log('%c🐾 Kirk Automations','font-size:20px;font-weight:bold;color:#6c63ff');
-console.log('%cTriple-click any service card for Easter eggs. Konami code works too.','color:#888');
+console.log('%c🐾 Kirk Automations','font-size:20px;font-weight:bold;color:#2558d9');
+console.log('%cHover over service cards for interactive demos. Konami code works too.','color:#888');
 
 })();
 </script>
