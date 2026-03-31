@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pipeline Builder — Kirk Automations</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔗</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a1a;--card:#12122a;--accent:#00e5ff;--accent2:#39ff14;--pink:#ff006e;--text:#e0e0e0;--dim:#666}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.back{position:fixed;top:14px;left:14px;font-size:.82rem;z-index:100;background:rgba(10,10,26,.85);
+  padding:6px 14px;border:1px solid var(--accent);border-radius:6px;font-family:'JetBrains Mono',monospace}
+h1{font-family:'Inter',sans-serif;font-weight:800;text-align:center;font-size:clamp(1.5rem,4vw,2.2rem);
+  color:var(--accent);margin:60px 0 8px;text-shadow:0 0 20px rgba(0,229,255,.3)}
+.subtitle{text-align:center;color:var(--accent2);font-size:.95rem;margin-bottom:6px;font-weight:600}
+.desc{text-align:center;color:var(--dim);font-size:.88rem;margin-bottom:30px;max-width:500px;margin-left:auto;margin-right:auto}
+.container{max-width:650px;margin:0 auto;padding:0 20px 60px}
+.level-header{text-align:center;margin-bottom:20px}
+.level-num{font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:.8rem;letter-spacing:2px;text-transform:uppercase}
+.level-name{font-size:1.3rem;font-weight:700;margin:4px 0}
+.level-desc{color:var(--dim);font-size:.88rem}
+
+/* Pipeline area */
+.pipeline-area{background:var(--card);border:1px solid rgba(0,229,255,.15);border-radius:16px;padding:24px;margin-bottom:20px;min-height:200px}
+.step-bank{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:24px}
+.step-chip{
+  padding:10px 18px;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.25);
+  border-radius:8px;font-size:.88rem;font-weight:600;cursor:pointer;
+  transition:all .2s;user-select:none;-webkit-user-select:none;
+  font-family:'JetBrains Mono',monospace;
+}
+.step-chip:hover{background:rgba(0,229,255,.15);transform:translateY(-2px)}
+.step-chip.used{opacity:.3;pointer-events:none;border-style:dashed}
+.step-chip.wrong{animation:shake .4s;border-color:var(--pink)}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+.pipeline-slots{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap}
+.pipe-slot{
+  min-width:100px;height:48px;border:2px dashed rgba(255,255,255,.12);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-size:.82rem;
+  color:var(--dim);transition:all .3s;position:relative;
+}
+.pipe-slot.filled{border-color:var(--accent2);border-style:solid;color:var(--accent2);background:rgba(57,255,20,.06)}
+.pipe-slot.active{border-color:var(--accent);animation:pulse-slot 1s ease-in-out infinite}
+@keyframes pulse-slot{0%,100%{box-shadow:0 0 0 0 rgba(0,229,255,.3)}50%{box-shadow:0 0 0 6px transparent}}
+.pipe-arrow{color:var(--dim);font-size:1.2rem;flex-shrink:0}
+
+.hud{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.88rem;
+  margin-bottom:20px;padding:10px 16px;background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:10px}
+.hud .level-prog{color:var(--accent)}
+.hud .score-val{color:var(--accent2)}
+.hud .time-val{color:#ffd600}
+
+.feedback{text-align:center;padding:14px;margin-top:14px;border-radius:10px;font-weight:600;display:none}
+.feedback.show{display:block;animation:fadeUp .4s ease}
+.feedback.correct{background:rgba(57,255,20,.1);border:1px solid var(--accent2);color:var(--accent2)}
+.feedback.wrong{background:rgba(255,0,110,.1);border:1px solid var(--pink);color:var(--pink)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.btn{padding:12px 28px;font-size:.95rem;font-weight:700;border:none;border-radius:8px;cursor:pointer;
+  transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--accent2);color:var(--bg)}
+.btn-primary:hover{box-shadow:0 0 20px rgba(57,255,20,.4);transform:scale(1.03)}
+.btn-reset{background:transparent;border:1px solid var(--dim);color:var(--dim);font-size:.82rem;padding:8px 18px}
+.btn-reset:hover{border-color:var(--accent);color:var(--accent)}
+
+.endscreen{text-align:center;padding:40px 20px}
+.endscreen h2{color:var(--accent2);font-size:1.8rem;margin-bottom:12px}
+.endscreen .final-score{font-size:2.5rem;font-weight:800;color:var(--accent);margin-bottom:8px;
+  font-family:'JetBrains Mono',monospace}
+.endscreen p{color:var(--dim);font-size:.95rem;margin-bottom:20px;line-height:1.6}
+
+.info-box{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:12px;
+  padding:24px;margin-top:40px;text-align:center}
+.info-box h3{color:var(--accent);font-size:1rem;margin-bottom:8px}
+.info-box p{color:var(--dim);font-size:.88rem;line-height:1.6}
+</style>
+</head>
+<body>
+<a class="back" href="../">← Back</a>
+<h1>🔗 Pipeline Builder</h1>
+<div class="subtitle">Kirk Automations</div>
+<div class="desc">Build real automation pipelines by clicking the steps in the right order!</div>
+<div class="container">
+  <div class="hud">
+    <span>Level: <span class="level-prog" id="levelProg">1/5</span></span>
+    <span>Score: <span class="score-val" id="scoreVal">0</span></span>
+    <span>Time: <span class="time-val" id="timeVal">0s</span></span>
+  </div>
+  <div id="gameArea"></div>
+  <div class="info-box">
+    <h3>What is Kirk Automations?</h3>
+    <p>Kirk Automations builds custom software that automates engineering work — CAD checks, drawing generation, data processing, and more. Each pipeline in this game is based on a real automation that saves hundreds to thousands of hours per year.</p>
+    <p style="margin-top:8px"><a href="../#contact">Learn more →</a></p>
+  </div>
+</div>
+
+<script>
+(function(){
+var levels=[
+  {
+    name:'Spec Check Report',
+    desc:'Automate thickness measurements + photos for 300 parts/week',
+    savings:'800 hrs/yr',
+    steps:['Open 3D CAD','Measure Thickness','Take Photos','Generate Excel','Email Report'],
+  },
+  {
+    name:'Drawing Generation',
+    desc:'Turn a finished 3D model into a 2D manufacturing drawing',
+    savings:'1,200 hrs/yr',
+    steps:['Load 3D Model','Extract Dimensions','Create 2D Layout','Add Tolerances','Export Drawing'],
+  },
+  {
+    name:'Customer Data Delivery',
+    desc:'Clean CAD, convert format, and deliver to the right customer via FTP/email',
+    savings:'100 hrs/yr',
+    steps:['Open 3D Model','Delete IP Lines','Save Customer Format','Zip with Docs','Upload to FTP'],
+  },
+  {
+    name:'CAD Comparison',
+    desc:'Compare system-level drawings to component-level drawings across milestones',
+    savings:'3,600 hrs/yr',
+    steps:['Scrape System CAD','Scrape Component CAD','Check Equivalence','Flag Differences','Output Report'],
+  },
+  {
+    name:'Data Commonization',
+    desc:'Merge 6 different data sources with different formats into one report',
+    savings:'2,000 hrs/yr',
+    steps:['Import 6 Sources','Normalize Formats','Align Columns','Merge Data','Generate Report'],
+  }
+];
+
+var currentLevel=0,score=0,startTime=Date.now(),currentStep=0;
+var gameArea=document.getElementById('gameArea');
+var levelProg=document.getElementById('levelProg');
+var scoreVal=document.getElementById('scoreVal');
+var timeVal=document.getElementById('timeVal');
+var timerInterval=setInterval(function(){
+  timeVal.textContent=Math.floor((Date.now()-startTime)/1000)+'s';
+},1000);
+
+function shuffle(arr){
+  var a=arr.slice();
+  for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}
+  return a;
+}
+
+function renderLevel(){
+  var lv=levels[currentLevel];
+  currentStep=0;
+  levelProg.textContent=(currentLevel+1)+'/'+levels.length;
+
+  var shuffled=shuffle(lv.steps);
+  var html='<div class="level-header"><div class="level-num">Level '+(currentLevel+1)+'</div>';
+  html+='<div class="level-name">'+lv.name+'</div>';
+  html+='<div class="level-desc">'+lv.desc+' — <strong style="color:#ffd600">'+lv.savings+' saved</strong></div></div>';
+  html+='<div class="pipeline-area">';
+  html+='<div class="step-bank" id="stepBank">';
+  shuffled.forEach(function(s,i){
+    html+='<div class="step-chip" data-step="'+s+'" onclick="window._pickStep(this)">'+s+'</div>';
+  });
+  html+='</div>';
+  html+='<div class="pipeline-slots" id="pipeSlots">';
+  lv.steps.forEach(function(s,i){
+    html+='<div class="pipe-slot'+(i===0?' active':'')+'" data-idx="'+i+'">Step '+(i+1)+'</div>';
+    if(i<lv.steps.length-1) html+='<span class="pipe-arrow">→</span>';
+  });
+  html+='</div>';
+  html+='</div>';
+  html+='<div class="feedback" id="feedback"></div>';
+  html+='<div style="text-align:center;margin-top:12px"><button class="btn btn-reset" onclick="window._resetLevel()">Reset Level</button></div>';
+  gameArea.innerHTML=html;
+}
+
+window._pickStep=function(el){
+  var stepText=el.getAttribute('data-step');
+  var lv=levels[currentLevel];
+  var fb=document.getElementById('feedback');
+  if(stepText===lv.steps[currentStep]){
+    // Correct
+    el.classList.add('used');
+    var slots=document.querySelectorAll('.pipe-slot');
+    slots[currentStep].textContent=stepText;
+    slots[currentStep].classList.add('filled');
+    slots[currentStep].classList.remove('active');
+    currentStep++;
+    if(currentStep<lv.steps.length){
+      slots[currentStep].classList.add('active');
+      fb.className='feedback';fb.style.display='none';
+    } else {
+      // Level complete
+      score+=100;
+      scoreVal.textContent=score;
+      fb.className='feedback correct show';
+      fb.textContent='✓ Pipeline complete! '+lv.savings+' saved annually.';
+      setTimeout(function(){
+        currentLevel++;
+        if(currentLevel<levels.length){renderLevel()}
+        else{showEnd()}
+      },1800);
+    }
+  } else {
+    // Wrong
+    el.classList.add('wrong');
+    setTimeout(function(){el.classList.remove('wrong')},400);
+    fb.className='feedback wrong show';
+    fb.textContent='✗ Wrong step! Need: Step '+(currentStep+1)+' of the pipeline.';
+    score=Math.max(0,score-10);
+    scoreVal.textContent=score;
+  }
+};
+
+window._resetLevel=function(){renderLevel()};
+
+function showEnd(){
+  clearInterval(timerInterval);
+  var time=Math.floor((Date.now()-startTime)/1000);
+  gameArea.innerHTML='<div class="endscreen">'+
+    '<h2>🔗 All Pipelines Built!</h2>'+
+    '<div class="final-score">'+score+' pts</div>'+
+    '<p>Completed in '+time+' seconds<br>'+
+    'These 5 automations save <strong style="color:var(--accent2)">7,700+ hours/year</strong> combined.</p>'+
+    '<p style="color:var(--dim)">Kirk Automations builds these pipelines for real engineering companies. Every pipeline you just built is running in production somewhere right now.</p>'+
+    '<button class="btn btn-primary" onclick="location.reload()">Play Again</button>'+
+    ' <a href="../#contact" class="btn btn-primary" style="display:inline-block;margin-left:8px;text-decoration:none">Get in Touch →</a>'+
+    '</div>';
+}
+
+renderLevel();
+})();
+</script>
+</body>
+</html>

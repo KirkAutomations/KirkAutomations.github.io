@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>The Automation Price Is Right | Kirk Automations</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e17;
+  --bg-card: #131926;
+  --bg-card-hover: #1a2236;
+  --accent: #00e5ff;
+  --accent2: #7c4dff;
+  --accent3: #00e676;
+  --danger: #ff1744;
+  --text: #e0e6f0;
+  --text-dim: #7a8ba8;
+  --border: #1e2a3a;
+  --gold: #ffd740;
+  --radius: 12px;
+  --glow: 0 0 20px rgba(0,229,255,0.3);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 20px;
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+.back-link:hover { opacity: 0.7; }
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 20px 40px;
+}
+.header {
+  text-align: center;
+  padding: 20px 0 30px;
+}
+.brand {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 8px;
+}
+h1 {
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+}
+.subtitle {
+  color: var(--text-dim);
+  margin-top: 8px;
+  font-size: 0.95rem;
+}
+.score-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.score-bar .label { color: var(--text-dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; }
+.score-bar .value { font-size: 1.3rem; font-weight: 700; color: var(--accent); }
+.score-bar .round-value { color: var(--accent2); }
+
+.game-area {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 30px 24px;
+  text-align: center;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.automation-name {
+  font-size: clamp(1.1rem, 4vw, 1.5rem);
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+.automation-prompt {
+  color: var(--text-dim);
+  margin-bottom: 28px;
+  font-size: 0.9rem;
+}
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+}
+.choice-btn {
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.choice-btn:hover, .choice-btn:focus {
+  border-color: var(--accent);
+  background: var(--bg-card-hover);
+  box-shadow: var(--glow);
+  transform: translateY(-2px);
+}
+.choice-btn.correct {
+  border-color: var(--accent3);
+  background: rgba(0,230,118,0.1);
+  box-shadow: 0 0 20px rgba(0,230,118,0.3);
+}
+.choice-btn.wrong {
+  border-color: var(--danger);
+  background: rgba(255,23,68,0.1);
+}
+.choice-btn.actual {
+  border-color: var(--gold);
+  background: rgba(255,215,64,0.1);
+}
+.choice-btn:disabled { cursor: default; transform: none; }
+
+.result-text {
+  margin-top: 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  min-height: 50px;
+}
+.result-text.win { color: var(--accent3); }
+.result-text.lose { color: var(--danger); }
+
+.next-btn, .start-btn {
+  margin-top: 20px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border: none;
+  border-radius: var(--radius);
+  padding: 14px 36px;
+  color: #000;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.next-btn:hover, .start-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glow);
+}
+
+.final-score {
+  text-align: center;
+}
+.final-score .big-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 3.5rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--gold), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.final-score .big-label {
+  color: var(--text-dim);
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+.final-score .grade {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 16px 0;
+}
+
+.info-section {
+  margin-top: 40px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+.info-section h3 {
+  color: var(--accent);
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+.info-section p {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+.info-section a { color: var(--accent); }
+
+.fun-fact {
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: rgba(124,77,255,0.1);
+  border-left: 3px solid var(--accent2);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  text-align: left;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-in { animation: slideIn 0.4s ease; }
+</style>
+</head>
+<body>
+
+<a href="../" class="back-link">← Back to Kirk Automations</a>
+
+<div class="container">
+  <div class="header">
+    <div class="brand">Kirk Automations</div>
+    <h1>⚡ The Automation Price Is Right</h1>
+    <p class="subtitle">How many hours per year does each automation save? Guess closest without going over!</p>
+  </div>
+
+  <div class="score-bar" id="scoreBar" style="display:none;">
+    <div><div class="label">Score</div><div class="value" id="scoreDisplay">0</div></div>
+    <div><div class="label">Round</div><div class="value round-value" id="roundDisplay">1 / 10</div></div>
+    <div><div class="label">Streak</div><div class="value" id="streakDisplay">0🔥</div></div>
+  </div>
+
+  <div class="game-area" id="gameArea">
+    <div id="startScreen">
+      <div style="font-size:3rem;margin-bottom:16px;">🎯</div>
+      <h2 style="margin-bottom:12px;">Think You Know Automation?</h2>
+      <p style="color:var(--text-dim);margin-bottom:8px;max-width:400px;">Kirk Automations builds tools that save engineers <strong style="color:var(--accent);">thousands of hours</strong> per year.</p>
+      <p style="color:var(--text-dim);margin-bottom:24px;max-width:400px;font-size:0.9rem;">Guess the hours saved by each automation — closest without going over wins the round!</p>
+      <button class="start-btn" onclick="startGame()">Let's Play →</button>
+    </div>
+    <div id="questionScreen" style="display:none;width:100%;"></div>
+    <div id="endScreen" style="display:none;"></div>
+  </div>
+
+  <div class="info-section">
+    <h3>💡 What is Kirk Automations?</h3>
+    <p>Kirk Automations builds custom engineering automation tools that eliminate tedious, repetitive tasks — like generating drawings from 3D CAD, checking specs against standards, and building parts lists automatically. These aren't theoretical savings: the hours in this game come from real projects saving real engineers real time. <a href="../">Learn more →</a></p>
+  </div>
+</div>
+
+<script>
+const AUTOMATIONS = [
+  { name: "Spec Check Report with Photos", hours: 800, fact: "Engineers used to manually cross-check specs against photos — now it's automated and error-free." },
+  { name: "Drawing Generation", hours: 1200, fact: "Converts 3D CAD models to manufacturing-ready 2D drawings automatically — no more manual dimensioning." },
+  { name: "Compare System CAD to Component CAD", hours: 3600, fact: "This is the big one — 3,600 hours saved by automatically checking if components fit the system design." },
+  { name: "Build Parts List from CAD & Spec Options", hours: 1032, fact: "Automatically generates BOMs from CAD geometry and spec configurations. No more spreadsheet wrangling." },
+  { name: "Navigate Program + Get Data + Make Email", hours: 1010, fact: "Bots navigate legacy internal systems, pull data, and draft emails — tasks that used to eat entire mornings." },
+  { name: "Commonize Data from 6 Sources", hours: 2000, fact: "Six different data formats, one unified output. What took days now takes minutes." },
+  { name: "Change Comparison", hours: 600, fact: "Automatically detects what changed between design revisions — no more line-by-line comparisons." },
+  { name: "Check CAD for Safety/Emissions/Critical", hours: 720, fact: "Automated compliance checking catches safety issues before they reach production." },
+  { name: "Fix Mistakes on Drawings", hours: 350, fact: "AI-assisted correction of common drawing errors — wrong tolerances, missing notes, bad dimensions." },
+  { name: "Calculate Maximum Condition from CAD", hours: 240, fact: "Maximum material condition calculations done instantly from 3D models instead of manual measurement." },
+  { name: "Clean Messy CAD", hours: 75, fact: "Automatically fixes naming conventions, layer issues, and geometry errors in messy CAD files." },
+  { name: "Automated Report Generation", hours: 100, fact: "Test results, inspection data, and analysis packaged into formatted reports automatically." },
+  { name: "Convert Data and Send to Customer", hours: 100, fact: "Translates data between formats and delivers it — no human copy-paste pipeline needed." },
+  { name: "Calculate Material Usage", hours: 100, fact: "Pulls geometry from CAD to calculate material weight, waste, and cost automatically." },
+  { name: "Classify Warranty Claims", hours: 50, fact: "NLP-based classification sorts warranty claims into categories for faster resolution." }
+];
+
+let currentRound = 0;
+let score = 0;
+let streak = 0;
+let maxStreak = 0;
+let roundItems = [];
+const TOTAL_ROUNDS = 10;
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function generateChoices(correctHours) {
+  const choices = [correctHours];
+  const allHours = AUTOMATIONS.map(a => a.hours).filter(h => h !== correctHours);
+  const shuffled = shuffle(allHours);
+  
+  for (const h of shuffled) {
+    if (choices.length >= 3) break;
+    if (!choices.includes(h) && Math.abs(h - correctHours) > 20) {
+      choices.push(h);
+    }
+  }
+  
+  while (choices.length < 3) {
+    const offset = (Math.random() > 0.5 ? 1 : -1) * (Math.floor(Math.random() * 5) + 1) * 100;
+    const fake = Math.max(25, correctHours + offset);
+    if (!choices.includes(fake)) choices.push(fake);
+  }
+  
+  return shuffle(choices);
+}
+
+function startGame() {
+  currentRound = 0;
+  score = 0;
+  streak = 0;
+  maxStreak = 0;
+  roundItems = shuffle(AUTOMATIONS).slice(0, TOTAL_ROUNDS);
+  
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('endScreen').style.display = 'none';
+  document.getElementById('scoreBar').style.display = 'flex';
+  document.getElementById('questionScreen').style.display = 'block';
+  
+  updateScoreBar();
+  showQuestion();
+}
+
+function updateScoreBar() {
+  document.getElementById('scoreDisplay').textContent = score.toLocaleString();
+  document.getElementById('roundDisplay').textContent = `${currentRound + 1} / ${TOTAL_ROUNDS}`;
+  document.getElementById('streakDisplay').textContent = `${streak}🔥`;
+}
+
+function showQuestion() {
+  const item = roundItems[currentRound];
+  const choices = generateChoices(item.hours);
+  
+  const q = document.getElementById('questionScreen');
+  q.innerHTML = `
+    <div class="animate-in">
+      <div style="font-size:2rem;margin-bottom:12px;">🏭</div>
+      <div class="automation-name">${item.name}</div>
+      <div class="automation-prompt">How many hours per year does this automation save?</div>
+      <div class="choices" id="choices">
+        ${choices.map((c, i) => `
+          <button class="choice-btn" onclick="handleChoice(${c}, ${item.hours}, this)" data-value="${c}">
+            ${c.toLocaleString()} hrs/yr
+          </button>
+        `).join('')}
+      </div>
+      <div class="result-text" id="resultText"></div>
+    </div>
+  `;
+}
+
+function handleChoice(chosen, actual, btn) {
+  const buttons = document.querySelectorAll('.choice-btn');
+  buttons.forEach(b => b.disabled = true);
+  
+  const isOver = chosen > actual;
+  const isExact = chosen === actual;
+  const closestUnder = !isOver;
+  
+  // Find closest without going over
+  const allValues = Array.from(buttons).map(b => parseInt(b.dataset.value));
+  const validChoices = allValues.filter(v => v <= actual);
+  const bestChoice = validChoices.length > 0 ? Math.max(...validChoices) : null;
+  const playerWins = chosen === bestChoice;
+  
+  buttons.forEach(b => {
+    const val = parseInt(b.dataset.value);
+    if (val === actual) {
+      b.classList.add('actual');
+      b.innerHTML += ' ← Actual';
+    }
+    if (val === chosen && isOver) {
+      b.classList.add('wrong');
+    }
+  });
+  
+  const resultText = document.getElementById('resultText');
+  const item = roundItems[currentRound];
+  
+  if (isExact) {
+    btn.classList.add('correct');
+    score += 500 + (streak * 100);
+    streak++;
+    resultText.className = 'result-text win';
+    resultText.innerHTML = `🎯 PERFECT! Exactly ${actual.toLocaleString()} hrs/yr! +${500 + ((streak-1) * 100)} points`;
+  } else if (playerWins) {
+    btn.classList.add('correct');
+    const diff = actual - chosen;
+    const bonus = Math.max(0, 300 - diff);
+    score += 200 + bonus + (streak * 50);
+    streak++;
+    resultText.className = 'result-text win';
+    resultText.innerHTML = `✅ Nice! ${chosen.toLocaleString()} is under ${actual.toLocaleString()}. +${200 + bonus + ((streak-1) * 50)} points`;
+  } else if (isOver) {
+    btn.classList.add('wrong');
+    streak = 0;
+    resultText.className = 'result-text lose';
+    resultText.innerHTML = `❌ Over! ${chosen.toLocaleString()} > ${actual.toLocaleString()}. The Price Is Wrong!`;
+  } else {
+    btn.classList.add('wrong');
+    streak = 0;
+    resultText.className = 'result-text lose';
+    resultText.innerHTML = `😬 Under, but not the closest. Actual: ${actual.toLocaleString()} hrs/yr`;
+  }
+  
+  maxStreak = Math.max(maxStreak, streak);
+  updateScoreBar();
+  
+  resultText.innerHTML += `<div class="fun-fact">💡 ${item.fact}</div>`;
+  
+  const nextLabel = currentRound < TOTAL_ROUNDS - 1 ? 'Next Round →' : 'See Results →';
+  resultText.innerHTML += `<button class="next-btn" onclick="nextRound()">${nextLabel}</button>`;
+}
+
+function nextRound() {
+  currentRound++;
+  if (currentRound >= TOTAL_ROUNDS) {
+    showEnd();
+  } else {
+    updateScoreBar();
+    showQuestion();
+  }
+}
+
+function showEnd() {
+  document.getElementById('questionScreen').style.display = 'none';
+  const endScreen = document.getElementById('endScreen');
+  endScreen.style.display = 'block';
+  
+  let grade, emoji;
+  if (score >= 4000) { grade = "Automation Genius"; emoji = "🏆"; }
+  else if (score >= 3000) { grade = "Senior Engineer"; emoji = "⭐"; }
+  else if (score >= 2000) { grade = "Solid Performer"; emoji = "👍"; }
+  else if (score >= 1000) { grade = "Getting There"; emoji = "📈"; }
+  else { grade = "Manual Labor Enthusiast"; emoji = "📋"; }
+  
+  endScreen.innerHTML = `
+    <div class="final-score animate-in">
+      <div style="font-size:3rem;margin-bottom:16px;">${emoji}</div>
+      <div class="big-label">Final Score</div>
+      <div class="big-number">${score.toLocaleString()}</div>
+      <div class="grade" style="color:var(--accent)">${grade}</div>
+      <p style="color:var(--text-dim);margin-bottom:8px;">Best Streak: ${maxStreak}🔥</p>
+      <p style="color:var(--text-dim);margin-bottom:24px;font-size:0.85rem;">Kirk Automations saves companies <strong style="color:var(--accent);">10,000+ hours per year</strong> with custom engineering automation.</p>
+      <button class="start-btn" onclick="startGame()">Play Again</button>
+    </div>
+  `;
+}
+</script>
+</body>
+</html>

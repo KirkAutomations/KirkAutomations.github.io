@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="arctic">
 <head>
 <meta charset="UTF-8">
@@ -137,11 +137,18 @@ body:hover #cursor-glow{opacity:.7}
    ═══════════════════════════════════════════════════════ */
 #themeSwitcher{
   position:fixed;top:50%;right:16px;transform:translateY(-50%);
-  z-index:9999;display:flex;flex-direction:column;gap:6px;
+  z-index:9999;display:flex;flex-direction:column;gap:6px;align-items:center;
   padding:10px 6px;background:rgba(20,20,30,.75);
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
   border-radius:30px;border:1px solid rgba(255,255,255,.06);
 }
+.theme-label{
+  writing-mode:vertical-rl;text-orientation:mixed;
+  font-size:.55rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text-secondary);opacity:.6;padding:4px 0;margin-bottom:2px;
+  transition:opacity .3s;
+}
+#themeSwitcher:hover .theme-label{opacity:1}
 [data-theme="arctic"] #themeSwitcher,[data-theme="sand"] #themeSwitcher{
   background:rgba(255,255,255,.82);border-color:rgba(0,0,0,.06);
 }
@@ -382,16 +389,7 @@ section{position:relative;z-index:2;padding:100px 40px}
 .service-card h3{font-size:1.2rem;font-weight:700;margin-bottom:10px}
 .service-card p{color:var(--text-secondary);font-size:.92rem;line-height:1.7}
 
-/* Game hint on hover */
-.game-hint{
-  display:inline-flex;align-items:center;gap:5px;
-  margin-top:14px;font-size:.78rem;font-weight:600;
-  color:var(--accent);opacity:0;transform:translateY(6px);
-  transition:opacity .3s,transform .3s;cursor:pointer;
-}
-.game-hint .hint-icon{font-size:1rem}
-.service-card:hover .game-hint{opacity:1;transform:translateY(0)}
-.game-hint:hover{text-decoration:underline}
+
 
 /* ═══════════════════════════════════════════════════════
    OPENCLAW SECTION
@@ -516,26 +514,7 @@ footer{
   border-top:1px solid var(--border-color);color:var(--text-secondary);font-size:.82rem;
 }
 
-/* ═══════════════════════════════════════════════════════
-   GAME PORTAL
-   ═══════════════════════════════════════════════════════ */
-.game-portal{
-  position:fixed;inset:0;z-index:10000;display:none;align-items:center;
-  justify-content:center;background:rgba(0,0,0,.92);backdrop-filter:blur(20px);
-}
-.game-portal.active{display:flex}
-.game-container{
-  background:var(--bg-card);border:1px solid var(--accent);border-radius:20px;
-  padding:28px;max-width:620px;width:92%;max-height:85vh;overflow-y:auto;position:relative;
-}
-.game-close{
-  position:absolute;top:12px;right:18px;background:none;border:none;
-  color:var(--text-secondary);font-size:1.5rem;cursor:pointer;z-index:1;
-}
-.game-close:hover{color:var(--accent)}
-.game-container h3{font-size:1.3rem;font-weight:700;margin-bottom:6px;text-align:center}
-.game-container .game-subtitle{text-align:center;color:var(--text-secondary);font-size:.82rem;margin-bottom:14px}
-.game-container canvas{width:100%;border-radius:8px;display:block}
+/* (Game portal removed — games are now standalone pages in /games/) */
 
 .secret-found{
   position:fixed;top:20px;left:50%;transform:translateX(-50%);
@@ -571,7 +550,6 @@ footer{
   .openclaw-card{padding:36px 20px}
   .signup-form{flex-direction:column}
   .scroll-indicator{display:none}
-  .game-hint{opacity:.8!important;transform:none!important}
 }
 </style>
 </head>
@@ -582,6 +560,7 @@ footer{
 
 <!-- ═══════════════════ THEME SWITCHER ═══════════════════ -->
 <div id="themeSwitcher">
+  <div class="theme-label">Theme</div>
   <div class="theme-dot" data-theme="midnight" data-label="Midnight" style="background:#f0b429"></div>
   <div class="theme-dot" data-theme="cyberteal" data-label="Cyber Teal" style="background:#00ddb5"></div>
   <div class="theme-dot" data-theme="solarflare" data-label="Solar Flare" style="background:#ff6d00"></div>
@@ -681,25 +660,22 @@ footer{
     </div>
     <div class="services-grid stagger">
 
-      <div class="service-card reveal" data-game="speccheck">
+      <div class="service-card reveal">
         <div class="service-icon">⚙️</div>
         <h3>Automated CAD Checks</h3>
         <p>CATIA, NX, AutoCAD, SolidWorks — our automations open 3D models, run clearance checks against your specs, and generate pass/fail reports. Weeks of manual work → minutes.</p>
-        <div class="game-hint" data-game="speccheck"><span class="hint-icon">🎮</span> Try the interactive demo →</div>
       </div>
 
-      <div class="service-card reveal" data-game="blueprint">
+      <div class="service-card reveal">
         <div class="service-icon">📐</div>
         <h3>Automated Drawings</h3>
         <p>Using 3D CAD and a few selections from an engineer, a 2D drawing is generated — formatted, dimensioned, and ready for the manufacturing plant. Saving 1,200+ hours/year.</p>
-        <div class="game-hint" data-game="blueprint"><span class="hint-icon">🎮</span> Try the interactive demo →</div>
       </div>
 
-      <div class="service-card reveal" data-game="datasort">
+      <div class="service-card reveal">
         <div class="service-icon">📊</div>
         <h3>Automated Excel &amp; BOM Work</h3>
         <p>Engineers combining customer data with internal Parts Lists/BOMs? Our automations merge documents, calculate quantities, and generate Excel files in your exact format.</p>
-        <div class="game-hint" data-game="datasort"><span class="hint-icon">🎮</span> Try the interactive demo →</div>
       </div>
 
       <div class="service-card reveal">
@@ -708,18 +684,16 @@ footer{
         <p>Deploy intelligent AI agents that handle repetitive work, answer questions, process data, and integrate with your existing tools. Your own 24/7 digital workforce.</p>
       </div>
 
-      <div class="service-card reveal" data-game="specmatch">
+      <div class="service-card reveal">
         <div class="service-icon">🌐</div>
         <h3>Custom Web Applications</h3>
         <p>Internal tools, dashboards, client portals — purpose-built web applications that do exactly what your business needs. No bloated SaaS. No compromises.</p>
-        <div class="game-hint" data-game="specmatch"><span class="hint-icon">🎮</span> Try the interactive demo →</div>
       </div>
 
-      <div class="service-card reveal" data-game="pipeline">
+      <div class="service-card reveal">
         <div class="service-icon">🔗</div>
         <h3>System Integration</h3>
         <p>Connect CAD systems, ERP, email, cloud storage, and databases into seamless automated workflows. Data flows where it needs to — automatically.</p>
-        <div class="game-hint" data-game="pipeline"><span class="hint-icon">🎮</span> Try the interactive demo →</div>
       </div>
 
     </div>
@@ -888,20 +862,71 @@ footer{
   </div>
 </section>
 
-<footer>
-  <p>&copy; 2023–2026 Kirk Automations. Built with precision. ⚡</p>
-</footer>
-
-<!-- Game Portal -->
-<div class="game-portal" id="gamePortal">
-  <div class="game-container" id="gameContainer">
-    <button class="game-close" id="gameClose">&times;</button>
-    <h3 id="gameTitle"></h3>
-    <div class="game-subtitle" id="gameSub"></div>
-    <canvas id="gameCanvas" width="540" height="400"></canvas>
-    <p id="gameInstructions" style="text-align:center;color:var(--text-secondary);margin-top:12px;font-size:.82rem"></p>
+<!-- ═══════════════════ EASTER EGG ═══════════════════ -->
+<div style="text-align:center;padding:30px 20px 0;position:relative;z-index:2">
+  <div id="easterEggTeaser" style="display:inline-flex;align-items:center;gap:8px;padding:10px 24px;
+    background:var(--bg-card);border:1px dashed var(--border-color);border-radius:50px;
+    cursor:pointer;font-size:.85rem;color:var(--text-secondary);transition:all .3s;user-select:none"
+    onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
+    onmouseout="this.style.borderColor='var(--border-color)';this.style.color='var(--text-secondary)'"
+    onclick="document.getElementById('easterEggGames').style.display='grid';this.style.display='none'">
+    🎮 <span>Psst... click here for a surprise</span>
+  </div>
+  <div id="easterEggGames" style="display:none;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:16px;max-width:900px;margin:20px auto 0;padding:0 20px">
+    <a href="games/automation-quiz.html" style="display:flex;align-items:center;gap:14px;padding:18px 20px;
+      background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;
+      text-decoration:none;color:var(--text-primary);transition:all .3s"
+      onmouseover="this.style.borderColor='var(--accent)';this.style.transform='translateY(-3px)'"
+      onmouseout="this.style.borderColor='var(--border-color)';this.style.transform=''">
+      <span style="font-size:2rem">💰</span>
+      <div><strong style="font-size:.95rem">The Automation Price Is Right</strong>
+      <div style="font-size:.78rem;color:var(--text-secondary)">Guess the hours saved — quiz game</div></div>
+    </a>
+    <a href="games/savings-snake.html" style="display:flex;align-items:center;gap:14px;padding:18px 20px;
+      background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;
+      text-decoration:none;color:var(--text-primary);transition:all .3s"
+      onmouseover="this.style.borderColor='var(--accent)';this.style.transform='translateY(-3px)'"
+      onmouseout="this.style.borderColor='var(--border-color)';this.style.transform=''">
+      <span style="font-size:2rem">🐍</span>
+      <div><strong style="font-size:.95rem">Savings Snake</strong>
+      <div style="font-size:.78rem;color:var(--text-secondary)">Eat automations, save hours</div></div>
+    </a>
+    <a href="games/automation-match.html" style="display:flex;align-items:center;gap:14px;padding:18px 20px;
+      background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;
+      text-decoration:none;color:var(--text-primary);transition:all .3s"
+      onmouseover="this.style.borderColor='var(--accent)';this.style.transform='translateY(-3px)'"
+      onmouseout="this.style.borderColor='var(--border-color)';this.style.transform=''">
+      <span style="font-size:2rem">🧠</span>
+      <div><strong style="font-size:.95rem">Automation Match</strong>
+      <div style="font-size:.78rem;color:var(--text-secondary)">Memory game — match the pairs</div></div>
+    </a>
+    <a href="games/hours-stacker.html" style="display:flex;align-items:center;gap:14px;padding:18px 20px;
+      background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;
+      text-decoration:none;color:var(--text-primary);transition:all .3s"
+      onmouseover="this.style.borderColor='var(--accent)';this.style.transform='translateY(-3px)'"
+      onmouseout="this.style.borderColor='var(--border-color)';this.style.transform=''">
+      <span style="font-size:2rem">🧱</span>
+      <div><strong style="font-size:.95rem">Hours Stacker</strong>
+      <div style="font-size:.78rem;color:var(--text-secondary)">Tetris-style automation blocks</div></div>
+    </a>
+    <a href="games/pipeline-builder.html" style="display:flex;align-items:center;gap:14px;padding:18px 20px;
+      background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;
+      text-decoration:none;color:var(--text-primary);transition:all .3s"
+      onmouseover="this.style.borderColor='var(--accent)';this.style.transform='translateY(-3px)'"
+      onmouseout="this.style.borderColor='var(--border-color)';this.style.transform=''">
+      <span style="font-size:2rem">🔗</span>
+      <div><strong style="font-size:.95rem">Pipeline Builder</strong>
+      <div style="font-size:.78rem;color:var(--text-secondary)">Connect the automation workflow</div></div>
+    </a>
   </div>
 </div>
+
+<footer>
+  <p>&copy; 2023–2026 Kirk Automations. Built with precision. ⚡ &nbsp;|&nbsp; <a href="projects.html" style="color:var(--text-secondary);font-size:.82rem">Our Projects</a></p>
+</footer>
+
+
 
 <!-- ═══════════════════════════════════════════════════════
      JAVASCRIPT
@@ -1107,503 +1132,13 @@ document.getElementById('contactForm').addEventListener('submit',function(e){
   this.innerHTML='<div style="text-align:center;padding:40px"><h3 style="color:var(--accent);margin-bottom:8px">✓ Message Sent!</h3><p style="color:var(--text-secondary)">We\'ll get back to you within 24 hours.</p></div>';
 });
 
-/* ═══════════════════════════════════════════════════════
-   12. GAMES — Automation-themed, triggered by hover hints
-   ═══════════════════════════════════════════════════════ */
-var gamePortal=document.getElementById('gamePortal');
-var gameCanvas=document.getElementById('gameCanvas');
-var gCtx=gameCanvas.getContext('2d');
-var gameTitle=document.getElementById('gameTitle');
-var gameSub=document.getElementById('gameSub');
-var gameInstr=document.getElementById('gameInstructions');
-var gameInterval=null;
-var activeH=[];
-
-function getAccent(){return getComputedStyle(html).getPropertyValue('--accent').trim()}
-function getBg(){return getComputedStyle(html).getPropertyValue('--bg-card').trim()}
-
-function cleanupGame(){
-  if(gameInterval){clearInterval(gameInterval);gameInterval=null}
-  activeH.forEach(function(h){h.el.removeEventListener(h.evt,h.fn)});activeH=[];
-}
-function addH(el,evt,fn,opts){el.addEventListener(evt,fn,opts||false);activeH.push({el:el,evt:evt,fn:fn})}
 function showNotif(text){
   var el=document.createElement('div');el.className='secret-found';el.textContent=text;
   document.body.appendChild(el);setTimeout(function(){el.remove()},3000);
 }
 
-function openGame(name){
-  cleanupGame();gamePortal.classList.add('active');document.body.style.overflow='hidden';
-  gameCanvas.width=540;gameCanvas.height=400;
-  switch(name){
-    case 'speccheck': startSpecCheck();break;
-    case 'blueprint': startBlueprintGame();break;
-    case 'datasort': startDataSort();break;
-    case 'specmatch': startSpecMatch();break;
-    case 'pipeline': startPipeline();break;
-  }
-}
-function closeGame(){cleanupGame();gamePortal.classList.remove('active');document.body.style.overflow=''}
-document.getElementById('gameClose').addEventListener('click',closeGame);
-gamePortal.addEventListener('click',function(e){if(e.target===gamePortal)closeGame()});
+/* ── (Games are now standalone HTML files in /games/) ── */
 
-// Click on game hints to open games
-document.querySelectorAll('.game-hint[data-game]').forEach(function(hint){
-  hint.addEventListener('click',function(e){
-    e.stopPropagation();
-    openGame(hint.getAttribute('data-game'));
-  });
-});
-
-/* ── GAME 1: Spec Check Inspector ──
-   Parts appear with measurements. Click PASS if in spec, FAIL if not.
-   Based on the Spec Check Report automation (800 hrs/yr saved) */
-function startSpecCheck(){
-  gameTitle.textContent='⚙️ Spec Check Inspector';
-  gameSub.textContent='Based on our Automated CAD Checks — saving 800+ hrs/year';
-  gameInstr.textContent='Is the measurement within spec? Click PASS ✓ or FAIL ✗ before time runs out!';
-
-  var parts=[
-    {name:'Panel Thickness',spec:'1.2 – 1.8 mm',val:1.5,unit:'mm',inSpec:true},
-    {name:'Clearance Gap',spec:'> 3.0 mm',val:2.1,unit:'mm',inSpec:false},
-    {name:'Bolt Torque',spec:'25 – 35 Nm',val:30,unit:'Nm',inSpec:true},
-    {name:'Surface Flatness',spec:'< 0.05 mm',val:0.08,unit:'mm',inSpec:false},
-    {name:'Weld Length',spec:'12 – 18 mm',val:15,unit:'mm',inSpec:true},
-    {name:'Hole Diameter',spec:'8.0 ± 0.2 mm',val:8.5,unit:'mm',inSpec:false},
-    {name:'Edge Radius',spec:'> 1.0 mm',val:1.3,unit:'mm',inSpec:true},
-    {name:'Gap Width',spec:'2.0 – 4.0 mm',val:1.5,unit:'mm',inSpec:false},
-    {name:'Flange Angle',spec:'88° – 92°',val:90,unit:'°',inSpec:true},
-    {name:'Wire Gauge',spec:'18 – 22 AWG',val:24,unit:'AWG',inSpec:false},
-    {name:'Rivet Spacing',spec:'20 – 30 mm',val:25,unit:'mm',inSpec:true},
-    {name:'Coating Thickness',spec:'0.5 – 1.0 mm',val:0.3,unit:'mm',inSpec:false},
-  ];
-  var shuffled=parts.sort(function(){return Math.random()-.5});
-  var idx=0,score=0,wrong=0,timer=8,total=10;
-  var tickTimer=null;
-
-  function drawPart(){
-    var accent=getAccent();
-    gCtx.fillStyle=getBg()||'#111';gCtx.fillRect(0,0,540,400);
-    if(idx>=total){
-      gCtx.fillStyle='#fff';gCtx.font='bold 28px Inter';gCtx.textAlign='center';
-      gCtx.fillText('Results: '+score+'/'+total+' correct',270,180);
-      gCtx.font='16px Inter';gCtx.fillStyle=score>=8?'#4caf50':'#ff5252';
-      gCtx.fillText(score>=8?'Excellent QC Inspector!':'Needs more training!',270,215);
-      gCtx.fillStyle='rgba(255,255,255,.4)';gCtx.font='13px Inter';
-      gCtx.fillText('Our automation does this 800+ hrs/year — instantly, zero errors.',270,260);
-      gCtx.textAlign='left';
-      if(tickTimer){clearInterval(tickTimer);tickTimer=null}
-      return;
-    }
-    var part=shuffled[idx%shuffled.length];
-    // Part display
-    gCtx.fillStyle=accent;gCtx.font='bold 14px Inter';gCtx.textAlign='center';
-    gCtx.fillText('Part '+(idx+1)+' of '+total,270,30);
-    gCtx.fillStyle='#fff';gCtx.font='bold 22px Inter';
-    gCtx.fillText(part.name,270,100);
-    gCtx.font='16px JetBrains Mono';gCtx.fillStyle='rgba(255,255,255,.6)';
-    gCtx.fillText('Spec: '+part.spec,270,140);
-    gCtx.font='bold 36px JetBrains Mono';
-    gCtx.fillStyle=accent;
-    gCtx.fillText(part.val+' '+part.unit,270,200);
-    // Timer bar
-    var barW=(timer/8)*400;
-    gCtx.fillStyle='rgba(255,255,255,.1)';gCtx.fillRect(70,240,400,8);
-    gCtx.fillStyle=timer>3?accent:'#ff5252';gCtx.fillRect(70,240,barW,8);
-    // Buttons
-    gCtx.fillStyle='#27ae60';gCtx.fillRect(100,290,150,60);
-    gCtx.fillStyle='#e74c3c';gCtx.fillRect(290,290,150,60);
-    gCtx.fillStyle='#fff';gCtx.font='bold 20px Inter';
-    gCtx.fillText('✓ PASS',175,327);
-    gCtx.fillText('✗ FAIL',365,327);
-    // Score
-    gCtx.font='13px Inter';gCtx.fillStyle='rgba(255,255,255,.4)';
-    gCtx.fillText('Score: '+score+' | Wrong: '+wrong,270,385);
-    gCtx.textAlign='left';
-  }
-
-  function handleClick(e){
-    if(idx>=total)return;
-    var r=gameCanvas.getBoundingClientRect();
-    var mx=((e.clientX||0)-r.left)*(540/r.width);
-    var my=((e.clientY||0)-r.top)*(400/r.height);
-    var part=shuffled[idx%shuffled.length];
-    var clickedPass=mx>=100&&mx<=250&&my>=290&&my<=350;
-    var clickedFail=mx>=290&&mx<=440&&my>=290&&my<=350;
-    if(!clickedPass&&!clickedFail)return;
-    if((clickedPass&&part.inSpec)||(clickedFail&&!part.inSpec))score++;
-    else wrong++;
-    idx++;timer=8;drawPart();
-  }
-  addH(gameCanvas,'click',handleClick);
-
-  timer=8;
-  drawPart();
-  tickTimer=setInterval(function(){
-    if(idx>=total)return;
-    timer-=.1;
-    if(timer<=0){wrong++;idx++;timer=8;}
-    drawPart();
-  },100);
-  gameInterval=tickTimer;
-}
-
-/* ── GAME 2: Blueprint Builder ──
-   Drag labels to correct positions on a simplified drawing.
-   Based on Drawing Generation (1200 hrs/yr saved) */
-function startBlueprintGame(){
-  gameTitle.textContent='📐 Blueprint Builder';
-  gameSub.textContent='Based on our Automated Drawing Generation — saving 1,200+ hrs/year';
-  gameInstr.textContent='Click the correct measurement for each highlighted feature!';
-
-  var questions=[
-    {q:'Overall Length',answers:['450 mm','120 mm','88°'],correct:0},
-    {q:'Hole Diameter',answers:['Ø8.2 mm','450 mm','25 Nm'],correct:0},
-    {q:'Flange Angle',answers:['1.5 mm','88°','Ø8.2 mm'],correct:1},
-    {q:'Wall Thickness',answers:['25 Nm','450 mm','1.5 mm'],correct:2},
-    {q:'Bolt Torque',answers:['88°','25 Nm','1.5 mm'],correct:1},
-    {q:'Fillet Radius',answers:['R3.0 mm','450 mm','88°'],correct:0},
-    {q:'Surface Finish',answers:['Ra 1.6','Ø8.2 mm','25 Nm'],correct:0},
-    {q:'Chamfer',answers:['1.5 mm','1x45°','R3.0 mm'],correct:1},
-  ];
-  var qi=0,score=0;
-
-  function draw(){
-    var accent=getAccent();
-    gCtx.fillStyle=getBg()||'#111';gCtx.fillRect(0,0,540,400);
-    if(qi>=questions.length){
-      gCtx.fillStyle='#fff';gCtx.font='bold 28px Inter';gCtx.textAlign='center';
-      gCtx.fillText('Drawing Complete! '+score+'/'+questions.length,270,180);
-      gCtx.font='14px Inter';gCtx.fillStyle='rgba(255,255,255,.4)';
-      gCtx.fillText('Our automation generates full drawings in seconds.',270,220);
-      gCtx.textAlign='left';return;
-    }
-    var q=questions[qi];
-    // Drawing area (simple outline)
-    gCtx.strokeStyle='rgba(255,255,255,.2)';gCtx.lineWidth=1;
-    gCtx.strokeRect(120,30,300,160);
-    gCtx.beginPath();gCtx.arc(220,110,20,0,6.283);gCtx.stroke();
-    gCtx.strokeRect(160,70,60,80);
-    // Highlight current feature
-    gCtx.strokeStyle=accent;gCtx.lineWidth=2;gCtx.setLineDash([4,4]);
-    gCtx.strokeRect(140,50,240,120);gCtx.setLineDash([]);
-
-    gCtx.fillStyle=accent;gCtx.font='bold 14px Inter';gCtx.textAlign='center';
-    gCtx.fillText('Question '+(qi+1)+'/'+questions.length,270,22);
-    gCtx.fillStyle='#fff';gCtx.font='bold 18px Inter';
-    gCtx.fillText('What is the '+q.q+'?',270,220);
-    // Answer buttons
-    for(var i=0;i<q.answers.length;i++){
-      var bx=60+i*170,by=260;
-      gCtx.fillStyle='rgba(255,255,255,.08)';gCtx.fillRect(bx,by,150,50);
-      gCtx.strokeStyle='rgba(255,255,255,.15)';gCtx.strokeRect(bx,by,150,50);
-      gCtx.fillStyle='#fff';gCtx.font='bold 15px JetBrains Mono';
-      gCtx.fillText(q.answers[i],bx+75,by+30);
-    }
-    gCtx.font='13px Inter';gCtx.fillStyle='rgba(255,255,255,.3)';
-    gCtx.fillText('Score: '+score,270,370);
-    gCtx.textAlign='left';
-  }
-
-  function handleClick(e){
-    if(qi>=questions.length)return;
-    var r=gameCanvas.getBoundingClientRect();
-    var mx=((e.clientX||0)-r.left)*(540/r.width);
-    var my=((e.clientY||0)-r.top)*(400/r.height);
-    if(my<260||my>310)return;
-    var choice=-1;
-    if(mx>=60&&mx<=210)choice=0;
-    else if(mx>=230&&mx<=380)choice=1;
-    else if(mx>=400&&mx<=550)choice=2;
-    if(choice<0)return;
-    if(choice===questions[qi].correct)score++;
-    qi++;draw();
-  }
-  addH(gameCanvas,'click',handleClick);
-  draw();
-}
-
-/* ── GAME 3: Data Sort ──
-   Falling data items — click to sort into correct columns.
-   Based on Commonize Data automation (2000 hrs/yr saved) */
-function startDataSort(){
-  gameTitle.textContent='📊 Data Sort Challenge';
-  gameSub.textContent='Based on our Excel/BOM automation — merging 6+ data sources instantly';
-  gameInstr.textContent='Click falling items to route them to the correct column. Green=Parts, Blue=Specs, Red=Costs';
-
-  var cols=[
-    {name:'Parts',color:'#27ae60',x:0,w:180},
-    {name:'Specs',color:'#2979ff',x:180,w:180},
-    {name:'Costs',color:'#e74c3c',x:360,w:180}
-  ];
-  var items=[
-    {text:'Bolt M8',col:0},{text:'1.5mm',col:1},{text:'$4.20',col:2},
-    {text:'Washer',col:0},{text:'Ra 1.6',col:1},{text:'$12.00',col:2},
-    {text:'Bracket',col:0},{text:'88°',col:1},{text:'$8.50',col:2},
-    {text:'Rivet',col:0},{text:'Ø6.0mm',col:1},{text:'$2.30',col:2},
-    {text:'Gasket',col:0},{text:'25 Nm',col:1},{text:'$15.00',col:2},
-    {text:'Clip',col:0},{text:'0.05mm',col:1},{text:'$1.80',col:2}
-  ];
-  var falling=[];var score=0,missed=0;var speed=1.2;var spawnTimer=0;
-  var pool=items.sort(function(){return Math.random()-.5});var pIdx=0;
-  var selectedCol=-1;var alive=true;
-
-  function spawn(){
-    if(pIdx>=pool.length)pIdx=0;
-    var it=pool[pIdx++];
-    falling.push({text:it.text,col:it.col,x:60+Math.random()*420,y:-20,speed:speed+Math.random()*.5});
-  }
-
-  function handleClick(e){
-    if(!alive)return;
-    var r=gameCanvas.getBoundingClientRect();
-    var mx=((e.clientX||0)-r.left)*(540/r.width);
-    var my=((e.clientY||0)-r.top)*(400/r.height);
-    // Check if clicking a falling item
-    for(var i=falling.length-1;i>=0;i--){
-      var f=falling[i];
-      if(mx>=f.x-30&&mx<=f.x+30&&my>=f.y-12&&my<=f.y+12){
-        // Determine which column it's closest to
-        var closestCol=mx<180?0:mx<360?1:2;
-        if(closestCol===f.col){score++;showNotif('✓ Correct!')}
-        else{missed++;showNotif('✗ Wrong column!')}
-        falling.splice(i,1);
-        return;
-      }
-    }
-  }
-  addH(gameCanvas,'click',handleClick);
-
-  gameInterval=setInterval(function(){
-    if(!alive)return;
-    var accent=getAccent();
-    spawnTimer++;
-    if(spawnTimer%40===0)spawn();
-    // Update
-    for(var i=falling.length-1;i>=0;i--){
-      falling[i].y+=falling[i].speed;
-      if(falling[i].y>420){missed++;falling.splice(i,1)}
-    }
-    if(missed>=5)alive=false;
-    speed=1.2+score*.05;
-
-    // Draw
-    gCtx.fillStyle=getBg()||'#111';gCtx.fillRect(0,0,540,400);
-    // Column labels at bottom
-    for(var c=0;c<cols.length;c++){
-      gCtx.fillStyle=cols[c].color+'22';gCtx.fillRect(cols[c].x,350,cols[c].w,50);
-      gCtx.fillStyle=cols[c].color;gCtx.font='bold 13px Inter';gCtx.textAlign='center';
-      gCtx.fillText(cols[c].name,cols[c].x+cols[c].w/2,380);
-    }
-    // Falling items
-    gCtx.textAlign='center';
-    for(i=0;i<falling.length;i++){
-      var f=falling[i];
-      var itemColor=cols[f.col].color;
-      gCtx.fillStyle=itemColor+'44';
-      gCtx.fillRect(f.x-35,f.y-14,70,28);
-      gCtx.strokeStyle=itemColor;gCtx.strokeRect(f.x-35,f.y-14,70,28);
-      gCtx.fillStyle='#fff';gCtx.font='bold 12px JetBrains Mono';
-      gCtx.fillText(f.text,f.x,f.y+4);
-    }
-    // HUD
-    gCtx.fillStyle='#fff';gCtx.font='14px Inter';gCtx.textAlign='left';
-    gCtx.fillText('Sorted: '+score,10,20);
-    gCtx.fillText('Missed: '+missed+'/5',430,20);
-
-    if(!alive){
-      gCtx.fillStyle='rgba(0,0,0,.7)';gCtx.fillRect(0,0,540,400);
-      gCtx.fillStyle='#fff';gCtx.font='bold 26px Inter';gCtx.textAlign='center';
-      gCtx.fillText('Data Sorted: '+score+' items',270,180);
-      gCtx.font='14px Inter';gCtx.fillStyle='rgba(255,255,255,.4)';
-      gCtx.fillText('Our automation merges 2,000+ data items per hour — no errors.',270,220);
-      gCtx.textAlign='left';clearInterval(gameInterval);
-    }
-  },25);
-  spawn();
-}
-
-/* ── GAME 4: Spec Match (Memory) ──
-   Match automation types. Engineering themed. */
-function startSpecMatch(){
-  gameTitle.textContent='🧠 Automation Match';
-  gameSub.textContent='Match each automation to its real-world savings';
-  gameInstr.textContent='Find matching pairs! Each pair is an automation + its annual hours saved.';
-
-  var pairs=[
-    {a:'CAD Checks',b:'3,600 hrs'},
-    {a:'Drawing Gen',b:'1,200 hrs'},
-    {a:'Data Merge',b:'2,000 hrs'},
-    {a:'Spec Calc',b:'1,032 hrs'},
-    {a:'Parts List',b:'800 hrs'},
-    {a:'Clean CAD',b:'75 hrs'},
-    {a:'Fix Drawings',b:'350 hrs'},
-    {a:'Navigate+Email',b:'1,010 hrs'}
-  ];
-  // Create 16 cards: each pair gets 2 cards with same pairId
-  var cards=[];
-  pairs.forEach(function(p,i){
-    cards.push({text:p.a,pairId:i});
-    cards.push({text:p.b,pairId:i});
-  });
-  cards=cards.sort(function(){return Math.random()-.5});
-  var revealed=Array(16).fill(false),matched=Array(16).fill(false);
-  var first=null,second=null,lockBoard=false,moves=0;
-
-  function drawCards(){
-    var accent=getAccent();
-    gCtx.fillStyle=getBg()||'#111';gCtx.fillRect(0,0,540,400);
-    for(var i=0;i<16;i++){
-      var col=i%4,row=Math.floor(i/4),x=col*135+2,y=row*100+2;
-      gCtx.fillStyle=matched[i]?accent+'22':revealed[i]?'rgba(255,255,255,.06)':'rgba(255,255,255,.02)';
-      gCtx.fillRect(x,y,131,96);
-      gCtx.strokeStyle=matched[i]?accent:revealed[i]?accent:'rgba(255,255,255,.1)';
-      gCtx.lineWidth=matched[i]?2:1;
-      gCtx.strokeRect(x,y,131,96);gCtx.lineWidth=1;
-      gCtx.textAlign='center';
-      if(revealed[i]||matched[i]){
-        gCtx.fillStyle='#fff';gCtx.font='bold 13px Inter';
-        gCtx.fillText(cards[i].text,x+65,y+52);
-      }else{
-        gCtx.fillStyle='rgba(255,255,255,.2)';gCtx.font='bold 18px Inter';
-        gCtx.fillText('?',x+65,y+54);
-      }
-    }
-    gCtx.textAlign='left';gCtx.fillStyle='rgba(255,255,255,.3)';gCtx.font='12px Inter';
-    gCtx.fillText('Moves: '+moves,10,395);
-    if(matched.every(Boolean)){
-      gCtx.fillStyle='rgba(0,0,0,.6)';gCtx.fillRect(0,0,540,400);
-      gCtx.fillStyle='#fff';gCtx.font='bold 24px Inter';gCtx.textAlign='center';
-      gCtx.fillText('🎉 All Matched in '+moves+' moves!',270,190);
-      gCtx.font='14px Inter';gCtx.fillStyle='rgba(255,255,255,.4)';
-      gCtx.fillText('Total savings shown: 10,000+ engineering hours/year',270,225);
-      gCtx.textAlign='left';
-    }
-  }
-
-  function handleClick(e){
-    if(lockBoard||matched.every(Boolean))return;
-    var r=gameCanvas.getBoundingClientRect();
-    var mx=((e.clientX||0)-r.left)*(540/r.width);
-    var my=((e.clientY||0)-r.top)*(400/r.height);
-    var col=Math.floor(mx/135),row=Math.floor(my/100);
-    if(col<0||col>=4||row<0||row>=4)return;
-    var idx=row*4+col;
-    if(revealed[idx]||matched[idx])return;
-    revealed[idx]=true;drawCards();
-    if(first===null){first=idx}
-    else{
-      second=idx;moves++;lockBoard=true;
-      if(cards[first].pairId===cards[second].pairId){
-        matched[first]=matched[second]=true;first=second=null;lockBoard=false;drawCards();
-      }else{setTimeout(function(){revealed[first]=revealed[second]=false;first=second=null;lockBoard=false;drawCards()},900)}
-    }
-  }
-  addH(gameCanvas,'click',handleClick);
-  drawCards();
-}
-
-/* ── GAME 5: Pipeline Rush ──
-   Connect data from sources to destinations.
-   Click nodes in the right order to build the pipeline. */
-function startPipeline(){
-  gameTitle.textContent='🔗 Pipeline Rush';
-  gameSub.textContent='Based on our System Integration work — connecting CAD, ERP, email & cloud';
-  gameInstr.textContent='Click the systems in the correct order to build the data pipeline!';
-
-  var pipelines=[
-    {seq:['3D CAD','Measurement','Excel Report','Email'],desc:'Spec Check Report'},
-    {seq:['CAD Model','Clean Data','Save Format','FTP Upload'],desc:'Customer Data Delivery'},
-    {seq:['Warranty DB','AI Classify','Top 3 Picks','Engineer Review'],desc:'Warranty Classification'},
-    {seq:['6 Sources','Commonize','Merge Data','Final Report'],desc:'Data Commonization'},
-    {seq:['3D Model','Extract Dims','Generate 2D','Plant Drawing'],desc:'Drawing Generation'},
-  ];
-  var pi=0,score=0,clickIdx=0;
-
-  function draw(){
-    var accent=getAccent();
-    gCtx.fillStyle=getBg()||'#111';gCtx.fillRect(0,0,540,400);
-    if(pi>=pipelines.length){
-      gCtx.fillStyle='#fff';gCtx.font='bold 24px Inter';gCtx.textAlign='center';
-      gCtx.fillText('🔗 All '+score+' Pipelines Built!',270,180);
-      gCtx.font='14px Inter';gCtx.fillStyle='rgba(255,255,255,.4)';
-      gCtx.fillText('Our integrations process data 24/7 — zero downtime.',270,220);
-      gCtx.textAlign='left';return;
-    }
-    var p=pipelines[pi];
-    gCtx.fillStyle=accent;gCtx.font='bold 14px Inter';gCtx.textAlign='center';
-    gCtx.fillText('Pipeline '+(pi+1)+'/'+pipelines.length+': '+p.desc,270,30);
-
-    // Show nodes in shuffled positions
-    if(!p._positions){
-      p._positions=[];
-      var shuffled=p.seq.map(function(s,i){return{text:s,order:i}}).sort(function(){return Math.random()-.5});
-      p._shuffled=shuffled;
-      var cols=shuffled.length;
-      for(var i=0;i<cols;i++){
-        p._positions.push({x:40+i*(500/cols),y:150+Math.random()*80,w:110,h:50});
-      }
-    }
-
-    // Draw connecting line for completed nodes
-    gCtx.strokeStyle=accent;gCtx.lineWidth=2;
-    for(var i=0;i<clickIdx-1;i++){
-      var a=null,b=null;
-      for(var j=0;j<p._shuffled.length;j++){
-        if(p._shuffled[j].order===i)a=p._positions[j];
-        if(p._shuffled[j].order===i+1)b=p._positions[j];
-      }
-      if(a&&b){
-        gCtx.beginPath();gCtx.moveTo(a.x+55,a.y+25);gCtx.lineTo(b.x+55,b.y+25);gCtx.stroke();
-      }
-    }
-    gCtx.lineWidth=1;
-
-    // Draw nodes
-    for(var i=0;i<p._shuffled.length;i++){
-      var n=p._shuffled[i],pos=p._positions[i];
-      var done=n.order<clickIdx;
-      var isNext=n.order===clickIdx;
-      gCtx.fillStyle=done?accent+'44':isNext?'rgba(255,255,255,.08)':'rgba(255,255,255,.03)';
-      gCtx.fillRect(pos.x,pos.y,pos.w,pos.h);
-      gCtx.strokeStyle=done?accent:isNext?accent:'rgba(255,255,255,.12)';
-      gCtx.strokeRect(pos.x,pos.y,pos.w,pos.h);
-      if(done){gCtx.fillStyle='rgba(255,255,255,.15)';gCtx.font='18px Inter';gCtx.fillText('✓',pos.x+55,pos.y+20)}
-      gCtx.fillStyle=done?accent:'#fff';gCtx.font=(done?'bold ':'')+' 12px Inter';
-      gCtx.fillText(n.text,pos.x+55,pos.y+35);
-    }
-
-    gCtx.fillStyle='rgba(255,255,255,.3)';gCtx.font='13px Inter';
-    gCtx.fillText('Click step '+(clickIdx+1)+': "'+p.seq[clickIdx]+'"',270,350);
-    gCtx.fillText('Score: '+score,270,380);
-    gCtx.textAlign='left';
-  }
-
-  function handleClick(e){
-    if(pi>=pipelines.length)return;
-    var r=gameCanvas.getBoundingClientRect();
-    var mx=((e.clientX||0)-r.left)*(540/r.width);
-    var my=((e.clientY||0)-r.top)*(400/r.height);
-    var p=pipelines[pi];
-    for(var i=0;i<p._shuffled.length;i++){
-      var pos=p._positions[i];
-      if(mx>=pos.x&&mx<=pos.x+pos.w&&my>=pos.y&&my<=pos.y+pos.h){
-        if(p._shuffled[i].order===clickIdx){
-          clickIdx++;
-          if(clickIdx>=p.seq.length){score++;pi++;clickIdx=0;}
-          draw();
-        }else{
-          showNotif('✗ Wrong step! Find: "'+p.seq[clickIdx]+'"');
-        }
-        return;
-      }
-    }
-  }
-  addH(gameCanvas,'click',handleClick);
-  draw();
-}
-
-/* ── KONAMI CODE ── */
 var kSeq=[];
 var KONAMI=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
 document.addEventListener('keydown',function(e){
@@ -1616,7 +1151,7 @@ document.addEventListener('keydown',function(e){
 });
 
 console.log('%c🐾 Kirk Automations','font-size:20px;font-weight:bold;color:#2558d9');
-console.log('%cHover over service cards for interactive demos. Konami code works too.','color:#888');
+console.log('%cKonami code works. Games at /games/. 10 themes on the right.','color:#888');
 
 })();
 </script>
