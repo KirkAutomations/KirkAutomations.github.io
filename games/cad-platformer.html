@@ -79,15 +79,15 @@ resize();
 
 const LEVELS=[
   {name:"Drawing Floor",bg1:'#0f1520',bg2:'#0a0a1a',platformColor:'#1a3a5c',accentColor:'#00e5ff',
-   difficulty:1,scrollSpeed:2.5,
+   difficulty:1,scrollSpeed:2.0,
    auto:"Drawing Generation",hours:1200,
    fact:"Kirk Automations generates fully dimensioned engineering drawings from 3D CAD models in seconds — saving over 1,200 hours per year. No more manual drafting."},
   {name:"Data Center",bg1:'#0f1a20',bg2:'#0a0a1a',platformColor:'#1a4a3c',accentColor:'#4ade80',
-   difficulty:2,scrollSpeed:3.2,
+   difficulty:2,scrollSpeed:2.6,
    auto:"Data Commonization",hours:2000,
    fact:"Our Data Commonization engine normalizes data across platforms automatically — eliminating 2,000 hours of copy-paste-reformat work every year across every department."},
   {name:"Quality Lab",bg1:'#1a0f20',bg2:'#0a0a1a',platformColor:'#4a1a3c',accentColor:'#f472b6',
-   difficulty:3,scrollSpeed:4.0,
+   difficulty:3,scrollSpeed:3.2,
    auto:"CAD Comparison",hours:3600,
    fact:"Comparing two versions of a complex CAD assembly used to take hours. Kirk Automations overlays both models and highlights every change — saving a record-breaking 3,600 hours per year."}
 ];
@@ -142,7 +142,7 @@ function generateLevel(lvlIdx){
   dangerZones=[];
   
   const totalWidth=lvl.scrollSpeed*45*60+W; // ~45 seconds of content
-  const platGap=lvl.difficulty===1?160:lvl.difficulty===2?180:200;
+  const platGap=lvl.difficulty===1?120:lvl.difficulty===2?140:160;
   const platCount=Math.floor(totalWidth/platGap);
   
   // Start platform
@@ -151,8 +151,8 @@ function generateLevel(lvlIdx){
   for(let i=1;i<platCount;i++){
     const px=120+i*platGap+Math.random()*60-30;
     const py=H*0.3+Math.random()*(H*0.4);
-    const pw=60+Math.random()*80;
-    const moving=lvl.difficulty>=2 && Math.random()>0.65;
+    const pw=80+Math.random()*100;
+    const moving=lvl.difficulty>=2 && Math.random()>0.75;
     const types=['sheet','layer','dimension'];
     const type=types[Math.floor(Math.random()*types.length)];
     
@@ -174,9 +174,9 @@ function generateLevel(lvlIdx){
   }
   
   // Danger zones (gaps between clusters)
-  for(let x=300;x<totalWidth;x+=400+Math.random()*200){
-    if(Math.random()>0.5){
-      dangerZones.push({x:x,w:80+Math.random()*60});
+  for(let x=400;x<totalWidth;x+=500+Math.random()*300){
+    if(Math.random()>0.6){
+      dangerZones.push({x:x,w:60+Math.random()*40});
     }
   }
 }
@@ -275,7 +275,7 @@ function update(dt){
   
   // Jump
   if(keys.jump && player.grounded && player.jumpReleased){
-    player.vy=-12;
+    player.vy=-14;
     player.grounded=false;
     player.jumpReleased=false;
     for(let i=0;i<5;i++){
@@ -285,7 +285,7 @@ function update(dt){
   if(!keys.jump) player.jumpReleased=true;
   
   // Gravity
-  player.vy+=0.5;
+  player.vy+=0.42;
   player.x+=player.vx;
   player.y+=player.vy;
   
