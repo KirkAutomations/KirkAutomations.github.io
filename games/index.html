@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kirk Automations Games</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a14;color:#e0e0e0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;min-height:100vh;overflow-x:hidden}
+.hero{text-align:center;padding:60px 20px 30px;background:linear-gradient(180deg,#111128 0%,#0a0a14 100%)}
+.hero h1{font-size:clamp(28px,8vw,48px);font-weight:700;letter-spacing:-1px;margin-bottom:8px;background:linear-gradient(135deg,#e94560,#ff7eb3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:clamp(14px,3.5vw,18px);color:#888;max-width:560px;margin:0 auto 16px}
+.back{display:inline-block;color:#e94560;text-decoration:none;font-size:14px;margin-top:8px;transition:opacity .2s}
+.back:hover{opacity:.7;text-decoration:underline}
+.content{max-width:900px;margin:0 auto;padding:20px 20px 60px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:14px}
+.card{display:flex;align-items:center;gap:16px;background:linear-gradient(145deg,#141428,#0f0f20);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:18px 20px;text-decoration:none;color:#fff;transition:transform .2s,box-shadow .2s,border-color .2s;min-height:80px}
+.card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(233,69,96,.15);border-color:rgba(233,69,96,.25)}
+.card .card-icon{font-size:36px;flex-shrink:0;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
+.card .card-info{flex:1;min-width:0}
+.card .card-info h3{font-size:clamp(14px,3.5vw,17px);font-weight:600;margin-bottom:3px;line-height:1.3}
+.card .card-info p{font-size:clamp(12px,2.8vw,13px);color:#777;line-height:1.4}
+.card .arrow{color:#444;font-size:18px;flex-shrink:0;transition:color .2s,transform .2s}
+.card:hover .arrow{color:#e94560;transform:translateX(3px)}
+.tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px;margin-top:4px;text-transform:uppercase;letter-spacing:.5px;background:rgba(233,69,96,.15);color:#e94560}
+.footer{text-align:center;padding:30px 20px;color:#444;font-size:13px;border-top:1px solid rgba(255,255,255,.04)}
+.footer a{color:#e94560;text-decoration:none}
+.footer a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>🎮 Kirk Automations Games</h1>
+  <p>9 games that teach you about engineering automation — while being genuinely fun to play.</p>
+  <a class="back" href="../projects.html">← Back to Projects</a>
+</div>
+
+<div class="content">
+  <div class="cards">
+    <a class="card" href="savings-snake.html">
+      <div class="card-icon">🐍</div>
+      <div class="card-info">
+        <h3>Savings Snake</h3>
+        <p>Classic snake — eat automations, rack up hours saved</p>
+        <span class="tag">Arcade</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+    <a class="card" href="automation-blaster.html">
+      <div class="card-icon">🚀</div>
+      <div class="card-info">
+        <h3>Automation Blaster</h3>
+        <p>Space invader — shoot down manual work</p>
+        <span class="tag">Shooter</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+    <a class="card" href="automation-empire.html">
+      <div class="card-icon">🏭</div>
+      <div class="card-info">
+        <h3>Automation Empire</h3>
+        <p>Idle clicker — build your automation business</p>
+        <span class="tag">Idle</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+    <a class="card" href="automation-defense.html">
+      <div class="card-icon">🏰</div>
+      <div class="card-info">
+        <h3>Automation Defense</h3>
+        <p>Tower defense — protect the plant build deadline</p>
+        <span class="tag">Strategy</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+    <a class="card" href="pipeline-builder.html">
+      <div class="card-icon">🔗</div>
+      <div class="card-info">
+        <h3>Pipeline Builder</h3>
+        <p>Build real automation workflows step by step</p>
+        <span class="tag">Puzzle</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+    <a class="card" href="automation-runner.html">
+      <div class="card-icon">🏃</div>
+      <div class="card-info">
+        <h3>Process Runner</h3>
+        <p>Endless runner — dodge paperwork, collect automations</p>
+        <span class="tag">Runner</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+    <a class="card" href="automation-rpg.html">
+      <div class="card-icon">⚔️</div>
+      <div class="card-info">
+        <h3>The Automation Quest</h3>
+        <p>Turn-based RPG — fight manual process monsters</p>
+        <span class="tag">RPG</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+    <a class="card" href="roi-calculator.html">
+      <div class="card-icon">📊</div>
+      <div class="card-info">
+        <h3>ROI Calculator</h3>
+        <p>Calculate your team's real automation savings</p>
+        <span class="tag">Tool</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+    <a class="card" href="cad-platformer.html">
+      <div class="card-icon">🎮</div>
+      <div class="card-info">
+        <h3>CAD Jumper</h3>
+        <p>2D platformer through CAD environments</p>
+        <span class="tag">Platformer</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+  </div>
+</div>
+
+<div class="footer">
+  <p>Kirk Automations — <a href="../index.html">Main Site</a> — <a href="../projects.html">Projects</a> — <a href="mailto:michael.kirk@kirkautomations.com">Contact</a></p>
+</div>
+
+</body>
+</html>
