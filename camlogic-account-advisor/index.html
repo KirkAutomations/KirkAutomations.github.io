@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAM Logic — Account Advisor</title>
+<style>
+:root {
+  --primary: #00708a;
+  --primary-dark: #005a6e;
+  --primary-light: #e0f4f8;
+  --accent: #f7941d;
+  --accent-light: #fff4e5;
+  --bg: #f5f7fa;
+  --card: #ffffff;
+  --text: #1a2a3a;
+  --text-light: #5a6a7a;
+  --border: #dde3ea;
+  --success: #27ae60;
+  --warning: #f39c12;
+  --danger: #e74c3c;
+  --radius: 10px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* NAV */
+.topbar {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.topbar h1 { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.5px; }
+.topbar h1 span { color: var(--accent); }
+.topbar-tabs { display: flex; gap: 4px; }
+.topbar-tabs button {
+  background: rgba(255,255,255,0.12);
+  border: none;
+  color: rgba(255,255,255,0.8);
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.topbar-tabs button:hover { background: rgba(255,255,255,0.22); color: white; }
+.topbar-tabs button.active { background: white; color: var(--primary); }
+
+/* LAYOUT */
+.container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+.section { display: none; }
+.section.active { display: block; }
+
+/* CARDS */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.card h2 {
+  font-size: 1.1rem;
+  color: var(--primary);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card h3 {
+  font-size: 0.95rem;
+  color: var(--text);
+  margin: 16px 0 8px;
+}
+
+/* GRID */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+@media (max-width: 768px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
+
+/* FORMS */
+input, select, textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  transition: border 0.2s;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0,112,138,0.1);
+}
+label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.form-group { margin-bottom: 16px; }
+
+/* BUTTONS */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-accent { background: var(--accent); color: white; }
+.btn-accent:hover { background: #e08517; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+.btn-danger { background: var(--danger); color: white; }
+
+/* CHECKLIST */
+.checklist { list-style: none; }
+.checklist li {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.checklist li:hover { background: var(--primary-light); }
+.checklist li:last-child { border-bottom: none; }
+.checklist li.checked { color: var(--text-light); text-decoration: line-through; }
+.checklist li .check {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.checklist li.checked .check {
+  background: var(--success);
+  border-color: var(--success);
+  color: white;
+}
+
+/* PRODUCT CARDS */
+.product-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+.product-card:hover { border-color: var(--primary); box-shadow: 0 4px 16px rgba(0,112,138,0.1); }
+.product-card.selected { border-color: var(--primary); background: var(--primary-light); }
+.product-card h4 { font-size: 1rem; margin-bottom: 6px; color: var(--primary-dark); }
+.product-card p { font-size: 0.85rem; color: var(--text-light); }
+.product-card .tier-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.tier-entry { background: #e8f5e9; color: #2e7d32; }
+.tier-mid { background: #fff3e0; color: #ef6c00; }
+.tier-premium { background: #e3f2fd; color: #1565c0; }
+.tier-platform { background: #f3e5f5; color: #7b1fa2; }
+
+/* UPSELL PATH */
+.upsell-path {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: var(--accent-light);
+  border-radius: var(--radius);
+  border-left: 4px solid var(--accent);
+  margin-top: 12px;
+}
+.upsell-path .arrow { font-size: 1.2rem; color: var(--accent); }
+
+/* TAG */
+.tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin: 2px;
+}
+.tag-industry { background: #e3f2fd; color: #1565c0; }
+.tag-need { background: #fce4ec; color: #c62828; }
+
+/* COMPETITIVE TABLE */
+.comp-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.comp-table th {
+  background: var(--primary);
+  color: white;
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 600;
+}
+.comp-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+.comp-table tr:hover td { background: var(--primary-light); }
+.comp-table .win { color: var(--success); font-weight: 600; }
+.comp-table .neutral { color: var(--warning); }
+.comp-table .lose { color: var(--danger); }
+
+/* ROI CALC */
+.roi-result {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+  margin-top: 16px;
+}
+.roi-result .big-number { font-size: 2.5rem; font-weight: 800; }
+.roi-result .label { font-size: 0.85rem; opacity: 0.8; }
+
+/* CLIENT LIST */
+.client-list { list-style: none; }
+.client-list li {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.client-list li:hover { background: var(--primary-light); }
+.client-health {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}
+.health-green { background: var(--success); }
+.health-yellow { background: var(--warning); }
+.health-red { background: var(--danger); }
+
+/* NOTES */
+.notes-area {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* PRINT */
+@media print {
+  .topbar, .topbar-tabs { display: none !important; }
+  .card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.section.active { animation: fadeIn 0.3s ease; }
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--primary-dark);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  z-index: 999;
+  animation: fadeIn 0.3s ease;
+  display: none;
+}
+
+/* SEARCH */
+.search-box {
+  position: relative;
+}
+.search-box input {
+  padding-left: 36px;
+}
+.search-box::before {
+  content: '🔍';
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.85rem;
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>⚙️ CAM Logic <span>Account Advisor</span></h1>
+  <div class="topbar-tabs">
+    <button class="active" onclick="showSection('meeting-prep')">📋 Meeting Prep</button>
+    <button onclick="showSection('products')">📦 Products</button>
+    <button onclick="showSection('competitive')">⚔️ Competitive</button>
+    <button onclick="showSection('roi')">💰 ROI Calculator</button>
+    <button onclick="showSection('clients')">👥 My Accounts</button>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ===== MEETING PREP ===== -->
+  <div id="meeting-prep" class="section active">
+    <div class="grid-2">
+      <div>
+        <div class="card">
+          <h2>📋 Pre-Call Checklist</h2>
+          <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:12px;">Click items as you prepare. Resets each time you start a new prep.</p>
+          <ul class="checklist" id="prepChecklist">
+            <li onclick="toggleCheck(this)"><span class="check"></span> Review client's current Siemens licenses & versions</li>
+            <li onclick="toggleCheck(this)"><span class="check"></span> Check last interaction date & notes</li>
+            <li onclick="toggleCheck(this)"><span class="check"></span> Review open support tickets / issues</li>
+            <li onclick="toggleCheck(this)"><span class="check"></span> Identify renewal dates (within 90 days?)</li>
+            <li onclick="toggleCheck(this)"><span class="check"></span> Check for upsell opportunities (see Product Advisor)</li>
+            <li onclick="toggleCheck(this)"><span class="check"></span> Review recent Siemens announcements / new features</li>
+            <li onclick="toggleCheck(this)"><span class="check"></span> Prepare competitive positioning (if switching risk)</li>
+            <li onclick="toggleCheck(this)"><span class="check"></span> Know client's industry pain points</li>
+            <li onclick="toggleCheck(this)"><span class="check"></span> Prepare demo / training recommendation</li>
+            <li onclick="toggleCheck(this)"><span class="check"></span> Set clear meeting objective & desired outcome</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h2>🎯 Meeting Objective</h2>
+          <div class="form-group">
+            <label>Client / Company</label>
+            <input type="text" id="meetingClient" placeholder="e.g., Pratt & Miller Engineering">
+          </div>
+          <div class="form-group">
+            <label>Contact Name & Title</label>
+            <input type="text" id="meetingContact" placeholder="e.g., Gary Latham — Design & Analysis">
+          </div>
+          <div class="form-group">
+            <label>Meeting Type</label>
+            <select id="meetingType">
+              <option>Quarterly Business Review</option>
+              <option>Renewal Discussion</option>
+              <option>Upsell / Expansion</option>
+              <option>New Prospect — Discovery</option>
+              <option>Training Follow-up</option>
+              <option>Support Escalation</option>
+              <option>Product Demo</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Primary Objective</label>
+            <textarea class="notes-area" id="meetingObjective" rows="3" placeholder="What's the ONE thing you want to walk away with?"></textarea>
+          </div>
+          <button class="btn btn-primary" onclick="saveMeetingPrep()">💾 Save to Account Notes</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <h2>💡 Quick Talk Tracks</h2>
+          <div id="talkTracks">
+            <h3>🔄 Renewal Conversation</h3>
+            <p style="font-size:0.85rem;margin-bottom:12px;">
+              "Since your last renewal, Siemens has released [X feature] in NX/SE. Let's look at how that maps to the [specific challenge] you mentioned last quarter. Are you getting full utilization across all seats?"
+            </p>
+
+            <h3>⬆️ Upsell: Solid Edge → NX</h3>
+            <p style="font-size:0.85rem;margin-bottom:12px;">
+              "Your team has outgrown Solid Edge's surfacing capabilities. NX gives you convergent modeling — mesh + B-rep in one body. For the complex geometries you're doing, it eliminates the back-and-forth with external tools."
+            </p>
+
+            <h3>📊 Teamcenter Value Prop</h3>
+            <p style="font-size:0.85rem;margin-bottom:12px;">
+              "How much time does your team spend looking for the right file version? Teamcenter X eliminates that — cloud-native PLM with full traceability. Most clients see 20-30% reduction in engineering change cycle time."
+            </p>
+
+            <h3>🏭 Additive Manufacturing</h3>
+            <p style="font-size:0.85rem;margin-bottom:12px;">
+              "We can print your prototype in-house — metal or polymer. Design-to-part in under a week. Lets you validate fit and function before committing to tooling. Our Auburn Hills lab runs DMLS and FDM."
+            </p>
+
+            <h3>🎓 Training / Adoption</h3>
+            <p style="font-size:0.85rem;margin-bottom:12px;">
+              "Software is only as good as the team using it. Xcelerator Academy gives every user self-paced learning, but we also do custom on-site training — Rob's our top instructor, clients love him."
+            </p>
+
+            <h3>🔍 Quality / Metrology</h3>
+            <p style="font-size:0.85rem;margin-bottom:12px;">
+              "Complex freeform surfaces need more than a CMM. Our metrology lab does full 3D scanning and validation — tie it back to your CAD model for deviation analysis. Catches issues before they become production problems."
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>📝 Live Meeting Notes</h2>
+          <textarea class="notes-area" id="liveNotes" rows="8" placeholder="Capture key points during the call..."></textarea>
+          <div style="margin-top:12px;display:flex;gap:8px;">
+            <button class="btn btn-outline btn-sm" onclick="appendTimestamp()">🕐 Timestamp</button>
+            <button class="btn btn-outline btn-sm" onclick="appendAction()">⚡ Action Item</button>
+            <button class="btn btn-primary btn-sm" onclick="copyNotes()">📋 Copy Notes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PRODUCTS ===== -->
+  <div id="products" class="section">
+    <div class="card">
+      <h2>📦 Siemens Product Matrix — What Does the Client Need?</h2>
+      <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:16px;">Click products to build an upsell path. Use industry tags to filter recommendations.</p>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+        <button class="btn btn-outline btn-sm" onclick="filterProducts('all')">All</button>
+        <button class="btn btn-outline btn-sm" onclick="filterProducts('design')">Design / CAD</button>
+        <button class="btn btn-outline btn-sm" onclick="filterProducts('manufacturing')">Manufacturing / CAM</button>
+        <button class="btn btn-outline btn-sm" onclick="filterProducts('plm')">PLM / Data Mgmt</button>
+        <button class="btn btn-outline btn-sm" onclick="filterProducts('simulation')">Simulation / CAE</button>
+        <button class="btn btn-outline btn-sm" onclick="filterProducts('services')">CAM Logic Services</button>
+      </div>
+    </div>
+
+    <div class="grid-3" id="productGrid">
+      <!-- Filled by JS -->
+    </div>
+
+    <div class="card" id="upsellPanel" style="display:none;">
+      <h2>⬆️ Upsell Path Builder</h2>
+      <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:12px;">Selected products form your recommended upgrade path.</p>
+      <div id="upsellPathDisplay"></div>
+      <button class="btn btn-outline btn-sm" onclick="clearUpsellPath()" style="margin-top:12px;">Clear Path</button>
+    </div>
+
+    <div class="card">
+      <h2>🗺️ Common Upgrade Paths</h2>
+      <div class="upsell-path">
+        <strong>Solid Edge</strong> <span class="arrow">→</span> <strong>NX CAD</strong> <span class="arrow">→</span> <strong>NX CAD + CAM</strong> <span class="arrow">→</span> <strong>+ Teamcenter</strong>
+      </div>
+      <div class="upsell-path" style="margin-top:8px;">
+        <strong>Standalone CAD</strong> <span class="arrow">→</span> <strong>+ Simcenter (FEA)</strong> <span class="arrow">→</span> <strong>+ NX CAM</strong> <span class="arrow">→</span> <strong>Full Digital Twin</strong>
+      </div>
+      <div class="upsell-path" style="margin-top:8px;">
+        <strong>Manual QC</strong> <span class="arrow">→</span> <strong>Metrology Services</strong> <span class="arrow">→</span> <strong>In-House Scanning</strong> <span class="arrow">→</span> <strong>Closed-Loop Quality</strong>
+      </div>
+      <div class="upsell-path" style="margin-top:8px;">
+        <strong>Prototyping Need</strong> <span class="arrow">→</span> <strong>Additive Mfg Services</strong> <span class="arrow">→</span> <strong>In-House 3D Print</strong> <span class="arrow">→</span> <strong>+ NX AM Design</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== COMPETITIVE ===== -->
+  <div id="competitive" class="section">
+    <div class="card">
+      <h2>⚔️ Competitive Positioning Guide</h2>
+      <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:16px;">Know where Siemens wins — and where to handle objections.</p>
+
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>Capability</th>
+            <th>Siemens (NX/SE)</th>
+            <th>Dassault (CATIA/SW)</th>
+            <th>PTC (Creo)</th>
+            <th>Autodesk (Fusion)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Surfacing / Complex Geometry</strong></td>
+            <td class="win">★★★★★ Best-in-class convergent modeling</td>
+            <td>★★★★ CATIA strong, SW limited</td>
+            <td>★★★★ Good parametric surfacing</td>
+            <td class="lose">★★★ Improving but gaps</td>
+          </tr>
+          <tr>
+            <td><strong>Integrated CAM</strong></td>
+            <td class="win">★★★★★ Same-window CAD→CAM</td>
+            <td class="lose">★★★ Requires DELMIA or 3rd party</td>
+            <td>★★★★ Creo NC decent</td>
+            <td>★★★★ Fusion CAM solid for mid-range</td>
+          </tr>
+          <tr>
+            <td><strong>PLM / Data Management</strong></td>
+            <td class="win">★★★★★ Teamcenter is industry standard</td>
+            <td>★★★★ ENOVIA powerful but complex</td>
+            <td>★★★★ Windchill mature</td>
+            <td class="lose">★★ Vault is basic</td>
+          </tr>
+          <tr>
+            <td><strong>Cloud / SaaS</strong></td>
+            <td>★★★★ Teamcenter X, NX X cloud-enabled</td>
+            <td class="win">★★★★★ 3DEXPERIENCE cloud-native</td>
+            <td>★★★ Creo+ newer</td>
+            <td class="win">★★★★★ Cloud-first, low barrier</td>
+          </tr>
+          <tr>
+            <td><strong>Simulation / FEA</strong></td>
+            <td class="win">★★★★★ Simcenter is top-tier</td>
+            <td>★★★★ SIMULIA excellent</td>
+            <td>★★★★ Creo Simulate + Ansys ties</td>
+            <td class="lose">★★★ Basic generative</td>
+          </tr>
+          <tr>
+            <td><strong>SMB / Ease of Use</strong></td>
+            <td>★★★★ Solid Edge very accessible</td>
+            <td>★★★★ SolidWorks king of SMB</td>
+            <td>★★★ Steeper learning curve</td>
+            <td class="win">★★★★★ Lowest entry barrier</td>
+          </tr>
+          <tr>
+            <td><strong>Additive Manufacturing</strong></td>
+            <td class="win">★★★★★ NX AM, build prep, DMLS support</td>
+            <td>★★★ Improving</td>
+            <td>★★★ Basic</td>
+            <td>★★★★ Generative + Netfabb</td>
+          </tr>
+          <tr>
+            <td><strong>Price / Value</strong></td>
+            <td class="neutral">Mid-high (but SE is competitive)</td>
+            <td class="lose">High (CATIA premium pricing)</td>
+            <td class="neutral">Mid (competitive licensing)</td>
+            <td class="win">Low (subscription-friendly)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h2>🛡️ Objection Handlers</h2>
+
+        <h3>"We're already on SolidWorks"</h3>
+        <p style="font-size:0.85rem;margin-bottom:12px;">
+          "SolidWorks is great for where you are now. But as your designs get more complex, you'll hit its ceiling — especially in surfacing and simulation. Solid Edge gives you synchronous technology with a smooth migration path. And NX is there when you need enterprise power."
+        </p>
+
+        <h3>"Siemens is too expensive"</h3>
+        <p style="font-size:0.85rem;margin-bottom:12px;">
+          "Let's look at total cost of ownership. Siemens integrates CAD+CAM+PLM in one ecosystem — no third-party bolt-ons, no data translation errors, no lost time. Our ROI calculator usually shows payback in 8-14 months."
+        </p>
+
+        <h3>"We're looking at Fusion 360"</h3>
+        <p style="font-size:0.85rem;margin-bottom:12px;">
+          "Fusion is attractive on price, but look at what's missing: robust PLM, advanced simulation, and manufacturing-grade CAM for complex multi-axis. You'll outgrow it — and migrating away from Autodesk later costs more than starting right."
+        </p>
+
+        <h3>"Our team doesn't have time for training"</h3>
+        <p style="font-size:0.85rem;margin-bottom:12px;">
+          "That's exactly why we offer Xcelerator Academy — self-paced, on-demand, fits into any schedule. Plus our custom on-site sessions are tailored to YOUR workflows, not generic. We've trained teams at Trico, Pratt & Miller — they see productivity gains within weeks."
+        </p>
+
+        <h3>"We only need CAD, not all this other stuff"</h3>
+        <p style="font-size:0.85rem;margin-bottom:12px;">
+          "Totally fair. Solid Edge is standalone-ready and priced for exactly that. But having the option to grow into CAM, simulation, and PLM without switching platforms — that's the long game. No re-training, no data migration headaches down the road."
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>🎯 Win Themes by Industry</h2>
+
+        <h3>🚗 Automotive</h3>
+        <p style="font-size:0.85rem;margin-bottom:12px;">
+          <span class="tag tag-need">Complex surfacing</span> <span class="tag tag-need">Multi-axis CAM</span> <span class="tag tag-need">PLM compliance</span><br>
+          Lead with NX + Teamcenter. Emphasize digital twin, BOM management, supplier collaboration. CAM Logic's proximity to OEMs is a differentiator.
+        </p>
+
+        <h3>🛩️ Aerospace & Defense</h3>
+        <p style="font-size:0.85rem;margin-bottom:12px;">
+          <span class="tag tag-need">ITAR compliance</span> <span class="tag tag-need">Simulation</span> <span class="tag tag-need">Traceability</span><br>
+          Teamcenter's access controls + Simcenter for structural/thermal analysis. NX CAM for 5-axis titanium machining.
+        </p>
+
+        <h3>🏥 Medical Devices</h3>
+        <p style="font-size:0.85rem;margin-bottom:12px;">
+          <span class="tag tag-need">FDA validation</span> <span class="tag tag-need">Traceability</span> <span class="tag tag-need">Additive</span><br>
+          Teamcenter for design history files. Additive for patient-specific implants. NX convergent modeling for organic shapes.
+        </p>
+
+        <h3>⚙️ General Manufacturing / Job Shops</h3>
+        <p style="font-size:0.85rem;margin-bottom:12px;">
+          <span class="tag tag-need">Fast quoting</span> <span class="tag tag-need">CNC programming</span> <span class="tag tag-need">Easy CAD</span><br>
+          Solid Edge + NX CAM. Quick design-to-NC path. CAM Logic's machining services as a bridge.
+        </p>
+
+        <h3>🔌 Industrial Equipment</h3>
+        <p style="font-size:0.85rem;margin-bottom:12px;">
+          <span class="tag tag-need">Electrical + mechanical</span> <span class="tag tag-need">Configuration</span> <span class="tag tag-need">PDM</span><br>
+          NX for mechanical, Capital for electrical, Teamcenter to manage configurations. The Xcelerator portfolio shines here.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ROI CALCULATOR ===== -->
+  <div id="roi" class="section">
+    <div class="card">
+      <h2>💰 Quick ROI Calculator</h2>
+      <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:16px;">Estimate ROI for a Siemens solution investment. Use in proposals and client conversations.</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Current State</h3>
+        <div class="form-group">
+          <label>Number of Engineers / Designers</label>
+          <input type="number" id="roiEngineers" value="10" min="1">
+        </div>
+        <div class="form-group">
+          <label>Avg. Fully-Loaded Cost per Engineer ($/yr)</label>
+          <input type="number" id="roiEngCost" value="120000" min="0" step="5000">
+        </div>
+        <div class="form-group">
+          <label>Hours/Week Lost to Manual Processes</label>
+          <input type="number" id="roiHoursLost" value="8" min="0" step="1">
+        </div>
+        <div class="form-group">
+          <label>Avg. Engineering Changes per Month</label>
+          <input type="number" id="roiECOs" value="15" min="0">
+        </div>
+        <div class="form-group">
+          <label>Avg. Cost per Engineering Change ($)</label>
+          <input type="number" id="roiECOCost" value="2500" min="0" step="100">
+        </div>
+        <div class="form-group">
+          <label>Rework / Scrap Cost ($/yr)</label>
+          <input type="number" id="roiRework" value="50000" min="0" step="5000">
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Proposed Investment</h3>
+        <div class="form-group">
+          <label>Annual Software License Cost ($)</label>
+          <input type="number" id="roiLicense" value="85000" min="0" step="5000">
+        </div>
+        <div class="form-group">
+          <label>Implementation / Training Cost (one-time)</label>
+          <input type="number" id="roiImpl" value="25000" min="0" step="5000">
+        </div>
+        <div class="form-group">
+          <label>Expected Productivity Gain (%)</label>
+          <input type="number" id="roiProdGain" value="20" min="0" max="100" step="5">
+        </div>
+        <div class="form-group">
+          <label>Expected ECO Reduction (%)</label>
+          <input type="number" id="roiECOReduction" value="30" min="0" max="100" step="5">
+        </div>
+        <div class="form-group">
+          <label>Expected Rework Reduction (%)</label>
+          <input type="number" id="roiReworkReduction" value="40" min="0" max="100" step="5">
+        </div>
+
+        <button class="btn btn-accent" onclick="calculateROI()" style="width:100%;justify-content:center;margin-top:8px;">📊 Calculate ROI</button>
+      </div>
+    </div>
+
+    <div id="roiResults" style="display:none;">
+      <div class="grid-3">
+        <div class="roi-result">
+          <div class="label">Annual Savings</div>
+          <div class="big-number" id="roiAnnualSavings">$0</div>
+        </div>
+        <div class="roi-result" style="background:linear-gradient(135deg,#27ae60,#1e8449);">
+          <div class="label">Net ROI (Year 1)</div>
+          <div class="big-number" id="roiNetROI">0%</div>
+        </div>
+        <div class="roi-result" style="background:linear-gradient(135deg,#f39c12,#d68910);">
+          <div class="label">Payback Period</div>
+          <div class="big-number" id="roiPayback">0 mo</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:20px;">
+        <h2>📊 Savings Breakdown</h2>
+        <div id="roiBreakdown"></div>
+        <div style="margin-top:16px;display:flex;gap:8px;">
+          <button class="btn btn-primary btn-sm" onclick="copyROI()">📋 Copy for Proposal</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MY ACCOUNTS ===== -->
+  <div id="clients" class="section">
+    <div class="card">
+      <h2>👥 My Accounts</h2>
+      <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:16px;">Quick-reference for your accounts. Data is stored in your browser (localStorage).</p>
+      <div style="display:flex;gap:8px;margin-bottom:16px;">
+        <div class="search-box" style="flex:1;">
+          <input type="text" id="clientSearch" placeholder="Search accounts..." oninput="renderClients()">
+        </div>
+        <button class="btn btn-primary" onclick="showAddClient()">+ Add Account</button>
+      </div>
+      <ul class="client-list" id="clientList"></ul>
+    </div>
+
+    <!-- Add/Edit Form -->
+    <div class="card" id="clientForm" style="display:none;">
+      <h2 id="clientFormTitle">➕ Add Account</h2>
+      <div class="grid-2">
+        <div>
+          <div class="form-group">
+            <label>Company Name</label>
+            <input type="text" id="cfName" placeholder="e.g., Pratt & Miller Engineering">
+          </div>
+          <div class="form-group">
+            <label>Primary Contact</label>
+            <input type="text" id="cfContact" placeholder="Name — Title">
+          </div>
+          <div class="form-group">
+            <label>Industry</label>
+            <select id="cfIndustry">
+              <option>Automotive</option>
+              <option>Aerospace & Defense</option>
+              <option>Medical Devices</option>
+              <option>General Manufacturing</option>
+              <option>Industrial Equipment</option>
+              <option>Consumer Products</option>
+              <option>Energy</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Current Software</label>
+            <input type="text" id="cfSoftware" placeholder="e.g., Solid Edge, NX CAD, Teamcenter">
+          </div>
+          <div class="form-group">
+            <label>Number of Seats</label>
+            <input type="number" id="cfSeats" min="0" placeholder="e.g., 15">
+          </div>
+        </div>
+        <div>
+          <div class="form-group">
+            <label>Renewal Date</label>
+            <input type="date" id="cfRenewal">
+          </div>
+          <div class="form-group">
+            <label>Annual Revenue ($)</label>
+            <input type="number" id="cfRevenue" min="0" step="1000" placeholder="e.g., 85000">
+          </div>
+          <div class="form-group">
+            <label>Account Health</label>
+            <select id="cfHealth">
+              <option value="green">🟢 Healthy — Engaged & Happy</option>
+              <option value="yellow">🟡 At Risk — Needs Attention</option>
+              <option value="red">🔴 Critical — Churn Risk</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Upsell Opportunities</label>
+            <input type="text" id="cfUpsell" placeholder="e.g., NX CAM, Teamcenter X">
+          </div>
+          <div class="form-group">
+            <label>Notes</label>
+            <textarea id="cfNotes" rows="3" placeholder="Key context for this account..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-primary" onclick="saveClient()">💾 Save Account</button>
+        <button class="btn btn-outline" onclick="hideClientForm()">Cancel</button>
+        <button class="btn btn-danger btn-sm" id="deleteClientBtn" onclick="deleteClient()" style="display:none;margin-left:auto;">🗑️ Delete</button>
+      </div>
+    </div>
+
+    <!-- Account Detail -->
+    <div class="card" id="clientDetail" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h2 id="detailName">Account</h2>
+        <div>
+          <button class="btn btn-outline btn-sm" onclick="editClient()">✏️ Edit</button>
+          <button class="btn btn-primary btn-sm" onclick="prepMeetingFromClient()">📋 Prep Meeting</button>
+        </div>
+      </div>
+      <div class="grid-2" style="margin-top:16px;" id="detailContent"></div>
+      <div style="margin-top:16px;">
+        <h3>📝 Notes History</h3>
+        <div id="detailNotes" style="font-size:0.85rem;white-space:pre-wrap;color:var(--text-light);margin-top:8px;"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== NAV =====
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.topbar-tabs button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 2500);
+}
+
+// ===== CHECKLIST =====
+function toggleCheck(li) {
+  li.classList.toggle('checked');
+  const check = li.querySelector('.check');
+  check.innerHTML = li.classList.contains('checked') ? '✓' : '';
+}
+
+// ===== MEETING NOTES =====
+function appendTimestamp() {
+  const ta = document.getElementById('liveNotes');
+  const now = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  ta.value += `\n[${now}] `;
+  ta.focus();
+}
+function appendAction() {
+  const ta = document.getElementById('liveNotes');
+  ta.value += '\n⚡ ACTION: ';
+  ta.focus();
+}
+function copyNotes() {
+  const client = document.getElementById('meetingClient').value || 'Unknown';
+  const type = document.getElementById('meetingType').value;
+  const objective = document.getElementById('meetingObjective').value;
+  const notes = document.getElementById('liveNotes').value;
+  const text = `MEETING NOTES — ${client}\nType: ${type}\nObjective: ${objective}\n\n${notes}`;
+  navigator.clipboard.writeText(text);
+  showToast('Notes copied to clipboard!');
+}
+function saveMeetingPrep() {
+  const client = document.getElementById('meetingClient').value;
+  if (!client) { showToast('Enter a client name first'); return; }
+  // Save notes to matching client if exists
+  const clients = getClients();
+  const match = clients.find(c => c.name.toLowerCase() === client.toLowerCase());
+  if (match) {
+    const notes = document.getElementById('liveNotes').value;
+    const obj = document.getElementById('meetingObjective').value;
+    const now = new Date().toLocaleDateString();
+    match.notes = `[${now}] ${document.getElementById('meetingType').value}: ${obj}\n${notes}\n\n${match.notes||''}`;
+    saveClients(clients);
+    showToast(`Notes saved to ${client} account!`);
+  } else {
+    showToast('No matching account found — save manually or add account first.');
+  }
+}
+
+// ===== PRODUCTS =====
+const products = [
+  { name:'NX X for Design (CAD)', cat:'design', tier:'premium', desc:'Enterprise CAD — convergent modeling, advanced surfacing, synchronous tech. The powerhouse.', upsellFrom:'Solid Edge, competitor CAD', industries:['Automotive','Aerospace','Medical'] },
+  { name:'Solid Edge', cat:'design', tier:'entry', desc:'Mid-market CAD with synchronous technology. Easy to learn, powerful for SMB. Great entry point.', upsellFrom:'AutoCAD, Inventor, SolidWorks', industries:['General Mfg','Consumer','Industrial'] },
+  { name:'NX X for Manufacturing (CAM)', cat:'manufacturing', tier:'premium', desc:'Full CNC programming — 2.5 to 5-axis, turning, mill-turn. Same window as NX CAD.', upsellFrom:'Standalone CAM tools, Mastercam', industries:['Automotive','Aerospace','General Mfg'] },
+  { name:'Teamcenter X', cat:'plm', tier:'platform', desc:'Cloud-native PLM — BOM, change mgmt, supplier collab, digital thread. Industry standard.', upsellFrom:'File shares, basic PDM, Vault', industries:['All'] },
+  { name:'Teamcenter (On-Prem)', cat:'plm', tier:'platform', desc:'Full PLM for enterprises needing on-prem control. Scales to thousands of users.', upsellFrom:'Windchill, ENOVIA, file-based', industries:['Aerospace','Automotive','Defense'] },
+  { name:'Simcenter', cat:'simulation', tier:'premium', desc:'Multiphysics simulation — FEA, CFD, thermal, motion. Validate designs before prototyping.', upsellFrom:'Ansys, standalone FEA', industries:['Automotive','Aerospace','Medical','Energy'] },
+  { name:'Solid Edge Simulation', cat:'simulation', tier:'mid', desc:'Integrated FEA for Solid Edge users. Structural, thermal, modal analysis without leaving SE.', upsellFrom:'No simulation', industries:['General Mfg','Consumer'] },
+  { name:'Additive Manufacturing Services', cat:'services', tier:'mid', desc:'CAM Logic in-house — DMLS metal printing, polymer FDM. Design-to-part in days.', upsellFrom:'External prototyping vendors', industries:['All'] },
+  { name:'CNC Machining Services', cat:'services', tier:'mid', desc:'Precision subtractive mfg — 3 to 5-axis CNC. From prototypes to short-run production.', upsellFrom:'External machine shops', industries:['All'] },
+  { name:'Metrology & Quality', cat:'services', tier:'mid', desc:'3D scanning, CMM, deviation analysis. Validate parts against CAD models.', upsellFrom:'Manual inspection', industries:['Automotive','Aerospace','Medical'] },
+  { name:'Training — Xcelerator Academy', cat:'services', tier:'entry', desc:'Self-paced online learning for all Siemens products. Plus custom on-site from CAM Logic.', upsellFrom:'Underutilized licenses', industries:['All'] },
+  { name:'NX AM (Additive Design)', cat:'design', tier:'premium', desc:'Design for additive — lattice, topology optimization, build prep. Integrated in NX.', upsellFrom:'Manual AM prep, Materialise', industries:['Aerospace','Medical','Automotive'] },
+];
+
+let selectedProducts = [];
+
+function renderProducts(filter='all') {
+  const grid = document.getElementById('productGrid');
+  grid.innerHTML = '';
+  const filtered = filter === 'all' ? products : products.filter(p => p.cat === filter);
+  filtered.forEach((p,i) => {
+    const idx = products.indexOf(p);
+    const sel = selectedProducts.includes(idx);
+    const tierClass = p.tier === 'entry' ? 'tier-entry' : p.tier === 'mid' ? 'tier-mid' : p.tier === 'premium' ? 'tier-premium' : 'tier-platform';
+    const div = document.createElement('div');
+    div.className = `product-card ${sel ? 'selected' : ''}`;
+    div.onclick = () => toggleProduct(idx);
+    div.innerHTML = `
+      <span class="tier-badge ${tierClass}">${p.tier}</span>
+      <h4>${p.name}</h4>
+      <p>${p.desc}</p>
+      <div style="margin-top:8px;">
+        ${p.industries.map(i=>`<span class="tag tag-industry">${i}</span>`).join(' ')}
+      </div>
+      ${p.upsellFrom ? `<div style="margin-top:6px;font-size:0.75rem;color:var(--accent);">⬆️ Replaces: ${p.upsellFrom}</div>` : ''}
+    `;
+    grid.appendChild(div);
+  });
+}
+
+function filterProducts(cat) { renderProducts(cat); }
+
+function toggleProduct(idx) {
+  const i = selectedProducts.indexOf(idx);
+  if (i >= 0) selectedProducts.splice(i,1);
+  else selectedProducts.push(idx);
+  renderProducts();
+  renderUpsellPath();
+}
+
+function renderUpsellPath() {
+  const panel = document.getElementById('upsellPanel');
+  const display = document.getElementById('upsellPathDisplay');
+  if (selectedProducts.length === 0) { panel.style.display='none'; return; }
+  panel.style.display = 'block';
+  display.innerHTML = '<div class="upsell-path">' +
+    selectedProducts.map(i => `<strong>${products[i].name}</strong>`).join(' <span class="arrow">→</span> ') +
+    '</div>';
+}
+
+function clearUpsellPath() {
+  selectedProducts = [];
+  renderProducts();
+  renderUpsellPath();
+}
+
+// ===== ROI =====
+function calculateROI() {
+  const engineers = +document.getElementById('roiEngineers').value;
+  const engCost = +document.getElementById('roiEngCost').value;
+  const hoursLost = +document.getElementById('roiHoursLost').value;
+  const ecos = +document.getElementById('roiECOs').value;
+  const ecoCost = +document.getElementById('roiECOCost').value;
+  const rework = +document.getElementById('roiRework').value;
+  const license = +document.getElementById('roiLicense').value;
+  const impl = +document.getElementById('roiImpl').value;
+  const prodGain = +document.getElementById('roiProdGain').value / 100;
+  const ecoReduction = +document.getElementById('roiECOReduction').value / 100;
+  const reworkReduction = +document.getElementById('roiReworkReduction').value / 100;
+
+  const hourlyRate = engCost / 2080;
+  const prodSavings = engineers * hoursLost * 52 * hourlyRate * prodGain;
+  const ecoSavings = ecos * 12 * ecoCost * ecoReduction;
+  const reworkSavings = rework * reworkReduction;
+  const totalSavings = prodSavings + ecoSavings + reworkSavings;
+  const year1Cost = license + impl;
+  const netSavings = totalSavings - year1Cost;
+  const roi = ((netSavings / year1Cost) * 100);
+  const paybackMonths = totalSavings > 0 ? Math.ceil(year1Cost / (totalSavings / 12)) : 0;
+
+  document.getElementById('roiResults').style.display = 'block';
+  document.getElementById('roiAnnualSavings').textContent = '$' + Math.round(totalSavings).toLocaleString();
+  document.getElementById('roiNetROI').textContent = Math.round(roi) + '%';
+  document.getElementById('roiPayback').textContent = paybackMonths + ' mo';
+
+  document.getElementById('roiBreakdown').innerHTML = `
+    <table class="comp-table">
+      <tr><td><strong>Productivity Recovery</strong> (${engineers} eng × ${hoursLost}h/wk × ${Math.round(prodGain*100)}%)</td><td class="win" style="text-align:right;">$${Math.round(prodSavings).toLocaleString()}/yr</td></tr>
+      <tr><td><strong>ECO Reduction</strong> (${ecos}/mo × $${ecoCost.toLocaleString()} × ${Math.round(ecoReduction*100)}%)</td><td class="win" style="text-align:right;">$${Math.round(ecoSavings).toLocaleString()}/yr</td></tr>
+      <tr><td><strong>Rework / Scrap Reduction</strong> ($${rework.toLocaleString()} × ${Math.round(reworkReduction*100)}%)</td><td class="win" style="text-align:right;">$${Math.round(reworkSavings).toLocaleString()}/yr</td></tr>
+      <tr><td><strong>Total Annual Savings</strong></td><td style="text-align:right;font-weight:700;">$${Math.round(totalSavings).toLocaleString()}/yr</td></tr>
+      <tr style="background:var(--accent-light);"><td><strong>Year 1 Investment</strong> (License + Implementation)</td><td style="text-align:right;color:var(--danger);font-weight:700;">-$${Math.round(year1Cost).toLocaleString()}</td></tr>
+      <tr style="background:var(--primary-light);"><td><strong>Year 1 Net Benefit</strong></td><td style="text-align:right;font-weight:700;color:${netSavings>=0?'var(--success)':'var(--danger)'};">$${Math.round(netSavings).toLocaleString()}</td></tr>
+    </table>
+  `;
+}
+
+function copyROI() {
+  const s = document.getElementById('roiAnnualSavings').textContent;
+  const r = document.getElementById('roiNetROI').textContent;
+  const p = document.getElementById('roiPayback').textContent;
+  const text = `ROI Summary\nAnnual Savings: ${s}\nYear 1 ROI: ${r}\nPayback Period: ${p}`;
+  navigator.clipboard.writeText(text);
+  showToast('ROI summary copied!');
+}
+
+// ===== CLIENTS (localStorage) =====
+function getClients() {
+  return JSON.parse(localStorage.getItem('camlogic_clients') || '[]');
+}
+function saveClients(clients) {
+  localStorage.setItem('camlogic_clients', JSON.stringify(clients));
+}
+
+let editingClientIdx = -1;
+let viewingClientIdx = -1;
+
+function renderClients() {
+  const clients = getClients();
+  const search = (document.getElementById('clientSearch')?.value || '').toLowerCase();
+  const list = document.getElementById('clientList');
+  const filtered = clients.filter(c => c.name.toLowerCase().includes(search) || (c.industry||'').toLowerCase().includes(search));
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<li style="justify-content:center;color:var(--text-light);">No accounts yet. Add your first one!</li>';
+    return;
+  }
+
+  // Sort: red first, then yellow, then green; within same health, by renewal date
+  const healthOrder = {red:0, yellow:1, green:2};
+  filtered.sort((a,b) => (healthOrder[a.health]||2) - (healthOrder[b.health]||2));
+
+  list.innerHTML = filtered.map((c,i) => {
+    const origIdx = clients.indexOf(c);
+    const renewal = c.renewal ? new Date(c.renewal) : null;
+    const daysUntil = renewal ? Math.ceil((renewal - new Date()) / 86400000) : null;
+    const renewalLabel = daysUntil !== null ? (daysUntil < 0 ? `⚠️ EXPIRED` : daysUntil < 90 ? `🔔 ${daysUntil}d to renewal` : `${daysUntil}d`) : '';
+    return `<li onclick="viewClient(${origIdx})">
+      <div>
+        <span class="client-health health-${c.health||'green'}"></span>
+        <strong>${c.name}</strong>
+        <span style="font-size:0.8rem;color:var(--text-light);margin-left:8px;">${c.industry||''} • ${c.seats||'?'} seats</span>
+      </div>
+      <div style="font-size:0.8rem;text-align:right;">
+        <div>${c.software||''}</div>
+        <div style="color:${daysUntil!==null && daysUntil < 90 ? 'var(--danger)' : 'var(--text-light)'}">${renewalLabel}</div>
+      </div>
+    </li>`;
+  }).join('');
+}
+
+function showAddClient() {
+  editingClientIdx = -1;
+  document.getElementById('clientFormTitle').textContent = '➕ Add Account';
+  document.getElementById('deleteClientBtn').style.display = 'none';
+  ['cfName','cfContact','cfSoftware','cfSeats','cfRenewal','cfRevenue','cfUpsell','cfNotes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('cfIndustry').selectedIndex = 0;
+  document.getElementById('cfHealth').selectedIndex = 0;
+  document.getElementById('clientForm').style.display = 'block';
+  document.getElementById('clientDetail').style.display = 'none';
+}
+
+function hideClientForm() {
+  document.getElementById('clientForm').style.display = 'none';
+}
+
+function saveClient() {
+  const clients = getClients();
+  const client = {
+    name: document.getElementById('cfName').value,
+    contact: document.getElementById('cfContact').value,
+    industry: document.getElementById('cfIndustry').value,
+    software: document.getElementById('cfSoftware').value,
+    seats: +document.getElementById('cfSeats').value || 0,
+    renewal: document.getElementById('cfRenewal').value,
+    revenue: +document.getElementById('cfRevenue').value || 0,
+    health: document.getElementById('cfHealth').value,
+    upsell: document.getElementById('cfUpsell').value,
+    notes: document.getElementById('cfNotes').value,
+  };
+  if (!client.name) { showToast('Company name is required'); return; }
+
+  if (editingClientIdx >= 0) {
+    // Preserve existing notes history
+    const existing = clients[editingClientIdx];
+    if (existing.notes && client.notes !== existing.notes) {
+      client.notes = client.notes + '\n\n---\n' + existing.notes;
+    }
+    clients[editingClientIdx] = client;
+  } else {
+    clients.push(client);
+  }
+  saveClients(clients);
+  hideClientForm();
+  renderClients();
+  showToast(editingClientIdx >= 0 ? 'Account updated!' : 'Account added!');
+  editingClientIdx = -1;
+}
+
+function viewClient(idx) {
+  viewingClientIdx = idx;
+  const clients = getClients();
+  const c = clients[idx];
+  document.getElementById('detailName').innerHTML = `<span class="client-health health-${c.health||'green'}"></span> ${c.name}`;
+  document.getElementById('detailContent').innerHTML = `
+    <div>
+      <p><strong>Contact:</strong> ${c.contact||'—'}</p>
+      <p><strong>Industry:</strong> ${c.industry||'—'}</p>
+      <p><strong>Software:</strong> ${c.software||'—'}</p>
+      <p><strong>Seats:</strong> ${c.seats||'—'}</p>
+    </div>
+    <div>
+      <p><strong>Renewal:</strong> ${c.renewal||'—'}</p>
+      <p><strong>Annual Revenue:</strong> ${c.revenue ? '$'+c.revenue.toLocaleString() : '—'}</p>
+      <p><strong>Upsell Opps:</strong> ${c.upsell||'—'}</p>
+      <p><strong>Health:</strong> ${c.health==='green'?'🟢 Healthy':c.health==='yellow'?'🟡 At Risk':'🔴 Critical'}</p>
+    </div>
+  `;
+  document.getElementById('detailNotes').textContent = c.notes || 'No notes yet.';
+  document.getElementById('clientDetail').style.display = 'block';
+  document.getElementById('clientForm').style.display = 'none';
+}
+
+function editClient() {
+  if (viewingClientIdx < 0) return;
+  const clients = getClients();
+  const c = clients[viewingClientIdx];
+  editingClientIdx = viewingClientIdx;
+  document.getElementById('clientFormTitle').textContent = '✏️ Edit Account';
+  document.getElementById('deleteClientBtn').style.display = 'inline-flex';
+  document.getElementById('cfName').value = c.name || '';
+  document.getElementById('cfContact').value = c.contact || '';
+  document.getElementById('cfIndustry').value = c.industry || 'Automotive';
+  document.getElementById('cfSoftware').value = c.software || '';
+  document.getElementById('cfSeats').value = c.seats || '';
+  document.getElementById('cfRenewal').value = c.renewal || '';
+  document.getElementById('cfRevenue').value = c.revenue || '';
+  document.getElementById('cfHealth').value = c.health || 'green';
+  document.getElementById('cfUpsell').value = c.upsell || '';
+  document.getElementById('cfNotes').value = c.notes || '';
+  document.getElementById('clientForm').style.display = 'block';
+  document.getElementById('clientDetail').style.display = 'none';
+}
+
+function deleteClient() {
+  if (editingClientIdx < 0) return;
+  if (!confirm('Delete this account?')) return;
+  const clients = getClients();
+  clients.splice(editingClientIdx, 1);
+  saveClients(clients);
+  hideClientForm();
+  renderClients();
+  showToast('Account deleted');
+  editingClientIdx = -1;
+}
+
+function prepMeetingFromClient() {
+  if (viewingClientIdx < 0) return;
+  const c = getClients()[viewingClientIdx];
+  document.getElementById('meetingClient').value = c.name;
+  document.getElementById('meetingContact').value = c.contact || '';
+  showSection('meeting-prep');
+  document.querySelector('.topbar-tabs button').click();
+  showToast(`Prepping for ${c.name}`);
+}
+
+// ===== INIT =====
+renderProducts();
+renderClients();
+</script>
+
+</body>
+</html>
