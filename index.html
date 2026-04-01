@@ -332,6 +332,11 @@ section{position:relative;z-index:2;padding:100px 40px}
   text-transform:uppercase;color:var(--accent);margin-bottom:12px;
 }
 .section-title{font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-1px;margin-bottom:14px}
+.section-title::after{
+  content:'';display:block;width:60px;height:2px;
+  background:linear-gradient(90deg,var(--gradient-start),var(--gradient-end));
+  margin:16px auto 0;border-radius:1px;
+}
 .section-desc{font-size:1.05rem;color:var(--text-secondary);max-width:600px;margin:0 auto}
 
 /* ═══════════════════════════════════════════════════════
@@ -384,8 +389,13 @@ section{position:relative;z-index:2;padding:100px 40px}
   background:var(--bg-card-hover);border-color:var(--accent);
   box-shadow:0 8px 35px var(--accent-glow);transform:translateY(-5px);
 }
-.service-icon{font-size:2.4rem;margin-bottom:18px;display:inline-block;transition:transform .35s}
-.service-card:hover .service-icon{transform:scale(1.12)}
+.service-icon{
+  width:48px;height:48px;margin-bottom:18px;display:flex;align-items:center;justify-content:center;
+  border-radius:12px;background:linear-gradient(135deg,var(--accent-glow),transparent);
+  transition:transform .35s,box-shadow .35s;
+}
+.service-icon svg{width:26px;height:26px;stroke:var(--accent);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.service-card:hover .service-icon{transform:scale(1.12);box-shadow:0 0 20px var(--accent-glow)}
 .service-card h3{font-size:1.2rem;font-weight:700;margin-bottom:10px}
 .service-card p{color:var(--text-secondary);font-size:.92rem;line-height:1.7}
 
@@ -442,9 +452,15 @@ section{position:relative;z-index:2;padding:100px 40px}
 .value-visual{
   background:var(--bg-card);border:1px solid var(--border-color);border-radius:16px;
   padding:40px;display:flex;align-items:center;justify-content:center;
-  font-size:4rem;min-height:240px;transition:all .3s;
+  min-height:240px;transition:all .3s;position:relative;overflow:hidden;
 }
 .value-visual:hover{border-color:var(--accent);box-shadow:0 0 30px var(--accent-glow)}
+.value-visual svg{width:100%;height:100%;max-width:200px;max-height:160px}
+.value-visual svg .vv-line{stroke:var(--accent);stroke-width:1.2;fill:none;opacity:.5;stroke-linecap:round}
+.value-visual svg .vv-accent{stroke:var(--accent);stroke-width:2;fill:none;stroke-linecap:round;stroke-dasharray:4 4;animation:vv-dash 20s linear infinite}
+.value-visual svg .vv-fill{fill:var(--accent-glow);stroke:none}
+.value-visual svg .vv-dot{fill:var(--accent)}
+@keyframes vv-dash{to{stroke-dashoffset:-200}}
 
 /* ═══════════════════════════════════════════════════════
    PROCESS TIMELINE
@@ -474,7 +490,7 @@ section{position:relative;z-index:2;padding:100px 40px}
   border-radius:16px;padding:32px;transition:all .3s;
 }
 .testimonial-card:hover{border-color:var(--accent);transform:translateY(-4px)}
-.quote-mark{font-size:3rem;color:var(--accent);opacity:.3;line-height:1;margin-bottom:10px}
+.quote-mark{font-size:3.5rem;font-family:Georgia,serif;color:var(--accent);opacity:.25;line-height:1;margin-bottom:10px;user-select:none}
 .testimonial-card p{color:var(--text-secondary);font-size:.92rem;line-height:1.7;margin-bottom:16px;font-style:italic}
 .testimonial-author{font-weight:700;font-size:.88rem}
 .testimonial-role{font-size:.78rem;color:var(--text-secondary)}
@@ -581,7 +597,6 @@ footer{
   <div class="nav-links" id="navLinks">
     <a href="#services">Services</a>
     <a href="#openclaw">OpenClaw</a>
-    <a href="#process">Process</a>
     <a href="#results">Results</a>
     <a href="#contact" class="nav-cta">Get Started</a>
   </div>
@@ -594,7 +609,7 @@ footer{
   <div class="hero-content">
     <a href="#openclaw" class="hero-badge">
       <span class="dot"></span>
-      <span><span class="badge-new">NEW</span> — We Now Deploy OpenClaw AI Agents</span>
+      <span>We Deploy OpenClaw AI Agents</span>
     </a>
     <h1>
       <span class="line-static">Profit Through Automating</span>
@@ -661,37 +676,37 @@ footer{
     <div class="services-grid stagger">
 
       <div class="service-card reveal">
-        <div class="service-icon">⚙️</div>
+        <div class="service-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></div>
         <h3>Automated CAD Checks</h3>
-        <p>CATIA, NX, AutoCAD, SolidWorks — our automations open 3D models, run clearance checks against your specs, and generate pass/fail reports. Weeks of manual work → minutes.</p>
+        <p>CATIA, NX, AutoCAD, SolidWorks — our automations open 3D models, run clearance checks against your specs, and generate pass/fail reports. Weeks of manual work, minutes of runtime.</p>
       </div>
 
       <div class="service-card reveal">
-        <div class="service-icon">📐</div>
+        <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/><line x1="14" y1="15" x2="18" y2="15"/><line x1="14" y1="12" x2="18" y2="12"/></svg></div>
         <h3>Automated Drawings</h3>
         <p>Using 3D CAD and a few selections from an engineer, a 2D drawing is generated — formatted, dimensioned, and ready for the manufacturing plant. Saving 1,200+ hours/year.</p>
       </div>
 
       <div class="service-card reveal">
-        <div class="service-icon">📊</div>
+        <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M3 3h18v18H3z"/><path d="M3 9h18M9 3v18"/><path d="M14 14l2 2 3-3"/></svg></div>
         <h3>Automated Excel &amp; BOM Work</h3>
         <p>Engineers combining customer data with internal Parts Lists/BOMs? Our automations merge documents, calculate quantities, and generate Excel files in your exact format.</p>
       </div>
 
       <div class="service-card reveal">
-        <div class="service-icon">🤖</div>
+        <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M12 2a4 4 0 014 4v5H8V6a4 4 0 014-4z"/><circle cx="12" cy="16" r="1.5"/></svg></div>
         <h3>AI Agents &amp; OpenClaw</h3>
         <p>Deploy intelligent AI agents that handle repetitive work, answer questions, process data, and integrate with your existing tools. Your own 24/7 digital workforce.</p>
       </div>
 
       <div class="service-card reveal">
-        <div class="service-icon">🌐</div>
+        <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
         <h3>Custom Web Applications</h3>
         <p>Internal tools, dashboards, client portals — purpose-built web applications that do exactly what your business needs. No bloated SaaS. No compromises.</p>
       </div>
 
       <div class="service-card reveal">
-        <div class="service-icon">🔗</div>
+        <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
         <h3>System Integration</h3>
         <p>Connect CAD systems, ERP, email, cloud storage, and databases into seamless automated workflows. Data flows where it needs to — automatically.</p>
       </div>
@@ -707,28 +722,28 @@ footer{
       <h3>Custom Software Specific To Your Design Rules And Specs</h3>
       <p>Save engineering hours year over year with automations that perform what was previously tedious, manual engineering work. Your specs. Your rules. Our code.</p>
     </div>
-    <div class="value-visual">🏭</div>
+    <div class="value-visual"><svg viewBox="0 0 200 160"><rect x="20" y="30" width="60" height="100" rx="4" class="vv-line"/><rect x="120" y="30" width="60" height="100" rx="4" class="vv-line"/><path d="M80 60h40M80 80h40M80 100h40" class="vv-accent"/><circle cx="50" cy="55" r="3" class="vv-dot"/><circle cx="50" cy="75" r="3" class="vv-dot"/><circle cx="50" cy="95" r="3" class="vv-dot"/><path d="M135 65l8 8 12-16" class="vv-line" style="stroke-width:2.5;opacity:1"/><path d="M135 90l8 8 12-16" class="vv-line" style="stroke-width:2.5;opacity:1"/></svg></div>
   </div>
   <div class="value-block reverse reveal">
     <div class="value-text">
       <h3>Quality Software For High Stakes Decisions</h3>
       <p>Our experienced programmers and extensive libraries eliminate human error and prevent last minute trips to Plant Builds. When the stakes are high, you need software you can trust.</p>
     </div>
-    <div class="value-visual">🛡️</div>
+    <div class="value-visual"><svg viewBox="0 0 200 160"><path d="M100 15L170 60v65l-70 40-70-40V60z" class="vv-line" style="stroke-width:1.5"/><path d="M100 35L150 60v45l-50 28-50-28V60z" class="vv-fill"/><path d="M85 90l12 12 25-30" style="stroke:var(--accent);stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round"/></svg></div>
   </div>
   <div class="value-block reveal">
     <div class="value-text">
       <h3>Extend Human Abilities With Computations Only A Computer Can Do</h3>
       <p>Unlock new capabilities for your company by using the power of computers to do heavy lifting. Things no human could do manually — at scale, with precision, around the clock.</p>
     </div>
-    <div class="value-visual">🚀</div>
+    <div class="value-visual"><svg viewBox="0 0 200 160"><circle cx="100" cy="80" r="50" class="vv-line"/><circle cx="100" cy="80" r="35" class="vv-accent"/><circle cx="100" cy="80" r="18" class="vv-fill"/><path d="M100 80L100 30M100 80L140 60M100 80L130 115" style="stroke:var(--accent);stroke-width:1.5;fill:none;stroke-linecap:round"/><circle cx="100" cy="30" r="4" class="vv-dot"/><circle cx="140" cy="60" r="4" class="vv-dot"/><circle cx="130" cy="115" r="4" class="vv-dot"/><circle cx="60" cy="60" r="3" class="vv-dot" style="opacity:.4"/><circle cx="62" cy="110" r="3" class="vv-dot" style="opacity:.4"/></svg></div>
   </div>
 </section>
 
 <!-- ═══════════════════ OPENCLAW ═══════════════════ -->
 <section class="openclaw-section" id="openclaw">
   <div class="openclaw-card reveal">
-    <div class="openclaw-icon">🐾</div>
+    <div class="openclaw-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 00-3 3c0 1.5 1 2.5 1 4H8a3 3 0 00-3 3v2a3 3 0 003 3h.5l.5 3h6l.5-3h.5a3 3 0 003-3v-2a3 3 0 00-3-3h-2c0-1.5 1-2.5 1-4a3 3 0 00-3-3z"/><circle cx="9.5" cy="13" r="1" fill="var(--accent)"/><circle cx="14.5" cy="13" r="1" fill="var(--accent)"/></svg></div>
     <h2>We Now Deploy <span class="gradient-text">OpenClaw</span> AI Agents</h2>
     <p>
       OpenClaw is an AI agent platform that gives your business a 24/7 intelligent assistant.
@@ -744,46 +759,7 @@ footer{
   </div>
 </section>
 
-<!-- ═══════════════════ PROCESS ═══════════════════ -->
-<section id="process">
-  <div class="container">
-    <div class="section-header reveal">
-      <div class="section-label">How We Work</div>
-      <h2 class="section-title">From Problem to Production</h2>
-      <p class="section-desc">A proven process refined across dozens of engineering automation projects.</p>
-    </div>
-    <div class="process-timeline">
-      <div class="process-step reveal">
-        <div class="step-num">1</div>
-        <div class="step-content">
-          <h3>Discovery Call</h3>
-          <p>We learn your workflow, pain points, and goals. No sales pitch — just understanding your problem deeply enough to solve it right the first time.</p>
-        </div>
-      </div>
-      <div class="process-step reveal">
-        <div class="step-num">2</div>
-        <div class="step-content">
-          <h3>Architecture &amp; Scope</h3>
-          <p>We design the solution, define deliverables, and give you a fixed-price quote. No surprises. No scope creep billing.</p>
-        </div>
-      </div>
-      <div class="process-step reveal">
-        <div class="step-num">3</div>
-        <div class="step-content">
-          <h3>Build &amp; Iterate</h3>
-          <p>Rapid development with your team's input. You see progress weekly — not at the end of a black-box sprint.</p>
-        </div>
-      </div>
-      <div class="process-step reveal">
-        <div class="step-num">4</div>
-        <div class="step-content">
-          <h3>Deploy &amp; Support</h3>
-          <p>Production deployment with documentation and training. We don't disappear — ongoing support is part of the deal.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+
 
 <!-- ═══════════════════ TESTIMONIALS ═══════════════════ -->
 <section id="results">
@@ -815,17 +791,7 @@ footer{
   </div>
 </section>
 
-<!-- ═══════════════════ CTA ═══════════════════ -->
-<section class="cta-section">
-  <div class="container reveal">
-    <h2>Ready to Stop Wasting<br><span class="gradient-text">Engineering Hours?</span></h2>
-    <p>Every week you wait is another week of manual work that didn't need to happen.</p>
-    <div class="cta-actions">
-      <a href="#contact" class="btn btn-primary magnetic">Start a Conversation →</a>
-      <a href="mailto:michael.kirk@kirkautomations.com" class="btn btn-secondary magnetic">Email Directly</a>
-    </div>
-  </div>
-</section>
+
 
 <!-- ═══════════════════ CONTACT ═══════════════════ -->
 <section class="contact-section" id="contact">
@@ -838,9 +804,9 @@ footer{
       <div class="contact-info reveal-left">
         <h3>Kirk Automations</h3>
         <p>Custom automation software and AI agents for engineering companies and businesses. Based in Michigan, serving clients nationwide.</p>
-        <div class="contact-detail"><span class="icon">📧</span><a href="mailto:michael.kirk@kirkautomations.com">michael.kirk@kirkautomations.com</a></div>
-        <div class="contact-detail"><span class="icon">📱</span><a href="tel:5869145944">(586) 914-5944</a></div>
-        <div class="contact-detail"><span class="icon">📍</span><span>Michigan, USA</span></div>
+        <div class="contact-detail"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg></span><a href="mailto:michael.kirk@kirkautomations.com">michael.kirk@kirkautomations.com</a></div>
+        <div class="contact-detail"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg></span><a href="tel:5869145944">(586) 914-5944</a></div>
+        <div class="contact-detail"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></span><span>Michigan, USA</span></div>
       </div>
       <form class="contact-form reveal-right" id="contactForm">
         <input type="text" name="name" placeholder="Your Name" required>
@@ -959,7 +925,7 @@ footer{
 </div>
 
 <footer>
-  <p>&copy; 2023–2026 Kirk Automations. Built with precision. ⚡ &nbsp;|&nbsp; <a href="projects.html" style="color:var(--text-secondary);font-size:.82rem">Our Projects</a></p>
+  <p>&copy; 2023–2026 Kirk Automations. Built with precision. &nbsp;|&nbsp; <a href="projects.html" style="color:var(--text-secondary);font-size:.82rem">Our Projects</a></p>
 </footer>
 
 
