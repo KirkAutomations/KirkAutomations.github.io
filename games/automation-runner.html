@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Process Runner | Kirk Automations</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a1a;color:#e0e0e0;font-family:'Inter',sans-serif;overflow:hidden;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+a{color:#00e5ff;text-decoration:none}
+.back-link{position:fixed;top:12px;left:12px;z-index:100;font-size:14px;cursor:pointer;color:#00e5ff}
+#gameCanvas{display:block;background:#0a0a1a;touch-action:none}
+#overlay{position:fixed;top:0;left:0;width:100%;height:100%;z-index:50;display:flex;justify-content:center;align-items:center;flex-direction:column;background:#0a0a1af0;pointer-events:all}
+#overlay.hidden{display:none;pointer-events:none}
+#overlay h1{font-size:32px;color:#00e5ff;margin-bottom:8px}
+#overlay h2{font-size:16px;color:#ffd700;margin-bottom:4px;font-family:'JetBrains Mono',monospace}
+#overlay p{font-size:13px;color:#888;max-width:400px;text-align:center;margin:8px 0;line-height:1.5}
+#overlay .score-line{font-size:20px;color:#00e5ff;font-weight:700;font-family:'JetBrains Mono',monospace;margin:8px 0}
+#overlay button{background:#00e5ff;color:#0a0a1a;border:none;padding:14px 40px;border-radius:8px;font-size:18px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-top:12px}
+#overlay button:hover{background:#33ecff}
+#hud{position:fixed;top:12px;right:12px;z-index:40;font-family:'JetBrains Mono',monospace;font-size:14px;text-align:right;background:#0a0a1acc;padding:8px 12px;border-radius:8px;border:1px solid #1a2332}
+#hud div{margin:2px 0}
+.val{color:#00e5ff;font-weight:700}
+#info-footer{position:fixed;bottom:8px;left:0;width:100%;text-align:center;font-size:11px;color:#444;z-index:1;padding:4px}
+#pickup-display{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:45;font-family:'JetBrains Mono',monospace;font-size:18px;color:#ffd700;text-align:center;pointer-events:none;opacity:0;transition:opacity 0.3s}
+#pickup-display.show{opacity:1}
+</style>
+</head>
+<body>
+<a class="back-link" href="#" onclick="if(history.length>1){history.back()}else{location.href='../'};return false">← Back</a>
+
+<canvas id="gameCanvas"></canvas>
+
+<div id="hud">
+  <div>Hours Saved: <span class="val" id="hud-score">0</span></div>
+  <div>Speed: <span class="val" id="hud-speed">1.0x</span></div>
+  <div>Best: <span class="val" id="hud-best">0</span></div>
+</div>
+
+<div id="pickup-display"></div>
+
+<div id="overlay">
+  <h1>⚡ Process Runner</h1>
+  <h2>Kirk Automations</h2>
+  <p>Run through the factory! Jump over manual work obstacles and collect automation power-ups. Each icon represents a real automation that saves real hours.</p>
+  <p style="font-size:12px;color:#666">Space / Tap to jump • Double-jump available!</p>
+  <button id="start-btn" onclick="startGame()">Run!</button>
+</div>
+
+<div id="info-footer">
+  <strong>What is Kirk Automations?</strong> We build custom automation that saves manufacturing teams thousands of hours per year.
+  <a href="../">Learn more →</a>
+</div>
+
+<script>
+const canvas=document.getElementById('gameCanvas');
+const ctx=canvas.getContext('2d');
+const overlay=document.getElementById('overlay');
+const pickupEl=document.getElementById('pickup-display');
+
+const AUTOMATIONS=[
+  {name:"Classify Warranty Claims",hours:50,icon:"📋"},
+  {name:"Clean Messy CAD",hours:75,icon:"🧹"},
+  {name:"Report Generation",hours:100,icon:"📊"},
+  {name:"Convert Data",hours:100,icon:"🔄"},
+  {name:"Material Usage Calc",hours:100,icon:"🧮"},
+  {name:"Max Condition Calc",hours:240,icon:"📐"},
+  {name:"Fix Drawing Mistakes",hours:350,icon:"✏️"},
+  {name:"Change Comparison",hours:600,icon:"🔀"},
+  {name:"Safety Check",hours:720,icon:"🛡️"},
+  {name:"Spec Check Report",hours:800,icon:"✅"},
+  {name:"Auto Email",hours:1010,icon:"📧"},
+  {name:"Parts List Builder",hours:1032,icon:"📦"},
+  {name:"Drawing Generation",hours:1200,icon:"📐"},
+  {name:"Data Commonization",hours:2000,icon:"🗄️"},
+  {name:"CAD Comparison",hours:3600,icon:"⚡"}
+];
+
+const OBSTACLES=[
+  {name:"Paper Stack",emoji:"📄",w:30,h:40},
+  {name:"Filing Cabinet",emoji:"🗄️",w:35,h:50},
+  {name:"Inbox Overflow",emoji:"📬",w:30,h:35},
+  {name:"Clipboard",emoji:"📋",w:25,h:35},
+  {name:"Spreadsheet",emoji:"📑",w:30,h:30}
+];
+
+let W,H,groundY;
+let game={running:false};
+
+function resize(){
+  W=window.innerWidth;
+  H=window.innerHeight;
+  canvas.width=W;
+  canvas.height=H;
+  groundY=H*0.75;
+}
+window.addEventListener('resize',resize);
+resize();
+
+// Parallax layers
+const bgLayers=[
+  {speed:0.1,color:'#0f1520',elements:[]}, // far buildings
+  {speed:0.3,color:'#131b2e',elements:[]}, // mid factory
+  {speed:0.6,color:'#1a2332',elements:[]}  // near conveyor
+];
+
+function initBgLayers(){
+  // Far: city silhouette
+  bgLayers[0].elements=[];
+  for(let x=0;x<W*3;x+=60+Math.random()*80){
+    bgLayers[0].elements.push({x:x,h:40+Math.random()*100,w:30+Math.random()*50});
+  }
+  bgLayers[1].elements=[];
+  for(let x=0;x<W*3;x+=100+Math.random()*120){
+    bgLayers[1].elements.push({x:x,h:60+Math.random()*80,w:50+Math.random()*60});
+  }
+  bgLayers[2].elements=[];
+  for(let x=0;x<W*3;x+=40){
+    bgLayers[2].elements.push({x:x});
+  }
+}
+
+// Player
+let player={x:0,y:0,vy:0,w:30,h:50,jumps:0,maxJumps:2,grounded:false,frame:0,alive:true};
+
+// Game objects
+let obstacles=[];
+let collectibles=[];
+let particles=[];
+let score=0;
+let speedMult=1;
+let distance=0;
+let baseSpeed=5;
+let highScore=parseInt(localStorage.getItem('processRunnerHigh'))||0;
+let pickupTimer=0;
+
+document.getElementById('hud-best').textContent=highScore;
+
+function startGame(){
+  overlay.classList.add('hidden');
+  game.running=true;
+  score=0;
+  speedMult=1;
+  distance=0;
+  obstacles=[];
+  collectibles=[];
+  particles=[];
+  player.x=W*0.15;
+  player.y=groundY-player.h;
+  player.vy=0;
+  player.jumps=0;
+  player.grounded=true;
+  player.alive=true;
+  player.frame=0;
+  initBgLayers();
+  lastSpawnDist=0;
+  lastCollectDist=0;
+  requestAnimationFrame(loop);
+}
+
+function endGame(){
+  game.running=false;
+  if(score>highScore){
+    highScore=score;
+    localStorage.setItem('processRunnerHigh',highScore);
+  }
+  overlay.classList.remove('hidden');
+  overlay.querySelector('h1').textContent='💥 Process Crashed!';
+  overlay.querySelector('h2').textContent='';
+  overlay.querySelector('p').textContent=`You automated ${score.toLocaleString()} hours before hitting a wall of manual work.`;
+  overlay.querySelector('.score-line')?.remove();
+  const sl=document.createElement('div');
+  sl.className='score-line';
+  sl.textContent=score.toLocaleString()+' hours saved';
+  overlay.querySelector('p').after(sl);
+  const p2=document.createElement('p');
+  p2.textContent='Best: '+highScore.toLocaleString()+' hours';
+  p2.style.color='#ffd700';
+  sl.after(p2);
+  document.getElementById('start-btn').textContent='Run Again!';
+}
+
+// Input
+let jumpPressed=false;
+function doJump(){
+  if(!game.running || !player.alive) return;
+  if(player.jumps<player.maxJumps){
+    player.vy=-13;
+    player.jumps++;
+    player.grounded=false;
+    // Jump particles
+    for(let i=0;i<5;i++){
+      particles.push({x:player.x+player.w/2,y:player.y+player.h,vx:(Math.random()-0.5)*3,vy:-Math.random()*3,life:0.5,color:'#00e5ff'});
+    }
+  }
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.code==='Space'||e.code==='ArrowUp'){e.preventDefault();doJump();}
+});
+canvas.addEventListener('touchstart',e=>{e.preventDefault();if(!game.running){startGame();}else{doJump();}},{passive:false});
+
+// Spawning
+let lastSpawnDist=0;
+let lastCollectDist=0;
+
+function spawnObstacle(){
+  const o=OBSTACLES[Math.floor(Math.random()*OBSTACLES.length)];
+  const tall=Math.random()>0.6;
+  obstacles.push({
+    x:W+50,
+    y:groundY-(tall?o.h*1.5:o.h),
+    w:o.w,h:tall?o.h*1.5:o.h,
+    emoji:o.emoji,name:o.name
+  });
+}
+
+function spawnCollectible(){
+  const a=AUTOMATIONS[Math.floor(Math.random()*AUTOMATIONS.length)];
+  const floatY=groundY-80-Math.random()*120;
+  collectibles.push({
+    x:W+50,y:floatY,
+    w:28,h:28,
+    icon:a.icon,name:a.name,hours:a.hours,
+    bobOffset:Math.random()*Math.PI*2
+  });
+}
+
+// Main loop
+let lastTime=0;
+function loop(ts){
+  if(!game.running) return;
+  const dt=Math.min((ts-lastTime)/1000,0.05);
+  lastTime=ts;
+  
+  const spd=baseSpeed*speedMult;
+  distance+=spd*dt*60;
+  
+  // Increase speed
+  speedMult=1+distance*0.00003;
+  
+  // Spawn
+  const spawnGap=Math.max(180,350-distance*0.02);
+  if(distance-lastSpawnDist>spawnGap){
+    spawnObstacle();
+    lastSpawnDist=distance;
+  }
+  if(distance-lastCollectDist>200+Math.random()*150){
+    spawnCollectible();
+    lastCollectDist=distance;
+  }
+  
+  // Physics
+  player.vy+=0.6; // gravity
+  player.y+=player.vy;
+  if(player.y>=groundY-player.h){
+    player.y=groundY-player.h;
+    player.vy=0;
+    player.jumps=0;
+    player.grounded=true;
+  }
+  player.frame+=dt*10*speedMult;
+  
+  // Move obstacles
+  for(let o of obstacles){
+    o.x-=spd*dt*60;
+  }
+  obstacles=obstacles.filter(o=>o.x>-60);
+  
+  // Move collectibles
+  for(let c of collectibles){
+    c.x-=spd*dt*60;
+    c.bobOffset+=dt*3;
+  }
+  collectibles=collectibles.filter(c=>c.x>-60);
+  
+  // Collision with obstacles
+  for(let o of obstacles){
+    if(player.x+player.w-8>o.x && player.x+8<o.x+o.w &&
+       player.y+player.h>o.y+5 && player.y<o.y+o.h){
+      player.alive=false;
+      // Death particles
+      for(let i=0;i<20;i++){
+        particles.push({x:player.x+player.w/2,y:player.y+player.h/2,
+          vx:(Math.random()-0.5)*8,vy:(Math.random()-0.5)*8,
+          life:1,color:Math.random()>0.5?'#ff4444':'#ffd700'});
+      }
+      setTimeout(endGame,500);
+    }
+  }
+  
+  // Collision with collectibles
+  for(let i=collectibles.length-1;i>=0;i--){
+    const c=collectibles[i];
+    const cy=c.y+Math.sin(c.bobOffset)*8;
+    if(player.x+player.w>c.x && player.x<c.x+c.w &&
+       player.y+player.h>cy && player.y<cy+c.h){
+      score+=c.hours;
+      // Show pickup
+      showPickup(c.name+': +'+c.hours.toLocaleString()+' hrs/yr');
+      // Particles
+      for(let j=0;j<8;j++){
+        particles.push({x:c.x+c.w/2,y:cy+c.h/2,
+          vx:(Math.random()-0.5)*5,vy:-Math.random()*4,
+          life:0.6,color:'#ffd700'});
+      }
+      collectibles.splice(i,1);
+    }
+  }
+  
+  // Particles
+  for(let p of particles){
+    p.x+=p.vx;p.y+=p.vy;
+    p.vy+=0.2;
+    p.life-=dt*2;
+  }
+  particles=particles.filter(p=>p.life>0);
+  
+  // Pickup timer
+  if(pickupTimer>0){
+    pickupTimer-=dt;
+    if(pickupTimer<=0) pickupEl.classList.remove('show');
+  }
+  
+  // HUD
+  document.getElementById('hud-score').textContent=score.toLocaleString();
+  document.getElementById('hud-speed').textContent=speedMult.toFixed(1)+'x';
+  document.getElementById('hud-best').textContent=highScore.toLocaleString();
+  
+  draw(dt);
+  if(player.alive) requestAnimationFrame(loop);
+}
+
+function showPickup(text){
+  pickupEl.textContent=text;
+  pickupEl.classList.add('show');
+  pickupTimer=1.5;
+}
+
+function draw(dt){
+  ctx.clearRect(0,0,W,H);
+  
+  // Background gradient
+  const grad=ctx.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0,'#0a0a1a');
+  grad.addColorStop(1,'#0f1923');
+  ctx.fillStyle=grad;
+  ctx.fillRect(0,0,W,H);
+  
+  const spd=baseSpeed*speedMult;
+  
+  // Parallax layer 0: far buildings
+  ctx.fillStyle='#0f1520';
+  for(let b of bgLayers[0].elements){
+    const bx=((b.x-distance*bgLayers[0].speed)%((W*3))+(W*3))%(W*3)-W*0.5;
+    ctx.fillRect(bx,groundY-b.h,b.w,b.h);
+  }
+  
+  // Parallax layer 1: factory mid
+  ctx.fillStyle='#131b2e';
+  for(let b of bgLayers[1].elements){
+    const bx=((b.x-distance*bgLayers[1].speed)%((W*3))+(W*3))%(W*3)-W*0.5;
+    ctx.fillRect(bx,groundY-b.h,b.w,b.h);
+    // Windows
+    ctx.fillStyle='#1a3a5c44';
+    for(let wy=groundY-b.h+10;wy<groundY-10;wy+=20){
+      for(let wx=bx+8;wx<bx+b.w-8;wx+=18){
+        ctx.fillRect(wx,wy,10,12);
+      }
+    }
+    ctx.fillStyle='#131b2e';
+  }
+  
+  // Parallax layer 2: conveyor belt
+  ctx.fillStyle='#1a2332';
+  ctx.fillRect(0,groundY,W,H-groundY);
+  ctx.strokeStyle='#234';
+  ctx.lineWidth=2;
+  for(let b of bgLayers[2].elements){
+    const bx=((b.x-distance*bgLayers[2].speed)%(40)+40)%40;
+    ctx.beginPath();
+    ctx.moveTo(bx,groundY);
+    ctx.lineTo(bx,H);
+    ctx.stroke();
+  }
+  
+  // Ground line
+  ctx.strokeStyle='#00e5ff44';
+  ctx.lineWidth=2;
+  ctx.beginPath();
+  ctx.moveTo(0,groundY);
+  ctx.lineTo(W,groundY);
+  ctx.stroke();
+  
+  // Obstacles
+  for(let o of obstacles){
+    ctx.fillStyle='#2a1a1a';
+    ctx.fillRect(o.x,o.y,o.w,o.h);
+    ctx.strokeStyle='#ff444466';
+    ctx.lineWidth=1;
+    ctx.strokeRect(o.x,o.y,o.w,o.h);
+    ctx.font=(o.h>40?'24':'18')+'px sans-serif';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText(o.emoji,o.x+o.w/2,o.y+o.h/2);
+  }
+  
+  // Collectibles
+  for(let c of collectibles){
+    const cy=c.y+Math.sin(c.bobOffset)*8;
+    // Glow
+    ctx.shadowBlur=12;
+    ctx.shadowColor='#ffd700';
+    ctx.font='22px sans-serif';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText(c.icon,c.x+c.w/2,cy+c.h/2);
+    ctx.shadowBlur=0;
+    // Hours label
+    ctx.font='bold 9px "JetBrains Mono"';
+    ctx.fillStyle='#ffd700';
+    ctx.fillText('+'+c.hours,c.x+c.w/2,cy-8);
+  }
+  
+  // Player
+  if(player.alive){
+    const px=player.x, py=player.y;
+    // Body
+    ctx.fillStyle='#00e5ff';
+    ctx.fillRect(px+8,py+10,14,25);
+    // Head
+    ctx.beginPath();
+    ctx.arc(px+15,py+8,8,0,Math.PI*2);
+    ctx.fill();
+    // Hard hat
+    ctx.fillStyle='#ffd700';
+    ctx.fillRect(px+6,py-2,18,6);
+    ctx.fillRect(px+10,py-5,10,5);
+    // Legs (animated)
+    ctx.fillStyle='#00e5ff';
+    const legPhase=Math.sin(player.frame*2);
+    if(player.grounded){
+      ctx.fillRect(px+8+legPhase*4,py+35,5,15);
+      ctx.fillRect(px+17-legPhase*4,py+35,5,15);
+    } else {
+      // Tucked legs in air
+      ctx.fillRect(px+8,py+35,5,10);
+      ctx.fillRect(px+17,py+35,5,10);
+    }
+    // Arms
+    ctx.strokeStyle='#00e5ff';
+    ctx.lineWidth=3;
+    const armPhase=Math.sin(player.frame*2+1);
+    ctx.beginPath();
+    ctx.moveTo(px+8,py+18);
+    ctx.lineTo(px+2+armPhase*3,py+28);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(px+22,py+18);
+    ctx.lineTo(px+28-armPhase*3,py+28);
+    ctx.stroke();
+  }
+  
+  // Particles
+  for(let p of particles){
+    ctx.globalAlpha=Math.max(0,p.life);
+    ctx.fillStyle=p.color;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,3,0,Math.PI*2);
+    ctx.fill();
+  }
+  ctx.globalAlpha=1;
+}
+</script>
+</body>
+</html>

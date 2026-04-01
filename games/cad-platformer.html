@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>CAD Jumper | Kirk Automations</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a1a;color:#e0e0e0;font-family:'Inter',sans-serif;overflow:hidden;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+a{color:#00e5ff;text-decoration:none}
+.back-link{position:fixed;top:12px;left:12px;z-index:100;font-size:14px;cursor:pointer;color:#00e5ff}
+#gameCanvas{display:block;background:#0a0a1a;touch-action:none}
+#hud{position:fixed;top:12px;right:12px;z-index:40;font-family:'JetBrains Mono',monospace;font-size:13px;text-align:right;background:#0a0a1acc;padding:8px 12px;border-radius:8px;border:1px solid #1a2332}
+#hud div{margin:2px 0}
+.val{color:#00e5ff;font-weight:700}
+.gold{color:#ffd700}
+#overlay{position:fixed;top:0;left:0;width:100%;height:100%;z-index:50;display:flex;justify-content:center;align-items:center;flex-direction:column;background:#0a0a1af0;pointer-events:all}
+#overlay.hidden{display:none;pointer-events:none}
+#overlay h1{font-size:28px;color:#00e5ff;margin-bottom:8px}
+#overlay h2{font-size:16px;color:#ffd700;margin-bottom:4px;font-family:'JetBrains Mono',monospace}
+#overlay p{font-size:13px;color:#888;max-width:420px;text-align:center;margin:8px 0;line-height:1.5}
+#overlay button{background:#00e5ff;color:#0a0a1a;border:none;padding:14px 40px;border-radius:8px;font-size:18px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin:6px}
+#overlay button:hover{background:#33ecff}
+.level-title{font-size:22px;font-weight:900;color:#ffd700;margin:8px 0}
+.fact-text{background:#131b2e;border:1px solid #00e5ff;border-radius:10px;padding:16px;margin:12px 0;font-size:13px;color:#bbb;max-width:400px;text-align:center;line-height:1.5}
+.fact-text strong{color:#00e5ff}
+#touch-controls{position:fixed;bottom:0;left:0;width:100%;height:40%;z-index:30;display:flex;pointer-events:all;opacity:0}
+#touch-left{width:33%;height:100%}
+#touch-jump{width:34%;height:100%}
+#touch-right{width:33%;height:100%}
+#info-footer{position:fixed;bottom:8px;left:0;width:100%;text-align:center;font-size:11px;color:#444;z-index:1;padding:4px}
+</style>
+</head>
+<body>
+<a class="back-link" href="#" onclick="if(history.length>1){history.back()}else{location.href='../'};return false">← Back</a>
+
+<canvas id="gameCanvas"></canvas>
+
+<div id="hud">
+  <div>Level: <span class="val" id="hud-level">1</span></div>
+  <div>Hours Saved: <span class="gold" id="hud-score">0</span></div>
+  <div>Time: <span class="val" id="hud-time">45</span></div>
+</div>
+
+<div id="touch-controls">
+  <div id="touch-left"></div>
+  <div id="touch-jump"></div>
+  <div id="touch-right"></div>
+</div>
+
+<div id="overlay">
+  <h1>⚡ CAD Jumper</h1>
+  <h2>Kirk Automations</h2>
+  <p>Jump between platforms made of drawing sheets, model layers, and dimension lines. Collect automation gems to save hours! Avoid falling into manual work pits.</p>
+  <p style="font-size:11px;color:#555">Arrow keys / WASD / Touch zones: left third=left, right third=right, middle=jump</p>
+  <button onclick="startLevel(0)">Start Level 1: Drawing Floor</button>
+</div>
+
+<div id="info-footer">
+  <strong>What is Kirk Automations?</strong> We build custom automation that saves manufacturing teams thousands of hours per year.
+  <a href="../">Learn more →</a>
+</div>
+
+<script>
+const canvas=document.getElementById('gameCanvas');
+const ctx=canvas.getContext('2d');
+const overlay=document.getElementById('overlay');
+
+let W,H;
+function resize(){
+  W=window.innerWidth;
+  H=window.innerHeight;
+  canvas.width=W;
+  canvas.height=H;
+}
+window.addEventListener('resize',resize);
+resize();
+
+const LEVELS=[
+  {name:"Drawing Floor",bg1:'#0f1520',bg2:'#0a0a1a',platformColor:'#1a3a5c',accentColor:'#00e5ff',
+   difficulty:1,scrollSpeed:2.5,
+   auto:"Drawing Generation",hours:1200,
+   fact:"Kirk Automations generates fully dimensioned engineering drawings from 3D CAD models in seconds — saving over 1,200 hours per year. No more manual drafting."},
+  {name:"Data Center",bg1:'#0f1a20',bg2:'#0a0a1a',platformColor:'#1a4a3c',accentColor:'#4ade80',
+   difficulty:2,scrollSpeed:3.2,
+   auto:"Data Commonization",hours:2000,
+   fact:"Our Data Commonization engine normalizes data across platforms automatically — eliminating 2,000 hours of copy-paste-reformat work every year across every department."},
+  {name:"Quality Lab",bg1:'#1a0f20',bg2:'#0a0a1a',platformColor:'#4a1a3c',accentColor:'#f472b6',
+   difficulty:3,scrollSpeed:4.0,
+   auto:"CAD Comparison",hours:3600,
+   fact:"Comparing two versions of a complex CAD assembly used to take hours. Kirk Automations overlays both models and highlights every change — saving a record-breaking 3,600 hours per year."}
+];
+
+const GEMS=[
+  {name:"Report Gen",hours:100,color:"#00e5ff"},
+  {name:"Fix Drawings",hours:350,color:"#ffd700"},
+  {name:"Spec Check",hours:800,color:"#a855f7"},
+  {name:"Parts List",hours:1032,color:"#f472b6"},
+  {name:"CAD Compare",hours:3600,color:"#4ade80"},
+  {name:"Safety Check",hours:720,color:"#ff6b6b"},
+  {name:"Drawing Gen",hours:1200,color:"#00e5ff"},
+  {name:"Data Common",hours:2000,color:"#ffd700"}
+];
+
+// Input
+let keys={left:false,right:false,jump:false};
+
+document.addEventListener('keydown',e=>{
+  if(e.code==='ArrowLeft'||e.code==='KeyA') keys.left=true;
+  if(e.code==='ArrowRight'||e.code==='KeyD') keys.right=true;
+  if(e.code==='ArrowUp'||e.code==='KeyW'||e.code==='Space'){e.preventDefault();keys.jump=true;}
+});
+document.addEventListener('keyup',e=>{
+  if(e.code==='ArrowLeft'||e.code==='KeyA') keys.left=false;
+  if(e.code==='ArrowRight'||e.code==='KeyD') keys.right=false;
+  if(e.code==='ArrowUp'||e.code==='KeyW'||e.code==='Space') keys.jump=false;
+});
+
+// Touch
+document.getElementById('touch-left').addEventListener('touchstart',e=>{e.preventDefault();keys.left=true},{passive:false});
+document.getElementById('touch-left').addEventListener('touchend',()=>keys.left=false);
+document.getElementById('touch-right').addEventListener('touchstart',e=>{e.preventDefault();keys.right=true},{passive:false});
+document.getElementById('touch-right').addEventListener('touchend',()=>keys.right=false);
+document.getElementById('touch-jump').addEventListener('touchstart',e=>{e.preventDefault();keys.jump=true},{passive:false});
+document.getElementById('touch-jump').addEventListener('touchend',()=>keys.jump=false);
+
+// Game state
+let game={running:false,level:0,score:0,timer:45};
+let player={x:0,y:0,vx:0,vy:0,w:24,h:36,grounded:false,jumpReleased:true};
+let camera={x:0};
+let platforms=[];
+let gems=[];
+let particles=[];
+let popups=[];
+let dangerZones=[];
+
+function generateLevel(lvlIdx){
+  const lvl=LEVELS[lvlIdx];
+  platforms=[];
+  gems=[];
+  dangerZones=[];
+  
+  const totalWidth=lvl.scrollSpeed*45*60+W; // ~45 seconds of content
+  const platGap=lvl.difficulty===1?160:lvl.difficulty===2?180:200;
+  const platCount=Math.floor(totalWidth/platGap);
+  
+  // Start platform
+  platforms.push({x:50,y:H*0.65,w:120,h:16,moving:false,type:'sheet'});
+  
+  for(let i=1;i<platCount;i++){
+    const px=120+i*platGap+Math.random()*60-30;
+    const py=H*0.3+Math.random()*(H*0.4);
+    const pw=60+Math.random()*80;
+    const moving=lvl.difficulty>=2 && Math.random()>0.65;
+    const types=['sheet','layer','dimension'];
+    const type=types[Math.floor(Math.random()*types.length)];
+    
+    platforms.push({
+      x:px,y:py,w:pw,h:14,
+      moving:moving,
+      moveRange:moving?40+Math.random()*40:0,
+      moveSpeed:moving?1+Math.random():0,
+      movePhase:Math.random()*Math.PI*2,
+      origY:py,
+      type:type
+    });
+    
+    // Gem on top of some platforms
+    if(Math.random()>0.4){
+      const g=GEMS[Math.floor(Math.random()*GEMS.length)];
+      gems.push({x:px+pw/2-10,y:py-40,w:20,h:20,name:g.name,hours:g.hours,color:g.color,collected:false,bob:Math.random()*Math.PI*2});
+    }
+  }
+  
+  // Danger zones (gaps between clusters)
+  for(let x=300;x<totalWidth;x+=400+Math.random()*200){
+    if(Math.random()>0.5){
+      dangerZones.push({x:x,w:80+Math.random()*60});
+    }
+  }
+}
+
+function startLevel(idx){
+  game.level=idx;
+  game.running=true;
+  game.timer=45;
+  
+  generateLevel(idx);
+  
+  player.x=80;
+  player.y=H*0.65-player.h-10;
+  player.vx=0;
+  player.vy=0;
+  player.grounded=false;
+  camera.x=0;
+  particles=[];
+  popups=[];
+  
+  overlay.classList.add('hidden');
+  
+  document.getElementById('hud-level').textContent=(idx+1)+' - '+LEVELS[idx].name;
+  
+  lastTime=performance.now();
+  requestAnimationFrame(loop);
+}
+
+function showLevelComplete(){
+  game.running=false;
+  const lvl=LEVELS[game.level];
+  
+  overlay.classList.remove('hidden');
+  overlay.innerHTML=`
+    <h1>✅ Level Complete!</h1>
+    <div class="level-title">${lvl.name}</div>
+    <h2>Hours Saved: ${game.score.toLocaleString()}</h2>
+    <div class="fact-text">
+      <strong>${lvl.auto}: ${lvl.hours.toLocaleString()} hrs/yr</strong><br><br>
+      ${lvl.fact}
+    </div>
+    ${game.level<2?
+      `<button onclick="startLevel(${game.level+1})">Next Level: ${LEVELS[game.level+1].name} →</button>`:
+      `<h2 style="color:#ffd700;margin-top:12px">🏆 All Levels Complete!</h2>
+       <p>Total Hours Saved: ${game.score.toLocaleString()}</p>
+       <p>Kirk Automations saves manufacturing teams nearly 12,000 hours per year.</p>
+       <button onclick="location.reload()">Play Again</button>`
+    }
+  `;
+}
+
+function showGameOver(reason){
+  game.running=false;
+  overlay.classList.remove('hidden');
+  overlay.innerHTML=`
+    <h1 style="color:#ff4444">💥 ${reason}</h1>
+    <h2>Hours Saved: ${game.score.toLocaleString()}</h2>
+    <p>The manual work pits got you! With automation, you wouldn't have to worry about falling behind.</p>
+    <button onclick="startLevel(${game.level})">Try Again</button>
+    <button onclick="location.reload()" style="background:#1a2332;color:#00e5ff;border:2px solid #00e5ff">Main Menu</button>
+  `;
+}
+
+let lastTime=0;
+function loop(ts){
+  if(!game.running) return;
+  const dt=Math.min((ts-lastTime)/1000,0.05);
+  lastTime=ts;
+  
+  update(dt);
+  draw();
+  requestAnimationFrame(loop);
+}
+
+function update(dt){
+  const lvl=LEVELS[game.level];
+  
+  // Timer
+  game.timer-=dt;
+  document.getElementById('hud-time').textContent=Math.max(0,Math.ceil(game.timer));
+  document.getElementById('hud-score').textContent=game.score.toLocaleString();
+  
+  if(game.timer<=0){
+    showLevelComplete();
+    return;
+  }
+  
+  // Auto-scroll camera
+  camera.x+=lvl.scrollSpeed*dt*60;
+  
+  // Player input
+  const moveSpeed=5;
+  if(keys.left) player.vx=-moveSpeed;
+  else if(keys.right) player.vx=moveSpeed;
+  else player.vx*=0.8;
+  
+  // Jump
+  if(keys.jump && player.grounded && player.jumpReleased){
+    player.vy=-12;
+    player.grounded=false;
+    player.jumpReleased=false;
+    for(let i=0;i<5;i++){
+      particles.push({x:player.x+player.w/2,y:player.y+player.h,vx:(Math.random()-0.5)*3,vy:-Math.random()*2,life:0.4,color:lvl.accentColor});
+    }
+  }
+  if(!keys.jump) player.jumpReleased=true;
+  
+  // Gravity
+  player.vy+=0.5;
+  player.x+=player.vx;
+  player.y+=player.vy;
+  
+  // Keep player on screen (horizontal)
+  if(player.x<camera.x-20){
+    player.x=camera.x-20;
+  }
+  if(player.x>camera.x+W-player.w){
+    player.x=camera.x+W-player.w;
+  }
+  
+  // Moving platforms
+  for(let p of platforms){
+    if(p.moving){
+      p.movePhase+=p.moveSpeed*dt;
+      p.y=p.origY+Math.sin(p.movePhase)*p.moveRange;
+    }
+  }
+  
+  // Platform collision
+  player.grounded=false;
+  for(let p of platforms){
+    if(player.x+player.w>p.x && player.x<p.x+p.w &&
+       player.y+player.h>=p.y && player.y+player.h<=p.y+20 && player.vy>=0){
+      player.y=p.y-player.h;
+      player.vy=0;
+      player.grounded=true;
+    }
+  }
+  
+  // Gem collection
+  for(let g of gems){
+    if(g.collected) continue;
+    g.bob+=dt*3;
+    const gy=g.y+Math.sin(g.bob)*6;
+    if(player.x+player.w>g.x && player.x<g.x+g.w &&
+       player.y+player.h>gy && player.y<gy+g.h){
+      g.collected=true;
+      game.score+=g.hours;
+      popups.push({x:g.x-camera.x,y:gy,text:g.name+': +'+g.hours.toLocaleString(),life:1.5,color:g.color});
+      for(let i=0;i<8;i++){
+        particles.push({x:g.x+g.w/2,y:gy+g.h/2,vx:(Math.random()-0.5)*5,vy:-Math.random()*4,life:0.6,color:g.color});
+      }
+    }
+  }
+  
+  // Fall death
+  if(player.y>H+50){
+    // Check if over danger zone
+    showGameOver('Fell into Manual Work!');
+    return;
+  }
+  
+  // Off screen left (scrolled past)
+  if(player.x<camera.x-100){
+    showGameOver('Left Behind by Progress!');
+    return;
+  }
+  
+  // Particles
+  for(let p of particles){
+    p.x+=p.vx;p.y+=p.vy;p.vy+=0.15;p.life-=dt*2;
+  }
+  particles=particles.filter(p=>p.life>0);
+  
+  // Popups
+  for(let p of popups){p.life-=dt;p.y-=25*dt;}
+  popups=popups.filter(p=>p.life>0);
+}
+
+function draw(){
+  const lvl=LEVELS[game.level];
+  ctx.clearRect(0,0,W,H);
+  
+  // Background
+  const grad=ctx.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0,lvl.bg1);
+  grad.addColorStop(1,lvl.bg2);
+  ctx.fillStyle=grad;
+  ctx.fillRect(0,0,W,H);
+  
+  // Grid dots (parallax)
+  ctx.fillStyle='#ffffff08';
+  for(let x=-camera.x*0.1%40;x<W;x+=40){
+    for(let y=0;y<H;y+=40){
+      ctx.fillRect(x,y,1,1);
+    }
+  }
+  
+  // Danger zone at bottom
+  ctx.fillStyle='#ff000015';
+  ctx.fillRect(0,H-30,W,30);
+  ctx.strokeStyle='#ff444444';
+  ctx.lineWidth=1;
+  ctx.setLineDash([4,4]);
+  ctx.beginPath();
+  ctx.moveTo(0,H-30);
+  ctx.lineTo(W,H-30);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  
+  ctx.font='10px "JetBrains Mono"';
+  ctx.fillStyle='#ff444444';
+  ctx.textAlign='center';
+  for(let x=50;x<W;x+=200){
+    ctx.fillText('⚠ MANUAL WORK PIT',x,H-12);
+  }
+  
+  const cx=camera.x;
+  
+  // Platforms
+  for(let p of platforms){
+    const sx=p.x-cx;
+    if(sx>W+100||sx<-200) continue;
+    
+    ctx.fillStyle=lvl.platformColor;
+    ctx.fillRect(sx,p.y,p.w,p.h);
+    
+    // Platform type decoration
+    ctx.strokeStyle=lvl.accentColor+'66';
+    ctx.lineWidth=1;
+    
+    if(p.type==='sheet'){
+      // Drawing sheet lines
+      ctx.strokeRect(sx+2,p.y+2,p.w-4,p.h-4);
+      ctx.beginPath();
+      for(let lx=sx+10;lx<sx+p.w-10;lx+=15){
+        ctx.moveTo(lx,p.y+5);ctx.lineTo(lx,p.y+p.h-5);
+      }
+      ctx.stroke();
+    } else if(p.type==='layer'){
+      // Model layers
+      ctx.fillStyle=lvl.platformColor+'88';
+      ctx.fillRect(sx+3,p.y-3,p.w-6,3);
+      ctx.fillRect(sx+6,p.y-6,p.w-12,3);
+    } else {
+      // Dimension line
+      ctx.beginPath();
+      ctx.moveTo(sx,p.y+p.h/2);
+      ctx.lineTo(sx+p.w,p.y+p.h/2);
+      ctx.stroke();
+      // Arrow ends
+      ctx.fillStyle=lvl.accentColor+'88';
+      ctx.beginPath();
+      ctx.moveTo(sx,p.y+p.h/2);ctx.lineTo(sx+6,p.y+2);ctx.lineTo(sx+6,p.y+p.h-2);ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(sx+p.w,p.y+p.h/2);ctx.lineTo(sx+p.w-6,p.y+2);ctx.lineTo(sx+p.w-6,p.y+p.h-2);ctx.fill();
+    }
+    
+    // Moving platform indicator
+    if(p.moving){
+      ctx.fillStyle='#ffd70066';
+      ctx.font='8px "JetBrains Mono"';
+      ctx.textAlign='center';
+      ctx.fillText('↕',sx+p.w/2,p.y-4);
+    }
+  }
+  
+  // Gems
+  for(let g of gems){
+    if(g.collected) continue;
+    const sx=g.x-cx;
+    if(sx>W+50||sx<-50) continue;
+    const gy=g.y+Math.sin(g.bob||0)*6;
+    
+    // Diamond shape
+    ctx.fillStyle=g.color;
+    ctx.shadowBlur=10;
+    ctx.shadowColor=g.color;
+    ctx.beginPath();
+    ctx.moveTo(sx+10,gy);
+    ctx.lineTo(sx+20,gy+10);
+    ctx.lineTo(sx+10,gy+20);
+    ctx.lineTo(sx,gy+10);
+    ctx.closePath();
+    ctx.fill();
+    ctx.shadowBlur=0;
+    
+    // Hours label
+    ctx.font='bold 8px "JetBrains Mono"';
+    ctx.fillStyle=g.color;
+    ctx.textAlign='center';
+    ctx.fillText('+'+g.hours,sx+10,gy-6);
+  }
+  
+  // Player
+  const px=player.x-cx;
+  const py=player.y;
+  
+  // Body
+  ctx.fillStyle=lvl.accentColor;
+  ctx.fillRect(px+6,py+10,12,16);
+  
+  // Head
+  ctx.beginPath();
+  ctx.arc(px+12,py+7,7,0,Math.PI*2);
+  ctx.fill();
+  
+  // Hard hat
+  ctx.fillStyle='#ffd700';
+  ctx.fillRect(px+4,py-2,16,5);
+  ctx.fillRect(px+7,py-5,10,4);
+  
+  // Legs
+  ctx.fillStyle=lvl.accentColor;
+  if(player.grounded && Math.abs(player.vx)>0.5){
+    const legT=performance.now()/100;
+    ctx.fillRect(px+6+Math.sin(legT)*3,py+26,4,10);
+    ctx.fillRect(px+14-Math.sin(legT)*3,py+26,4,10);
+  } else {
+    ctx.fillRect(px+6,py+26,4,10);
+    ctx.fillRect(px+14,py+26,4,10);
+  }
+  
+  // Particles
+  for(let p of particles){
+    ctx.globalAlpha=Math.max(0,p.life);
+    ctx.fillStyle=p.color;
+    ctx.beginPath();
+    ctx.arc(p.x-cx,p.y,3,0,Math.PI*2);
+    ctx.fill();
+  }
+  ctx.globalAlpha=1;
+  
+  // Popups
+  ctx.font='bold 13px "JetBrains Mono"';
+  for(let p of popups){
+    ctx.fillStyle=p.color;
+    ctx.globalAlpha=Math.min(1,p.life);
+    ctx.textAlign='center';
+    ctx.fillText(p.text,p.x+camera.x*0-0+W/2, p.y);
+  }
+  ctx.globalAlpha=1;
+  
+  // Touch zone hints
+  if('ontouchstart' in window){
+    ctx.fillStyle='#ffffff08';
+    ctx.font='11px Inter';
+    ctx.textAlign='center';
+    ctx.fillText('← TAP',W*0.16,H-40);
+    ctx.fillText('JUMP',W*0.5,H-40);
+    ctx.fillText('TAP →',W*0.83,H-40);
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ROI Calculator | Kirk Automations</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a1a;color:#e0e0e0;font-family:'Inter',sans-serif;min-height:100vh}
+a{color:#00e5ff;text-decoration:none}
+.back-link{position:fixed;top:12px;left:12px;z-index:100;font-size:14px;cursor:pointer;color:#00e5ff}
+.container{max-width:700px;margin:0 auto;padding:60px 20px 100px}
+h1{color:#00e5ff;font-size:28px;text-align:center;margin-bottom:4px}
+h2{color:#ffd700;font-family:'JetBrains Mono',monospace;font-size:14px;text-align:center;margin-bottom:24px}
+.step{display:none;animation:fadeIn 0.4s ease}
+.step.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.step-header{font-size:13px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.step-title{font-size:20px;font-weight:700;color:#e0e0e0;margin-bottom:20px}
+.progress-bar{display:flex;gap:4px;margin-bottom:32px}
+.progress-bar .dot{flex:1;height:4px;border-radius:2px;background:#1a2332}
+.progress-bar .dot.done{background:#00e5ff}
+.progress-bar .dot.current{background:#ffd700}
+
+/* Slider */
+.slider-group{margin:20px 0}
+.slider-group label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px}
+.slider-group label span{color:#00e5ff;font-family:'JetBrains Mono',monospace;font-weight:700}
+input[type=range]{-webkit-appearance:none;width:100%;height:8px;border-radius:4px;background:#1a2332;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#00e5ff;cursor:pointer;border:2px solid #0a0a1a}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#00e5ff;cursor:pointer;border:2px solid #0a0a1a}
+
+/* Checkboxes */
+.task-list{display:flex;flex-direction:column;gap:6px}
+.task-item{display:flex;align-items:center;gap:10px;background:#131b2e;border:1px solid #1a2332;border-radius:8px;padding:10px 14px;cursor:pointer;transition:all .2s}
+.task-item:hover{border-color:#00e5ff44}
+.task-item.checked{border-color:#00e5ff;background:#0d2440}
+.task-item input[type=checkbox]{display:none}
+.task-check{width:20px;height:20px;border-radius:4px;border:2px solid #333;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.task-item.checked .task-check{background:#00e5ff;border-color:#00e5ff;color:#0a0a1a;font-weight:900}
+.task-info{flex:1;text-align:left}
+.task-name{font-size:13px;font-weight:600}
+.task-hours{font-size:11px;color:#ffd700;font-family:'JetBrains Mono',monospace}
+
+/* Hours sliders */
+.hours-list{display:flex;flex-direction:column;gap:12px}
+.hours-item{background:#131b2e;border:1px solid #1a2332;border-radius:8px;padding:12px 14px}
+.hours-item label{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}
+.hours-item label span{color:#ffd700;font-family:'JetBrains Mono',monospace;font-weight:700}
+
+/* Button */
+.btn{display:block;width:100%;background:#00e5ff;color:#0a0a1a;border:none;padding:16px;border-radius:10px;font-size:18px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-top:24px;transition:all .2s}
+.btn:hover{background:#33ecff;transform:scale(1.01)}
+.btn-secondary{background:#1a2332;color:#00e5ff;border:2px solid #00e5ff}
+.btn-secondary:hover{background:#0d2440}
+.btn-gold{background:#ffd700;color:#0a0a1a}
+
+/* Results */
+.results{text-align:center}
+.result-card{background:#131b2e;border:2px solid #00e5ff;border-radius:16px;padding:24px;margin:16px 0}
+.result-number{font-size:48px;font-weight:900;font-family:'JetBrains Mono',monospace;color:#00e5ff;margin:8px 0}
+.result-label{font-size:14px;color:#888;margin-bottom:4px}
+.result-sub{font-size:12px;color:#666}
+.burn-card{background:#2a1a1a;border:2px solid #ff4444;border-radius:16px;padding:20px;margin:16px 0}
+.burn-card .result-number{color:#ff4444;font-size:36px}
+.compare-card{background:#1a2a1a;border:2px solid #4ade80;border-radius:16px;padding:20px;margin:16px 0}
+.compare-card .result-number{color:#4ade80;font-size:24px}
+.cta-box{background:linear-gradient(135deg,#0d2440,#131b2e);border:2px solid #ffd700;border-radius:16px;padding:24px;margin:24px 0;text-align:center}
+.cta-box h3{color:#ffd700;font-size:20px;margin-bottom:8px}
+.cta-box p{color:#bbb;font-size:13px;margin-bottom:16px}
+.share-btn{background:#1a2332;color:#00e5ff;border:1px solid #00e5ff;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:13px;margin-top:8px;font-family:'Inter',sans-serif}
+
+/* Animation */
+.counting{animation:pulse 0.5s ease infinite alternate}
+@keyframes pulse{from{transform:scale(1)}to{transform:scale(1.03)}}
+.spin-animation{animation:spin 2s ease-in-out}
+@keyframes spin{0%{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(1.2)}100%{transform:rotate(360deg) scale(1)}}
+
+#info-footer{text-align:center;font-size:11px;color:#444;padding:20px}
+</style>
+</head>
+<body>
+<a class="back-link" href="#" onclick="if(history.length>1){history.back()}else{location.href='../'};return false">← Back</a>
+
+<div class="container">
+  <h1>⚡ ROI Calculator</h1>
+  <h2>Kirk Automations</h2>
+  
+  <div class="progress-bar" id="progress">
+    <div class="dot current"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+  
+  <!-- STEP 1: Engineers -->
+  <div class="step active" id="step1">
+    <div class="step-header">Step 1 of 3</div>
+    <div class="step-title">How many engineers are on your team?</div>
+    <div class="slider-group">
+      <label>Engineers: <span id="eng-val">10</span></label>
+      <input type="range" id="eng-slider" min="1" max="100" value="10" oninput="document.getElementById('eng-val').textContent=this.value">
+    </div>
+    <p style="font-size:12px;color:#555;margin-top:8px">This helps us estimate the scale of manual work across your organization.</p>
+    <button class="btn" onclick="goStep(2)">Next →</button>
+  </div>
+  
+  <!-- STEP 2: Tasks -->
+  <div class="step" id="step2">
+    <div class="step-header">Step 2 of 3</div>
+    <div class="step-title">Which tasks does your team do manually?</div>
+    <p style="font-size:12px;color:#666;margin-bottom:16px">Check all that apply. These are real automations Kirk Automations has built for manufacturing clients.</p>
+    <div class="task-list" id="task-list"></div>
+    <button class="btn" onclick="goStep(3)">Next →</button>
+    <button class="btn btn-secondary" onclick="goStep(1)" style="margin-top:8px;font-size:14px">← Back</button>
+  </div>
+  
+  <!-- STEP 3: Hours -->
+  <div class="step" id="step3">
+    <div class="step-header">Step 3 of 3</div>
+    <div class="step-title">How many hours per week on each task?</div>
+    <p style="font-size:12px;color:#666;margin-bottom:16px">Estimate total team hours spent per week on each checked task.</p>
+    <div class="hours-list" id="hours-list"></div>
+    <button class="btn btn-gold" onclick="calculate()">⚡ Calculate Savings</button>
+    <button class="btn btn-secondary" onclick="goStep(2)" style="margin-top:8px;font-size:14px">← Back</button>
+  </div>
+  
+  <!-- RESULTS -->
+  <div class="step" id="step4">
+    <div class="step-header">Your Results</div>
+    <div class="results">
+      <div class="result-card">
+        <div class="result-label">Total Hours Wasted Per Year</div>
+        <div class="result-number" id="res-hours">0</div>
+        <div class="result-sub">hours of manual work that automation could eliminate</div>
+      </div>
+      
+      <div class="burn-card">
+        <div class="result-label">💸 Annual Cost of Manual Work</div>
+        <div class="result-number" id="res-cost">$0</div>
+        <div class="result-sub" id="res-daily"></div>
+      </div>
+      
+      <div class="result-card">
+        <div class="result-label">Equivalent Full-Time Employees</div>
+        <div class="result-number" id="res-fte">0</div>
+        <div class="result-sub">people doing nothing but manual busywork all year</div>
+      </div>
+      
+      <div class="compare-card">
+        <div class="result-label">🏠 With that wasted time, you could...</div>
+        <div class="result-number" id="res-compare"></div>
+      </div>
+      
+      <div class="cta-box">
+        <h3>Kirk Automations can fix this.</h3>
+        <p>We've already saved manufacturing clients nearly 12,000 hours per year with custom automation. Your team could be next.</p>
+        <a href="../contact" class="btn btn-gold" style="display:inline-block;text-decoration:none;padding:14px 32px">Get in Touch →</a>
+        <br>
+        <button class="share-btn" onclick="shareResults()">📋 Copy Results</button>
+      </div>
+      
+      <button class="btn btn-secondary" onclick="goStep(1)" style="margin-top:16px">Start Over</button>
+    </div>
+  </div>
+</div>
+
+<div id="info-footer">
+  <strong>What is Kirk Automations?</strong> We build custom automation that saves manufacturing teams thousands of hours per year.
+  <a href="../">Learn more →</a>
+</div>
+
+<script>
+const TASKS=[
+  {name:"Classify Warranty Claims",hours:50},
+  {name:"Clean Messy CAD",hours:75},
+  {name:"Report Generation",hours:100},
+  {name:"Convert Data + Send to Customer",hours:100},
+  {name:"Material Usage Calc",hours:100},
+  {name:"Max Condition Calc",hours:240},
+  {name:"Fix Drawing Mistakes",hours:350},
+  {name:"Change Comparison",hours:600},
+  {name:"Safety/Emissions Check",hours:720},
+  {name:"Spec Check Report",hours:800},
+  {name:"Navigate Program + Auto Email",hours:1010},
+  {name:"Parts List Builder",hours:1032},
+  {name:"Drawing Generation",hours:1200},
+  {name:"Data Commonization",hours:2000},
+  {name:"CAD Comparison",hours:3600}
+];
+
+let checkedTasks=new Set();
+let hourValues={};
+
+// Build task list
+const taskListEl=document.getElementById('task-list');
+TASKS.forEach((t,i)=>{
+  const div=document.createElement('div');
+  div.className='task-item';
+  div.innerHTML=`
+    <input type="checkbox" id="task-${i}">
+    <div class="task-check" id="check-${i}"></div>
+    <div class="task-info">
+      <div class="task-name">${t.name}</div>
+      <div class="task-hours">Kirk saves: ${t.hours.toLocaleString()} hrs/yr</div>
+    </div>
+  `;
+  div.onclick=()=>{
+    if(checkedTasks.has(i)){
+      checkedTasks.delete(i);
+      div.classList.remove('checked');
+      document.getElementById('check-'+i).textContent='';
+    } else {
+      checkedTasks.add(i);
+      div.classList.add('checked');
+      document.getElementById('check-'+i).textContent='✓';
+    }
+  };
+  taskListEl.appendChild(div);
+});
+
+function goStep(n){
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('step'+n).classList.add('active');
+  
+  // Update progress
+  document.querySelectorAll('.progress-bar .dot').forEach((d,i)=>{
+    d.className='dot';
+    if(i<n-1) d.classList.add('done');
+    if(i===n-1) d.classList.add('current');
+  });
+  
+  // Build hours sliders for step 3
+  if(n===3){
+    buildHoursSliders();
+  }
+  
+  window.scrollTo(0,0);
+}
+
+function buildHoursSliders(){
+  const el=document.getElementById('hours-list');
+  el.innerHTML='';
+  checkedTasks.forEach(i=>{
+    const t=TASKS[i];
+    const defaultH=Math.min(40,Math.max(1,Math.round(t.hours/52)));
+    hourValues[i]=hourValues[i]||defaultH;
+    const div=document.createElement('div');
+    div.className='hours-item';
+    div.innerHTML=`
+      <label>${t.name}: <span id="hval-${i}">${hourValues[i]} hrs/wk</span></label>
+      <input type="range" min="1" max="80" value="${hourValues[i]}" 
+        oninput="hourValues[${i}]=parseInt(this.value);document.getElementById('hval-${i}').textContent=this.value+' hrs/wk'">
+    `;
+    el.appendChild(div);
+  });
+  
+  if(checkedTasks.size===0){
+    el.innerHTML='<p style="color:#ff6b6b;text-align:center;padding:20px">No tasks selected! Go back and check some tasks first.</p>';
+  }
+}
+
+function calculate(){
+  if(checkedTasks.size===0){
+    alert('Please select at least one task first!');
+    goStep(2);
+    return;
+  }
+  
+  const engineers=parseInt(document.getElementById('eng-slider').value);
+  
+  let totalHoursPerWeek=0;
+  checkedTasks.forEach(i=>{
+    totalHoursPerWeek+=hourValues[i]||1;
+  });
+  
+  const totalHoursPerYear=totalHoursPerWeek*52;
+  const costPerYear=totalHoursPerYear*75;
+  const fteWasted=(totalHoursPerYear/2080).toFixed(1);
+  const dailyCost=(costPerYear/365).toFixed(0);
+  const houses=Math.max(1,Math.floor(totalHoursPerYear/4000));
+  
+  goStep(4);
+  
+  // Animate counters
+  animateCounter('res-hours',0,totalHoursPerYear,2000,v=>v.toLocaleString());
+  animateCounter('res-cost',0,costPerYear,2000,v=>'$'+v.toLocaleString());
+  animateCounter('res-fte',0,parseFloat(fteWasted)*10,2000,v=>(v/10).toFixed(1));
+  
+  setTimeout(()=>{
+    document.getElementById('res-daily').textContent="That's like burning $"+parseInt(dailyCost).toLocaleString()+" every single day";
+    document.getElementById('res-compare').textContent='Build '+houses+' house'+(houses>1?'s':'')+' with that wasted time (at 4,000 hrs each)';
+  },2200);
+  
+  // Store for sharing
+  window._results={totalHoursPerYear,costPerYear,fteWasted,dailyCost,engineers};
+}
+
+function animateCounter(elId,from,to,duration,format){
+  const el=document.getElementById(elId);
+  const start=performance.now();
+  el.classList.add('counting');
+  
+  function step(ts){
+    const elapsed=ts-start;
+    const progress=Math.min(elapsed/duration,1);
+    const eased=1-Math.pow(1-progress,3); // ease out
+    const current=Math.round(from+(to-from)*eased);
+    el.textContent=format(current);
+    if(progress<1) requestAnimationFrame(step);
+    else el.classList.remove('counting');
+  }
+  requestAnimationFrame(step);
+}
+
+function shareResults(){
+  if(!window._results) return;
+  const r=window._results;
+  const text=`🏭 ROI Calculator Results (Kirk Automations)
+  
+Team Size: ${r.engineers} engineers
+Hours Wasted/Year: ${r.totalHoursPerYear.toLocaleString()}
+Annual Cost: $${r.costPerYear.toLocaleString()} (at $75/hr)
+FTE Equivalent: ${r.fteWasted} employees
+Daily Burn Rate: $${parseInt(r.dailyCost).toLocaleString()}/day
+
+Kirk Automations has saved clients 12,000+ hrs/yr.
+Learn more: kirkautomations.com`;
+  
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=document.querySelector('.share-btn');
+    btn.textContent='✅ Copied!';
+    setTimeout(()=>btn.textContent='📋 Copy Results',2000);
+  }).catch(()=>{
+    // Fallback
+    const ta=document.createElement('textarea');
+    ta.value=text;document.body.appendChild(ta);
+    ta.select();document.execCommand('copy');
+    document.body.removeChild(ta);
+    const btn=document.querySelector('.share-btn');
+    btn.textContent='✅ Copied!';
+    setTimeout(()=>btn.textContent='📋 Copy Results',2000);
+  });
+}
+</script>
+</body>
+</html>
