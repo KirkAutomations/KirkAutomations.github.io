@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Automation Defense — Kirk Automations</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#0a0a1a;font-family:'Inter',sans-serif;color:#e0e0e0;touch-action:none;user-select:none;-webkit-user-select:none}
+#gameContainer{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center}
+canvas{display:block}
+.back-link{position:absolute;top:10px;left:10px;color:#00e5ff;text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:14px;z-index:100;opacity:.7}
+.back-link:hover{opacity:1}
+#ui-overlay{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50}
+#ui-overlay.active{pointer-events:auto}
+.screen{display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;max-width:600px;width:90%}
+.screen.visible{display:flex}
+h1{font-family:'JetBrains Mono',monospace;font-size:clamp(22px,5vw,42px);color:#00e5ff;text-shadow:0 0 20px rgba(0,229,255,.4);margin-bottom:8px}
+h2{font-family:'JetBrains Mono',monospace;font-size:clamp(16px,3vw,28px);color:#76ff03;margin-bottom:12px}
+.sub{font-size:clamp(11px,2.5vw,16px);color:#aaa;margin-bottom:20px}
+.btn{font-family:'JetBrains Mono',monospace;background:linear-gradient(135deg,#00e5ff,#2979ff);color:#0a0a1a;border:none;padding:14px 32px;font-size:clamp(14px,2.5vw,18px);font-weight:700;border-radius:8px;cursor:pointer;margin:6px;transition:transform .15s;text-transform:uppercase;letter-spacing:1px}
+.btn:hover{transform:scale(1.05)}
+.btn.sec{background:linear-gradient(135deg,#76ff03,#00c853)}
+.btn.warn{background:linear-gradient(135deg,#ffab40,#ff6d00)}
+.score-display{font-family:'JetBrains Mono',monospace;font-size:clamp(18px,4vw,32px);color:#ffab40;margin:8px 0}
+.info-section{margin-top:20px;padding:15px;background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.12);border-radius:8px;max-width:90%;text-align:left;font-size:clamp(11px,2vw,14px);line-height:1.5;max-height:28vh;overflow-y:auto}
+.info-section h3{color:#00e5ff;font-family:'JetBrains Mono',monospace;margin-bottom:6px}
+.info-section a{color:#76ff03;text-decoration:none}
+.info-section ul{margin-left:15px;color:#bbb}
+
+/* HUD */
+.hud{position:absolute;top:0;left:0;width:100%;padding:6px 12px;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:clamp(10px,1.8vw,14px);color:#00e5ff;text-shadow:0 0 6px rgba(0,229,255,.3);z-index:20;pointer-events:none;background:linear-gradient(180deg,rgba(10,10,26,.9),transparent)}
+.hud div{display:flex;flex-direction:column;gap:1px}
+.hud .right{text-align:right}
+
+/* Tower panel */
+#towerPanel{position:absolute;bottom:0;left:0;width:100%;background:linear-gradient(0deg,rgba(10,10,26,.95),rgba(10,10,26,.7));padding:8px;display:none;z-index:30;pointer-events:auto}
+.tower-bar{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.tower-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 10px;min-width:70px;cursor:pointer;transition:border-color .2s,transform .1s;font-family:'JetBrains Mono',monospace}
+.tower-btn:hover,.tower-btn.selected{border-color:#00e5ff;transform:scale(1.05)}
+.tower-btn.selected{background:rgba(0,229,255,.1)}
+.tower-btn .t-icon{font-size:20px;margin-bottom:2px}
+.tower-btn .t-name{font-size:clamp(8px,1.5vw,11px);color:#e0e0e0;white-space:nowrap}
+.tower-btn .t-cost{font-size:clamp(8px,1.5vw,11px);color:#76ff03}
+.tower-btn:disabled{opacity:.3;cursor:default}
+
+.wave-banner{position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);font-family:'JetBrains Mono',monospace;font-size:clamp(18px,4vw,36px);color:#76ff03;text-shadow:0 0 25px rgba(118,255,3,.5);opacity:0;transition:opacity .3s;pointer-events:none;text-align:center;max-width:85%;z-index:40}
+.wave-banner.visible{opacity:1}
+.fact-text{font-size:clamp(10px,1.8vw,14px);color:#ffab40;margin-top:8px}
+</style>
+</head>
+<body>
+<a href="../" class="back-link">← Back</a>
+<div id="gameContainer">
+<canvas id="c"></canvas>
+
+<div id="ui-overlay" class="active">
+<div id="menuScreen" class="screen visible">
+<h1>🏰 AUTOMATION DEFENSE</h1>
+<div class="sub">A Kirk Automations Tower Defense</div>
+<p style="color:#aaa;margin-bottom:15px;font-size:clamp(11px,2vw,14px)">Stop manual engineering tasks from reaching the Plant Build Deadline!<br>Place automation towers to defend the line.</p>
+<button class="btn" onclick="startGame()">DEFEND THE LINE</button>
+<div id="menuHS" style="color:#76ff03;font-family:'JetBrains Mono',monospace;margin-top:8px"></div>
+<div class="info-section">
+<h3>What is Kirk Automations?</h3>
+<p>Kirk Automations builds custom software that eliminates repetitive engineering work — saving manufacturers <strong>11,727+ hours per year</strong>.</p>
+<ul style="margin-top:6px">
+<li>CAD Comparison — 3,600 hrs/yr saved</li>
+<li>Data Commonizer — 2,000 hrs/yr saved</li>
+<li>Drawing Generation — 1,200 hrs/yr saved</li>
+<li>Parts List Builder — 1,032 hrs/yr saved</li>
+<li>Auto Email Data — 1,010 hrs/yr saved</li>
+<li>Spec Check Report — 800 hrs/yr saved</li>
+<li>Safety Check — 720 hrs/yr saved</li>
+</ul>
+<p style="margin-top:8px"><a href="../">Learn more at KirkAutomations.com →</a></p>
+</div>
+</div>
+
+<div id="pauseScreen" class="screen">
+<h2>⏸ PAUSED</h2>
+<button class="btn" onclick="resumeGame()">RESUME</button>
+<button class="btn sec" onclick="quitToMenu()">QUIT</button>
+</div>
+
+<div id="gameOverScreen" class="screen">
+<h2 id="goTitle">DEFENSE BREACHED</h2>
+<div class="score-display" id="goScore">0</div>
+<div id="goWave" style="color:#aaa;margin-bottom:4px"></div>
+<div id="goHS" style="color:#76ff03;font-family:'JetBrains Mono',monospace;display:none">★ NEW HIGH SCORE ★</div>
+<button class="btn" onclick="startGame()">PLAY AGAIN</button>
+<button class="btn sec" onclick="quitToMenu()">MENU</button>
+</div>
+
+<div id="waveBanner" class="wave-banner"></div>
+</div>
+
+<!-- HUD -->
+<div class="hud" id="hud" style="display:none">
+<div>
+<div id="hudCurrency">💰 0 hrs</div>
+<div id="hudWave">Wave 1/10</div>
+</div>
+<div class="right">
+<div id="hudLives">❤️ 20</div>
+<div id="hudScore">Score: 0</div>
+</div>
+</div>
+
+<!-- Tower panel -->
+<div id="towerPanel">
+<div class="tower-bar" id="towerBar"></div>
+</div>
+
+<button id="pauseBtn" style="position:absolute;top:5px;right:5px;z-index:60;background:rgba(0,229,255,.15);border:1px solid rgba(0,229,255,.3);color:#00e5ff;font-family:'JetBrains Mono',monospace;font-size:13px;padding:5px 10px;border-radius:6px;cursor:pointer;display:none;pointer-events:auto" onclick="togglePause()">❚❚</button>
+</div>
+
+<script>
+// ==================== AUDIO ====================
+const AC=window.AudioContext||window.webkitAudioContext;
+let ac;
+function ea(){if(!ac)ac=new AC();if(ac.state==='suspended')ac.resume()}
+function snd(type){
+  ea();if(!ac)return;const n=ac.currentTime,o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);
+  switch(type){
+    case'shoot':o.type='square';o.frequency.setValueAtTime(500,n);o.frequency.exponentialRampToValueAtTime(200,n+.06);g.gain.setValueAtTime(.07,n);g.gain.exponentialRampToValueAtTime(.001,n+.06);o.start(n);o.stop(n+.06);break;
+    case'hit':o.type='sawtooth';o.frequency.setValueAtTime(250,n);o.frequency.exponentialRampToValueAtTime(80,n+.1);g.gain.setValueAtTime(.1,n);g.gain.exponentialRampToValueAtTime(.001,n+.1);o.start(n);o.stop(n+.1);break;
+    case'place':o.type='sine';o.frequency.setValueAtTime(600,n);o.frequency.exponentialRampToValueAtTime(900,n+.08);g.gain.setValueAtTime(.08,n);g.gain.exponentialRampToValueAtTime(.001,n+.1);o.start(n);o.stop(n+.1);break;
+    case'wave':o.type='sine';o.frequency.setValueAtTime(523,n);o.frequency.setValueAtTime(659,n+.1);o.frequency.setValueAtTime(784,n+.2);g.gain.setValueAtTime(.08,n);g.gain.exponentialRampToValueAtTime(.001,n+.3);o.start(n);o.stop(n+.3);break;
+    case'die':o.type='sawtooth';o.frequency.setValueAtTime(200,n);o.frequency.exponentialRampToValueAtTime(40,n+.3);g.gain.setValueAtTime(.12,n);g.gain.exponentialRampToValueAtTime(.001,n+.3);o.start(n);o.stop(n+.3);break;
+    case'win':o.type='sine';[523,659,784,1047].forEach((f,i)=>{const o2=ac.createOscillator(),g2=ac.createGain();o2.connect(g2);g2.connect(ac.destination);o2.type='sine';o2.frequency.setValueAtTime(f,n+i*.1);g2.gain.setValueAtTime(.08,n+i*.1);g2.gain.exponentialRampToValueAtTime(.001,n+i*.1+.3);o2.start(n+i*.1);o2.stop(n+i*.1+.3)});o.start(n);o.stop(n+.01);g.gain.setValueAtTime(0,n);break;
+    case'boss':o.type='sawtooth';o.frequency.setValueAtTime(80,n);o.frequency.exponentialRampToValueAtTime(40,n+.4);g.gain.setValueAtTime(.15,n);g.gain.exponentialRampToValueAtTime(.001,n+.4);o.start(n);o.stop(n+.4);break;
+  }
+}
+
+// ==================== CONSTANTS ====================
+const TOWER_TYPES=[
+  {id:'cad',name:'CAD Checker',desc:'Fast, low damage',cost:25,range:80,damage:1,rate:500,color:'#00e5ff',icon:'🔍',splash:0},
+  {id:'draw',name:'Drawing Gen',desc:'Medium all-around',cost:50,range:100,damage:2,rate:1000,color:'#76ff03',icon:'📐',splash:0},
+  {id:'data',name:'Data Processor',desc:'Slow, area damage',cost:80,range:90,damage:3,rate:1800,color:'#ffab40',icon:'🔗',splash:40},
+  {id:'ai',name:'AI Agent',desc:'Powerful, expensive',cost:150,range:120,damage:6,rate:1200,color:'#e040fb',icon:'🤖',splash:0},
+];
+
+const ENEMY_TYPES=[
+  {name:'Manual Check',hp:2,speed:1,reward:5,color:'#ff5252',size:8},
+  {name:'Spreadsheet Error',hp:5,speed:.8,reward:10,color:'#ff9100',size:10},
+  {name:'Missing Drawing',hp:8,speed:.65,reward:18,color:'#ffea00',size:12},
+  {name:'Data Entry',hp:3,speed:1.3,reward:7,color:'#448aff',size:8},
+  {name:'Format Mismatch',hp:6,speed:.9,reward:12,color:'#69f0ae',size:10},
+  {name:'Rev Tracking',hp:4,speed:1.1,reward:8,color:'#e040fb',size:9},
+];
+const BOSS={name:'Full Manual Audit',hp:30,speed:.35,reward:80,color:'#ff1744',size:18};
+
+const FACTS=[
+  "CAD Comparison saves 3,600 hrs/yr — comparing system vs component drawings automatically.",
+  "Drawing Generation converts 3D to 2D manufacturing drawings — 1,200 hrs/yr saved.",
+  "Data Commonizer merges 6 data sources into one unified format — 2,000 hrs/yr.",
+  "Parts List Builder creates BOMs from CAD + specs — 1,032 hrs/yr.",
+  "Auto Email Data navigates programs, extracts data, emails it — 1,010 hrs/yr.",
+  "Spec Check Report measures parts, photographs them, generates Excel — 800 hrs/yr.",
+  "Safety Check verifies safety and emissions compliance — 720 hrs/yr.",
+  "Change Comparison detects design revision changes — 600 hrs/yr.",
+  "Drawing Fix corrects common drawing errors — 350 hrs/yr.",
+  "Kirk Automations saves clients 11,727+ hours annually.",
+];
+
+// ==================== PATH ====================
+// Path is defined as waypoints in game coords (0-1 normalized), scaled to canvas
+// S-shaped path
+const PATH_NORM=[
+  {x:0,y:.15},{x:.25,y:.15},{x:.45,y:.2},{x:.6,y:.35},
+  {x:.65,y:.5},{x:.55,y:.65},{x:.35,y:.72},{x:.2,y:.78},
+  {x:.15,y:.88},{x:.3,y:.95},{x:.55,y:.92},{x:.8,y:.85},{x:1,y:.85}
+];
+
+// ==================== GAME STATE ====================
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d');
+let W,H,GW,GH,OX,OY,cellSize;
+let path=[]; // scaled path
+let gameState='menu';
+let currency=0,score=0,lives=20,waveNum=0,highScore=0;
+let towers=[],enemies=[],projectiles=[],particles=[];
+let selectedTower=null;
+let waveActive=false,spawnQueue=[],spawnTimer=0;
+let shakeX=0,shakeY=0,shakeDur=0;
+let lastTime=0;
+
+// Grid for placement (occupied cells)
+const GRID_COLS=16,GRID_ROWS=16;
+let grid=[];
+
+function resize(){
+  const dpr=window.devicePixelRatio||1;
+  const maxW=window.innerWidth;
+  const maxH=window.innerHeight;
+  // Reserve space for tower panel
+  const panelH=window.innerWidth<500?80:70;
+  const availH=maxH-panelH;
+  const aspect=1;
+  let w,h;
+  if(maxW/availH>aspect){h=availH;w=h}else{w=maxW;h=w}
+  canvas.style.width=w+'px';
+  canvas.style.height=h+'px';
+  canvas.width=w*dpr;
+  canvas.height=h*dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  W=w;H=h;
+  GW=W;GH=H;OX=0;OY=0;
+  cellSize=GW/GRID_COLS;
+
+  // Scale path
+  path=PATH_NORM.map(p=>({x:OX+p.x*GW,y:OY+p.y*GH}));
+
+  // Mark path cells as blocked
+  rebuildGrid();
+}
+
+function rebuildGrid(){
+  grid=[];
+  for(let r=0;r<GRID_ROWS;r++){grid[r]=[];for(let c=0;c<GRID_COLS;c++)grid[r][c]=false}
+  // Block path cells
+  for(let i=0;i<path.length-1;i++){
+    const steps=20;
+    for(let s=0;s<=steps;s++){
+      const t=s/steps;
+      const px=path[i].x+(path[i+1].x-path[i].x)*t;
+      const py=path[i].y+(path[i+1].y-path[i].y)*t;
+      const c=Math.floor((px-OX)/cellSize);
+      const r=Math.floor((py-OY)/cellSize);
+      if(r>=0&&r<GRID_ROWS&&c>=0&&c<GRID_COLS){
+        grid[r][c]=true;
+        // Also block adjacent for width
+        if(r>0)grid[r-1][c]=true;
+        if(r<GRID_ROWS-1)grid[r+1][c]=true;
+      }
+    }
+  }
+  // Block tower cells
+  for(const t of towers){
+    const c=Math.floor((t.x-OX)/cellSize);
+    const r=Math.floor((t.y-OY)/cellSize);
+    if(r>=0&&r<GRID_ROWS&&c>=0&&c<GRID_COLS)grid[r][c]=true;
+  }
+}
+
+window.addEventListener('resize',resize);
+resize();
+
+// ==================== PATH HELPERS ====================
+function getPathLength(){
+  let len=0;
+  for(let i=1;i<path.length;i++){
+    const dx=path[i].x-path[i-1].x,dy=path[i].y-path[i-1].y;
+    len+=Math.sqrt(dx*dx+dy*dy);
+  }
+  return len;
+}
+function getPosOnPath(progress){
+  const totalLen=getPathLength();
+  let target=progress*totalLen;
+  for(let i=1;i<path.length;i++){
+    const dx=path[i].x-path[i-1].x,dy=path[i].y-path[i-1].y;
+    const segLen=Math.sqrt(dx*dx+dy*dy);
+    if(target<=segLen){
+      const t=target/segLen;
+      return{x:path[i-1].x+dx*t,y:path[i-1].y+dy*t};
+    }
+    target-=segLen;
+  }
+  return{x:path[path.length-1].x,y:path[path.length-1].y};
+}
+
+// ==================== SCREENS ====================
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('visible'));
+  const ov=document.getElementById('ui-overlay');
+  if(id){document.getElementById(id).classList.add('visible');ov.classList.add('active')}
+  else ov.classList.remove('active');
+}
+
+function init(){
+  highScore=parseInt(localStorage.getItem('ad_hs'))||0;
+  document.getElementById('menuHS').textContent=highScore>0?'High Score: '+highScore.toLocaleString()+' hrs':'';
+  showScreen('menuScreen');
+  buildTowerPanel();
+}
+
+function buildTowerPanel(){
+  const bar=document.getElementById('towerBar');
+  bar.innerHTML='';
+  TOWER_TYPES.forEach(t=>{
+    const btn=document.createElement('div');
+    btn.className='tower-btn';
+    btn.dataset.id=t.id;
+    btn.innerHTML=`<div class="t-icon">${t.icon}</div><div class="t-name">${t.name}</div><div class="t-cost">${t.cost} hrs</div>`;
+    btn.addEventListener('click',()=>selectTower(t.id));
+    btn.addEventListener('touchstart',e=>{e.preventDefault();selectTower(t.id)},{passive:false});
+    bar.appendChild(btn);
+  });
+}
+
+function selectTower(id){
+  selectedTower=selectedTower===id?null:id;
+  document.querySelectorAll('.tower-btn').forEach(b=>{
+    b.classList.toggle('selected',b.dataset.id===selectedTower);
+  });
+}
+
+// ==================== START / PAUSE ====================
+function startGame(){
+  ea();
+  currency=100;score=0;lives=20;waveNum=0;
+  towers=[];enemies=[];projectiles=[];particles=[];
+  selectedTower=null;waveActive=false;spawnQueue=[];
+  rebuildGrid();
+  gameState='playing';
+  showScreen(null);
+  document.getElementById('hud').style.display='flex';
+  document.getElementById('towerPanel').style.display='block';
+  document.getElementById('pauseBtn').style.display='block';
+  nextWave();
+}
+
+function togglePause(){
+  if(gameState==='playing'){gameState='paused';showScreen('pauseScreen')}
+  else if(gameState==='paused')resumeGame();
+}
+function resumeGame(){gameState='playing';showScreen(null)}
+function quitToMenu(){
+  gameState='menu';
+  document.getElementById('hud').style.display='none';
+  document.getElementById('towerPanel').style.display='none';
+  document.getElementById('pauseBtn').style.display='none';
+  document.getElementById('menuHS').textContent=highScore>0?'High Score: '+highScore.toLocaleString()+' hrs':'';
+  showScreen('menuScreen');
+}
+
+// ==================== WAVES ====================
+function nextWave(){
+  waveNum++;
+  if(waveNum>10){victory();return}
+  snd('wave');
+
+  // Show wave banner
+  const banner=document.getElementById('waveBanner');
+  banner.innerHTML=`Wave ${waveNum}/10<div class="fact-text">${FACTS[(waveNum-1)%FACTS.length]}</div>`;
+  banner.classList.add('visible');
+  setTimeout(()=>{banner.classList.remove('visible')},3000);
+
+  // Build spawn queue
+  spawnQueue=[];
+  const count=6+waveNum*3;
+  for(let i=0;i<count;i++){
+    // Pick random enemy, scale with wave
+    const idx=Math.min(Math.floor(Math.random()*Math.min(waveNum,ENEMY_TYPES.length)),ENEMY_TYPES.length-1);
+    const base=ENEMY_TYPES[idx];
+    const hpScale=1+waveNum*.25;
+    spawnQueue.push({
+      name:base.name,hp:Math.ceil(base.hp*hpScale),maxHp:Math.ceil(base.hp*hpScale),
+      speed:base.speed*(1+waveNum*.03),reward:Math.ceil(base.reward*(1+waveNum*.1)),
+      color:base.color,size:base.size,progress:0,boss:false
+    });
+  }
+  // Boss every 3 waves
+  if(waveNum%3===0){
+    const hpScale=1+waveNum*.5;
+    spawnQueue.push({
+      name:BOSS.name,hp:Math.ceil(BOSS.hp*hpScale),maxHp:Math.ceil(BOSS.hp*hpScale),
+      speed:BOSS.speed,reward:Math.ceil(BOSS.reward*(1+waveNum*.15)),
+      color:BOSS.color,size:BOSS.size,progress:0,boss:true
+    });
+    snd('boss');
+  }
+  spawnTimer=500;
+  waveActive=true;
+}
+
+function victory(){
+  gameState='gameOver';
+  snd('win');
+  document.getElementById('goTitle').textContent='🏆 DEFENSE SUCCESSFUL!';
+  endGame();
+}
+
+function gameOver(){
+  gameState='gameOver';
+  snd('die');
+  document.getElementById('goTitle').textContent='DEFENSE BREACHED';
+  endGame();
+}
+
+function endGame(){
+  if(score>highScore){highScore=score;localStorage.setItem('ad_hs',highScore);document.getElementById('goHS').style.display='block'}
+  else document.getElementById('goHS').style.display='none';
+  document.getElementById('goScore').textContent=score.toLocaleString()+' hrs saved';
+  document.getElementById('goWave').textContent='Reached Wave '+waveNum+'/10';
+  document.getElementById('hud').style.display='none';
+  document.getElementById('towerPanel').style.display='none';
+  document.getElementById('pauseBtn').style.display='none';
+  showScreen('gameOverScreen');
+}
+
+// ==================== PLACEMENT ====================
+function placeTower(cx,cy){
+  if(!selectedTower)return;
+  const type=TOWER_TYPES.find(t=>t.id===selectedTower);
+  if(!type||currency<type.cost)return;
+
+  // Snap to grid
+  const col=Math.floor((cx-OX)/cellSize);
+  const row=Math.floor((cy-OY)/cellSize);
+  if(col<0||col>=GRID_COLS||row<0||row>=GRID_ROWS)return;
+  if(grid[row][col])return; // occupied
+
+  currency-=type.cost;
+  const tx=OX+col*cellSize+cellSize/2;
+  const ty=OY+row*cellSize+cellSize/2;
+  towers.push({
+    x:tx,y:ty,type:type,range:type.range*(GW/400),damage:type.damage,
+    rate:type.rate,splash:type.splash*(GW/400),color:type.color,
+    cooldown:0,level:1
+  });
+  grid[row][col]=true;
+  snd('place');
+}
+
+canvas.addEventListener('click',e=>{
+  if(gameState!=='playing')return;
+  const rect=canvas.getBoundingClientRect();
+  placeTower(e.clientX-rect.left,e.clientY-rect.top);
+});
+canvas.addEventListener('touchstart',e=>{
+  if(gameState!=='playing')return;
+  e.preventDefault();ea();
+  const rect=canvas.getBoundingClientRect();
+  const t=e.changedTouches[0];
+  placeTower(t.clientX-rect.left,t.clientY-rect.top);
+},{passive:false});
+
+// Keyboard
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'||e.key==='p'||e.key==='P')togglePause();
+  if(e.key>='1'&&e.key<='4'){
+    const idx=parseInt(e.key)-1;
+    if(idx<TOWER_TYPES.length)selectTower(TOWER_TYPES[idx].id);
+  }
+});
+
+// ==================== PARTICLES ====================
+function spawnParticles(x,y,color,count){
+  for(let i=0;i<count;i++){
+    const ang=Math.random()*Math.PI*2;
+    const spd=(30+Math.random()*80)*(GW/400);
+    particles.push({x,y,vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd,
+      life:1,decay:1+Math.random(),size:(1.5+Math.random()*2.5)*(GW/400),color});
+  }
+}
+
+// ==================== UPDATE ====================
+function update(dt){
+  if(gameState!=='playing')return;
+  const dtS=dt/1000;
+
+  // Shake
+  if(shakeDur>0){shakeDur-=dt;shakeX=(Math.random()-.5)*3*(GW/400);shakeY=(Math.random()-.5)*3*(GW/400)}
+  else{shakeX=0;shakeY=0}
+
+  // Spawn
+  if(waveActive&&spawnQueue.length>0){
+    spawnTimer-=dt;
+    if(spawnTimer<=0){
+      enemies.push(spawnQueue.shift());
+      spawnTimer=600+Math.random()*400;
+    }
+  }
+
+  // Check wave complete
+  if(waveActive&&spawnQueue.length===0&&enemies.length===0){
+    waveActive=false;
+    setTimeout(()=>{if(gameState==='playing')nextWave()},2000);
+  }
+
+  // Move enemies
+  const pathLen=getPathLength();
+  for(let i=enemies.length-1;i>=0;i--){
+    const e=enemies[i];
+    e.progress+=e.speed*(GW/400)*60*dtS/pathLen;
+    if(e.progress>=1){
+      // Reached end
+      lives-=e.boss?5:1;
+      shakeDur=150;
+      snd('die');
+      enemies.splice(i,1);
+      if(lives<=0){lives=0;gameOver()}
+      continue;
+    }
+    const pos=getPosOnPath(e.progress);
+    e.x=pos.x;e.y=pos.y;
+  }
+
+  // Towers shoot
+  for(const t of towers){
+    t.cooldown-=dt;
+    if(t.cooldown>0)continue;
+    // Find target in range
+    let target=null,minProg=-1;
+    for(const e of enemies){
+      if(e.x===undefined)continue;
+      const dx=e.x-t.x,dy=e.y-t.y;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<=t.range&&e.progress>minProg){target=e;minProg=e.progress}
+    }
+    if(target){
+      t.cooldown=t.rate;
+      const dx=target.x-t.x,dy=target.y-t.y;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      const speed=250*(GW/400);
+      projectiles.push({
+        x:t.x,y:t.y,vx:dx/dist*speed,vy:dy/dist*speed,
+        damage:t.damage,splash:t.splash,color:t.color,
+        target:target,life:2
+      });
+      snd('shoot');
+    }
+  }
+
+  // Move projectiles
+  for(let i=projectiles.length-1;i>=0;i--){
+    const p=projectiles[i];
+    p.x+=p.vx*dtS;p.y+=p.vy*dtS;
+    p.life-=dtS;
+    if(p.life<=0){projectiles.splice(i,1);continue}
+
+    // Check hit
+    for(let j=enemies.length-1;j>=0;j--){
+      const e=enemies[j];
+      if(e.x===undefined)continue;
+      const dx=p.x-e.x,dy=p.y-e.y;
+      if(Math.sqrt(dx*dx+dy*dy)<e.size*(GW/400)+5){
+        // Hit
+        if(p.splash>0){
+          // Area damage
+          for(const e2 of enemies){
+            if(e2.x===undefined)continue;
+            const d2=Math.sqrt((p.x-e2.x)**2+(p.y-e2.y)**2);
+            if(d2<=p.splash){
+              e2.hp-=p.damage;
+              spawnParticles(e2.x,e2.y,p.color,3);
+            }
+          }
+        }else{
+          e.hp-=p.damage;
+        }
+        spawnParticles(p.x,p.y,p.color,5);
+        projectiles.splice(i,1);
+        snd('hit');
+        break;
+      }
+    }
+  }
+
+  // Remove dead enemies
+  for(let i=enemies.length-1;i>=0;i--){
+    if(enemies[i].hp<=0){
+      const e=enemies[i];
+      score+=e.reward;
+      currency+=e.reward;
+      spawnParticles(e.x,e.y,e.color,e.boss?20:8);
+      if(e.boss)shakeDur=300;
+      enemies.splice(i,1);
+    }
+  }
+
+  // Particles
+  for(let i=particles.length-1;i>=0;i--){
+    const p=particles[i];
+    p.x+=p.vx*dtS;p.y+=p.vy*dtS;
+    p.life-=p.decay*dtS;
+    if(p.life<=0)particles.splice(i,1);
+  }
+
+  // Update tower buttons
+  document.querySelectorAll('.tower-btn').forEach(b=>{
+    const t=TOWER_TYPES.find(tt=>tt.id===b.dataset.id);
+    b.style.opacity=currency>=t.cost?'1':'.4';
+  });
+
+  // HUD
+  document.getElementById('hudCurrency').textContent='💰 '+currency+' hrs';
+  document.getElementById('hudWave').textContent='Wave '+waveNum+'/10';
+  document.getElementById('hudLives').textContent='❤️ '+lives;
+  document.getElementById('hudScore').textContent='Score: '+score.toLocaleString();
+}
+
+// ==================== DRAW ====================
+function draw(){
+  ctx.save();
+  ctx.translate(shakeX,shakeY);
+  ctx.fillStyle='#0a0a1a';ctx.fillRect(-5,-5,W+10,H+10);
+
+  // Grid lines (subtle)
+  ctx.strokeStyle='rgba(255,255,255,.03)';ctx.lineWidth=1;
+  for(let c=0;c<=GRID_COLS;c++){const x=OX+c*cellSize;ctx.beginPath();ctx.moveTo(x,OY);ctx.lineTo(x,OY+GH);ctx.stroke()}
+  for(let r=0;r<=GRID_ROWS;r++){const y=OY+r*cellSize;ctx.beginPath();ctx.moveTo(OX,y);ctx.lineTo(OX+GW,y);ctx.stroke()}
+
+  // Path
+  ctx.strokeStyle='rgba(255,255,255,.08)';ctx.lineWidth=cellSize*.8;ctx.lineCap='round';ctx.lineJoin='round';
+  ctx.beginPath();
+  for(let i=0;i<path.length;i++){if(i===0)ctx.moveTo(path[i].x,path[i].y);else ctx.lineTo(path[i].x,path[i].y)}
+  ctx.stroke();
+
+  // Path markers
+  ctx.fillStyle='rgba(118,255,3,.15)';
+  ctx.font=`bold ${Math.floor(10*(GW/400))}px 'JetBrains Mono',monospace`;
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillStyle='rgba(118,255,3,.3)';
+  ctx.fillText('START →',path[0].x+30*(GW/400),path[0].y);
+  ctx.fillStyle='rgba(255,23,68,.3)';
+  ctx.fillText('⚠ DEADLINE',path[path.length-1].x-35*(GW/400),path[path.length-1].y);
+
+  // Towers
+  for(const t of towers){
+    // Range circle (subtle)
+    ctx.strokeStyle='rgba('+hexToRgb(t.color)+',.08)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.arc(t.x,t.y,t.range,0,Math.PI*2);ctx.stroke();
+
+    // Tower body
+    const s=cellSize*.4;
+    ctx.fillStyle=t.color;
+    ctx.shadowColor=t.color;ctx.shadowBlur=8*(GW/400);
+    ctx.fillRect(t.x-s,t.y-s,s*2,s*2);
+    ctx.shadowBlur=0;
+
+    // Icon
+    ctx.font=`${Math.floor(14*(GW/400))}px sans-serif`;
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(t.type.icon,t.x,t.y);
+  }
+
+  // Enemies
+  for(const e of enemies){
+    if(e.x===undefined)continue;
+    const r=e.size*(GW/400);
+    ctx.fillStyle=e.color;
+    ctx.shadowColor=e.color;ctx.shadowBlur=e.boss?12*(GW/400):6*(GW/400);
+    ctx.beginPath();ctx.arc(e.x,e.y,r,0,Math.PI*2);ctx.fill();
+    ctx.shadowBlur=0;
+
+    // HP bar
+    const bw=r*2.5,bh=3*(GW/400);
+    ctx.fillStyle='rgba(0,0,0,.6)';ctx.fillRect(e.x-bw/2,e.y-r-bh-3*(GW/400),bw,bh);
+    ctx.fillStyle=e.hp/e.maxHp>.5?'#76ff03':e.hp/e.maxHp>.25?'#ffab40':'#ff1744';
+    ctx.fillRect(e.x-bw/2,e.y-r-bh-3*(GW/400),bw*(e.hp/e.maxHp),bh);
+
+    // Name
+    if(e.boss||r>8*(GW/400)){
+      ctx.fillStyle='#fff';
+      ctx.font=`bold ${Math.floor(7*(GW/400))}px 'JetBrains Mono',monospace`;
+      ctx.textAlign='center';
+      ctx.fillText(e.name,e.x,e.y+r+10*(GW/400));
+    }
+  }
+
+  // Projectiles
+  for(const p of projectiles){
+    ctx.fillStyle=p.color;
+    ctx.shadowColor=p.color;ctx.shadowBlur=4*(GW/400);
+    ctx.beginPath();ctx.arc(p.x,p.y,3*(GW/400),0,Math.PI*2);ctx.fill();
+    ctx.shadowBlur=0;
+  }
+
+  // Particles
+  for(const p of particles){
+    ctx.globalAlpha=Math.max(0,p.life);
+    ctx.fillStyle=p.color;
+    ctx.fillRect(p.x-p.size/2,p.y-p.size/2,p.size,p.size);
+  }
+  ctx.globalAlpha=1;
+
+  // Selected tower preview (ghost)
+  if(selectedTower&&mousePos){
+    const type=TOWER_TYPES.find(t=>t.id===selectedTower);
+    const col=Math.floor((mousePos.x-OX)/cellSize);
+    const row=Math.floor((mousePos.y-OY)/cellSize);
+    if(col>=0&&col<GRID_COLS&&row>=0&&row<GRID_ROWS){
+      const tx=OX+col*cellSize+cellSize/2;
+      const ty=OY+row*cellSize+cellSize/2;
+      const valid=!grid[row][col]&&currency>=type.cost;
+      ctx.globalAlpha=.4;
+      ctx.fillStyle=valid?type.color:'#ff1744';
+      ctx.fillRect(tx-cellSize*.4,ty-cellSize*.4,cellSize*.8,cellSize*.8);
+      ctx.strokeStyle=valid?type.color:'#ff1744';
+      ctx.lineWidth=1;
+      ctx.beginPath();ctx.arc(tx,ty,type.range*(GW/400),0,Math.PI*2);ctx.stroke();
+      ctx.globalAlpha=1;
+    }
+  }
+
+  ctx.restore();
+}
+
+let mousePos=null;
+canvas.addEventListener('mousemove',e=>{
+  const rect=canvas.getBoundingClientRect();
+  mousePos={x:e.clientX-rect.left,y:e.clientY-rect.top};
+});
+canvas.addEventListener('mouseleave',()=>mousePos=null);
+
+function hexToRgb(hex){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return r+','+g+','+b;
+}
+
+// ==================== GAME LOOP ====================
+function loop(ts){
+  if(!lastTime)lastTime=ts;
+  const dt=Math.min(ts-lastTime,50);
+  lastTime=ts;
+  update(dt);
+  draw();
+  requestAnimationFrame(loop);
+}
+
+// ==================== INIT ====================
+init();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Automation Empire — Kirk Automations</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;background:#0a0a1a;font-family:'Inter',sans-serif;color:#e0e0e0;overflow-x:hidden}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0a0a1a}::-webkit-scrollbar-thumb{background:#1a1a3a;border-radius:3px}
+.back-link{position:fixed;top:10px;left:10px;color:#00e5ff;text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:14px;z-index:100;opacity:.7;transition:opacity .2s}
+.back-link:hover{opacity:1}
+
+#app{max-width:600px;margin:0 auto;padding:15px 15px 100px;min-height:100vh}
+
+.header{text-align:center;padding:30px 0 15px}
+.header h1{font-family:'JetBrains Mono',monospace;font-size:clamp(22px,5vw,40px);color:#00e5ff;text-shadow:0 0 20px rgba(0,229,255,.4);margin-bottom:5px}
+.header .sub{font-size:clamp(11px,2.5vw,16px);color:#888}
+
+.stats{background:linear-gradient(135deg,rgba(0,229,255,.08),rgba(118,255,3,.05));border:1px solid rgba(0,229,255,.2);border-radius:12px;padding:20px;margin:15px 0;text-align:center}
+.total-hours{font-family:'JetBrains Mono',monospace;font-size:clamp(28px,7vw,52px);color:#00e5ff;text-shadow:0 0 30px rgba(0,229,255,.4);line-height:1.1}
+.total-label{font-size:clamp(11px,2vw,14px);color:#76ff03;margin-top:4px}
+.rate{font-family:'JetBrains Mono',monospace;font-size:clamp(14px,3vw,22px);color:#76ff03;margin-top:8px}
+.multiplier{font-size:clamp(11px,2vw,14px);color:#ffab40;margin-top:4px}
+
+.click-area{position:relative;margin:15px auto;width:clamp(120px,30vw,180px);height:clamp(120px,30vw,180px);border-radius:50%;background:radial-gradient(circle,rgba(0,229,255,.15),rgba(0,229,255,.02));border:2px solid rgba(0,229,255,.3);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .1s,box-shadow .1s;-webkit-tap-highlight-color:transparent;user-select:none}
+.click-area:active{transform:scale(.95);box-shadow:0 0 40px rgba(0,229,255,.5)}
+.click-area .click-text{font-family:'JetBrains Mono',monospace;font-size:clamp(12px,2.5vw,16px);color:#00e5ff;text-align:center;pointer-events:none}
+.click-area .click-icon{font-size:clamp(30px,8vw,50px);display:block;margin-bottom:5px}
+.click-float{position:absolute;font-family:'JetBrains Mono',monospace;font-size:16px;color:#76ff03;pointer-events:none;animation:floatUp .8s ease-out forwards;z-index:10}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-60px)}}
+
+.section-title{font-family:'JetBrains Mono',monospace;font-size:clamp(14px,3vw,20px);color:#76ff03;margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid rgba(118,255,3,.2)}
+
+.auto-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 15px;margin-bottom:10px;display:flex;align-items:center;gap:12px;transition:border-color .2s}
+.auto-card:hover{border-color:rgba(0,229,255,.3)}
+.auto-card .icon{font-size:28px;flex-shrink:0;width:40px;text-align:center}
+.auto-card .info{flex:1;min-width:0}
+.auto-card .name{font-family:'JetBrains Mono',monospace;font-size:clamp(12px,2.5vw,15px);color:#e0e0e0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.auto-card .desc{font-size:clamp(10px,2vw,12px);color:#888;margin-top:2px}
+.auto-card .owned{font-size:clamp(10px,2vw,12px);color:#76ff03;margin-top:2px}
+.auto-card .buy-btn{flex-shrink:0;font-family:'JetBrains Mono',monospace;background:linear-gradient(135deg,#00e5ff,#2979ff);color:#0a0a1a;border:none;padding:8px 14px;font-size:clamp(11px,2vw,14px);font-weight:700;border-radius:6px;cursor:pointer;transition:transform .1s,opacity .2s;white-space:nowrap}
+.auto-card .buy-btn:hover{transform:scale(1.05)}
+.auto-card .buy-btn:disabled{opacity:.3;cursor:default;transform:none}
+
+.upgrade-card{background:rgba(118,255,3,.03);border:1px solid rgba(118,255,3,.1);border-radius:10px;padding:12px 15px;margin-bottom:10px;display:flex;align-items:center;gap:12px}
+.upgrade-card .info{flex:1}
+.upgrade-card .name{font-family:'JetBrains Mono',monospace;font-size:clamp(12px,2.5vw,15px);color:#76ff03}
+.upgrade-card .desc{font-size:clamp(10px,2vw,12px);color:#888;margin-top:2px}
+.upgrade-card .buy-btn{flex-shrink:0;font-family:'JetBrains Mono',monospace;background:linear-gradient(135deg,#76ff03,#00c853);color:#0a0a1a;border:none;padding:8px 14px;font-size:clamp(11px,2vw,14px);font-weight:700;border-radius:6px;cursor:pointer;transition:transform .1s,opacity .2s;white-space:nowrap}
+.upgrade-card .buy-btn:disabled{opacity:.3;cursor:default}
+
+.prestige-panel{background:linear-gradient(135deg,rgba(255,171,64,.08),rgba(255,61,0,.05));border:1px solid rgba(255,171,64,.2);border-radius:12px;padding:15px;margin:15px 0;text-align:center}
+.prestige-panel h3{font-family:'JetBrains Mono',monospace;color:#ffab40;font-size:clamp(14px,3vw,20px);margin-bottom:8px}
+.prestige-panel p{font-size:clamp(11px,2vw,14px);color:#bbb;margin-bottom:10px}
+.prestige-btn{font-family:'JetBrains Mono',monospace;background:linear-gradient(135deg,#ffab40,#ff6d00);color:#0a0a1a;border:none;padding:12px 24px;font-size:clamp(13px,2.5vw,18px);font-weight:700;border-radius:8px;cursor:pointer;transition:transform .1s}
+.prestige-btn:hover{transform:scale(1.05)}
+.prestige-btn:disabled{opacity:.3;cursor:default}
+
+.milestone{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(0,229,255,.1);border:1px solid #00e5ff;border-radius:10px;padding:12px 20px;font-family:'JetBrains Mono',monospace;font-size:14px;color:#00e5ff;z-index:200;animation:milestoneIn .3s ease-out,milestoneOut .3s ease-in 3.7s;max-width:90%;text-align:center;pointer-events:none}
+@keyframes milestoneIn{from{opacity:0;transform:translateX(-50%) translateY(-20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes milestoneOut{from{opacity:1}to{opacity:0}}
+
+.info-section{margin-top:30px;padding:15px;background:rgba(0,229,255,.03);border:1px solid rgba(0,229,255,.1);border-radius:10px;font-size:clamp(11px,2vw,14px);line-height:1.6}
+.info-section h3{color:#00e5ff;font-family:'JetBrains Mono',monospace;margin-bottom:8px}
+.info-section a{color:#76ff03;text-decoration:none}
+.info-section ul{margin-left:15px;color:#bbb}
+</style>
+</head>
+<body>
+<a href="../" class="back-link">&larr; Back</a>
+<div id="app">
+<div class="header">
+<h1>&#9889; AUTOMATION EMPIRE</h1>
+<div class="sub">Build Your Kirk Automations Dynasty</div>
+</div>
+
+<div class="stats">
+<div class="total-hours" id="totalHours">0</div>
+<div class="total-label">HOURS SAVED</div>
+<div class="rate" id="rateDisplay">+0 hrs/sec</div>
+<div class="multiplier" id="multDisplay"></div>
+</div>
+
+<div class="click-area" id="clickArea">
+<div class="click-text"><span class="click-icon">&#9881;&#65039;</span>Process Task<br><span style="font-size:.8em;color:#76ff03" id="clickValue">+1 hr</span></div>
+</div>
+
+<div class="section-title">&#127981; Automations</div>
+<div id="automationList"></div>
+
+<div class="section-title">&#11014;&#65039; Upgrades</div>
+<div id="upgradeList"></div>
+
+<div class="prestige-panel" id="prestigePanel">
+<h3>&#127970; New Client</h3>
+<p>Reset progress but earn a permanent <span style="color:#ffab40">earnings multiplier</span>.<br>
+Requires 100,000 hours saved.</p>
+<p id="prestigeInfo" style="color:#ffab40"></p>
+<button class="prestige-btn" id="prestigeBtn" disabled onclick="doPrestige()">New Client (&times;<span id="nextMult">2</span>)</button>
+</div>
+
+<div class="section-title">&#128202; Milestones</div>
+<div id="milestoneList" style="font-size:clamp(11px,2vw,13px);color:#888"></div>
+
+<div class="info-section">
+<h3>What is Kirk Automations?</h3>
+<p>Kirk Automations builds custom software that eliminates repetitive engineering work &mdash; saving manufacturers <strong>11,727+ hours per year</strong>.</p>
+<ul style="margin-top:8px">
+<li>Spec Check Report: 800 hrs/yr &mdash; measures parts, generates excel</li>
+<li>Drawing Generation: 1,200 hrs/yr &mdash; 3D to 2D drawings</li>
+<li>CAD Comparison: 3,600 hrs/yr &mdash; system vs component</li>
+<li>Parts List Builder: 1,032 hrs/yr &mdash; BOMs from CAD</li>
+<li>Auto Email Data: 1,010 hrs/yr &mdash; extract &amp; email data</li>
+<li>Data Commonizer: 2,000 hrs/yr &mdash; merge 6 sources</li>
+<li>Change Comparison: 600 hrs/yr &mdash; revision detection</li>
+<li>Safety Check: 720 hrs/yr &mdash; compliance verification</li>
+<li>Drawing Fix: 350 hrs/yr &mdash; correct drawing errors</li>
+<li>Max Condition Calc: 240 hrs/yr &mdash; material condition</li>
+<li>Clean Messy CAD: 75 hrs/yr &mdash; fix naming/geometry</li>
+<li>Report Generation: 100 hrs/yr &mdash; package test results</li>
+</ul>
+<p style="margin-top:10px"><a href="../">Learn more at KirkAutomations.com &rarr;</a></p>
+</div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+// ==================== AUDIO ====================
+var AudioCtx=window.AudioContext||window.webkitAudioContext;
+var audioCtx=null;
+function ensureAudio(){if(!audioCtx)audioCtx=new AudioCtx();if(audioCtx.state==='suspended')audioCtx.resume();}
+function playClick(){
+  ensureAudio();if(!audioCtx)return;
+  var now=audioCtx.currentTime,o=audioCtx.createOscillator(),g=audioCtx.createGain();
+  o.connect(g);g.connect(audioCtx.destination);
+  o.type='sine';o.frequency.setValueAtTime(600,now);o.frequency.exponentialRampToValueAtTime(900,now+.04);
+  g.gain.setValueAtTime(.08,now);g.gain.exponentialRampToValueAtTime(.001,now+.06);
+  o.start(now);o.stop(now+.06);
+}
+function playBuy(){
+  ensureAudio();if(!audioCtx)return;
+  var now=audioCtx.currentTime,o=audioCtx.createOscillator(),g=audioCtx.createGain();
+  o.connect(g);g.connect(audioCtx.destination);
+  o.type='sine';o.frequency.setValueAtTime(400,now);o.frequency.exponentialRampToValueAtTime(800,now+.1);
+  g.gain.setValueAtTime(.1,now);g.gain.exponentialRampToValueAtTime(.001,now+.15);
+  o.start(now);o.stop(now+.15);
+}
+function playMilestone(){
+  ensureAudio();if(!audioCtx)return;
+  var now=audioCtx.currentTime;
+  [523,659,784].forEach(function(f,i){
+    var o=audioCtx.createOscillator(),g=audioCtx.createGain();
+    o.connect(g);g.connect(audioCtx.destination);o.type='sine';
+    o.frequency.setValueAtTime(f,now+i*.1);g.gain.setValueAtTime(.08,now+i*.1);g.gain.exponentialRampToValueAtTime(.001,now+i*.1+.2);
+    o.start(now+i*.1);o.stop(now+i*.1+.2);
+  });
+}
+function playPrestige(){
+  ensureAudio();if(!audioCtx)return;
+  var now=audioCtx.currentTime;
+  [261,329,392,523,659,784].forEach(function(f,i){
+    var o=audioCtx.createOscillator(),g=audioCtx.createGain();
+    o.connect(g);g.connect(audioCtx.destination);o.type='triangle';
+    o.frequency.setValueAtTime(f,now+i*.08);g.gain.setValueAtTime(.1,now+i*.08);g.gain.exponentialRampToValueAtTime(.001,now+i*.08+.3);
+    o.start(now+i*.08);o.stop(now+i*.08+.3);
+  });
+}
+
+// ==================== GAME DATA ====================
+var AUTOMATIONS=[
+  {id:'speccheck',name:'Spec Check Report',desc:'Measures parts, takes photos, generates Excel \u2014 800 hrs/yr',baseRate:8,baseCost:10,icon:'\ud83d\udccb'},
+  {id:'cleanmessy',name:'Clean Messy CAD',desc:'Fixes naming and geometry \u2014 75 hrs/yr',baseRate:0.75,baseCost:25,icon:'\ud83e\uddf9'},
+  {id:'reportgen',name:'Report Generation',desc:'Auto-packages test results \u2014 100 hrs/yr',baseRate:1,baseCost:50,icon:'\ud83d\udcca'},
+  {id:'maxcondition',name:'Max Condition Calc',desc:'Calculates max material condition \u2014 240 hrs/yr',baseRate:2.4,baseCost:100,icon:'\ud83d\udcd0'},
+  {id:'drawingfix',name:'Drawing Fix',desc:'Corrects common drawing errors \u2014 350 hrs/yr',baseRate:3.5,baseCost:200,icon:'\u270f\ufe0f'},
+  {id:'changecomp',name:'Change Comparison',desc:'Detects design revision changes \u2014 600 hrs/yr',baseRate:6,baseCost:400,icon:'\ud83d\udd04'},
+  {id:'safetycheck',name:'Safety Check',desc:'Safety/emissions compliance \u2014 720 hrs/yr',baseRate:7.2,baseCost:750,icon:'\ud83d\udee1\ufe0f'},
+  {id:'autoemail',name:'Auto Email Data',desc:'Navigates programs, extracts, emails \u2014 1,010 hrs/yr',baseRate:10.1,baseCost:1500,icon:'\ud83d\udce7'},
+  {id:'partslist',name:'Parts List Builder',desc:'Builds BOMs from CAD + specs \u2014 1,032 hrs/yr',baseRate:10.32,baseCost:3000,icon:'\ud83d\udce6'},
+  {id:'drawinggen',name:'Drawing Generation',desc:'3D to 2D manufacturing drawings \u2014 1,200 hrs/yr',baseRate:12,baseCost:6000,icon:'\ud83d\udcd0'},
+  {id:'datacommon',name:'Data Commonizer',desc:'Merges 6 sources into one format \u2014 2,000 hrs/yr',baseRate:20,baseCost:15000,icon:'\ud83d\udd17'},
+  {id:'cadcompare',name:'CAD Comparison',desc:'System vs component drawings \u2014 3,600 hrs/yr',baseRate:36,baseCost:40000,icon:'\ud83d\udd0d'}
+];
+
+var UPGRADES=[
+  {id:'algo1',name:'Better Algorithms',desc:'All automations 2\u00d7 faster',mult:2,cost:5000,icon:'\ud83e\udde0',req:500},
+  {id:'parallel',name:'Parallel Processing',desc:'All automations 3\u00d7 faster',mult:3,cost:50000,icon:'\u26a1',req:10000},
+  {id:'ai1',name:'AI Enhancement',desc:'All automations 5\u00d7 faster',mult:5,cost:500000,icon:'\ud83e\udd16',req:100000},
+  {id:'quantum',name:'Quantum Optimization',desc:'All automations 10\u00d7 faster',mult:10,cost:5000000,icon:'\ud83c\udf00',req:1000000},
+  {id:'click2',name:'Ergonomic Mouse',desc:'Click value \u00d72',clickMult:2,cost:200,icon:'\ud83d\uddb1\ufe0f',req:100},
+  {id:'click5',name:'Mechanical Keyboard',desc:'Click value \u00d75',clickMult:5,cost:2000,icon:'\u2328\ufe0f',req:1000},
+  {id:'click10',name:'Voice Commands',desc:'Click value \u00d710',clickMult:10,cost:25000,icon:'\ud83c\udfa4',req:5000},
+  {id:'click50',name:'Neural Interface',desc:'Click value \u00d750',clickMult:50,cost:300000,icon:'\ud83e\uddec',req:50000}
+];
+
+var MILESTONES=[
+  {hrs:100,text:'\ud83d\udca1 First 100 hours saved! That\'s 2.5 work weeks.',fact:'Kirk Automations\' Report Generation saves 100 hrs/yr by auto-packaging test results.'},
+  {hrs:500,text:'\ud83d\udd27 500 hours \u2014 like having an extra employee for 3 months!'},
+  {hrs:1000,text:'\ud83c\udfed 1,000 hours saved! One engineer\'s half-year of work.'},
+  {hrs:3600,text:'\ud83d\udd0d 3,600 hours \u2014 that\'s what CAD Comparison saves yearly!',fact:'CAD Comparison checks system vs component drawings automatically.'},
+  {hrs:10000,text:'\u26a1 10,000 hours! Nearly 5 full-time engineers\' worth.'},
+  {hrs:11727,text:'\ud83c\udfc6 11,727 hours \u2014 you matched Kirk Automations\' total yearly savings!',fact:'All 12 Kirk automations combined save 11,727+ hours per year.'},
+  {hrs:50000,text:'\ud83d\ude80 50,000 hours! A small factory\'s engineering department.'},
+  {hrs:100000,text:'\ud83c\udf1f 100,000 hours saved. You\'re automating at industrial scale!'},
+  {hrs:500000,text:'\ud83c\udfe2 Half a million hours! Multiple plants running on automation.'},
+  {hrs:1000000,text:'\ud83d\udc51 ONE MILLION HOURS. You are the automation empire.'}
+];
+
+// ==================== GAME STATE ====================
+var state={
+  hours:0,
+  totalEarned:0,
+  owned:{},
+  upgrades:{},
+  prestige:0,
+  multiplier:1,
+  milestonesHit:[],
+  lastSave:Date.now()
+};
+
+function save(){state.lastSave=Date.now();localStorage.setItem('ae_save2',JSON.stringify(state));}
+function load(){
+  var s=localStorage.getItem('ae_save2');
+  if(s){try{var parsed=JSON.parse(s);for(var k in parsed)state[k]=parsed[k];
+    // Offline earnings
+    var elapsed=(Date.now()-state.lastSave)/1000;
+    if(elapsed>10){var offline=getAutoRate()*elapsed*.5;state.hours+=offline;state.totalEarned+=offline;if(offline>1)showMilestonePopup({text:'Welcome back! Earned '+fmt(offline)+' hrs while away.'});}
+  }catch(e){}}
+}
+
+// ==================== CALCULATIONS ====================
+function getClickValue(){
+  var v=1;
+  for(var i=0;i<UPGRADES.length;i++){var u=UPGRADES[i];if(u.clickMult&&state.upgrades[u.id])v*=u.clickMult;}
+  return v*state.multiplier;
+}
+
+function getAutoRate(){
+  var total=0;
+  for(var i=0;i<AUTOMATIONS.length;i++){var a=AUTOMATIONS[i];var count=state.owned[a.id]||0;if(count>0)total+=a.baseRate*count;}
+  var mult=1;
+  for(var i=0;i<UPGRADES.length;i++){var u=UPGRADES[i];if(u.mult&&state.upgrades[u.id])mult*=u.mult;}
+  return total*mult*state.multiplier;
+}
+
+function getCost(auto){
+  var count=state.owned[auto.id]||0;
+  return Math.floor(auto.baseCost*Math.pow(1.15,count));
+}
+
+// ==================== FORMATTING ====================
+function fmt(n){
+  if(n>=1e12)return(n/1e12).toFixed(2)+'T';
+  if(n>=1e9)return(n/1e9).toFixed(2)+'B';
+  if(n>=1e6)return(n/1e6).toFixed(2)+'M';
+  if(n>=1e3)return(n/1e3).toFixed(1)+'K';
+  return Math.floor(n).toLocaleString();
+}
+
+// ==================== RENDERING ====================
+function renderAutomations(){
+  var container=document.getElementById('automationList');
+  var html='';
+  for(var i=0;i<AUTOMATIONS.length;i++){
+    var a=AUTOMATIONS[i];
+    var count=state.owned[a.id]||0;
+    var cost=getCost(a);
+    var canBuy=state.hours>=cost;
+    html+='<div class="auto-card"><div class="icon">'+a.icon+'</div><div class="info"><div class="name">'+a.name+'</div><div class="desc">'+a.desc+'</div><div class="owned">'+(count>0?'Owned: '+count+' ('+fmt(a.baseRate*count)+' hrs/s)':'Not owned')+'</div></div><button class="buy-btn" '+(canBuy?'':'disabled')+' data-id="'+a.id+'">'+fmt(cost)+' hrs</button></div>';
+  }
+  container.innerHTML=html;
+}
+
+function renderUpgrades(){
+  var container=document.getElementById('upgradeList');
+  var html='';
+  for(var i=0;i<UPGRADES.length;i++){
+    var u=UPGRADES[i];
+    if(state.upgrades[u.id])continue;
+    if(state.totalEarned<u.req*.3)continue;
+    var canBuy=state.hours>=u.cost;
+    html+='<div class="upgrade-card"><div class="icon" style="font-size:28px;flex-shrink:0;width:40px;text-align:center">'+u.icon+'</div><div class="info"><div class="name">'+u.name+'</div><div class="desc">'+u.desc+' \u2014 Cost: '+fmt(u.cost)+' hrs</div></div><button class="buy-btn" '+(canBuy?'':'disabled')+' data-uid="'+u.id+'">BUY</button></div>';
+  }
+  container.innerHTML=html;
+}
+
+function renderMilestones(){
+  var container=document.getElementById('milestoneList');
+  var html='';
+  for(var i=0;i<MILESTONES.length;i++){
+    var m=MILESTONES[i];
+    var hit=state.milestonesHit.indexOf(i)!==-1;
+    html+='<div style="margin-bottom:6px;'+(hit?'color:#76ff03':'color:#444')+'">'+(hit?'\u2705':'\u2b1c')+' '+fmt(m.hrs)+' hrs \u2014 '+m.text+'</div>';
+  }
+  container.innerHTML=html;
+}
+
+function updateDisplay(){
+  document.getElementById('totalHours').textContent=fmt(state.hours);
+  document.getElementById('rateDisplay').textContent='+'+fmt(getAutoRate())+' hrs/sec';
+  document.getElementById('clickValue').textContent='+'+fmt(getClickValue())+' hr'+(getClickValue()!==1?'s':'');
+  var canPrestige=state.totalEarned>=100000;
+  document.getElementById('prestigeBtn').disabled=!canPrestige;
+  var nextMult=state.prestige+2;
+  document.getElementById('nextMult').textContent=nextMult;
+  document.getElementById('multDisplay').textContent=state.multiplier>1?'Client Multiplier: \u00d7'+state.multiplier:'';
+  document.getElementById('prestigeInfo').textContent=state.prestige>0?'Prestige level: '+state.prestige+' (\u00d7'+state.multiplier+' earnings)':'';
+}
+
+// ==================== MILESTONE CHECK ====================
+function checkMilestones(){
+  for(var i=0;i<MILESTONES.length;i++){
+    if(state.milestonesHit.indexOf(i)===-1&&state.totalEarned>=MILESTONES[i].hrs){
+      state.milestonesHit.push(i);
+      showMilestonePopup(MILESTONES[i]);
+      playMilestone();
+      renderMilestones();
+    }
+  }
+}
+
+function showMilestonePopup(m){
+  var el=document.createElement('div');
+  el.className='milestone';
+  el.textContent='\ud83c\udfaf MILESTONE: '+m.text;
+  document.body.appendChild(el);
+  setTimeout(function(){el.remove()},4000);
+}
+
+// ==================== CLICK ====================
+var clickArea=document.getElementById('clickArea');
+clickArea.addEventListener('click',function(e){
+  ensureAudio();
+  var val=getClickValue();
+  state.hours+=val;
+  state.totalEarned+=val;
+  playClick();
+  var rect=clickArea.getBoundingClientRect();
+  var fl=document.createElement('div');
+  fl.className='click-float';
+  fl.textContent='+'+fmt(val);
+  fl.style.left=(e.clientX-rect.left)+'px';
+  fl.style.top=(e.clientY-rect.top-20)+'px';
+  clickArea.appendChild(fl);
+  setTimeout(function(){fl.remove()},800);
+  checkMilestones();
+  updateDisplay();
+});
+
+// ==================== BUY HANDLERS ====================
+document.getElementById('automationList').addEventListener('click',function(e){
+  var btn=e.target.closest('.buy-btn');
+  if(!btn||btn.disabled)return;
+  var id=btn.dataset.id;
+  var auto=null;
+  for(var i=0;i<AUTOMATIONS.length;i++){if(AUTOMATIONS[i].id===id){auto=AUTOMATIONS[i];break;}}
+  if(!auto)return;
+  var cost=getCost(auto);
+  if(state.hours<cost)return;
+  state.hours-=cost;
+  state.owned[id]=(state.owned[id]||0)+1;
+  playBuy();
+  renderAutomations();renderUpgrades();updateDisplay();save();
+});
+
+document.getElementById('upgradeList').addEventListener('click',function(e){
+  var btn=e.target.closest('.buy-btn');
+  if(!btn||btn.disabled)return;
+  var id=btn.dataset.uid;
+  var upg=null;
+  for(var i=0;i<UPGRADES.length;i++){if(UPGRADES[i].id===id){upg=UPGRADES[i];break;}}
+  if(!upg||state.hours<upg.cost)return;
+  state.hours-=upg.cost;
+  state.upgrades[id]=true;
+  playBuy();
+  renderAutomations();renderUpgrades();updateDisplay();save();
+});
+
+// ==================== PRESTIGE ====================
+window.doPrestige=function(){
+  if(state.totalEarned<100000)return;
+  playPrestige();
+  state.prestige++;
+  state.multiplier=state.prestige+1;
+  state.hours=0;
+  state.totalEarned=0;
+  state.owned={};
+  state.upgrades={};
+  state.milestonesHit=[];
+  save();
+  renderAutomations();renderUpgrades();renderMilestones();updateDisplay();
+  showMilestonePopup({text:'New Client acquired! Earnings \u00d7'+state.multiplier});
+};
+
+// ==================== GAME LOOP ====================
+var lastTick=performance.now();
+var renderTimer=0;
+function tick(now){
+  var dt=(now-lastTick)/1000;
+  if(dt>5)dt=5;
+  lastTick=now;
+  var rate=getAutoRate();
+  if(rate>0){
+    var earned=rate*dt;
+    state.hours+=earned;
+    state.totalEarned+=earned;
+  }
+  renderTimer+=dt;
+  if(renderTimer>=0.1){
+    renderTimer=0;
+    updateDisplay();
+    checkMilestones();
+  }
+  requestAnimationFrame(tick);
+}
+
+setInterval(function(){save();renderAutomations();renderUpgrades();},5000);
+
+// ==================== INIT ====================
+load();
+renderAutomations();renderUpgrades();renderMilestones();updateDisplay();
+requestAnimationFrame(tick);
+
+})();
+</script>
+</body>
+</html>
