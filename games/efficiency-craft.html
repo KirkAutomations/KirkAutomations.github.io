@@ -1,0 +1,2150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Efficiency Craft</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+html,body{width:100%;height:100%;overflow:hidden;background:#1a1a2e;font-family:'Courier New',monospace}
+canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
+#game-container{width:100%;height:100%;position:relative}
+#ui-overlay{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10}
+#ui-overlay *{pointer-events:auto}
+#top-bar{position:absolute;top:0;left:0;right:0;background:rgba(0,0,0,0.8);padding:4px 8px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;font-size:12px;color:#fff;z-index:20}
+.meter{display:flex;align-items:center;gap:3px;background:rgba(255,255,255,0.1);border-radius:4px;padding:2px 6px}
+.meter-bar{width:60px;height:8px;background:#333;border-radius:4px;overflow:hidden}
+.meter-fill{height:100%;border-radius:4px;transition:width 0.3s}
+#day-display{color:#ffd700;font-weight:bold;margin-right:4px}
+#score-display{color:#0f0;font-weight:bold}
+#grade-display{font-size:14px;font-weight:bold;margin-left:4px}
+#inventory-bar{position:absolute;bottom:60px;left:50%;transform:translateX(-50%);display:flex;gap:2px;background:rgba(0,0,0,0.85);padding:4px;border-radius:6px;border:1px solid #555;z-index:20}
+.inv-slot{width:40px;height:40px;background:rgba(255,255,255,0.1);border:1px solid #555;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;color:#fff;position:relative}
+.inv-slot .count{position:absolute;bottom:1px;right:3px;font-size:9px;color:#ffd700;font-weight:bold}
+.inv-slot .icon{font-size:18px}
+#mobile-controls{position:absolute;bottom:0;left:0;right:0;height:55px;display:none;justify-content:space-between;align-items:center;padding:5px 10px;background:rgba(0,0,0,0.85);z-index:20}
+#joystick-area{width:120px;height:45px;display:flex;gap:2px;align-items:center;justify-content:center}
+.joy-btn{width:38px;height:38px;background:rgba(255,255,255,0.2);border:1px solid #888;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.joy-btn:active{background:rgba(255,255,255,0.4)}
+#action-buttons{display:flex;gap:4px}
+.act-btn{width:44px;height:38px;background:rgba(100,200,100,0.3);border:1px solid #6c6;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;cursor:pointer;font-family:'Courier New',monospace}
+.act-btn:active{background:rgba(100,200,100,0.5)}
+#crafting-modal{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:90%;max-width:400px;max-height:80vh;background:rgba(20,20,40,0.97);border:2px solid #8b5e3c;border-radius:8px;padding:12px;color:#fff;z-index:100;display:none;overflow-y:auto}
+#crafting-modal h2{text-align:center;color:#ffd700;margin-bottom:8px;font-size:16px}
+.recipe-card{background:rgba(255,255,255,0.08);border:1px solid #555;border-radius:6px;padding:8px;margin-bottom:6px;cursor:pointer;transition:background 0.2s}
+.recipe-card:hover,.recipe-card:active{background:rgba(255,255,255,0.15)}
+.recipe-card.disabled{opacity:0.4;cursor:not-allowed}
+.recipe-name{color:#ffd700;font-weight:bold;font-size:13px}
+.recipe-ing{color:#aaa;font-size:11px;margin:2px 0}
+.recipe-stats{display:flex;gap:8px;font-size:10px;color:#8f8}
+.recipe-fact{color:#8bf;font-size:10px;font-style:italic;margin-top:3px}
+.close-btn{position:absolute;top:6px;right:10px;font-size:20px;color:#fff;cursor:pointer;background:none;border:none}
+#tutorial-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:200;display:none;align-items:center;justify-content:center}
+#tutorial-box{background:rgba(20,30,60,0.97);border:2px solid #4a9;border-radius:10px;padding:16px;max-width:340px;width:90%;color:#fff;text-align:center}
+#tutorial-box h3{color:#4fc;margin-bottom:8px;font-size:15px}
+#tutorial-box p{font-size:12px;line-height:1.5;margin-bottom:10px;color:#cde}
+#tutorial-box .tut-btn{background:#4a9;color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:13px;font-family:'Courier New',monospace;margin:3px}
+#tutorial-box .tut-btn.skip{background:#555}
+#title-screen{position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(180deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff}
+#title-screen h1{font-size:clamp(28px,6vw,48px);color:#4fc;text-shadow:0 0 20px rgba(79,252,200,0.5);margin-bottom:4px}
+#title-screen .subtitle{font-size:clamp(11px,2.5vw,16px);color:#8bf;margin-bottom:20px}
+#title-screen .start-btn{background:#4a9;color:#fff;border:none;padding:12px 36px;border-radius:8px;font-size:18px;cursor:pointer;font-family:'Courier New',monospace;margin:6px;transition:transform 0.1s}
+#title-screen .start-btn:hover{transform:scale(1.05)}
+#title-screen .best-score{color:#ffd700;font-size:12px;margin-top:12px}
+#title-screen .credits{color:#556;font-size:10px;margin-top:20px}
+#day-summary{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:250;display:none;align-items:center;justify-content:center}
+#day-summary-box{background:rgba(20,30,50,0.97);border:2px solid #ffd700;border-radius:10px;padding:16px;max-width:360px;width:90%;color:#fff;text-align:center}
+#day-summary-box h2{color:#ffd700;margin-bottom:8px}
+#day-summary-box .stat-line{display:flex;justify-content:space-between;padding:3px 0;font-size:12px;border-bottom:1px solid #333}
+#day-summary-box button{background:#4a9;color:#fff;border:none;padding:10px 24px;border-radius:6px;cursor:pointer;font-size:14px;font-family:'Courier New',monospace;margin-top:10px}
+#minimap{position:absolute;top:40px;right:4px;border:1px solid #555;border-radius:4px;z-index:15;opacity:0.85}
+#fact-popup{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(10,30,60,0.95);border:2px solid #4fc;border-radius:8px;padding:12px 16px;color:#8bf;font-size:12px;text-align:center;max-width:300px;z-index:150;display:none;animation:factIn 0.3s ease}
+@keyframes factIn{from{opacity:0;transform:translate(-50%,-50%) scale(0.8)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+#mine-progress{position:absolute;width:40px;height:4px;background:#333;border-radius:2px;z-index:15;display:none}
+#mine-progress .fill{height:100%;background:#4fc;border-radius:2px;transition:width 0.05s}
+#enemy-alert{position:absolute;top:50px;left:50%;transform:translateX(-50%);background:rgba(200,30,30,0.9);border:2px solid #f44;border-radius:8px;padding:8px 18px;color:#fff;font-size:13px;font-weight:bold;z-index:150;display:none;animation:alertPulse 0.5s ease infinite alternate;white-space:nowrap}
+@keyframes alertPulse{from{box-shadow:0 0 5px rgba(255,0,0,0.5)}to{box-shadow:0 0 20px rgba(255,0,0,0.8)}}
+#kill-counter{color:#f88;font-size:11px;margin-left:4px}
+#shop-modal,#sell-modal{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:90%;max-width:400px;max-height:80vh;background:rgba(20,20,40,0.97);border-radius:8px;padding:12px;color:#fff;z-index:100;display:none;overflow-y:auto}
+#shop-modal{border:2px solid #4af}
+#sell-modal{border:2px solid #fa0}
+#shop-modal h2{text-align:center;color:#4af;margin-bottom:8px;font-size:16px}
+#sell-modal h2{text-align:center;color:#fa0;margin-bottom:8px;font-size:16px}
+.shop-card,.sell-card{background:rgba(255,255,255,0.08);border:1px solid #555;border-radius:6px;padding:8px;margin-bottom:6px;cursor:pointer;transition:background 0.2s}
+.shop-card:hover,.sell-card:hover{background:rgba(255,255,255,0.15)}
+.shop-card.disabled,.sell-card.disabled{opacity:0.4;cursor:not-allowed}
+.worker-name{color:#4af;font-weight:bold;font-size:13px}
+.worker-desc{color:#aaa;font-size:11px;margin:2px 0}
+.worker-stats{display:flex;gap:8px;font-size:10px;color:#8f8}
+.worker-cost{color:#ffd700;font-size:12px;font-weight:bold}
+.sell-name{color:#fa0;font-weight:bold;font-size:13px}
+.sell-info{color:#aaa;font-size:11px}
+.sell-price{color:#4f4;font-size:12px;font-weight:bold}
+#worker-count{color:#4af;font-size:11px;margin-left:4px}
+@media(max-width:768px){
+  #mobile-controls{display:flex!important}
+  .meter-bar{width:40px}
+  #top-bar{font-size:10px}
+  .inv-slot{width:34px;height:34px}
+  .inv-slot .icon{font-size:15px}
+  #inventory-bar{bottom:58px}
+}
+</style>
+</head>
+<body>
+<div id="game-container">
+<canvas id="gameCanvas"></canvas>
+<div id="ui-overlay">
+<div id="top-bar">
+  <span id="day-display">Day 1</span>
+  <div class="meter"><span>💰</span><div class="meter-bar"><div class="meter-fill" id="budget-fill" style="width:100%;background:#4a4"></div></div><span id="budget-val">$20</span></div>
+  <div class="meter"><span>⚡</span><div class="meter-bar"><div class="meter-fill" id="energy-fill" style="width:100%;background:#f80"></div></div><span id="energy-val">100</span></div>
+  <div class="meter"><span>⏰</span><div class="meter-bar"><div class="meter-fill" id="time-fill" style="width:100%;background:#48f"></div></div><span id="time-val">16h</span></div>
+  <div class="meter"><span>❤️</span><div class="meter-bar"><div class="meter-fill" id="health-fill" style="width:100%;background:#f44"></div></div><span id="health-val">100</span></div>
+  <span id="score-display">Score: 0</span>
+  <span id="grade-display">F</span>
+  <span id="kill-counter">Kills: 0</span>
+  <span id="worker-count">Workers: 0</span>
+</div>
+<div id="inventory-bar"></div>
+<div id="mobile-controls">
+  <div id="joystick-area">
+    <div style="display:flex;flex-direction:column;gap:1px;align-items:center">
+      <button class="joy-btn" data-dir="up">W</button>
+      <div style="display:flex;gap:1px">
+        <button class="joy-btn" data-dir="left">A</button>
+        <button class="joy-btn" data-dir="down">S</button>
+        <button class="joy-btn" data-dir="right">D</button>
+      </div>
+    </div>
+  </div>
+  <div id="action-buttons">
+    <button class="act-btn" id="btn-fight" style="background:rgba(200,60,60,0.3);border-color:#f66">Fight</button>
+    <button class="act-btn" id="btn-mine">Mine</button>
+    <button class="act-btn" id="btn-craft">Craft</button>
+    <button class="act-btn" id="btn-shop" style="background:rgba(60,60,200,0.3);border-color:#66f">Shop</button>
+    <button class="act-btn" id="btn-sell" style="background:rgba(200,150,0,0.3);border-color:#fa0">Sell</button>
+    <button class="act-btn" id="btn-eat">Eat</button>
+  </div>
+</div>
+<canvas id="minimap" width="90" height="90"></canvas>
+<div id="mine-progress"><div class="fill"></div></div>
+</div>
+<div id="crafting-modal"><button class="close-btn" id="close-craft">&times;</button><h2>Crafting Station</h2><div id="recipe-list"></div></div>
+<div id="shop-modal"><button class="close-btn" id="close-shop">&times;</button><h2>⚔️ Hire Workers</h2><div id="shop-list"></div></div>
+<div id="sell-modal"><button class="close-btn" id="close-sell">&times;</button><h2>💰 Sell Items</h2><div id="sell-list"></div></div>
+<div id="tutorial-overlay"><div id="tutorial-box"><h3 id="tut-title"></h3><p id="tut-text"></p><div><button class="tut-btn" id="tut-next">Next</button><button class="tut-btn skip" id="tut-skip">Skip</button></div></div></div>
+<div id="day-summary"><div id="day-summary-box"><h2 id="sum-title">Day Complete!</h2><div id="sum-stats"></div><button id="sum-next">Next Day</button></div></div>
+<div id="fact-popup"></div>
+<div id="enemy-alert"></div>
+<div id="title-screen">
+  <h1>Efficiency Craft</h1>
+  <div class="subtitle">Build an Efficient Life - Block by Block</div>
+  <div class="subtitle" style="font-size:10px;color:#6a8">Inspired by EfficiencyIsEverything.com</div>
+  <button class="start-btn" id="btn-start">Start Game</button>
+  <button class="start-btn" id="btn-start-skip" style="background:#555;font-size:14px;padding:8px 24px">Start (Skip Tutorial)</button>
+  <div class="best-score" id="best-score-display"></div>
+  <div class="credits">WASD to move | Click/Space to mine & fight | E to craft</div>
+  <div class="credits" style="color:#4af;margin-top:4px">F5 = Quick Save | F9 = Quick Load</div>
+  <div class="credits" style="color:#f66;margin-top:6px">Beware: Zombies, Skeletons, Scarecrows & Dragons!</div>
+  <div class="credits" style="color:#888;margin-top:10px">Click anywhere to start</div>
+</div>
+</div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const minimapCanvas = document.getElementById('minimap');
+const minimapCtx = minimapCanvas.getContext('2d');
+
+// === CONSTANTS ===
+const WORLD_W = 30, WORLD_H = 30;
+const TILE = 32;
+const DAY_TIME = 180; // seconds per day (3 minutes)
+const MAX_DAYS = 5;
+const MAX_INV = 10;
+
+// Resource definitions - Real data from EfficiencyIsEverything.com Calorie Per Dollar rankings
+const RES = {
+  wheat:{name:'Flour/Wheat',icon:'🌾',color:'#d4a',gather:1.5,cost:0,zone:'farm',cal:4464,protein:13,micro:3,costPer:0.08,calPerDollar:4464,eie:'Flour is #1 on EIE\'s Calorie Per Dollar list at 4,464 cal/$! The most efficient calorie source.'},
+  rice:{name:'Rice',icon:'🍚',color:'#ffd',gather:1.2,cost:0,zone:'farm',cal:2320,protein:7,micro:2,costPer:0.10,calPerDollar:2320,eie:'Rice ranks #4 on EIE at 2,320 cal/$. A staple for budget eating worldwide.'},
+  beans:{name:'Pinto Beans',icon:'🫘',color:'#a63',gather:2,cost:0,zone:'garden',cal:1026,protein:21,micro:7,costPer:0.12,calPerDollar:1026,eie:'Pinto Beans: 1,026 cal/$ (EIE). Buy 10lb bags for maximum efficiency!'},
+  eggs:{name:'Eggs',icon:'🥚',color:'#fec',gather:1,cost:1.5,zone:'market',cal:802,protein:13,micro:5,costPer:0.20,calPerDollar:802,eie:'Costco Eggs: 802 cal/$. One of the best protein-per-dollar foods.'},
+  veggies:{name:'Frozen Peas',icon:'🥦',color:'#3a3',gather:1.8,cost:0,zone:'farm',cal:354,protein:3,micro:9,costPer:0.25,calPerDollar:354,eie:'Frozen Peas: 354 cal/$. Best veggie bang for your buck per EIE data.'},
+  chicken:{name:'Chicken',icon:'🍗',color:'#da5',gather:3,cost:3,zone:'market',cal:239,protein:27,micro:4,costPer:0.50,calPerDollar:239,eie:'Chicken: 239 cal/$. Good protein but expensive calories vs rice/oats.'},
+  milk:{name:'Whole Milk',icon:'🥛',color:'#eef',gather:1,cost:1,zone:'market',cal:902,protein:8,micro:6,costPer:0.15,calPerDollar:902,eie:'Whole Milk: 902 cal/$! EIE ranks it surprisingly high for a liquid.'},
+  oats:{name:'Plain Oats',icon:'🌿',color:'#cb8',gather:1.2,cost:0,zone:'garden',cal:2148,protein:13,micro:5,costPer:0.08,calPerDollar:2148,eie:'Plain Oats: 2,148 cal/$ (#5 on EIE). Dirt cheap, high protein, filling!'},
+  potatoes:{name:'Potatoes',icon:'🥔',color:'#c95',gather:2,cost:0,zone:'farm',cal:500,protein:4,micro:4,costPer:0.10,calPerDollar:500,eie:'Potatoes are nutrient-dense and cheap. A survival food for centuries.'},
+  lentils:{name:'Lentils',icon:'🟤',color:'#964',gather:2.2,cost:0,zone:'garden',cal:929,protein:73,micro:8,costPer:0.09,calPerDollar:929,eie:'Lentils: 929 cal/$ AND 73g protein per dollar! EIE calls them the ultimate efficiency food.'},
+  peanutbutter:{name:'Peanut Butter',icon:'🥜',color:'#c90',gather:1.5,cost:0.5,zone:'market',cal:1487,protein:18,micro:4,costPer:0.12,calPerDollar:1487,eie:'Peanut Butter: 1,487 cal/$! Dense calories, good protein, long shelf life.'},
+  pasta:{name:'Pasta',icon:'🍝',color:'#ec5',gather:1.3,cost:0,zone:'garden',cal:1600,protein:11,micro:3,costPer:0.09,calPerDollar:1600,eie:'Pasta: 1,600 cal/$. Angel hair or white pasta are top-tier budget foods.'},
+  banana:{name:'Banana',icon:'🍌',color:'#fe3',gather:0.8,cost:0.5,zone:'farm',cal:299,protein:2,micro:6,costPer:0.25,calPerDollar:299,eie:'Bananas: 299 cal/$. Cheap fruit but way less efficient than grains.'}
+};
+
+const RECIPES = [
+  {name:'Rice & Beans Bowl',ing:{rice:1,beans:1},energy:40,health:25,cost:0.22,time:8,fact:'EIE TIP: Rice (2,320 cal/$) + Beans (1,026 cal/$) = complete protein for pennies! This combo has fed civilizations for thousands of years.'},
+  {name:'Nutrient Breakfast',ing:{eggs:1,veggies:1},energy:30,health:35,cost:0.45,time:6,fact:'EIE TIP: Eggs (802 cal/$) give you 13g protein each. Pair with frozen peas (354 cal/$) for micronutrients. Budget breakfast under $0.50!'},
+  {name:'Bulk Meal Prep',ing:{chicken:1,rice:1},energy:50,health:20,cost:0.60,time:12,fact:'EIE TIP: Batch cooking saves ~5 hours/week. That\'s 260 hours/year! Use that time for a side hustle or self-improvement.'},
+  {name:'Quick Fuel',ing:{oats:1,milk:1},energy:35,health:20,cost:0.23,time:3,fact:'EIE TIP: Oats (2,148 cal/$) + Milk (902 cal/$) = the cheapest balanced breakfast possible. Under $0.25 per serving!'},
+  {name:'Lentil Power Soup',ing:{lentils:1,veggies:1},energy:35,health:40,cost:0.34,time:10,fact:'EIE TIP: Lentils give 73g protein per dollar — the HIGHEST on EIE\'s protein list. More efficient than any meat!'},
+  {name:'Potato Hash',ing:{potatoes:1,eggs:1},energy:30,health:22,cost:0.30,time:7,fact:'EIE 80/20 RULE: 80% of nutrition from 20% of foods. Potatoes + Eggs cover most essential nutrients for almost nothing.'},
+  {name:'Grain Power Bowl',ing:{wheat:1,lentils:1},energy:45,health:30,cost:0.24,time:9,fact:'EIE TIP: Flour (4,464 cal/$) + Lentils (929 cal/$) = the most budget-efficient meal mathematically possible.'},
+  {name:'Veggie Omelette',ing:{eggs:2,veggies:1},energy:30,health:38,cost:0.65,time:5,fact:'EIE TIP: Costco eggs (802 cal/$) beat Walmart eggs (566 cal/$) by 42%. Where you buy matters as much as what you buy!'},
+  {name:'PB Oat Balls',ing:{peanutbutter:1,oats:1},energy:45,health:18,cost:0.20,time:4,fact:'EIE TIP: PB (1,487 cal/$) + Oats (2,148 cal/$) = 3,635 cal/$ combined. No cooking needed! The ultimate lazy efficiency meal.'},
+  {name:'Pasta & Lentils',ing:{pasta:1,lentils:1},energy:42,health:32,cost:0.18,time:10,fact:'EIE TIP: Pasta (1,600 cal/$) + Lentils (73g protein/$) is the Italian efficiency secret. Pasta e lenticchie!'},
+  {name:'Banana Oat Shake',ing:{banana:1,oats:1,milk:1},energy:38,health:28,cost:0.40,time:2,fact:'EIE TIME TIP: 2-minute prep time! Blend and go. EIE says the fastest meal is the one you actually make consistently.'},
+  {name:'$1.50 Day Meal',ing:{rice:1,lentils:1,veggies:1},energy:55,health:45,cost:0.30,time:14,fact:'EIE CHALLENGE: You CAN eat for $1.50/day! Rice + Lentils + Veggies hits all nutrition targets at rock-bottom cost.'}
+];
+
+// EIE Educational Tips - shown between days and randomly during gameplay
+const EIE_TIPS = [
+  {cat:'FOOD RANKING',tip:'EIE\'s Top 5 Cal/$: 1) Flour 4,464  2) Bread 3,333  3) Sugar 2,854  4) Rice 2,320  5) Oats 2,148',source:'efficiencyiseverything.com/calorie-per-dollar-list'},
+  {cat:'PROTEIN',tip:'Lentils provide 73g of protein per dollar — more than chicken, beef, or any meat! Cook them in 20 minutes.',source:'efficiencyiseverything.com/how-to-easily-cook-lentils'},
+  {cat:'TIME',tip:'Biphasic sleep: A 20-minute nap can save you ~12 hours per week by reducing total sleep needed.',source:'efficiencyiseverything.com/save-hours-sleeping-tips'},
+  {cat:'TIME',tip:'Watch videos at 1.5-2x speed. A 3-hour movie in 2 hours = 1 hour saved. Works for lectures too!',source:'efficiencyiseverything.com/watchvideosfaster'},
+  {cat:'MONEY',tip:'EIE proves you can eat all 44 micronutrients for $1.50/day using their ranked food lists.',source:'efficiencyiseverything.com'},
+  {cat:'COOKING',tip:'The 5 Cooking Cheat Codes: Salt, Fat, Acid, Sugar, Umami. These make any cheap food taste restaurant-quality.',source:'efficiencyiseverything.com/cooking-cheat-codes'},
+  {cat:'80/20 RULE',tip:'80% of your appearance comes from 20% of the effort. Focus on: 1) Fitness 2) Hygiene 3) Fit of clothes.',source:'efficiencyiseverything.com'},
+  {cat:'TIME',tip:'Use a spaghetti diagram of your morning routine to find wasted steps. Most people waste 15+ minutes on inefficient paths.',source:'efficiencyiseverything.com'},
+  {cat:'MONEY',tip:'Little Caesar\'s: 423 cal/$. McDouble: 300 cal/$. But homemade rice & beans: 1,500+ cal/$. Cooking wins every time.',source:'efficiencyiseverything.com/calorie-per-dollar-list'},
+  {cat:'PROTEIN',tip:'Cheapest protein sources: 1) Lentils 73g/$  2) Pinto Beans  3) Eggs  4) Whole Milk  5) Peanut Butter',source:'efficiencyiseverything.com'},
+  {cat:'CAFFEINE',tip:'Cheapest caffeine: bulk coffee grounds, then tea bags. Energy drinks cost 5-10x more per mg of caffeine.',source:'efficiencyiseverything.com/caffeine-per-dollar'},
+  {cat:'LIFE HACK',tip:'Put a 1-cup measuring scoop IN your coffee container. Saves time every single morning for years.',source:'efficiencyiseverything.com'},
+  {cat:'MONEY',tip:'Beef prices keep rising. EIE has 32 chicken recipes as substitutes — chicken is nearly always cheaper per protein gram.',source:'efficiencyiseverything.com'},
+  {cat:'LIFE HACK',tip:'Pre-label recurring items (baby bottles, storage containers). Eliminating repetitive tasks is pure efficiency.',source:'efficiencyiseverything.com'},
+  {cat:'TIME',tip:'Error-proof your shower temperature with a marked handle. EIE calculates this saves ~300 hours over a lifetime.',source:'efficiencyiseverything.com/error-proof-home-shower-temperature'},
+  {cat:'FOOD RANKING',tip:'Ramen: 1,949 cal/$. Peanut Butter: 1,487 cal/$. Pasta: 1,600 cal/$. The cheap staples are genuinely the most efficient.',source:'efficiencyiseverything.com/calorie-per-dollar-list'},
+  {cat:'PHILOSOPHY',tip:'EIE principle: "If it\'s useful, use it. If it\'s not useful, don\'t." Apply this to every purchase and habit.',source:'efficiencyiseverything.com'},
+  {cat:'MONEY',tip:'Alcohol per dollar: boxed wine and bulk beer win. But the real efficiency move is drinking water — $0/cal.',source:'efficiencyiseverything.com/alcohol-per-dollar'},
+  {cat:'FOOD RANKING',tip:'Fresh raspberries: only 13 cal/$. Frozen blueberries: 70 cal/$. Bananas: 299 cal/$. Fresh fruit is a luxury item by the data.',source:'efficiencyiseverything.com/calorie-per-dollar-list'},
+  {cat:'LIFE HACK',tip:'EIE lived on $19,000/year including rent. Key: optimize the big 3 expenses (housing, food, transport) and the rest follows.',source:'efficiencyiseverything.com/tips_to_live_low_cost'}
+];
+
+// Tile types
+const T={GRASS:0,WATER:1,PATH:2,CRAFT:3,BED:4,RESOURCE:5,MARKET_FLOOR:6,WALL:7,HOME_FLOOR:8,FARM_SOIL:9,GARDEN_SOIL:10,SHOP:11,SELL:12};
+const TILE_COLORS={
+  [T.GRASS]:'#3a7a3a',[T.WATER]:'#2255aa',[T.PATH]:'#8a7a5a',[T.CRAFT]:'#8b5e3c',
+  [T.BED]:'#5544aa',[T.RESOURCE]:'#4a4',[T.MARKET_FLOOR]:'#7a6a5a',[T.WALL]:'#555',
+  [T.HOME_FLOOR]:'#6a5a4a',[T.FARM_SOIL]:'#5a4a2a',[T.GARDEN_SOIL]:'#3a5a2a',
+  [T.SHOP]:'#2244aa',[T.SELL]:'#aa6600'
+};
+
+// === GAME STATE ===
+let G = {
+  screen:'title', // title, playing, summary, gameover
+  day:1, budget:20, energy:80, timeLeft:DAY_TIME, health:70,
+  score:0, totalScore:0,
+  px:15, py:15, // player grid position
+  inventory:[], // [{type,count}]
+  world:[], // 2d array
+  worldRes:[], // resource on tile [{type,hp}] or null
+  mining:null, // {x,y,progress,total}
+  craftOpen:false,
+  tutStep:-1, tutActive:false,
+  moveDir:null, moveTimer:0,
+  dayTransition:false,
+  mealsEaten:[],
+  timeSaved:0, timeWasted:0,
+  facingX:0, facingY:1,
+  bestScore: parseInt(localStorage.getItem('eie2_best'))||0,
+  enemies: [],
+  kills: 0,
+  totalKills: 0,
+  attackCooldown: 0,
+  enemySpawnTimer: 0,
+  alertTimer: 0,
+  workers: [],
+  shopOpen: false,
+  sellOpen: false
+};
+
+// === ENEMY DEFINITIONS ===
+const ENEMY_TYPES = {
+  zombie: {
+    name: 'Farmer Zombie',
+    icon: '🧟',
+    color: '#4a6a2a',
+    skinColor: '#6a8a3a',
+    hp: 3,
+    speed: 0.8,       // tiles per second
+    damage: 5,         // damage to player on contact
+    stealChance: 0.7,  // chance to steal crop vs destroy
+    cropDamage: 1,     // how fast they eat crops
+    scoreValue: 15,
+    spawnZones: ['farm','garden'],
+    description: 'Shambles toward crops and devours them!'
+  },
+  skeleton: {
+    name: 'Skeleton',
+    icon: '💀',
+    color: '#ccc',
+    skinColor: '#eee',
+    hp: 2,
+    speed: 1.4,
+    damage: 8,
+    stealChance: 0.3,
+    cropDamage: 1.5,
+    scoreValue: 20,
+    spawnZones: ['farm','garden','market'],
+    description: 'Fast and rattly! Smashes crops quickly.'
+  },
+  dragon: {
+    name: 'Angry Dragon',
+    icon: '🐉',
+    color: '#c22',
+    skinColor: '#e44',
+    hp: 6,
+    speed: 0.6,
+    damage: 15,
+    stealChance: 0.1,
+    cropDamage: 2,
+    scoreValue: 40,
+    spawnZones: ['farm','garden','market'],
+    description: 'Tough and destructive! Burns everything!'
+  },
+  scarecrow: {
+    name: 'Evil Scarecrow',
+    icon: '🎃',
+    color: '#8a5a1a',
+    skinColor: '#c88030',
+    hp: 4,
+    speed: 1.0,
+    damage: 7,
+    stealChance: 0.9,
+    cropDamage: 0.8,
+    scoreValue: 25,
+    spawnZones: ['farm'],
+    description: 'Steals your crops and hoards them!'
+  }
+};
+
+// === TUTORIAL ===
+const TUTORIALS = [
+  {title:'Welcome to Efficiency Craft!', text:'Build an efficient life by gathering food, crafting meals, and managing your budget and time. Let\'s learn the basics!'},
+  {title:'Movement', text:'Use WASD keys to move around the world. On mobile, use the directional buttons at the bottom-left. Try moving around!'},
+  {title:'Gathering Resources', text:'Walk up to colored resource blocks and click/tap them (or press the Mine button on mobile) to gather ingredients. Each resource takes time to gather.'},
+  {title:'Your Inventory', text:'Gathered items appear in your inventory bar at the bottom. You can hold up to 10 items. Plan what you need before gathering!'},
+  {title:'Crafting Meals', text:'Find the brown Crafting Station block near your home. Press E or the Craft button to open recipes. Combine ingredients into efficient meals!'},
+  {title:'Efficiency Meters', text:'Watch your 4 meters: Budget (money left), Energy (need food), Time (limited per day), and Health (nutrition quality). Balance all four for the best score!'},
+  {title:'Time Management', text:'Every action costs time. Walking, mining, and cooking all use your day\'s hours. Plan efficient routes to save time! Wasted steps = wasted time.'},
+  {title:'Watch Out for Enemies!', text:'Farmer Zombies, Skeletons, Evil Scarecrows, and Angry Dragons will invade and try to steal or destroy your crops! Face them and press Space/F (or the Fight button on mobile) to attack. Protect your resources!'},
+  {title:'Scoring & Days', text:'Survive 5 days while maximizing your Efficiency Score. Defeat enemies for bonus points! You get graded S through F. Try to optimize nutrients per dollar and per minute. Good luck!'}
+];
+
+// === WORLD GENERATION ===
+function generateWorld(){
+  const w=[], r=[];
+  for(let y=0;y<WORLD_H;y++){w[y]=[];r[y]=[];for(let x=0;x<WORLD_W;x++){w[y][x]=T.GRASS;r[y][x]=null;}}
+
+  // Zones layout:
+  // Top-left: Farm (0-14, 0-14)
+  // Top-right: Market (16-29, 0-14)
+  // Bottom-left: Garden (0-14, 16-29)
+  // Bottom-right: Home (16-29, 16-29)
+  // Center: paths + water
+
+  // Paths
+  for(let i=0;i<WORLD_W;i++){w[15][i]=T.PATH;w[i]?w[i][15]=T.PATH:0;}
+  for(let i=14;i<=16;i++)for(let j=14;j<=16;j++)w[i][j]=T.PATH;
+
+  // Water features
+  for(let i=5;i<10;i++)for(let j=5;j<8;j++){if(Math.random()<0.6)w[j][i]=T.WATER;}
+  w[3][7]=T.WATER;w[4][8]=T.WATER;
+
+  // Farm zone (top-left)
+  for(let y=1;y<14;y++)for(let x=1;x<14;x++){
+    if(w[y][x]===T.GRASS && Math.random()<0.3) w[y][x]=T.FARM_SOIL;
+  }
+
+  // Market zone (top-right)
+  for(let y=2;y<13;y++)for(let x=17;x<28;x++){
+    if(y>=3&&y<=11&&x>=18&&x<=26) w[y][x]=T.MARKET_FLOOR;
+  }
+  for(let x=17;x<=28;x++){w[2][x]=T.WALL;w[12][x]=T.WALL;}
+  for(let y=2;y<=12;y++){w[y][17]=T.WALL;w[y][28]=T.WALL;}
+  w[7][17]=T.MARKET_FLOOR; // entrance
+
+  // Garden zone (bottom-left)
+  for(let y=17;y<29;y++)for(let x=1;x<14;x++){
+    if(w[y][x]===T.GRASS && Math.random()<0.25) w[y][x]=T.GARDEN_SOIL;
+  }
+
+  // Home zone (bottom-right)
+  for(let y=18;y<26;y++)for(let x=18;x<26;x++) w[y][x]=T.HOME_FLOOR;
+  for(let x=17;x<=26;x++){w[17][x]=T.WALL;w[26][x]=T.WALL;}
+  for(let y=17;y<=26;y++){w[y][17]=T.WALL;w[y][26]=T.WALL;}
+  w[17][21]=T.HOME_FLOOR; // entrance
+  w[20][20]=T.CRAFT; w[20][21]=T.CRAFT;
+  w[22][19]=T.SHOP; w[22][20]=T.SHOP;  // Shop (hire workers)
+  w[22][24]=T.SELL; w[22][25]=T.SELL;  // Sell station
+  w[24][23]=T.BED; w[24][24]=T.BED;
+
+  // Place resources
+  placeResources(w,r);
+  G.world=w; G.worldRes=r;
+  G.px=21; G.py=18; // Start near home
+}
+
+function placeResources(w,r){
+  const farmRes=['wheat','rice','veggies','potatoes'];
+  const gardenRes=['beans','lentils','oats'];
+  const marketRes=['eggs','chicken','milk'];
+
+  // Farm resources
+  for(let y=1;y<14;y++)for(let x=1;x<14;x++){
+    if((w[y][x]===T.FARM_SOIL||w[y][x]===T.GRASS) && Math.random()<0.15 && w[y][x]!==T.WATER){
+      const t=farmRes[Math.floor(Math.random()*farmRes.length)];
+      w[y][x]=T.RESOURCE;
+      r[y][x]={type:t,hp:RES[t].gather};
+    }
+  }
+  // Garden resources
+  for(let y=17;y<29;y++)for(let x=1;x<14;x++){
+    if((w[y][x]===T.GARDEN_SOIL||w[y][x]===T.GRASS) && Math.random()<0.15){
+      const t=gardenRes[Math.floor(Math.random()*gardenRes.length)];
+      w[y][x]=T.RESOURCE;
+      r[y][x]={type:t,hp:RES[t].gather};
+    }
+  }
+  // Market resources
+  for(let y=4;y<11;y++)for(let x=19;x<27;x++){
+    if(w[y][x]===T.MARKET_FLOOR && Math.random()<0.2){
+      const t=marketRes[Math.floor(Math.random()*marketRes.length)];
+      w[y][x]=T.RESOURCE;
+      r[y][x]={type:t,hp:RES[t].gather};
+    }
+  }
+}
+
+function regenerateResources(){
+  for(let y=0;y<WORLD_H;y++)for(let x=0;x<WORLD_W;x++){
+    if(G.worldRes[y][x]===null){
+      const tile=G.world[y][x];
+      let pool=null;
+      if(y<14&&x<14&&(tile===T.GRASS||tile===T.FARM_SOIL)) pool=['wheat','rice','veggies','potatoes'];
+      else if(y>16&&x<14&&(tile===T.GRASS||tile===T.GARDEN_SOIL)) pool=['beans','lentils','oats'];
+      else if(y>2&&y<12&&x>17&&x<28&&tile===T.MARKET_FLOOR) pool=['eggs','chicken','milk'];
+      if(pool && Math.random()<0.12){
+        const t=pool[Math.floor(Math.random()*pool.length)];
+        G.world[y][x]=T.RESOURCE;
+        G.worldRes[y][x]={type:t,hp:RES[t].gather};
+      }
+    }
+  }
+}
+
+// === AUDIO ===
+let audioCtx;
+function initAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();}
+function playSound(freq,dur,type='square'){
+  if(!audioCtx)return;
+  try{
+    const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+    o.type=type;o.frequency.value=freq;
+    g.gain.setValueAtTime(0.08,audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+dur);
+    o.connect(g);g.connect(audioCtx.destination);
+    o.start();o.stop(audioCtx.currentTime+dur);
+  }catch(e){}
+}
+function sndMine(){playSound(200+Math.random()*100,0.1);}
+function sndCraft(){playSound(440,0.1);setTimeout(()=>playSound(660,0.15),100);}
+function sndEat(){playSound(330,0.08);setTimeout(()=>playSound(440,0.08),80);setTimeout(()=>playSound(550,0.12),160);}
+function sndDay(){playSound(220,0.2,'sine');setTimeout(()=>playSound(330,0.2,'sine'),150);setTimeout(()=>playSound(440,0.3,'sine'),300);}
+
+// === RENDERING ===
+let camX=0, camY=0;
+let screenW, screenH, tilesX, tilesY;
+
+function resize(){
+  screenW=window.innerWidth; screenH=window.innerHeight;
+  canvas.width=screenW; canvas.height=screenH;
+  tilesX=Math.ceil(screenW/TILE)+2; tilesY=Math.ceil(screenH/TILE)+2;
+}
+window.addEventListener('resize',resize);
+resize();
+
+function drawTile(x,y,sx,sy){
+  const tile=G.world[y]?.[x];
+  if(tile===undefined)return;
+  const res=G.worldRes[y]?.[x];
+
+  // Base tile
+  ctx.fillStyle=TILE_COLORS[tile]||'#333';
+  if(tile===T.RESOURCE && res){
+    const base = res.type&&RES[res.type]?RES[res.type].color:'#4a4';
+    ctx.fillStyle=base;
+  }
+  ctx.fillRect(sx,sy,TILE,TILE);
+
+  // Tile details
+  if(tile===T.WATER){
+    ctx.fillStyle='#3366cc';
+    ctx.fillRect(sx+2,sy+2,TILE-4,TILE-4);
+    ctx.fillStyle='rgba(255,255,255,0.15)';
+    ctx.fillRect(sx+8,sy+6,10,2);
+    ctx.fillRect(sx+4,sy+14,14,2);
+  }
+  if(tile===T.CRAFT){
+    ctx.fillStyle='#6a4a2a';ctx.fillRect(sx+4,sy+4,TILE-8,TILE-8);
+    ctx.fillStyle='#ffd700';ctx.font='14px serif';ctx.fillText('🔨',sx+8,sy+22);
+  }
+  if(tile===T.BED){
+    ctx.fillStyle='#7766cc';ctx.fillRect(sx+4,sy+6,TILE-8,TILE-12);
+    ctx.fillStyle='#aaa';ctx.fillRect(sx+6,sy+4,10,6);
+  }
+  if(tile===T.WALL){
+    ctx.fillStyle='#666';ctx.fillRect(sx,sy,TILE,TILE);
+    ctx.fillStyle='#555';ctx.fillRect(sx+1,sy+1,TILE-2,TILE-2);
+    ctx.strokeStyle='#444';ctx.strokeRect(sx+4,sy+4,TILE-8,TILE-8);
+  }
+  if(tile===T.SHOP){
+    ctx.fillStyle='#1a3a8a';ctx.fillRect(sx+2,sy+2,TILE-4,TILE-4);
+    ctx.fillStyle='#2a4aaa';ctx.fillRect(sx+4,sy+4,TILE-8,TILE-8);
+    ctx.strokeStyle='#4af';ctx.lineWidth=2;ctx.strokeRect(sx+2,sy+2,TILE-4,TILE-4);ctx.lineWidth=1;
+    ctx.font='14px serif';ctx.fillText('⚔️',sx+8,sy+22);
+  }
+  if(tile===T.SELL){
+    ctx.fillStyle='#8a5500';ctx.fillRect(sx+2,sy+2,TILE-4,TILE-4);
+    ctx.fillStyle='#aa6a00';ctx.fillRect(sx+4,sy+4,TILE-8,TILE-8);
+    ctx.strokeStyle='#fa0';ctx.lineWidth=2;ctx.strokeRect(sx+2,sy+2,TILE-4,TILE-4);ctx.lineWidth=1;
+    ctx.font='14px serif';ctx.fillText('💰',sx+8,sy+22);
+  }
+
+  // Resource icon
+  if(tile===T.RESOURCE && res && RES[res.type]){
+    ctx.font='16px serif';
+    ctx.fillText(RES[res.type].icon, sx+8, sy+22);
+  }
+
+  // Grid lines (subtle)
+  ctx.strokeStyle='rgba(0,0,0,0.15)';
+  ctx.strokeRect(sx,sy,TILE,TILE);
+}
+
+function drawPlayer(sx,sy){
+  // Body
+  ctx.fillStyle='#4af';
+  ctx.fillRect(sx+8,sy+6,16,20);
+  // Head
+  ctx.fillStyle='#fca';
+  ctx.fillRect(sx+10,sy+2,12,10);
+  // Eyes
+  ctx.fillStyle='#333';
+  const ex = G.facingX>0?18:G.facingX<0?12:14;
+  ctx.fillRect(sx+ex,sy+5,2,3);
+  ctx.fillRect(sx+ex+4,sy+5,2,3);
+  // Feet
+  ctx.fillStyle='#654';
+  ctx.fillRect(sx+9,sy+26,6,4);
+  ctx.fillRect(sx+17,sy+26,6,4);
+}
+
+function getDayLight(){
+  const pct = G.timeLeft / DAY_TIME;
+  if(pct>0.7) return 0;
+  if(pct>0.3) return (0.7-pct)/0.4 * 0.4;
+  return 0.4 + (0.3-pct)/0.3 * 0.3;
+}
+
+function render(){
+  ctx.fillStyle='#1a1a2e';
+  ctx.fillRect(0,0,screenW,screenH);
+
+  // Camera
+  camX = G.px*TILE - screenW/2 + TILE/2;
+  camY = G.py*TILE - screenH/2 + TILE/2;
+  camX = Math.max(0, Math.min(WORLD_W*TILE-screenW, camX));
+  camY = Math.max(0, Math.min(WORLD_H*TILE-screenH, camY));
+
+  const startTX = Math.floor(camX/TILE);
+  const startTY = Math.floor(camY/TILE);
+  const offX = -(camX%TILE);
+  const offY = -(camY%TILE);
+
+  // Draw tiles
+  for(let dy=0;dy<tilesY;dy++){
+    for(let dx=0;dx<tilesX;dx++){
+      const wx=startTX+dx, wy=startTY+dy;
+      if(wx>=0&&wx<WORLD_W&&wy>=0&&wy<WORLD_H){
+        drawTile(wx,wy, offX+dx*TILE, offY+dy*TILE);
+      }
+    }
+  }
+
+  // Draw workers
+  for(const w of G.workers){
+    const wsx=w.x*TILE-camX, wsy=w.y*TILE-camY;
+    if(wsx>-TILE&&wsx<screenW+TILE&&wsy>-TILE&&wsy<screenH+TILE){
+      drawWorker(w,wsx,wsy);
+    }
+  }
+
+  // Draw enemies
+  for(const e of G.enemies){
+    const esx=e.x*TILE-camX, esy=e.y*TILE-camY;
+    if(esx>-TILE&&esx<screenW+TILE&&esy>-TILE&&esy<screenH+TILE){
+      drawEnemy(e,esx,esy);
+    }
+  }
+
+  // Draw player
+  const psx = G.px*TILE - camX;
+  const psy = G.py*TILE - camY;
+  drawPlayer(psx,psy);
+
+  // Facing indicator (subtle)
+  const fx=G.px+G.facingX, fy=G.py+G.facingY;
+  if(fx>=0&&fx<WORLD_W&&fy>=0&&fy<WORLD_H){
+    const fsx=fx*TILE-camX, fsy=fy*TILE-camY;
+    ctx.strokeStyle='rgba(255,255,0,0.35)';
+    ctx.lineWidth=2;
+    ctx.strokeRect(fsx+1,fsy+1,TILE-2,TILE-2);
+    ctx.lineWidth=1;
+  }
+
+  // Day/night overlay
+  const dark=getDayLight();
+  if(dark>0){
+    ctx.fillStyle=`rgba(0,0,30,${dark})`;
+    ctx.fillRect(0,0,screenW,screenH);
+  }
+
+  // Zone labels
+  ctx.font='bold 11px Courier New';
+  ctx.fillStyle='rgba(255,255,255,0.5)';
+  const lx1=7*TILE-camX, ly1=0.3*TILE-camY;
+  if(lx1>-100&&lx1<screenW+100&&ly1>-20&&ly1<screenH) ctx.fillText('FARM ZONE',lx1,ly1+12);
+  const lx2=22*TILE-camX, ly2=1*TILE-camY;
+  if(lx2>-100&&lx2<screenW+100&&ly2>-20&&ly2<screenH) ctx.fillText('MARKET',lx2,ly2+12);
+  const lx3=7*TILE-camX, ly3=16*TILE-camY;
+  if(lx3>-100&&lx3<screenW+100&&ly3>-20&&ly3<screenH) ctx.fillText('GARDEN',lx3,ly3+12);
+  const lx4=20*TILE-camX, ly4=16.3*TILE-camY;
+  if(lx4>-100&&lx4<screenW+100&&ly4>-20&&ly4<screenH) ctx.fillText('HOME',lx4,ly4+12);
+  // Shop & Sell labels
+  ctx.font='bold 9px Courier New';
+  const sx1=19*TILE-camX, sy1=21.3*TILE-camY;
+  if(sx1>-60&&sx1<screenW+60&&sy1>-10&&sy1<screenH){ctx.fillStyle='#4af';ctx.fillText('SHOP',sx1+4,sy1+10);}
+  const sx2=24*TILE-camX, sy2=21.3*TILE-camY;
+  if(sx2>-60&&sx2<screenW+60&&sy2>-10&&sy2<screenH){ctx.fillStyle='#fa0';ctx.fillText('SELL',sx2+4,sy2+10);}
+
+  // Minimap
+  drawMinimap();
+}
+
+function drawMinimap(){
+  const mw=90,mh=90,s=3;
+  minimapCtx.fillStyle='#111';
+  minimapCtx.fillRect(0,0,mw,mh);
+  for(let y=0;y<WORLD_H;y++)for(let x=0;x<WORLD_W;x++){
+    const t=G.world[y][x];
+    let c=TILE_COLORS[t]||'#333';
+    if(t===T.RESOURCE&&G.worldRes[y][x]) c=RES[G.worldRes[y][x].type]?.color||'#4a4';
+    minimapCtx.fillStyle=c;
+    minimapCtx.fillRect(x*s,y*s,s,s);
+  }
+  // Worker dots
+  for(const w of G.workers) drawWorkerOnMinimap(w);
+  // Enemy dots
+  for(const e of G.enemies) drawEnemyOnMinimap(e);
+  // Player dot
+  minimapCtx.fillStyle='#ff0';
+  minimapCtx.fillRect(G.px*s-1,G.py*s-1,3,3);
+}
+
+// === INVENTORY ===
+function addToInventory(type){
+  const total=G.inventory.reduce((s,i)=>s+i.count,0);
+  if(total>=MAX_INV) return false;
+  const slot=G.inventory.find(i=>i.type===type);
+  if(slot) slot.count++;
+  else G.inventory.push({type,count:1});
+  return true;
+}
+
+function removeFromInventory(type,count=1){
+  const slot=G.inventory.find(i=>i.type===type);
+  if(!slot||slot.count<count) return false;
+  slot.count-=count;
+  if(slot.count<=0) G.inventory=G.inventory.filter(i=>i.count>0);
+  return true;
+}
+
+function hasItems(ing){
+  for(const [t,c] of Object.entries(ing)){
+    const slot=G.inventory.find(i=>i.type===t);
+    if(!slot||slot.count<c) return false;
+  }
+  return true;
+}
+
+function renderInventory(){
+  const bar=document.getElementById('inventory-bar');
+  bar.innerHTML='';
+  for(let i=0;i<MAX_INV;i++){
+    const slot=document.createElement('div');
+    slot.className='inv-slot';
+    if(i<G.inventory.length && G.inventory[i].count>0){
+      const item=G.inventory[i];
+      const r=RES[item.type];
+      slot.innerHTML=`<span class="icon">${r.icon}</span><span class="count">${item.count}</span>`;
+      slot.title=r.name;
+    }
+    bar.appendChild(slot);
+  }
+}
+
+// === METERS UI ===
+function updateMeters(){
+  const bf=document.getElementById('budget-fill');
+  const ef=document.getElementById('energy-fill');
+  const tf=document.getElementById('time-fill');
+  const hf=document.getElementById('health-fill');
+  bf.style.width=Math.max(0,G.budget/20*100)+'%';
+  bf.style.background=G.budget>10?'#4a4':G.budget>5?'#da4':'#f44';
+  ef.style.width=Math.max(0,G.energy)+'%';
+  ef.style.background=G.energy>50?'#f80':G.energy>25?'#f60':'#f33';
+  tf.style.width=Math.max(0,G.timeLeft/DAY_TIME*100)+'%';
+  hf.style.width=Math.max(0,G.health)+'%';
+  hf.style.background=G.health>60?'#f44':G.health>30?'#c44':'#844';
+  document.getElementById('budget-val').textContent='$'+G.budget.toFixed(1);
+  document.getElementById('energy-val').textContent=Math.round(G.energy);
+  document.getElementById('time-val').textContent=Math.round(G.timeLeft/DAY_TIME*16)+'h';
+  document.getElementById('health-val').textContent=Math.round(G.health);
+  document.getElementById('day-display').textContent='Day '+G.day;
+  const sc=calcScore();
+  G.score=sc;
+  document.getElementById('score-display').textContent='Score: '+sc;
+  const grade=sc>=90?'S':sc>=75?'A':sc>=60?'B':sc>=45?'C':sc>=30?'D':'F';
+  const gEl=document.getElementById('grade-display');
+  gEl.textContent=grade;
+  gEl.style.color=grade==='S'?'#ffd700':grade==='A'?'#4f4':grade==='B'?'#4af':grade==='C'?'#fa4':grade==='D'?'#f84':'#f44';
+}
+
+function calcScore(){
+  const budgetScore = Math.max(0, G.budget/20*25);
+  const energyScore = Math.max(0, G.energy/100*25);
+  const timeScore = Math.max(0, G.timeLeft/DAY_TIME*25);
+  const healthScore = Math.max(0, G.health/100*25);
+  return Math.round(budgetScore+energyScore+timeScore+healthScore);
+}
+
+// === MOVEMENT ===
+function canWalkTo(x,y){
+  if(x<0||x>=WORLD_W||y<0||y>=WORLD_H) return false;
+  const t=G.world[y][x];
+  return t!==T.WATER && t!==T.WALL;
+}
+
+function movePlayer(dx,dy){
+  if(G.screen!=='playing'||G.craftOpen||G.mining) return;
+  G.facingX=dx; G.facingY=dy;
+  const nx=G.px+dx, ny=G.py+dy;
+  if(canWalkTo(nx,ny)){
+    G.px=nx; G.py=ny;
+    G.timeLeft-=0.3; // walking costs time
+    G.energy-=0.15; // walking costs energy
+    if(G.energy<0) G.energy=0;
+  }
+}
+
+// === MINING ===
+function tryMine(){
+  if(G.screen!=='playing'||G.craftOpen) return;
+  const tx=G.px+G.facingX, ty=G.py+G.facingY;
+  if(tx<0||tx>=WORLD_W||ty<0||ty>=WORLD_H) return;
+  const res=G.worldRes[ty][tx];
+  if(!res) return;
+  const r=RES[res.type];
+  if(!r) return;
+  if(G.mining && G.mining.x===tx && G.mining.y===ty) return; // already mining
+  G.mining={x:tx,y:ty,progress:0,total:r.gather};
+}
+
+function updateMining(dt){
+  if(!G.mining) return;
+  G.mining.progress+=dt;
+  sndMine();
+
+  // Show progress bar
+  const mp=document.getElementById('mine-progress');
+  const fill=mp.querySelector('.fill');
+  const psx=G.mining.x*TILE-camX;
+  const psy=G.mining.y*TILE-camY-8;
+  mp.style.display='block';
+  mp.style.left=psx+'px';
+  mp.style.top=psy+'px';
+  fill.style.width=(G.mining.progress/G.mining.total*100)+'%';
+
+  if(G.mining.progress>=G.mining.total){
+    // Mined!
+    const res=G.worldRes[G.mining.y][G.mining.x];
+    if(res){
+      const r=RES[res.type];
+      // Cost for market items
+      if(r.cost>0){
+        if(G.budget>=r.cost){
+          G.budget-=r.cost;
+        } else {
+          showFact('Not enough budget for '+r.name+'! ($'+r.cost+')');
+          G.mining=null;
+          mp.style.display='none';
+          return;
+        }
+      }
+      if(addToInventory(res.type)){
+        G.timeLeft-=r.gather;
+        G.worldRes[G.mining.y][G.mining.x]=null;
+        G.world[G.mining.y][G.mining.x]=T.GRASS;
+        // Restore zone floor
+        if(G.mining.y<14&&G.mining.x<14) G.world[G.mining.y][G.mining.x]=T.FARM_SOIL;
+        else if(G.mining.y>16&&G.mining.x<14) G.world[G.mining.y][G.mining.x]=T.GARDEN_SOIL;
+        else if(G.mining.y>2&&G.mining.y<12&&G.mining.x>17&&G.mining.x<28) G.world[G.mining.y][G.mining.x]=T.MARKET_FLOOR;
+        renderInventory();
+        playSound(500,0.15);
+      } else {
+        showFact('Inventory full! (Max '+MAX_INV+' items)');
+      }
+    }
+    G.mining=null;
+    mp.style.display='none';
+  }
+}
+
+// === CRAFTING ===
+function openCrafting(){
+  if(G.screen!=='playing') return;
+  // Check if near crafting station
+  const near=[[G.px-1,G.py],[G.px+1,G.py],[G.px,G.py-1],[G.px,G.py+1],[G.px,G.py]];
+  let nearCraft=false;
+  for(const [x,y] of near){
+    if(x>=0&&x<WORLD_W&&y>=0&&y<WORLD_H&&G.world[y][x]===T.CRAFT) nearCraft=true;
+  }
+  if(!nearCraft){showFact('You need to be near a Crafting Station! (brown blocks with hammer in Home zone)');return;}
+
+  G.craftOpen=true;
+  const modal=document.getElementById('crafting-modal');
+  modal.style.display='block';
+  const list=document.getElementById('recipe-list');
+  list.innerHTML='';
+
+  for(const recipe of RECIPES){
+    const can=hasItems(recipe.ing);
+    const card=document.createElement('div');
+    card.className='recipe-card'+(can?'':' disabled');
+    const ingStr=Object.entries(recipe.ing).map(([t,c])=>`${RES[t].icon}${RES[t].name}x${c}`).join(' + ');
+    card.innerHTML=`
+      <div class="recipe-name">${recipe.name}</div>
+      <div class="recipe-ing">${ingStr}</div>
+      <div class="recipe-stats">
+        <span>⚡+${recipe.energy}</span>
+        <span>❤️+${recipe.health}</span>
+        <span>💰$${recipe.cost.toFixed(2)}</span>
+        <span>⏰${recipe.time}s</span>
+      </div>
+      <div class="recipe-fact">"${recipe.fact}"</div>
+    `;
+    if(can){
+      card.onclick=()=>craftRecipe(recipe);
+    }
+    list.appendChild(card);
+  }
+}
+
+function craftRecipe(recipe){
+  if(!hasItems(recipe.ing)) return;
+  for(const [t,c] of Object.entries(recipe.ing)) removeFromInventory(t,c);
+  G.energy=Math.min(100,G.energy+recipe.energy);
+  G.health=Math.min(100,G.health+recipe.health);
+  G.timeLeft-=recipe.time;
+  G.mealsEaten.push(recipe.name);
+  sndCraft();
+  renderInventory();
+  closeCrafting();
+  showFact(recipe.fact);
+  setTimeout(()=>sndEat(),300);
+}
+
+function closeCrafting(){
+  G.craftOpen=false;
+  document.getElementById('crafting-modal').style.display='none';
+}
+
+// === SLEEP / END DAY ===
+function trySleep(){
+  if(G.screen!=='playing') return;
+  const near=[[G.px-1,G.py],[G.px+1,G.py],[G.px,G.py-1],[G.px,G.py+1],[G.px,G.py]];
+  let nearBed=false;
+  for(const [x,y] of near){
+    if(x>=0&&x<WORLD_W&&y>=0&&y<WORLD_H&&G.world[y][x]===T.BED) nearBed=true;
+  }
+  if(!nearBed&&G.timeLeft>10){showFact('Find your Bed in the Home zone to end the day early, or wait for time to run out!');return;}
+  endDay();
+}
+
+function endDay(){
+  G.screen='summary';
+  sndDay();
+  G.totalScore+=G.score;
+
+  const box=document.getElementById('sum-stats');
+  box.innerHTML='';
+  const stats=[
+    ['Budget Remaining','$'+G.budget.toFixed(2)],
+    ['Energy Level',Math.round(G.energy)+'%'],
+    ['Health',Math.round(G.health)+'%'],
+    ['Time Remaining',Math.round(G.timeLeft/DAY_TIME*16)+'h'],
+    ['Meals Crafted',G.mealsEaten.length],
+    ['Enemies Defeated',G.kills],
+    ['Workers Alive',G.workers.filter(w=>w.alive).length],
+    ['Day Score',G.score],
+    ['Total Score',G.totalScore]
+  ];
+  for(const [k,v] of stats){
+    const d=document.createElement('div');
+    d.className='stat-line';
+    d.innerHTML=`<span>${k}</span><span style="color:#ffd700">${v}</span>`;
+    box.appendChild(d);
+  }
+
+  const title=document.getElementById('sum-title');
+  const btn=document.getElementById('sum-next');
+  if(G.day>=MAX_DAYS){
+    const avg=Math.round(G.totalScore/MAX_DAYS);
+    const grade=avg>=90?'S':avg>=75?'A':avg>=60?'B':avg>=45?'C':avg>=30?'D':'F';
+    title.textContent='Game Complete! Final Grade: '+grade;
+    btn.textContent='Play Again';
+    if(G.totalScore>G.bestScore){
+      G.bestScore=G.totalScore;
+      localStorage.setItem('eie2_best',G.totalScore);
+    }
+  } else {
+    title.textContent='Day '+G.day+' Complete!';
+    btn.textContent='Next Day';
+  }
+  document.getElementById('day-summary').style.display='flex';
+}
+
+function nextDay(){
+  document.getElementById('day-summary').style.display='none';
+  if(G.day>=MAX_DAYS){
+    resetGame();
+    return;
+  }
+  G.day++;
+  G.timeLeft=DAY_TIME;
+  G.budget=Math.min(20,G.budget+15); // earn some money each day
+  G.energy=Math.max(G.energy, 50); // some rest
+  G.health=Math.max(G.health-5, 30); // health degrades slightly without good food
+  G.mealsEaten=[];
+  G.enemies=[];
+  G.kills=0;
+  G.enemySpawnTimer=Math.max(8, 20-G.day*3); // enemies come faster on later days
+  // Keep surviving workers, heal them a bit
+  G.workers=G.workers.filter(w=>w.alive);
+  for(const w of G.workers){
+    w.hp=Math.min(w.maxHp,w.hp+2);
+    w.x=G.px; w.y=G.py; // regroup at player
+  }
+  document.getElementById('kill-counter').textContent='Kills: 0';
+  document.getElementById('worker-count').textContent='Workers: '+G.workers.length;
+  regenerateResources();
+  G.screen='playing';
+}
+
+// === FACTS / POPUPS ===
+let factTimer=null;
+function showFact(text){
+  const el=document.getElementById('fact-popup');
+  el.textContent=text;
+  el.style.display='block';
+  clearTimeout(factTimer);
+  factTimer=setTimeout(()=>{el.style.display='none';},3500);
+}
+
+// === TUTORIAL ===
+function startTutorial(){
+  G.tutActive=true;
+  G.tutStep=0;
+  showTutStep();
+}
+
+function showTutStep(){
+  if(G.tutStep>=TUTORIALS.length){
+    endTutorial();
+    return;
+  }
+  const t=TUTORIALS[G.tutStep];
+  document.getElementById('tut-title').textContent=t.title;
+  document.getElementById('tut-text').textContent=t.text;
+  document.getElementById('tutorial-overlay').style.display='flex';
+  document.getElementById('tut-next').textContent=G.tutStep>=TUTORIALS.length-1?'Start Playing!':'Next';
+}
+
+function endTutorial(){
+  G.tutActive=false;
+  document.getElementById('tutorial-overlay').style.display='none';
+}
+
+// === MINECRAFT-STYLE AMBIENT MUSIC ===
+let musicPlaying=false, musicTimer=0, musicNodes=[];
+const SCALES={
+  day:[60,62,64,67,69,72,74,76,79,81], // C pentatonic (MIDI)
+  night:[60,63,65,67,70,72,75,77,79,82] // C minor pentatonic
+};
+function midiToFreq(m){return 440*Math.pow(2,(m-69)/12);}
+
+function playMusicNote(freq,dur,delay,vol,type){
+  if(!audioCtx)return;
+  try{
+    const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+    o.type=type||'sine';
+    o.frequency.value=freq;
+    const t=audioCtx.currentTime+delay;
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(vol,t+0.08);
+    g.gain.setValueAtTime(vol,t+dur*0.6);
+    g.gain.exponentialRampToValueAtTime(0.001,t+dur);
+    o.connect(g);g.connect(audioCtx.destination);
+    o.start(t);o.stop(t+dur);
+    musicNodes.push({o,g});
+  }catch(e){}
+}
+
+function playMusicPhrase(){
+  if(!audioCtx||!musicPlaying)return;
+  const pct=G.timeLeft/DAY_TIME;
+  const scale=pct>0.3?SCALES.day:SCALES.night;
+  const len=4+Math.floor(Math.random()*5); // 4-8 notes per phrase
+  let t=0;
+  for(let i=0;i<len;i++){
+    const note=scale[Math.floor(Math.random()*scale.length)];
+    const oct=Math.random()<0.3?-12:0; // occasionally drop octave
+    const dur=0.4+Math.random()*1.2;
+    const vol=0.025+Math.random()*0.015;
+    // Main note (piano-like sine)
+    playMusicNote(midiToFreq(note+oct),dur,t,vol,'sine');
+    // Soft harmony
+    if(Math.random()<0.3){
+      const harm=scale[(scale.indexOf(note)+2)%scale.length]||note+4;
+      playMusicNote(midiToFreq(harm+oct),dur*0.8,t+0.05,vol*0.4,'triangle');
+    }
+    t+=dur*0.6+Math.random()*0.4;
+  }
+  // Occasional low bass note
+  if(Math.random()<0.4){
+    const bass=scale[Math.floor(Math.random()*3)]-12;
+    playMusicNote(midiToFreq(bass),2+Math.random(),t*0.3,0.02,'triangle');
+  }
+  musicTimer=t+2+Math.random()*4; // pause between phrases
+}
+
+function updateMusic(dt){
+  if(!musicPlaying)return;
+  musicTimer-=dt;
+  if(musicTimer<=0) playMusicPhrase();
+}
+
+function startMusic(){
+  if(!audioCtx)return;
+  musicPlaying=true;
+  musicTimer=1; // start first phrase quickly
+}
+
+function stopMusic(){
+  musicPlaying=false;
+  musicTimer=0;
+}
+
+// === ENEMIES ===
+function sndHit(){playSound(150,0.12,'sawtooth');setTimeout(()=>playSound(100,0.08,'sawtooth'),60);}
+function sndEnemyDie(){playSound(200,0.1);setTimeout(()=>playSound(150,0.1),80);setTimeout(()=>playSound(100,0.15),160);}
+function sndEnemySpawn(){playSound(80,0.3,'sawtooth');}
+function sndCropStolen(){playSound(300,0.08);setTimeout(()=>playSound(200,0.12),80);}
+
+function getSpawnEdge(zones){
+  // Spawn at edges of the world near target zones
+  const edges=[];
+  if(zones.includes('farm')){edges.push({x:0,y:Math.floor(Math.random()*14)});edges.push({x:Math.floor(Math.random()*14),y:0});}
+  if(zones.includes('garden')){edges.push({x:0,y:17+Math.floor(Math.random()*12)});edges.push({x:Math.floor(Math.random()*14),y:29});}
+  if(zones.includes('market')){edges.push({x:29,y:Math.floor(Math.random()*14)});edges.push({x:17+Math.floor(Math.random()*12),y:0});}
+  const e=edges[Math.floor(Math.random()*edges.length)];
+  // Make sure spawn tile is walkable
+  if(e&&G.world[e.y]&&G.world[e.y][e.x]!==undefined){
+    const t=G.world[e.y][e.x];
+    if(t===T.WATER||t===T.WALL){e.x=Math.min(28,Math.max(1,e.x));e.y=Math.min(28,Math.max(1,e.y));}
+  }
+  return e||{x:0,y:0};
+}
+
+function spawnEnemy(type){
+  const def=ENEMY_TYPES[type];
+  if(!def)return;
+  const pos=getSpawnEdge(def.spawnZones);
+  G.enemies.push({
+    type: type,
+    x: pos.x,
+    y: pos.y,
+    hp: def.hp,
+    maxHp: def.hp,
+    moveTimer: 0,
+    targetX: -1,
+    targetY: -1,
+    eating: false,
+    eatProgress: 0,
+    flashTimer: 0,
+    deathTimer: 0,
+    alive: true,
+    facing: 1
+  });
+  sndEnemySpawn();
+}
+
+function spawnWave(){
+  const day=G.day;
+  // More and tougher enemies on later days
+  const types=['zombie','zombie','skeleton','scarecrow','dragon'];
+  const count = Math.min(2 + day, 8);
+  // Weight toward easier enemies early
+  for(let i=0;i<count;i++){
+    let pool;
+    if(day<=1) pool=['zombie','zombie','zombie','scarecrow'];
+    else if(day<=2) pool=['zombie','zombie','skeleton','scarecrow'];
+    else if(day<=3) pool=['zombie','skeleton','skeleton','scarecrow','dragon'];
+    else pool=['zombie','skeleton','skeleton','scarecrow','dragon','dragon'];
+    const type=pool[Math.floor(Math.random()*pool.length)];
+    // Stagger spawns
+    setTimeout(()=>{
+      if(G.screen==='playing') spawnEnemy(type);
+    }, i*3000 + Math.random()*2000);
+  }
+  showEnemyAlert(count+' enemies approaching!');
+}
+
+function showEnemyAlert(msg){
+  const el=document.getElementById('enemy-alert');
+  el.textContent='⚠️ '+msg;
+  el.style.display='block';
+  G.alertTimer=3;
+}
+
+function findNearestCrop(ex,ey){
+  let best=null, bestDist=999;
+  for(let y=0;y<WORLD_H;y++){
+    for(let x=0;x<WORLD_W;x++){
+      if(G.worldRes[y][x]){
+        const dist=Math.abs(x-ex)+Math.abs(y-ey);
+        if(dist<bestDist){
+          bestDist=dist;
+          best={x,y};
+        }
+      }
+    }
+  }
+  return best;
+}
+
+function updateEnemies(dt){
+  if(G.screen!=='playing')return;
+
+  // Spawn timer - waves come periodically
+  G.enemySpawnTimer-=dt;
+  if(G.enemySpawnTimer<=0){
+    G.enemySpawnTimer = Math.max(25, 50 - G.day*5); // faster spawns on later days
+    spawnWave();
+  }
+
+  // Alert timer
+  if(G.alertTimer>0){
+    G.alertTimer-=dt;
+    if(G.alertTimer<=0) document.getElementById('enemy-alert').style.display='none';
+  }
+
+  // Attack cooldown
+  if(G.attackCooldown>0) G.attackCooldown-=dt;
+
+  for(let i=G.enemies.length-1;i>=0;i--){
+    const e=G.enemies[i];
+    if(!e.alive){
+      e.deathTimer-=dt;
+      if(e.deathTimer<=0) G.enemies.splice(i,1);
+      continue;
+    }
+
+    // Flash timer (hit feedback)
+    if(e.flashTimer>0) e.flashTimer-=dt;
+
+    // Check if touching player - deal damage
+    if(e.x===G.px && e.y===G.py){
+      const def=ENEMY_TYPES[e.type];
+      G.energy-=def.damage*dt*0.5;
+      G.health-=def.damage*dt*0.3;
+      if(G.energy<0)G.energy=0;
+      if(G.health<0)G.health=0;
+    }
+
+    // Is enemy currently eating a crop?
+    if(e.eating){
+      const res=G.worldRes[e.y]?.[e.x];
+      if(res){
+        const def=ENEMY_TYPES[e.type];
+        e.eatProgress+=dt*def.cropDamage;
+        if(e.eatProgress>=1.5){
+          // Crop destroyed/stolen
+          const resName=RES[res.type]?.name||'crop';
+          if(Math.random()<def.stealChance){
+            showFact(def.name+' stole your '+resName+'! Protect your crops!');
+          } else {
+            showFact(def.name+' destroyed your '+resName+'!');
+          }
+          sndCropStolen();
+          G.worldRes[e.y][e.x]=null;
+          // Restore zone floor
+          if(e.y<14&&e.x<14) G.world[e.y][e.x]=T.FARM_SOIL;
+          else if(e.y>16&&e.x<14) G.world[e.y][e.x]=T.GARDEN_SOIL;
+          else if(e.y>2&&e.y<12&&e.x>17&&e.x<28) G.world[e.y][e.x]=T.MARKET_FLOOR;
+          else G.world[e.y][e.x]=T.GRASS;
+          e.eating=false;
+          e.eatProgress=0;
+          G.score=Math.max(0,G.score-2);
+        }
+      } else {
+        e.eating=false;
+        e.eatProgress=0;
+      }
+      continue; // Don't move while eating
+    }
+
+    // Movement AI
+    e.moveTimer-=dt;
+    if(e.moveTimer<=0){
+      const def=ENEMY_TYPES[e.type];
+      e.moveTimer=1/def.speed;
+
+      // Find target crop
+      const target=findNearestCrop(e.x,e.y);
+      if(target){
+        e.targetX=target.x;
+        e.targetY=target.y;
+
+        // Move toward target (simple pathfinding)
+        let dx=0, dy=0;
+        const diffX=target.x-e.x, diffY=target.y-e.y;
+        // Prefer the axis with more distance
+        if(Math.abs(diffX)>=Math.abs(diffY)){
+          dx=diffX>0?1:diffX<0?-1:0;
+        } else {
+          dy=diffY>0?1:diffY<0?-1:0;
+        }
+
+        const nx=e.x+dx, ny=e.y+dy;
+        // Check walkable (enemies can't walk on water/walls)
+        if(nx>=0&&nx<WORLD_W&&ny>=0&&ny<WORLD_H){
+          const t=G.world[ny][nx];
+          if(t!==T.WATER&&t!==T.WALL){
+            e.x=nx;
+            e.y=ny;
+            e.facing=dx||1;
+          } else {
+            // Try the other axis
+            if(dx!==0){dy=diffY>0?1:diffY<0?-1:0;dx=0;}
+            else{dx=diffX>0?1:diffX<0?-1:0;dy=0;}
+            const nx2=e.x+dx, ny2=e.y+dy;
+            if(nx2>=0&&nx2<WORLD_W&&ny2>=0&&ny2<WORLD_H){
+              const t2=G.world[ny2][nx2];
+              if(t2!==T.WATER&&t2!==T.WALL){e.x=nx2;e.y=ny2;e.facing=dx||1;}
+            }
+          }
+        }
+
+        // Check if arrived at crop
+        if(G.worldRes[e.y]?.[e.x]){
+          e.eating=true;
+          e.eatProgress=0;
+        }
+      } else {
+        // No crops, wander toward player menacingly
+        const diffX=G.px-e.x, diffY=G.py-e.y;
+        let dx=diffX>0?1:diffX<0?-1:0;
+        let dy=diffY>0?1:diffY<0?-1:0;
+        if(Math.random()<0.5){const tmp=dx;dx=0;} else {dy=0;}
+        const nx=e.x+dx, ny=e.y+dy;
+        if(nx>=0&&nx<WORLD_W&&ny>=0&&ny<WORLD_H){
+          const t=G.world[ny][nx];
+          if(t!==T.WATER&&t!==T.WALL){e.x=nx;e.y=ny;e.facing=dx||1;}
+        }
+      }
+    }
+  }
+}
+
+function attackEnemy(tx,ty){
+  if(G.attackCooldown>0)return false;
+  for(const e of G.enemies){
+    if(!e.alive)continue;
+    if(e.x===tx&&e.y===ty){
+      e.hp--;
+      e.flashTimer=0.2;
+      e.eating=false;
+      e.eatProgress=0;
+      sndHit();
+      G.attackCooldown=0.4;
+      G.energy-=1; // attacking costs a tiny bit of energy
+      if(e.hp<=0){
+        e.alive=false;
+        e.deathTimer=0.6;
+        G.kills++;
+        G.totalKills++;
+        G.score+=ENEMY_TYPES[e.type].scoreValue;
+        document.getElementById('kill-counter').textContent='Kills: '+G.kills;
+        sndEnemyDie();
+        const def=ENEMY_TYPES[e.type];
+        showFact('Defeated '+def.name+'! +'+def.scoreValue+' points!');
+        // Small rewards for killing enemies
+        G.budget+=0.50;
+      }
+      return true;
+    }
+  }
+  return false;
+}
+
+function drawEnemy(e,sx,sy){
+  const def=ENEMY_TYPES[e.type];
+  if(!e.alive){
+    // Death animation - fade and shrink
+    const t=e.deathTimer/0.6;
+    ctx.globalAlpha=t;
+    ctx.fillStyle='#f00';
+    const shrink=(1-t)*8;
+    ctx.fillRect(sx+shrink,sy+shrink,TILE-shrink*2,TILE-shrink*2);
+    ctx.font=(16-shrink)+'px serif';
+    ctx.fillText(def.icon,sx+8+shrink,sy+22);
+    ctx.globalAlpha=1;
+    return;
+  }
+
+  // Flash white when hit
+  if(e.flashTimer>0){
+    ctx.fillStyle='#fff';
+  } else {
+    ctx.fillStyle=def.color;
+  }
+
+  // Body based on type
+  if(e.type==='zombie'){
+    // Green body
+    ctx.fillRect(sx+8,sy+8,16,18);
+    ctx.fillStyle=e.flashTimer>0?'#fff':def.skinColor;
+    ctx.fillRect(sx+10,sy+3,12,10); // head
+    // Arms reaching out
+    ctx.fillStyle=e.flashTimer>0?'#fff':'#5a7a2a';
+    ctx.fillRect(sx+2,sy+10,6,4);
+    ctx.fillRect(sx+24,sy+10,6,4);
+    // Eyes
+    ctx.fillStyle='#f00';
+    ctx.fillRect(sx+12,sy+6,3,3);
+    ctx.fillRect(sx+18,sy+6,3,3);
+    // Torn clothes
+    ctx.fillStyle='#443';
+    ctx.fillRect(sx+9,sy+20,4,6);
+    ctx.fillRect(sx+19,sy+20,4,6);
+  } else if(e.type==='skeleton'){
+    // White bones
+    ctx.fillStyle=e.flashTimer>0?'#ff0':'#ddd';
+    ctx.fillRect(sx+12,sy+8,8,16); // spine
+    ctx.fillRect(sx+6,sy+10,20,4); // ribs
+    ctx.fillRect(sx+8,sy+14,16,3); // ribs2
+    ctx.fillStyle=e.flashTimer>0?'#ff0':'#eee';
+    ctx.fillRect(sx+10,sy+2,12,10); // skull
+    // Eye sockets
+    ctx.fillStyle='#000';
+    ctx.fillRect(sx+12,sy+4,3,4);
+    ctx.fillRect(sx+18,sy+4,3,4);
+    // Jaw
+    ctx.fillRect(sx+13,sy+9,6,2);
+    // Legs
+    ctx.fillStyle=e.flashTimer>0?'#ff0':'#ccc';
+    ctx.fillRect(sx+10,sy+24,4,6);
+    ctx.fillRect(sx+18,sy+24,4,6);
+  } else if(e.type==='dragon'){
+    // Red dragon body
+    ctx.fillStyle=e.flashTimer>0?'#fff':def.color;
+    ctx.fillRect(sx+6,sy+10,20,14); // body
+    ctx.fillStyle=e.flashTimer>0?'#fff':'#e44';
+    ctx.fillRect(sx+8,sy+2,16,12); // head
+    // Wings
+    ctx.fillStyle=e.flashTimer>0?'#fff':'#a11';
+    ctx.fillRect(sx+1,sy+6,8,10);
+    ctx.fillRect(sx+23,sy+6,8,10);
+    // Wing tips
+    ctx.fillRect(sx-1,sy+4,4,6);
+    ctx.fillRect(sx+29,sy+4,4,6);
+    // Eyes (yellow/orange)
+    ctx.fillStyle='#ff0';
+    ctx.fillRect(sx+11,sy+5,3,3);
+    ctx.fillRect(sx+19,sy+5,3,3);
+    // Nostrils with fire
+    ctx.fillStyle='#f80';
+    ctx.fillRect(sx+14,sy+10,2,2);
+    ctx.fillRect(sx+17,sy+10,2,2);
+    // Fire breath (when eating)
+    if(e.eating){
+      ctx.fillStyle='rgba(255,100,0,0.7)';
+      ctx.fillRect(sx+12,sy+13,8,4);
+      ctx.fillStyle='rgba(255,200,0,0.5)';
+      ctx.fillRect(sx+10,sy+16,12,3);
+    }
+    // Tail
+    ctx.fillStyle=e.flashTimer>0?'#fff':'#c22';
+    ctx.fillRect(sx+2,sy+20,6,3);
+    // Legs
+    ctx.fillStyle='#811';
+    ctx.fillRect(sx+8,sy+24,5,5);
+    ctx.fillRect(sx+19,sy+24,5,5);
+  } else if(e.type==='scarecrow'){
+    // Scarecrow body
+    ctx.fillStyle=e.flashTimer>0?'#fff':'#8a5a1a';
+    ctx.fillRect(sx+12,sy+10,8,16); // post
+    ctx.fillRect(sx+4,sy+12,24,4); // arms (crossbar)
+    // Pumpkin head
+    ctx.fillStyle=e.flashTimer>0?'#fff':'#e88020';
+    ctx.fillRect(sx+8,sy+1,16,12);
+    // Face carved
+    ctx.fillStyle='#000';
+    ctx.fillRect(sx+11,sy+4,3,3); // left eye
+    ctx.fillRect(sx+18,sy+4,3,3); // right eye
+    ctx.fillRect(sx+13,sy+8,6,3); // mouth
+    ctx.fillRect(sx+12,sy+9,2,2); // jagged mouth
+    ctx.fillRect(sx+18,sy+9,2,2);
+    // Hat
+    ctx.fillStyle=e.flashTimer>0?'#fff':'#333';
+    ctx.fillRect(sx+6,sy-1,20,3);
+    ctx.fillRect(sx+10,sy-5,12,5);
+    // Straw bits
+    ctx.fillStyle='#da3';
+    ctx.fillRect(sx+4,sy+16,3,2);
+    ctx.fillRect(sx+25,sy+16,3,2);
+    ctx.fillRect(sx+11,sy+26,4,3);
+    ctx.fillRect(sx+17,sy+26,4,3);
+  }
+
+  // Health bar above enemy
+  if(e.hp<e.maxHp){
+    const barW=TILE-8;
+    const hpPct=e.hp/e.maxHp;
+    ctx.fillStyle='#400';
+    ctx.fillRect(sx+4,sy-4,barW,3);
+    ctx.fillStyle=hpPct>0.5?'#0f0':hpPct>0.25?'#ff0':'#f00';
+    ctx.fillRect(sx+4,sy-4,barW*hpPct,3);
+  }
+
+  // Eating indicator
+  if(e.eating){
+    ctx.fillStyle='rgba(255,0,0,0.6)';
+    const eatPct=e.eatProgress/1.5;
+    ctx.fillRect(sx+4,sy+TILE,TILE-8,3);
+    ctx.fillStyle='#f44';
+    ctx.fillRect(sx+4,sy+TILE,(TILE-8)*eatPct,3);
+    // Chomp animation
+    ctx.font='10px serif';
+    ctx.fillText('💢',sx+TILE-8,sy+TILE+12);
+  }
+}
+
+function drawEnemyOnMinimap(e){
+  if(!e.alive)return;
+  const s=3;
+  const def=ENEMY_TYPES[e.type];
+  minimapCtx.fillStyle=e.type==='dragon'?'#f00':e.type==='skeleton'?'#fff':e.type==='scarecrow'?'#f80':'#0f0';
+  minimapCtx.fillRect(e.x*s,e.y*s,s,s);
+}
+
+// === WORKER DEFINITIONS ===
+const WORKER_TYPES = {
+  guard: {
+    name: 'Guard',
+    icon: '🛡️',
+    color: '#48f',
+    cost: 4,
+    hp: 5,
+    attack: 1,
+    speed: 1.0,
+    range: 6,
+    description: 'Basic defender. Patrols and fights nearby enemies.'
+  },
+  knight: {
+    name: 'Knight',
+    icon: '⚔️',
+    color: '#daa520',
+    cost: 8,
+    hp: 8,
+    attack: 2,
+    speed: 1.3,
+    range: 10,
+    description: 'Strong fighter with heavy damage. Great vs dragons!'
+  },
+  archer: {
+    name: 'Archer',
+    icon: '🏹',
+    color: '#3c3',
+    cost: 6,
+    hp: 3,
+    attack: 1,
+    speed: 1.5,
+    range: 12,
+    description: 'Fast & long range. Hunts enemies across the map.'
+  },
+  wizard: {
+    name: 'Wizard',
+    icon: '🧙',
+    color: '#a4f',
+    cost: 10,
+    hp: 4,
+    attack: 3,
+    speed: 0.9,
+    range: 8,
+    description: 'Devastating magic attacks! Expensive but powerful.'
+  }
+};
+
+// === SHOP (buy workers) ===
+function nearTileType(tileType){
+  const near=[[G.px-1,G.py],[G.px+1,G.py],[G.px,G.py-1],[G.px,G.py+1],[G.px,G.py]];
+  for(const [x,y] of near){
+    if(x>=0&&x<WORLD_W&&y>=0&&y<WORLD_H&&G.world[y][x]===tileType) return true;
+  }
+  return false;
+}
+
+function openShop(){
+  if(G.screen!=='playing')return;
+  G.shopOpen=true;
+  const modal=document.getElementById('shop-modal');
+  modal.style.display='block';
+  const list=document.getElementById('shop-list');
+  list.innerHTML='';
+  for(const [key,w] of Object.entries(WORKER_TYPES)){
+    const canAfford=G.budget>=w.cost;
+    const card=document.createElement('div');
+    card.className='shop-card'+(canAfford?'':' disabled');
+    card.innerHTML=`
+      <div class="worker-name">${w.icon} ${w.name}</div>
+      <div class="worker-desc">${w.description}</div>
+      <div class="worker-stats">
+        <span>❤️${w.hp} HP</span>
+        <span>⚔️${w.attack} ATK</span>
+        <span>🏃${w.speed} SPD</span>
+        <span>👁️${w.range} Range</span>
+      </div>
+      <div class="worker-cost">💰 $${w.cost.toFixed(2)}</div>
+    `;
+    if(canAfford){
+      card.onclick=()=>hireWorker(key);
+    }
+    list.appendChild(card);
+  }
+}
+
+function hireWorker(type){
+  const def=WORKER_TYPES[type];
+  if(!def||G.budget<def.cost)return;
+  G.budget-=def.cost;
+  G.workers.push({
+    type: type,
+    x: G.px,
+    y: G.py,
+    hp: def.hp,
+    maxHp: def.hp,
+    moveTimer: 0,
+    attackTimer: 0,
+    targetEnemy: null,
+    flashTimer: 0,
+    alive: true,
+    deathTimer: 0,
+    facing: 1
+  });
+  document.getElementById('worker-count').textContent='Workers: '+G.workers.filter(w=>w.alive).length;
+  playSound(500,0.1);setTimeout(()=>playSound(700,0.15),100);
+  showFact('Hired a '+def.name+'! They will fight enemies for you.');
+  closeShop();
+  updateMeters();
+}
+
+function closeShop(){
+  G.shopOpen=false;
+  document.getElementById('shop-modal').style.display='none';
+}
+
+// === SELL (sell inventory items) ===
+function openSell(){
+  if(G.screen!=='playing')return;
+  G.sellOpen=true;
+  const modal=document.getElementById('sell-modal');
+  modal.style.display='block';
+  renderSellList();
+}
+
+function renderSellList(){
+  const list=document.getElementById('sell-list');
+  list.innerHTML='';
+  if(G.inventory.length===0){
+    list.innerHTML='<div style="text-align:center;color:#888;padding:20px">No items to sell!</div>';
+    return;
+  }
+  for(const item of G.inventory){
+    if(item.count<=0)continue;
+    const r=RES[item.type];
+    const sellPrice=(r.costPer*1.5).toFixed(2); // sell for 1.5x the cost-per-serving
+    const card=document.createElement('div');
+    card.className='sell-card';
+    card.innerHTML=`
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div class="sell-name">${r.icon} ${r.name} x${item.count}</div>
+          <div class="sell-info">Nutritional value: ${r.cal}cal, ${r.protein}g protein</div>
+        </div>
+        <div class="sell-price">+$${sellPrice} each</div>
+      </div>
+    `;
+    card.onclick=()=>sellItem(item.type,sellPrice);
+    list.appendChild(card);
+  }
+  // Sell All button
+  const sellAll=document.createElement('div');
+  sellAll.className='sell-card';
+  sellAll.style.background='rgba(255,150,0,0.15)';
+  sellAll.style.borderColor='#fa0';
+  sellAll.style.textAlign='center';
+  const totalValue=G.inventory.reduce((s,item)=>{
+    const r=RES[item.type];
+    return s+(r.costPer*1.5)*item.count;
+  },0);
+  sellAll.innerHTML=`<div class="sell-name" style="color:#fa0">💰 SELL ALL — +$${totalValue.toFixed(2)}</div>`;
+  sellAll.onclick=()=>sellAllItems();
+  list.appendChild(sellAll);
+}
+
+function sellItem(type,price){
+  if(!removeFromInventory(type,1))return;
+  G.budget+=parseFloat(price);
+  playSound(600,0.06);setTimeout(()=>playSound(800,0.08),60);
+  renderInventory();
+  updateMeters();
+  renderSellList();
+  if(G.inventory.length===0) closeSell();
+}
+
+function sellAllItems(){
+  let total=0;
+  for(const item of G.inventory){
+    const r=RES[item.type];
+    total+=(r.costPer*1.5)*item.count;
+  }
+  G.inventory=[];
+  G.budget+=total;
+  playSound(600,0.06);setTimeout(()=>playSound(800,0.08),60);setTimeout(()=>playSound(1000,0.1),120);
+  showFact('Sold everything for $'+total.toFixed(2)+'!');
+  renderInventory();
+  updateMeters();
+  closeSell();
+}
+
+function closeSell(){
+  G.sellOpen=false;
+  document.getElementById('sell-modal').style.display='none';
+}
+
+// === WORKER AI ===
+function updateWorkers(dt){
+  for(let i=G.workers.length-1;i>=0;i--){
+    const w=G.workers[i];
+    if(!w.alive){
+      w.deathTimer-=dt;
+      if(w.deathTimer<=0) G.workers.splice(i,1);
+      continue;
+    }
+    if(w.flashTimer>0) w.flashTimer-=dt;
+    if(w.attackTimer>0) w.attackTimer-=dt;
+
+    const def=WORKER_TYPES[w.type];
+
+    // Find nearest alive enemy within range
+    let nearest=null, nearDist=999;
+    for(const e of G.enemies){
+      if(!e.alive)continue;
+      const dist=Math.abs(e.x-w.x)+Math.abs(e.y-w.y);
+      if(dist<nearDist&&dist<=def.range){
+        nearDist=dist;
+        nearest=e;
+      }
+    }
+
+    if(nearest){
+      // Move toward enemy
+      w.moveTimer-=dt;
+      if(w.moveTimer<=0){
+        w.moveTimer=1/def.speed;
+        if(nearDist>1){
+          // Chase
+          const diffX=nearest.x-w.x, diffY=nearest.y-w.y;
+          let dx=0,dy=0;
+          if(Math.abs(diffX)>=Math.abs(diffY)) dx=diffX>0?1:-1;
+          else dy=diffY>0?1:-1;
+          const nx=w.x+dx, ny=w.y+dy;
+          if(nx>=0&&nx<WORLD_W&&ny>=0&&ny<WORLD_H){
+            const t=G.world[ny][nx];
+            if(t!==T.WATER&&t!==T.WALL){w.x=nx;w.y=ny;w.facing=dx||w.facing;}
+          }
+        }
+      }
+      // Attack if adjacent
+      if(nearDist<=1&&w.attackTimer<=0){
+        nearest.hp-=def.attack;
+        nearest.flashTimer=0.2;
+        nearest.eating=false;
+        nearest.eatProgress=0;
+        w.attackTimer=0.8;
+        sndHit();
+        if(nearest.hp<=0){
+          nearest.alive=false;
+          nearest.deathTimer=0.6;
+          G.kills++;G.totalKills++;
+          G.score+=ENEMY_TYPES[nearest.type].scoreValue;
+          document.getElementById('kill-counter').textContent='Kills: '+G.kills;
+          sndEnemyDie();
+        }
+      }
+    } else {
+      // No enemies nearby, follow player loosely
+      w.moveTimer-=dt;
+      if(w.moveTimer<=0){
+        w.moveTimer=1/def.speed;
+        const distToPlayer=Math.abs(G.px-w.x)+Math.abs(G.py-w.y);
+        if(distToPlayer>3){
+          const diffX=G.px-w.x, diffY=G.py-w.y;
+          let dx=0,dy=0;
+          if(Math.random()<0.5) dx=diffX>0?1:diffX<0?-1:0;
+          else dy=diffY>0?1:diffY<0?-1:0;
+          const nx=w.x+dx, ny=w.y+dy;
+          if(nx>=0&&nx<WORLD_W&&ny>=0&&ny<WORLD_H){
+            const t=G.world[ny][nx];
+            if(t!==T.WATER&&t!==T.WALL){w.x=nx;w.y=ny;w.facing=dx||w.facing;}
+          }
+        }
+      }
+    }
+
+    // Workers can be hurt by enemies standing on them
+    for(const e of G.enemies){
+      if(!e.alive)continue;
+      if(e.x===w.x&&e.y===w.y){
+        w.hp-=ENEMY_TYPES[e.type].damage*dt*0.15;
+        if(w.hp<=0){
+          w.alive=false;
+          w.deathTimer=0.8;
+          showFact(def.name+' was defeated!');
+          document.getElementById('worker-count').textContent='Workers: '+G.workers.filter(wk=>wk.alive).length;
+        }
+      }
+    }
+  }
+}
+
+// === WORKER RENDERING ===
+function drawWorker(w,sx,sy){
+  const def=WORKER_TYPES[w.type];
+  if(!w.alive){
+    const t=w.deathTimer/0.8;
+    ctx.globalAlpha=t;
+    ctx.fillStyle='#88f';
+    const shrink=(1-t)*8;
+    ctx.fillRect(sx+shrink,sy+shrink,TILE-shrink*2,TILE-shrink*2);
+    ctx.font=(16-shrink)+'px serif';
+    ctx.fillText(def.icon,sx+8+shrink,sy+22);
+    ctx.globalAlpha=1;
+    return;
+  }
+
+  const flash=w.flashTimer>0;
+
+  if(w.type==='guard'){
+    ctx.fillStyle=flash?'#fff':'#3366aa';
+    ctx.fillRect(sx+8,sy+8,16,18);
+    ctx.fillStyle=flash?'#fff':'#fca';
+    ctx.fillRect(sx+10,sy+2,12,10);
+    // Shield
+    ctx.fillStyle=flash?'#fff':'#4488ff';
+    ctx.fillRect(sx+3,sy+10,6,10);
+    ctx.fillStyle='#fff';
+    ctx.fillRect(sx+5,sy+13,2,4);
+    // Helmet
+    ctx.fillStyle='#888';
+    ctx.fillRect(sx+10,sy+0,12,5);
+    ctx.fillRect(sx+8,sy+3,16,3);
+    // Feet
+    ctx.fillStyle='#444';
+    ctx.fillRect(sx+9,sy+26,6,4);
+    ctx.fillRect(sx+17,sy+26,6,4);
+  } else if(w.type==='knight'){
+    ctx.fillStyle=flash?'#fff':'#aa8822';
+    ctx.fillRect(sx+8,sy+6,16,20);
+    ctx.fillStyle=flash?'#fff':'#fca';
+    ctx.fillRect(sx+10,sy+1,12,10);
+    // Gold armor
+    ctx.fillStyle=flash?'#fff':'#daa520';
+    ctx.fillRect(sx+9,sy+8,14,10);
+    // Sword
+    ctx.fillStyle='#ccc';
+    ctx.fillRect(sx+24,sy+6,3,16);
+    ctx.fillStyle='#ffd700';
+    ctx.fillRect(sx+23,sy+14,5,3);
+    // Helmet with plume
+    ctx.fillStyle='#888';
+    ctx.fillRect(sx+9,sy+0,14,5);
+    ctx.fillStyle='#f22';
+    ctx.fillRect(sx+13,sy-3,6,4);
+    ctx.fillStyle='#444';
+    ctx.fillRect(sx+9,sy+26,6,4);
+    ctx.fillRect(sx+17,sy+26,6,4);
+  } else if(w.type==='archer'){
+    ctx.fillStyle=flash?'#fff':'#2a6a2a';
+    ctx.fillRect(sx+10,sy+8,12,16);
+    ctx.fillStyle=flash?'#fff':'#fca';
+    ctx.fillRect(sx+11,sy+2,10,10);
+    // Hood
+    ctx.fillStyle=flash?'#fff':'#1a4a1a';
+    ctx.fillRect(sx+10,sy+0,12,6);
+    ctx.fillRect(sx+9,sy+2,3,6);
+    // Bow
+    ctx.fillStyle='#8B4513';
+    ctx.beginPath();
+    ctx.arc(sx+26,sy+16,8,Math.PI*0.7,Math.PI*1.3);
+    ctx.lineWidth=2;ctx.strokeStyle=flash?'#fff':'#8B4513';ctx.stroke();
+    ctx.lineWidth=1;
+    // Bowstring
+    ctx.strokeStyle='#ddd';
+    ctx.beginPath();ctx.moveTo(sx+22,sy+9);ctx.lineTo(sx+22,sy+23);ctx.stroke();
+    // Quiver
+    ctx.fillStyle='#654';
+    ctx.fillRect(sx+4,sy+8,4,14);
+    ctx.fillStyle='#444';
+    ctx.fillRect(sx+10,sy+24,5,5);
+    ctx.fillRect(sx+17,sy+24,5,5);
+  } else if(w.type==='wizard'){
+    ctx.fillStyle=flash?'#fff':'#6a2aaa';
+    ctx.fillRect(sx+10,sy+10,12,16);
+    ctx.fillStyle=flash?'#fff':'#fca';
+    ctx.fillRect(sx+11,sy+4,10,10);
+    // Wizard hat
+    ctx.fillStyle=flash?'#fff':'#4a1a8a';
+    ctx.fillRect(sx+8,sy+2,16,4);
+    ctx.beginPath();
+    ctx.moveTo(sx+12,sy+3);ctx.lineTo(sx+16,sy-6);ctx.lineTo(sx+20,sy+3);
+    ctx.fillStyle=flash?'#fff':'#4a1a8a';ctx.fill();
+    // Star on hat
+    ctx.fillStyle='#ff0';ctx.font='8px serif';ctx.fillText('★',sx+13,sy+0);
+    // Staff
+    ctx.fillStyle='#8B4513';
+    ctx.fillRect(sx+24,sy+4,2,22);
+    ctx.fillStyle='#a4f';
+    ctx.beginPath();ctx.arc(sx+25,sy+4,4,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#fff';
+    ctx.beginPath();ctx.arc(sx+25,sy+4,2,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#444';
+    ctx.fillRect(sx+11,sy+26,5,4);
+    ctx.fillRect(sx+17,sy+26,5,4);
+  }
+
+  // Health bar
+  if(w.hp<w.maxHp){
+    const barW=TILE-8;
+    const hpPct=w.hp/w.maxHp;
+    ctx.fillStyle='#004';
+    ctx.fillRect(sx+4,sy-4,barW,3);
+    ctx.fillStyle=hpPct>0.5?'#4af':hpPct>0.25?'#ff0':'#f00';
+    ctx.fillRect(sx+4,sy-4,barW*hpPct,3);
+  }
+
+  // Attack animation flash
+  if(w.attackTimer>0.5){
+    ctx.fillStyle='rgba(255,255,100,0.4)';
+    ctx.fillRect(sx-2,sy-2,TILE+4,TILE+4);
+  }
+}
+
+function drawWorkerOnMinimap(w){
+  if(!w.alive)return;
+  const s=3;
+  minimapCtx.fillStyle='#4af';
+  minimapCtx.fillRect(w.x*s,w.y*s,s,s);
+}
+
+// === GAME LOOP ===
+let lastTime=0;
+function gameLoop(ts){
+  const dt=(ts-lastTime)/1000;
+  lastTime=ts;
+
+  if(G.screen==='playing'){
+    // Time passes
+    G.timeLeft-=dt*0.5;
+    // Energy drains slowly
+    G.energy-=dt*0.2;
+    // Health drains slowly
+    G.health-=dt*0.05;
+
+    if(G.energy<0) G.energy=0;
+    if(G.health<0) G.health=0;
+    if(G.timeLeft<=0){
+      G.timeLeft=0;
+      endDay();
+    }
+
+    // Movement repeat
+    if(G.moveDir && !G.mining && !G.craftOpen){
+      G.moveTimer-=dt;
+      if(G.moveTimer<=0){
+        const dirs={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
+        const d=dirs[G.moveDir];
+        if(d) movePlayer(d[0],d[1]);
+        G.moveTimer=0.15;
+      }
+    }
+
+    // Mining
+    if(G.mining) updateMining(dt);
+
+    // Enemies
+    updateEnemies(dt);
+
+    // Workers
+    updateWorkers(dt);
+
+    // Update music
+    updateMusic(dt);
+
+    // Update UI
+    updateMeters();
+    renderInventory();
+  }
+
+  if(G.screen==='playing'||G.screen==='summary') render();
+  requestAnimationFrame(gameLoop);
+}
+
+// === INPUT ===
+const keys={};
+document.addEventListener('keydown',e=>{
+  if(G.screen!=='playing') return;
+  initAudio();
+  keys[e.key.toLowerCase()]=true;
+  const dirs={w:[0,-1],s:[0,1],a:[-1,0],d:[1,0],arrowup:[0,-1],arrowdown:[0,1],arrowleft:[-1,0],arrowright:[1,0]};
+  const k=e.key.toLowerCase();
+  const d=dirs[k];
+  if(d){
+    movePlayer(d[0],d[1]);
+    G.moveDir={w:'up',s:'down',a:'left',d:'right',arrowup:'up',arrowdown:'down',arrowleft:'left',arrowright:'right'}[k];
+    G.moveTimer=0.25;
+    e.preventDefault();
+  }
+  if(k===' '||k==='f'){
+    // Try attack first, then mine
+    const atx=G.px+G.facingX, aty=G.py+G.facingY;
+    if(!attackEnemy(atx,aty)) tryMine();
+    e.preventDefault();
+  }
+  if(k==='e') openCrafting();
+  if(k==='b') openShop();
+  if(k==='n') openSell();
+  if(k==='q'||k==='escape'){if(G.craftOpen)closeCrafting();if(G.shopOpen)closeShop();if(G.sellOpen)closeSell();}
+  if(k==='r') trySleep();
+});
+document.addEventListener('keyup',e=>{
+  const k=e.key.toLowerCase();
+  keys[k]=false;
+  const keyDir={w:'up',s:'down',a:'left',d:'right',arrowup:'up',arrowdown:'down',arrowleft:'left',arrowright:'right'};
+  if(keyDir[k]===G.moveDir) G.moveDir=null;
+});
+
+// Mouse/touch on canvas
+canvas.addEventListener('click',e=>{
+  if(G.screen!=='playing'||G.craftOpen) return;
+  initAudio();
+  const rect=canvas.getBoundingClientRect();
+  const mx=e.clientX-rect.left+camX;
+  const my=e.clientY-rect.top+camY;
+  const tx=Math.floor(mx/TILE), ty=Math.floor(my/TILE);
+  if(tx<0||tx>=WORLD_W||ty<0||ty>=WORLD_H) return;
+
+  // If clicking adjacent tile, attack enemy / mine / interact
+  const dx=tx-G.px, dy=ty-G.py;
+  if(Math.abs(dx)<=1&&Math.abs(dy)<=1&&(Math.abs(dx)+Math.abs(dy))<=1){
+    G.facingX=dx||0; G.facingY=dy||0;
+    // Try attacking enemy first
+    if(attackEnemy(tx,ty)){
+      // attacked!
+    } else if(G.worldRes[ty][tx]){
+      G.mining={x:tx,y:ty,progress:0,total:RES[G.worldRes[ty][tx].type].gather};
+    } else if(G.world[ty][tx]===T.CRAFT){
+      openCrafting();
+    } else if(G.world[ty][tx]===T.SHOP){
+      openShop();
+    } else if(G.world[ty][tx]===T.SELL){
+      openSell();
+    } else if(G.world[ty][tx]===T.BED){
+      trySleep();
+    }
+  } else {
+    // Face toward click
+    if(Math.abs(dx)>Math.abs(dy)){G.facingX=dx>0?1:-1;G.facingY=0;}
+    else{G.facingX=0;G.facingY=dy>0?1:-1;}
+  }
+});
+
+// Mobile controls
+document.querySelectorAll('.joy-btn').forEach(btn=>{
+  const dir=btn.dataset.dir;
+  let interval=null;
+  const start=()=>{
+    initAudio();
+    const dirs={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
+    const d=dirs[dir];
+    if(d) movePlayer(d[0],d[1]);
+    G.moveDir=dir;
+    G.moveTimer=0.2;
+  };
+  const stop=()=>{if(G.moveDir===dir)G.moveDir=null;};
+  btn.addEventListener('touchstart',e=>{e.preventDefault();start();});
+  btn.addEventListener('touchend',e=>{e.preventDefault();stop();});
+  btn.addEventListener('mousedown',start);
+  btn.addEventListener('mouseup',stop);
+  btn.addEventListener('mouseleave',stop);
+});
+
+document.getElementById('btn-fight').addEventListener('click',()=>{initAudio();const atx=G.px+G.facingX,aty=G.py+G.facingY;if(!attackEnemy(atx,aty))showFact('No enemy in range! Face an enemy and attack.');});
+document.getElementById('btn-mine').addEventListener('click',()=>{initAudio();tryMine();});
+document.getElementById('btn-craft').addEventListener('click',()=>{initAudio();openCrafting();});
+document.getElementById('btn-shop').addEventListener('click',()=>{initAudio();openShop();});
+document.getElementById('btn-sell').addEventListener('click',()=>{initAudio();openSell();});
+document.getElementById('btn-eat').addEventListener('click',()=>{initAudio();trySleep();});
+document.getElementById('close-craft').addEventListener('click',closeCrafting);
+document.getElementById('close-shop').addEventListener('click',closeShop);
+document.getElementById('close-sell').addEventListener('click',closeSell);
+document.getElementById('tut-next').addEventListener('click',()=>{G.tutStep++;showTutStep();});
+document.getElementById('tut-skip').addEventListener('click',endTutorial);
+document.getElementById('sum-next').addEventListener('click',nextDay);
+
+// Title screen
+function startGame(withTutorial){
+  initAudio();
+  document.getElementById('title-screen').style.display='none';
+  generateWorld();
+  G.screen='playing';
+  G.enemySpawnTimer=withTutorial?20:15;
+  renderInventory();
+  updateMeters();
+  startMusic();
+  if(withTutorial) startTutorial();
+}
+document.getElementById('btn-start').addEventListener('click',()=>startGame(true));
+document.getElementById('btn-start-skip').addEventListener('click',()=>startGame(false));
+// Click anywhere on title screen to start (skip tutorial)
+document.getElementById('title-screen').addEventListener('click',(e)=>{
+  if(e.target.closest('.start-btn')) return; // let buttons handle themselves
+  startGame(false);
+});
+
+// === QUICK SAVE / LOAD ===
+function quickSave(){
+  const save={
+    day:G.day, budget:G.budget, energy:G.energy, timeLeft:G.timeLeft, health:G.health,
+    score:G.score, totalScore:G.totalScore, px:G.px, py:G.py,
+    inventory:JSON.parse(JSON.stringify(G.inventory)),
+    world:G.world.map(r=>[...r]),
+    worldRes:G.worldRes.map(r=>r.map(c=>c?{...c}:null)),
+    kills:G.kills, totalKills:G.totalKills,
+    mealsEaten:[...G.mealsEaten],
+    facingX:G.facingX, facingY:G.facingY,
+    enemies:G.enemies.map(e=>({...e})),
+    enemySpawnTimer:G.enemySpawnTimer,
+    workers:G.workers.map(w=>({...w}))
+  };
+  localStorage.setItem('eie2_quicksave',JSON.stringify(save));
+  showFact('Game saved!');
+  playSound(600,0.08);setTimeout(()=>playSound(800,0.12),80);
+}
+
+function quickLoad(){
+  const raw=localStorage.getItem('eie2_quicksave');
+  if(!raw){showFact('No save found!');return;}
+  try{
+    const save=JSON.parse(raw);
+    G.day=save.day; G.budget=save.budget; G.energy=save.energy;
+    G.timeLeft=save.timeLeft; G.health=save.health;
+    G.score=save.score; G.totalScore=save.totalScore;
+    G.px=save.px; G.py=save.py;
+    G.inventory=save.inventory;
+    G.world=save.world;
+    G.worldRes=save.worldRes;
+    G.kills=save.kills; G.totalKills=save.totalKills;
+    G.mealsEaten=save.mealsEaten;
+    G.facingX=save.facingX; G.facingY=save.facingY;
+    G.enemies=save.enemies||[];
+    G.enemySpawnTimer=save.enemySpawnTimer||15;
+    G.workers=save.workers||[];
+    G.shopOpen=false;G.sellOpen=false;
+    document.getElementById('worker-count').textContent='Workers: '+G.workers.filter(w=>w.alive).length;
+    G.mining=null; G.craftOpen=false; G.moveDir=null;
+    G.attackCooldown=0; G.alertTimer=0;
+    closeCrafting();
+    document.getElementById('title-screen').style.display='none';
+    document.getElementById('day-summary').style.display='none';
+    document.getElementById('kill-counter').textContent='Kills: '+G.kills;
+    G.screen='playing';
+    initAudio(); startMusic();
+    renderInventory(); updateMeters();
+    showFact('Game loaded!');
+    playSound(800,0.08);setTimeout(()=>playSound(600,0.12),80);
+  }catch(e){showFact('Save corrupted!');}
+}
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='F5'){e.preventDefault();quickSave();}
+  if(e.key==='F9'){e.preventDefault();quickLoad();}
+});
+
+function resetGame(){
+  G.day=1;G.budget=20;G.energy=80;G.timeLeft=DAY_TIME;G.health=70;
+  G.score=0;G.totalScore=0;G.inventory=[];G.mining=null;G.craftOpen=false;
+  G.mealsEaten=[];G.moveDir=null;G.enemies=[];G.kills=0;G.totalKills=0;
+  G.enemySpawnTimer=15;G.attackCooldown=0;G.alertTimer=0;
+  G.workers=[];G.shopOpen=false;G.sellOpen=false;
+  document.getElementById('kill-counter').textContent='Kills: 0';
+  document.getElementById('worker-count').textContent='Workers: 0';
+  document.getElementById('enemy-alert').style.display='none';
+  closeShop();closeSell();
+  stopMusic();
+  closeCrafting();
+  document.getElementById('day-summary').style.display='none';
+  document.getElementById('title-screen').style.display='flex';
+  G.screen='title';
+  const bs=parseInt(localStorage.getItem('eie2_best'))||0;
+  document.getElementById('best-score-display').textContent=bs>0?'Best Score: '+bs:'';
+}
+
+// Init best score display
+const bs=parseInt(localStorage.getItem('eie2_best'))||0;
+document.getElementById('best-score-display').textContent=bs>0?'Best Score: '+bs:'';
+
+// Start loop
+requestAnimationFrame(gameLoop);
+
+})();
+</script>
+</body>
+</html>
