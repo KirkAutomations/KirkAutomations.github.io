@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>LaserCraft Games — Orion, Michigan Metal Fabrication</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#e0e0e0;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+.hero{text-align:center;padding:60px 20px 40px;background:linear-gradient(180deg,rgba(232,130,12,.06),transparent);position:relative}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(232,130,12,.08),transparent 70%);pointer-events:none}
+.hero h1{font-size:clamp(2rem,6vw,3rem);font-weight:900;letter-spacing:-1px;margin-bottom:8px;color:#e8820c;text-shadow:0 0 40px rgba(232,130,12,.25)}
+.hero .sub{font-size:clamp(.85rem,2.5vw,1.05rem);color:#888;max-width:550px;margin:0 auto 20px;line-height:1.6}
+.hero .sub strong{color:#ccc}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;background:rgba(232,130,12,.08);border:1px solid rgba(232,130,12,.2);border-radius:30px;font-size:.78rem;font-weight:600;color:#e8820c;margin-bottom:20px}
+.badge .dot{width:8px;height:8px;background:#e8820c;border-radius:50%;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.back{position:fixed;top:14px;left:14px;color:#666;text-decoration:none;font-size:.8rem;z-index:100;transition:color .2s}
+.back:hover{color:#e8820c}
+.content{max-width:800px;margin:0 auto;padding:0 20px 60px}
+.games-grid{display:grid;grid-template-columns:1fr;gap:16px}
+.game-card{display:flex;align-items:center;gap:20px;background:#141414;border:1px solid #222;border-radius:16px;padding:24px;text-decoration:none;color:#e0e0e0;transition:all .3s;position:relative;overflow:hidden}
+.game-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,#e8820c,#ff9f33);transform:scaleX(0);transform-origin:left;transition:transform .4s}
+.game-card:hover{border-color:#e8820c;transform:translateY(-3px);box-shadow:0 8px 30px rgba(232,130,12,.12)}
+.game-card:hover::before{transform:scaleX(1)}
+.game-icon{font-size:3rem;min-width:60px;text-align:center;filter:drop-shadow(0 2px 8px rgba(232,130,12,.3))}
+.game-info{flex:1}
+.game-info h3{font-size:1.2rem;font-weight:700;margin-bottom:4px;color:#fff}
+.game-info .genre{font-size:.72rem;color:#e8820c;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:6px}
+.game-info p{font-size:.88rem;color:#888;line-height:1.5}
+.game-info .teaches{font-size:.75rem;color:#666;margin-top:6px}
+.game-info .teaches span{color:#e8820c}
+.arrow{color:#444;font-size:1.2rem;transition:all .2s}
+.game-card:hover .arrow{color:#e8820c;transform:translateX(4px)}
+.about{background:#141414;border:1px solid #222;border-radius:16px;padding:28px;margin-top:30px;text-align:center}
+.about h2{font-size:1.1rem;color:#e8820c;margin-bottom:10px;text-transform:uppercase;letter-spacing:2px}
+.about p{font-size:.88rem;color:#888;line-height:1.7;max-width:600px;margin:0 auto}
+.about p strong{color:#ccc}
+.about .contact{margin-top:14px;font-size:.82rem;color:#666}
+.about .contact a{color:#e8820c;text-decoration:none}
+.about .contact a:hover{text-decoration:underline}
+.footer{text-align:center;padding:30px 20px;color:#444;font-size:.78rem;border-top:1px solid rgba(255,255,255,.04);margin-top:40px}
+.footer a{color:#e8820c;text-decoration:none}
+</style>
+</head>
+<body>
+<a class="back" href="javascript:history.back()">&#8592; Back</a>
+
+<div class="hero">
+  <div class="badge"><span class="dot"></span> LaserCraft &mdash; Orion, Michigan</div>
+  <h1>&#9889; LaserCraft Games</h1>
+  <p class="sub">Play through the world of <strong>metal fabrication</strong> &mdash; laser cutting, stamping, robotic welding, and quality inspection. Fun first, education built in.</p>
+</div>
+
+<div class="content">
+  <div class="games-grid">
+
+    <a class="game-card" href="laser-precision.html">
+      <div class="game-icon">&#9889;</div>
+      <div class="game-info">
+        <div class="genre">Precision / Tracing</div>
+        <h3>Laser Precision</h3>
+        <p>You ARE the CNC laser. Trace blueprint paths to cut metal parts. Stay on the line, build combos, earn stars.</p>
+        <div class="teaches">Teaches: <span>5-axis cutting &bull; tolerances &bull; CNC laser operation</span></div>
+      </div>
+      <span class="arrow">&rarr;</span>
+    </a>
+
+    <a class="game-card" href="forge-tycoon.html">
+      <div class="game-icon">&#9881;</div>
+      <div class="game-info">
+        <div class="genre">Idle / Tycoon</div>
+        <h3>Forge Tycoon</h3>
+        <p>Build LaserCraft from scratch. Buy presses, lasers, welding robots. Fill orders, earn ISO certification, become an industry leader.</p>
+        <div class="teaches">Teaches: <span>equipment types &bull; production flow &bull; ISO 9001 &bull; full-service fabrication</span></div>
+      </div>
+      <span class="arrow">&rarr;</span>
+    </a>
+
+    <a class="game-card" href="quality-inspector.html">
+      <div class="game-icon">&#128270;</div>
+      <div class="game-info">
+        <div class="genre">Reaction / Decision</div>
+        <h3>Quality Inspector</h3>
+        <p>Parts slide onto the inspection table. Spot defects &mdash; cracks, warps, porosity, off-spec dimensions &mdash; before time runs out. PASS or REJECT.</p>
+        <div class="teaches">Teaches: <span>CMM inspection &bull; defect types &bull; quality standards &bull; ISO certification</span></div>
+      </div>
+      <span class="arrow">&rarr;</span>
+    </a>
+
+    <a class="game-card" href="weld-runner.html">
+      <div class="game-icon">&#129302;</div>
+      <div class="game-info">
+        <div class="genre">Side-Scrolling Action</div>
+        <h3>Weld Runner</h3>
+        <p>You're a robotic welding arm on the assembly line. Switch lanes, time your welds, avoid defective parts. Speed increases &mdash; how far can you go?</p>
+        <div class="teaches">Teaches: <span>robotic welding &bull; assembly operations &bull; weld quality &bull; production speed</span></div>
+      </div>
+      <span class="arrow">&rarr;</span>
+    </a>
+
+  </div>
+
+  <div class="about">
+    <h2>About LaserCraft</h2>
+    <p><strong>LaserCraft</strong> has been precision fabricating in <strong>Orion Township, Michigan</strong> since <strong>1995</strong>. They operate 3 CNC laser machines (including two 5-axis units), presses from 20 to 600 tons, robotic welding cells, CNC machining centers, and a full CAD/CMM inspection department. <strong>ISO 9001 certified.</strong></p>
+    <p style="margin-top:10px">From raw steel to finished assembly &mdash; stamp, cut, machine, weld, inspect &mdash; all under one roof.</p>
+    <div class="contact">
+      &#128205; 151 Premier Drive, Orion Township, MI 48359 &bull;
+      &#128222; (248) 340-8922 &bull;
+      &#9993; <a href="mailto:data@lasercraft.us">data@lasercraft.us</a> &bull;
+      <a href="http://lasercraft.us" target="_blank">lasercraft.us</a>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>Built by <a href="../index.html">Kirk Automations</a> &bull; <a href="../projects.html">All Projects</a></p>
+</div>
+
+</body>
+</html>
