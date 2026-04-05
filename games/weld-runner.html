@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<title>Weld Runner — LaserCraft Games</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#e0e0e0;font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;user-select:none}
+canvas{border:2px solid #e8820c;border-radius:8px;touch-action:none}
+.hud{position:fixed;top:16px;left:50%;transform:translateX(-50%);display:flex;gap:24px;font-size:13px;font-weight:700;z-index:10}
+.hud span{color:#e8820c}
+.hud .label{color:#666;text-transform:uppercase;font-size:9px;display:block;letter-spacing:1px}
+#overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;text-align:center;padding:20px}
+#overlay h1{font-size:2.2rem;color:#e8820c;margin-bottom:8px;text-shadow:0 0 25px rgba(232,130,12,.3)}
+#overlay h2{font-size:1.6rem;color:#e8820c;margin-bottom:10px}
+#overlay p{color:#aaa;max-width:480px;line-height:1.6;margin-bottom:6px;font-size:.9rem}
+.fact{background:rgba(232,130,12,.08);border:1px solid rgba(232,130,12,.2);border-radius:10px;padding:14px 18px;margin:14px 0;max-width:460px;font-size:.82rem;color:#ccc;line-height:1.5}
+.fact strong{color:#e8820c}
+.btn{padding:14px 32px;background:linear-gradient(135deg,#e8820c,#ff9f33);color:#000;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:14px;letter-spacing:1px;transition:all .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(232,130,12,.4)}
+.back{position:fixed;top:12px;left:12px;color:#666;text-decoration:none;font-size:.8rem;z-index:200}
+.back:hover{color:#e8820c}
+</style>
+</head>
+<body>
+<a class="back" href="javascript:history.back()">&#8592; Back</a>
+<div class="hud">
+  <div><span class="label">Score</span><span id="hScore">0</span></div>
+  <div><span class="label">Combo</span><span id="hCombo">x1</span></div>
+  <div><span class="label">Speed</span><span id="hSpeed">1.0x</span></div>
+  <div><span class="label">Welds</span><span id="hWelds">0</span></div>
+  <div><span class="label">Distance</span><span id="hDist">0m</span></div>
+</div>
+<canvas id="c"></canvas>
+<div id="overlay">
+  <h1>&#x1F916; WELD RUNNER</h1>
+  <p>You're a robotic welding arm on LaserCraft's assembly line. Parts fly past — hit SPACE or TAP at the right moment to weld the joint.</p>
+  <p>UP/DOWN or swipe to change lanes. Avoid defective parts. Chain perfect welds for combo multipliers!</p>
+  <div class="fact"><strong>About LaserCraft:</strong> Their robotic welding cells produce consistent, high-strength MIG/TIG welds on seat frames, structural brackets, and full sub-assemblies — all verified with 100% inspection.</div>
+  <button class="btn" onclick="startGame()">START WELDING</button>
+</div>
+
+<script>
+var c=document.getElementById('c'),ctx=c.getContext('2d');
+var W,H,LANES=3,laneH;
+function resize(){
+  W=c.width=Math.min(window.innerWidth-20,800);
+  H=c.height=Math.min(window.innerHeight-100,500);
+  laneH=H/LANES;
+}
+resize();window.addEventListener('resize',function(){resize()});
+
+var overlay=document.getElementById('overlay');
+
+var FACTS=[
+  "LaserCraft's robotic welding cells use programmed paths for perfectly repeatable welds every time.",
+  "From seat frames to structural brackets — every weld at LaserCraft meets automotive-grade strength requirements.",
+  "Nut and stud installation happens inline — LaserCraft builds complete assemblies, not just individual parts.",
+  "100% inspection means every welded assembly is verified before leaving the facility in Orion, Michigan.",
+  "LaserCraft has been welding and fabricating since 1995 — three decades of manufacturing expertise.",
+  "Their 5-axis CNC lasers can cut pre-weld prep features directly into formed parts for perfect fit-up.",
+  "ISO 9001 certification ensures LaserCraft's welding procedures are documented, repeatable, and audited.",
+  "Robotic welding eliminates human fatigue errors — consistent quality from the first part to the thousandth."
+];
+var factIdx=0;
+
+var score=0,combo=1,welds=0,dist=0,speed=1,gameActive=false;
+var playerLane=1; // 0,1,2
+var playerX=100,playerArmAngle=0,welding=false,weldTimer=0;
+var items=[],sparks=[],weldFlashes=[];
+var scrollX=0;
+
+// Item types
+function spawnItem(){
+  var lane=Math.floor(Math.random()*LANES);
+  var isJoint=Math.random()<.65;
+  var isDefect=!isJoint&&Math.random()<.5;
+  var isPowerup=!isJoint&&!isDefect&&Math.random()<.15;
+  items.push({
+    x:W+50,
+    lane:lane,
+    type:isJoint?'joint':(isDefect?'defect':(isPowerup?'powerup':'obstacle')),
+    width:isJoint?60:(isDefect?50:40),
+    hit:false,
+    passed:false
+  });
+}
+
+function addSparks(x,y,good){
+  for(var i=0;i<(good?12:6);i++){
+    var a=Math.random()*Math.PI*2;
+    var s=2+Math.random()*4;
+    sparks.push({x:x,y:y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-2,life:15+Math.random()*15,max:30,
+      color:good?'232,130,12':'255,50,50'});
+  }
+}
+
+function addWeldFlash(x,y){
+  weldFlashes.push({x:x,y:y,life:10,max:10});
+}
+
+function laneY(lane){return lane*laneH+laneH/2}
+
+function doWeld(){
+  if(!gameActive||welding)return;
+  welding=true;weldTimer=12;
+
+  // Check if there's a joint in range
+  var py=laneY(playerLane);
+  var hit=false;
+  for(var i=0;i<items.length;i++){
+    var it=items[i];
+    if(it.hit||it.passed||it.lane!==playerLane)continue;
+    var dx=Math.abs(it.x-playerX-40);
+    if(dx<45){
+      it.hit=true;hit=true;
+      if(it.type==='joint'){
+        var perfect=dx<15;
+        var pts=perfect?50:25;
+        score+=pts*combo;welds++;
+        combo=Math.min(10,combo+(perfect?.5:.2));
+        addSparks(it.x,py,true);addWeldFlash(it.x,py);
+      }else if(it.type==='defect'){
+        // Welding defective part is bad
+        score=Math.max(0,score-30);combo=1;
+        addSparks(it.x,py,false);
+      }else if(it.type==='powerup'){
+        score+=100;combo=Math.min(10,combo+1);
+        addSparks(it.x,py,true);addWeldFlash(it.x,py);
+      }else if(it.type==='obstacle'){
+        score=Math.max(0,score-20);combo=1;
+        addSparks(it.x,py,false);
+      }
+      break;
+    }
+  }
+  if(!hit){
+    // Mis-weld penalty
+    combo=Math.max(1,combo-.3);
+  }
+}
+
+function moveLane(dir){
+  if(!gameActive)return;
+  playerLane=Math.max(0,Math.min(LANES-1,playerLane+dir));
+}
+
+// Input
+document.addEventListener('keydown',function(e){
+  if(e.key===' '||e.key==='Enter'){e.preventDefault();doWeld()}
+  if(e.key==='ArrowUp'||e.key==='w')moveLane(-1);
+  if(e.key==='ArrowDown'||e.key==='s')moveLane(1);
+});
+
+var touchStartY=0;
+c.addEventListener('touchstart',function(e){
+  e.preventDefault();touchStartY=e.touches[0].clientY;
+  doWeld();
+},{passive:false});
+c.addEventListener('touchmove',function(e){
+  e.preventDefault();
+  var dy=e.touches[0].clientY-touchStartY;
+  if(Math.abs(dy)>30){
+    moveLane(dy>0?1:-1);
+    touchStartY=e.touches[0].clientY;
+  }
+},{passive:false});
+c.addEventListener('click',doWeld);
+
+var spawnTimer=0,lastTime=0;
+
+function gameLoop(ts){
+  if(!lastTime)lastTime=ts;
+  var dt=Math.min((ts-lastTime)/1000,.05);lastTime=ts;
+
+  if(!gameActive){requestAnimationFrame(gameLoop);return}
+
+  dist+=speed*dt*10;
+  speed=1+dist/500*.1; // gradual speed increase
+  scrollX+=speed*3;
+
+  // Spawn
+  spawnTimer-=dt;
+  if(spawnTimer<=0){
+    spawnItem();
+    spawnTimer=Math.max(.4,1.2-speed*.08)+Math.random()*.5;
+  }
+
+  // Move items
+  for(var i=items.length-1;i>=0;i--){
+    items[i].x-=speed*3;
+    if(items[i].x<-80){
+      // Missed joint = penalty
+      if(items[i].type==='joint'&&!items[i].hit&&!items[i].passed){
+        combo=1;
+      }
+      items[i].passed=true;
+    }
+    if(items[i].x<-200)items.splice(i,1);
+  }
+
+  // Check collision (obstacles in player lane)
+  for(var i=0;i<items.length;i++){
+    var it=items[i];
+    if(it.hit||it.passed)continue;
+    if(it.lane===playerLane&&it.type==='obstacle'){
+      var dx=Math.abs(it.x-playerX);
+      if(dx<30){
+        it.hit=true;score=Math.max(0,score-50);combo=1;
+        addSparks(it.x,laneY(playerLane),false);
+      }
+    }
+  }
+
+  if(welding){weldTimer--;if(weldTimer<=0)welding=false}
+
+  // Update sparks
+  for(var i=sparks.length-1;i>=0;i--){
+    var s=sparks[i];s.x+=s.vx;s.y+=s.vy;s.vy+=.15;s.life--;
+    if(s.life<=0)sparks.splice(i,1);
+  }
+  for(var i=weldFlashes.length-1;i>=0;i--){
+    weldFlashes[i].life--;if(weldFlashes[i].life<=0)weldFlashes.splice(i,1);
+  }
+
+  // End condition: distance milestones with facts
+  if(Math.floor(dist)%200===0&&Math.floor(dist)>0&&Math.floor(dist)!==Math.floor((dist-speed*dt*10))){
+    // Could show fact inline but keep going
+  }
+
+  // === DRAW ===
+  ctx.clearRect(0,0,W,H);
+
+  // Factory background
+  ctx.fillStyle='#111';ctx.fillRect(0,0,W,H);
+
+  // Lane lines
+  for(var i=0;i<=LANES;i++){
+    var y=i*laneH;
+    ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);
+    ctx.strokeStyle='rgba(232,130,12,.15)';ctx.lineWidth=1;ctx.stroke();
+  }
+
+  // Conveyor markings
+  for(var x=-scrollX%40;x<W;x+=40){
+    ctx.fillStyle='rgba(232,130,12,.04)';ctx.fillRect(x,0,2,H);
+  }
+
+  // Lane highlight
+  var tgtY=laneY(playerLane);
+  ctx.fillStyle='rgba(232,130,12,.04)';
+  ctx.fillRect(0,playerLane*laneH,W,laneH);
+
+  // Items
+  for(var i=0;i<items.length;i++){
+    var it=items[i];
+    if(it.hit)continue;
+    var iy=laneY(it.lane);
+
+    if(it.type==='joint'){
+      // Weld joint — two metal pieces with gap
+      ctx.fillStyle='#555';
+      ctx.fillRect(it.x-25,iy-18,22,36);
+      ctx.fillRect(it.x+3,iy-18,22,36);
+      // Gap highlight
+      ctx.fillStyle='rgba(232,130,12,.2)';
+      ctx.fillRect(it.x-3,iy-18,6,36);
+      // Label
+      ctx.font='bold 8px Segoe UI';ctx.fillStyle='rgba(232,130,12,.6)';ctx.textAlign='center';
+      ctx.fillText('WELD',it.x,iy+28);
+    }else if(it.type==='defect'){
+      // Bad part — red glow
+      ctx.fillStyle='#443';
+      ctx.fillRect(it.x-20,iy-15,40,30);
+      ctx.strokeStyle='rgba(255,50,50,.6)';ctx.lineWidth=2;ctx.strokeRect(it.x-20,iy-15,40,30);
+      // Crack
+      ctx.beginPath();ctx.moveTo(it.x-10,iy-8);ctx.lineTo(it.x+5,iy+2);ctx.lineTo(it.x-3,iy+8);
+      ctx.strokeStyle='rgba(255,50,50,.7)';ctx.lineWidth=1.5;ctx.stroke();
+      ctx.font='bold 7px Segoe UI';ctx.fillStyle='#f44';ctx.textAlign='center';
+      ctx.fillText('DEFECT',it.x,iy+26);
+    }else if(it.type==='powerup'){
+      // Star powerup
+      ctx.beginPath();
+      for(var j=0;j<5;j++){
+        var a=j/5*Math.PI*2-Math.PI/2;
+        var r=j%2===0?12:6;
+        j===0?ctx.moveTo(it.x+Math.cos(a)*r,iy+Math.sin(a)*r):ctx.lineTo(it.x+Math.cos(a+(j%2===0?0:Math.PI/5))*r,iy+Math.sin(a+(j%2===0?0:Math.PI/5))*r);
+      }
+      // proper star
+      ctx.closePath();ctx.fillStyle='rgba(232,130,12,.6)';ctx.fill();
+      ctx.font='bold 7px Segoe UI';ctx.fillStyle='#e8820c';ctx.textAlign='center';
+      ctx.fillText('BONUS',it.x,iy+22);
+    }else{
+      // Obstacle
+      ctx.fillStyle='#333';
+      ctx.beginPath();ctx.moveTo(it.x,iy-18);ctx.lineTo(it.x+18,iy);ctx.lineTo(it.x,iy+18);ctx.lineTo(it.x-18,iy);ctx.closePath();
+      ctx.fill();ctx.strokeStyle='#666';ctx.lineWidth=1;ctx.stroke();
+    }
+  }
+
+  // Player (robotic arm)
+  var py=tgtY;
+  // Base
+  ctx.fillStyle='#444';ctx.fillRect(playerX-10,py-25,20,50);
+  ctx.fillStyle='#e8820c';ctx.fillRect(playerX-12,py-8,24,16);
+  // Arm
+  var armLen=35;
+  var armAngle=welding?(Math.PI*.3*Math.sin(weldTimer)):(Math.sin(Date.now()*.003)*.1);
+  var armEndX=playerX+12+Math.cos(armAngle)*armLen;
+  var armEndY=py+Math.sin(armAngle)*armLen;
+  ctx.beginPath();ctx.moveTo(playerX+12,py);ctx.lineTo(armEndX,armEndY);
+  ctx.strokeStyle='#e8820c';ctx.lineWidth=4;ctx.lineCap='round';ctx.stroke();
+  // Torch tip
+  ctx.beginPath();ctx.arc(armEndX,armEndY,4,0,Math.PI*2);
+  ctx.fillStyle=welding?'#fff':'#e8820c';ctx.fill();
+
+  // Weld arc glow
+  if(welding){
+    var g=ctx.createRadialGradient(armEndX,armEndY,0,armEndX,armEndY,25);
+    g.addColorStop(0,'rgba(255,255,200,.4)');g.addColorStop(1,'rgba(232,130,12,0)');
+    ctx.beginPath();ctx.arc(armEndX,armEndY,25,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+  }
+
+  // Sparks
+  for(var i=0;i<sparks.length;i++){
+    var s=sparks[i];
+    var a=s.life/s.max;
+    ctx.beginPath();ctx.arc(s.x,s.y,1.5*a,0,Math.PI*2);
+    ctx.fillStyle='rgba('+s.color+','+a+')';ctx.fill();
+  }
+
+  // Weld flashes
+  for(var i=0;i<weldFlashes.length;i++){
+    var f=weldFlashes[i];
+    var a=f.life/f.max;
+    var g2=ctx.createRadialGradient(f.x,f.y,0,f.x,f.y,40*a);
+    g2.addColorStop(0,'rgba(255,255,200,'+(a*.5)+')');g2.addColorStop(1,'rgba(232,130,12,0)');
+    ctx.beginPath();ctx.arc(f.x,f.y,40*a,0,Math.PI*2);ctx.fillStyle=g2;ctx.fill();
+  }
+
+  // HUD update
+  document.getElementById('hScore').textContent=score;
+  document.getElementById('hCombo').textContent='x'+combo.toFixed(1);
+  document.getElementById('hSpeed').textContent=speed.toFixed(1)+'x';
+  document.getElementById('hWelds').textContent=welds;
+  document.getElementById('hDist').textContent=Math.floor(dist)+'m';
+
+  requestAnimationFrame(gameLoop);
+}
+
+function startGame(){
+  overlay.style.display='none';
+  score=0;combo=1;welds=0;dist=0;speed=1;
+  playerLane=1;items=[];sparks=[];weldFlashes=[];
+  spawnTimer=1;lastTime=0;
+  gameActive=true;
+}
+
+requestAnimationFrame(gameLoop);
+</script>
+</body>
+</html>

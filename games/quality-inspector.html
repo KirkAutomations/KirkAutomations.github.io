@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<title>Quality Inspector — LaserCraft Games</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#e0e0e0;font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;user-select:none}
+canvas{border:2px solid #e8820c;border-radius:8px;cursor:pointer;touch-action:none}
+.hud{position:fixed;top:16px;left:50%;transform:translateX(-50%);display:flex;gap:24px;font-size:13px;font-weight:700;z-index:10}
+.hud span{color:#e8820c}
+.hud .label{color:#666;text-transform:uppercase;font-size:9px;display:block;letter-spacing:1px}
+#overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;text-align:center;padding:20px}
+#overlay h1{font-size:2.2rem;color:#e8820c;margin-bottom:8px;text-shadow:0 0 25px rgba(232,130,12,.3)}
+#overlay h2{font-size:1.6rem;color:#e8820c;margin-bottom:10px}
+#overlay p{color:#aaa;max-width:480px;line-height:1.6;margin-bottom:6px;font-size:.9rem}
+.fact{background:rgba(232,130,12,.08);border:1px solid rgba(232,130,12,.2);border-radius:10px;padding:14px 18px;margin:14px 0;max-width:440px;font-size:.82rem;color:#ccc;line-height:1.5}
+.fact strong{color:#e8820c}
+.btn{padding:14px 32px;background:linear-gradient(135deg,#e8820c,#ff9f33);color:#000;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:14px;letter-spacing:1px;transition:all .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(232,130,12,.4)}
+.back{position:fixed;top:12px;left:12px;color:#666;text-decoration:none;font-size:.8rem;z-index:200}
+.back:hover{color:#e8820c}
+#feedback{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2rem;font-weight:900;z-index:50;pointer-events:none;opacity:0;transition:opacity .3s}
+.controls{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:12px;z-index:10}
+.ctrl-btn{padding:12px 24px;border-radius:8px;font-weight:700;font-size:.85rem;cursor:pointer;border:2px solid;transition:all .2s;font-family:inherit}
+.ctrl-btn.pass{background:rgba(0,180,0,.1);color:#0c0;border-color:#0c0}
+.ctrl-btn.pass:hover{background:#0c0;color:#000}
+.ctrl-btn.fail{background:rgba(255,40,40,.1);color:#f44;border-color:#f44}
+.ctrl-btn.fail:hover{background:#f44;color:#000}
+.ctrl-btn:disabled{opacity:.3;cursor:not-allowed}
+</style>
+</head>
+<body>
+<a class="back" href="javascript:history.back()">&#8592; Back</a>
+<div class="hud">
+  <div><span class="label">Wave</span><span id="hWave">1</span></div>
+  <div><span class="label">Score</span><span id="hScore">0</span></div>
+  <div><span class="label">Streak</span><span id="hStreak">0</span></div>
+  <div><span class="label">Lives</span><span id="hLives">&#10084;&#10084;&#10084;</span></div>
+  <div><span class="label">Time</span><span id="hTimer">--</span></div>
+</div>
+<canvas id="c"></canvas>
+<div id="feedback"></div>
+<div class="controls">
+  <button class="ctrl-btn pass" id="btnPass" onclick="judge(true)" disabled>&#10003; PASS</button>
+  <button class="ctrl-btn fail" id="btnFail" onclick="judge(false)" disabled>&#10007; REJECT</button>
+</div>
+<div id="overlay">
+  <h1>&#128270; QUALITY INSPECTOR</h1>
+  <p>You're on LaserCraft's inspection line. Each part slides in — you have seconds to decide: <strong>PASS</strong> or <strong>REJECT</strong>.</p>
+  <p>Look for defects: cracks, warps, wrong dimensions, bad welds, surface damage. Miss a bad part or reject a good one? You lose a life.</p>
+  <div class="fact"><strong>Real Talk:</strong> LaserCraft is ISO 9001 certified with CMM inspection verifying every part meets spec. Their 100% quality commitment means zero defective parts leave the building.</div>
+  <button class="btn" onclick="startGame()">START INSPECTION</button>
+</div>
+
+<script>
+var c=document.getElementById('c'),ctx=c.getContext('2d');
+var W,H;
+function resize(){
+  var s=Math.min(window.innerWidth-40,window.innerHeight-180,600);
+  W=c.width=s;H=c.height=s;
+}
+resize();window.addEventListener('resize',resize);
+
+var overlay=document.getElementById('overlay'),feedback=document.getElementById('feedback');
+var btnPass=document.getElementById('btnPass'),btnFail=document.getElementById('btnFail');
+
+var PART_TYPES=[
+  {name:'Stamped Bracket',shape:'bracket',desc:'Steel bracket from the 200T press'},
+  {name:'Laser-Cut Panel',shape:'panel',desc:'Flat panel cut on 3-axis laser'},
+  {name:'Tube Profile',shape:'tube',desc:'Round tube cut on 5-axis laser'},
+  {name:'Machined Block',shape:'block',desc:'CNC-machined aluminum fixture'},
+  {name:'Welded Frame',shape:'frame',desc:'Robotic-welded seat sub-frame'},
+  {name:'Bent Channel',shape:'channel',desc:'Press brake formed channel'}
+];
+
+var DEFECTS=[
+  {name:'Hairline Crack',visual:'crack',severity:'critical'},
+  {name:'Surface Scratch',visual:'scratch',severity:'minor'},
+  {name:'Warp Distortion',visual:'warp',severity:'critical'},
+  {name:'Weld Porosity',visual:'porosity',severity:'critical'},
+  {name:'Dimension Off-Spec',visual:'dimension',severity:'critical'},
+  {name:'Burr Edge',visual:'burr',severity:'minor'},
+  {name:'Misaligned Hole',visual:'hole',severity:'critical'},
+  {name:'Discoloration',visual:'discolor',severity:'minor'}
+];
+
+var FACTS=[
+  "LaserCraft's CMM room uses coordinate measuring machines to verify dimensions to thousandths of an inch.",
+  "ISO 9001 certification means every process is documented, audited, and continuously improved.",
+  "100% inspection at LaserCraft — every welded assembly gets checked before it ships.",
+  "5-axis laser cutting achieves tolerances of plus or minus 0.005 inches on 3D formed parts.",
+  "LaserCraft has been maintaining quality standards since 1995 — over 30 years in Orion, Michigan.",
+  "Their robotic welding cells produce repeatable, consistent welds — quality you can measure.",
+  "From raw stock to final assembly, LaserCraft tracks every part through the production process.",
+  "Press operations from 20T to 600T — each die is qualified before production begins."
+];
+var factIdx=0;
+
+var score=0,wave=1,streak=0,maxStreak=0,lives=3,gameActive=false;
+var currentPart=null,partTimer=0,maxTime=0,judged=false;
+var slideX=0,slideTarget=0,partReady=false;
+var animParts=[];
+
+function genPart(){
+  var type=PART_TYPES[Math.floor(Math.random()*PART_TYPES.length)];
+  var hasDefect=Math.random()<(.4+wave*.03);
+  var defect=hasDefect?DEFECTS[Math.floor(Math.random()*DEFECTS.length)]:null;
+  var defectPos={x:.3+Math.random()*.4,y:.3+Math.random()*.4};
+  return{type:type,defect:defect,defectPos:defectPos,isGood:!hasDefect};
+}
+
+function drawPart(part,cx,cy,size){
+  var s=size;
+  ctx.save();ctx.translate(cx,cy);
+
+  // Metal base
+  var grad=ctx.createLinearGradient(-s/2,-s/2,s/2,s/2);
+  grad.addColorStop(0,'#555');grad.addColorStop(.5,'#888');grad.addColorStop(1,'#666');
+
+  var shape=part.type.shape;
+  ctx.beginPath();
+  if(shape==='bracket'){
+    ctx.moveTo(-s*.4,-s*.35);ctx.lineTo(s*.4,-s*.35);ctx.lineTo(s*.4,-s*.15);
+    ctx.lineTo(s*.1,-s*.15);ctx.lineTo(s*.1,s*.35);ctx.lineTo(-s*.1,s*.35);
+    ctx.lineTo(-s*.1,-s*.15);ctx.lineTo(-s*.4,-s*.15);ctx.closePath();
+  }else if(shape==='panel'){
+    ctx.rect(-s*.4,-s*.3,s*.8,s*.6);
+  }else if(shape==='tube'){
+    ctx.ellipse(0,0,s*.15,s*.35,0,0,Math.PI*2);
+  }else if(shape==='block'){
+    ctx.rect(-s*.3,-s*.3,s*.6,s*.6);
+  }else if(shape==='frame'){
+    ctx.moveTo(-s*.4,-s*.3);ctx.lineTo(s*.4,-s*.3);ctx.lineTo(s*.35,s*.3);ctx.lineTo(-s*.35,s*.3);ctx.closePath();
+    // cutout
+  }else if(shape==='channel'){
+    ctx.moveTo(-s*.35,-s*.35);ctx.lineTo(-s*.2,-s*.35);ctx.lineTo(-s*.2,s*.15);
+    ctx.lineTo(s*.2,s*.15);ctx.lineTo(s*.2,-s*.35);ctx.lineTo(s*.35,-s*.35);
+    ctx.lineTo(s*.35,s*.35);ctx.lineTo(-s*.35,s*.35);ctx.closePath();
+  }
+  ctx.fillStyle=grad;ctx.fill();
+  ctx.strokeStyle='#999';ctx.lineWidth=1.5;ctx.stroke();
+
+  // Dimension lines
+  ctx.setLineDash([4,4]);ctx.strokeStyle='rgba(232,130,12,.3)';ctx.lineWidth=.5;
+  ctx.beginPath();ctx.moveTo(-s*.5,0);ctx.lineTo(s*.5,0);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(0,-s*.5);ctx.lineTo(0,s*.5);ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Draw defect if present
+  if(part.defect){
+    var dx=part.defectPos.x*s-s/2,dy=part.defectPos.y*s-s/2;
+    var d=part.defect;
+    ctx.save();ctx.translate(dx,dy);
+
+    if(d.visual==='crack'){
+      ctx.beginPath();ctx.moveTo(-12,-8);
+      ctx.lineTo(-3,0);ctx.lineTo(-8,5);ctx.lineTo(2,3);ctx.lineTo(5,10);ctx.lineTo(10,8);
+      ctx.strokeStyle='rgba(40,40,40,.8)';ctx.lineWidth=1.5;ctx.stroke();
+      ctx.strokeStyle='rgba(80,80,80,.4)';ctx.lineWidth=3;ctx.stroke();
+    }else if(d.visual==='scratch'){
+      ctx.beginPath();ctx.moveTo(-15,-2);ctx.lineTo(15,2);
+      ctx.strokeStyle='rgba(200,200,200,.6)';ctx.lineWidth=1;ctx.stroke();
+    }else if(d.visual==='warp'){
+      // Wavy distortion
+      ctx.beginPath();
+      for(var i=-15;i<15;i++){
+        var y=Math.sin(i*.3)*5;
+        i===-15?ctx.moveTo(i,y):ctx.lineTo(i,y);
+      }
+      ctx.strokeStyle='rgba(150,50,50,.5)';ctx.lineWidth=2;ctx.stroke();
+      // shadow
+      ctx.fillStyle='rgba(100,40,40,.15)';ctx.fillRect(-15,-8,30,16);
+    }else if(d.visual==='porosity'){
+      for(var i=0;i<5;i++){
+        ctx.beginPath();ctx.arc(Math.random()*16-8,Math.random()*16-8,1+Math.random()*2,0,Math.PI*2);
+        ctx.fillStyle='rgba(30,30,30,.7)';ctx.fill();
+      }
+    }else if(d.visual==='dimension'){
+      // red measurement line
+      ctx.beginPath();ctx.moveTo(-20,0);ctx.lineTo(20,0);
+      ctx.strokeStyle='rgba(255,50,50,.6)';ctx.lineWidth=1;ctx.stroke();
+      ctx.font='bold 9px Segoe UI';ctx.fillStyle='#f44';ctx.textAlign='center';
+      ctx.fillText('OFF SPEC',0,-6);
+    }else if(d.visual==='burr'){
+      ctx.beginPath();
+      for(var i=0;i<8;i++){
+        var a=i/8*Math.PI*2;
+        var r=6+Math.random()*4;
+        i===0?ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r):ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r);
+      }
+      ctx.closePath();ctx.strokeStyle='rgba(180,180,180,.5)';ctx.lineWidth=1;ctx.stroke();
+    }else if(d.visual==='hole'){
+      ctx.beginPath();ctx.arc(0,0,6,0,Math.PI*2);ctx.strokeStyle='rgba(255,80,80,.5)';ctx.lineWidth=1.5;ctx.stroke();
+      ctx.beginPath();ctx.arc(5,3,6,0,Math.PI*2);ctx.setLineDash([3,3]);ctx.strokeStyle='rgba(232,130,12,.4)';ctx.stroke();ctx.setLineDash([]);
+    }else if(d.visual==='discolor'){
+      var g=ctx.createRadialGradient(0,0,0,0,0,15);
+      g.addColorStop(0,'rgba(120,80,30,.3)');g.addColorStop(1,'rgba(120,80,30,0)');
+      ctx.beginPath();ctx.arc(0,0,15,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  // Part label
+  ctx.font='bold 10px Segoe UI';ctx.fillStyle='rgba(232,130,12,.5)';ctx.textAlign='center';
+  ctx.fillText(part.type.name,0,s*.45+12);
+
+  ctx.restore();
+}
+
+function showFeedback(text,color){
+  feedback.textContent=text;feedback.style.color=color;feedback.style.opacity='1';
+  setTimeout(function(){feedback.style.opacity='0'},800);
+}
+
+function judge(passed){
+  if(!gameActive||judged||!partReady)return;
+  judged=true;
+  btnPass.disabled=true;btnFail.disabled=true;
+
+  var correct=(passed&&currentPart.isGood)||(!passed&&!currentPart.isGood);
+
+  if(correct){
+    score+=10*(1+Math.floor(streak/3));
+    streak++;if(streak>maxStreak)maxStreak=streak;
+    showFeedback(passed?'GOOD PART \u2713':'DEFECT CAUGHT \u2713','#0c0');
+    // slide out right
+    slideTarget=W+200;
+  }else{
+    lives--;streak=0;
+    if(!passed&&currentPart.isGood){
+      showFeedback('GOOD PART REJECTED!','#f44');
+    }else{
+      showFeedback('DEFECT MISSED: '+currentPart.defect.name,'#f44');
+    }
+    slideTarget=W+200;
+  }
+
+  document.getElementById('hLives').textContent='\u2764'.repeat(Math.max(0,lives));
+  document.getElementById('hScore').textContent=score;
+  document.getElementById('hStreak').textContent=streak;
+
+  setTimeout(function(){
+    if(lives<=0){endGame();return}
+    // Wave progression
+    if(score>wave*80){
+      wave++;document.getElementById('hWave').textContent=wave;
+    }
+    nextPart();
+  },800);
+}
+
+function nextPart(){
+  currentPart=genPart();
+  slideX=-250;slideTarget=W/2;partReady=false;judged=false;
+  maxTime=Math.max(3,8-wave*.3);partTimer=maxTime;
+}
+
+function endGame(){
+  gameActive=false;
+  btnPass.disabled=true;btnFail.disabled=true;
+  overlay.innerHTML='<h2>SHIFT OVER</h2>'+
+    '<p>Score: <span style="color:#e8820c">'+score+'</span></p>'+
+    '<p>Parts Inspected: Wave <span style="color:#e8820c">'+wave+'</span> | Best Streak: <span style="color:#e8820c">'+maxStreak+'</span></p>'+
+    '<div class="fact"><strong>LaserCraft Quality:</strong> '+FACTS[factIdx%FACTS.length]+'</div>'+
+    '<button class="btn" onclick="startGame()">NEW SHIFT</button>';
+  factIdx++;
+  overlay.style.display='flex';
+}
+
+var lastTick=0;
+function gameLoop(ts){
+  if(!lastTick)lastTick=ts;
+  var dt=(ts-lastTick)/1000;lastTick=ts;
+
+  ctx.clearRect(0,0,W,H);
+
+  // Background — inspection table
+  ctx.fillStyle='#181818';ctx.fillRect(0,0,W,H);
+  // Grid
+  ctx.strokeStyle='rgba(232,130,12,.03)';ctx.lineWidth=1;
+  for(var x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
+  for(var y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+
+  // conveyor belt lines
+  ctx.fillStyle='rgba(232,130,12,.06)';
+  ctx.fillRect(0,H/2-60,W,120);
+  for(var x=0;x<W;x+=30){
+    ctx.fillStyle='rgba(232,130,12,.04)';
+    ctx.fillRect(x,H/2-60,2,120);
+  }
+
+  if(gameActive&&currentPart){
+    // Slide animation
+    slideX+=(slideTarget-slideX)*.12;
+    if(Math.abs(slideX-slideTarget)<5){
+      slideX=slideTarget;
+      if(slideTarget===W/2){
+        partReady=true;
+        if(!judged){btnPass.disabled=false;btnFail.disabled=false}
+      }
+    }
+
+    // Timer
+    if(partReady&&!judged){
+      partTimer-=dt;
+      if(partTimer<=0){
+        // Auto-pass (missed inspection)
+        if(!currentPart.isGood){lives--;streak=0;showFeedback('TOO SLOW — DEFECT SHIPPED!','#f44')}
+        else{showFeedback('Auto-passed','#888')}
+        judged=true;btnPass.disabled=true;btnFail.disabled=true;
+        document.getElementById('hLives').textContent='\u2764'.repeat(Math.max(0,lives));
+        slideTarget=W+200;
+        setTimeout(function(){
+          if(lives<=0){endGame();return}
+          if(score>wave*80){wave++;document.getElementById('hWave').textContent=wave}
+          nextPart();
+        },600);
+      }
+      document.getElementById('hTimer').textContent=Math.max(0,partTimer).toFixed(1)+'s';
+      // Timer bar
+      var pct=partTimer/maxTime;
+      ctx.fillStyle=pct>.3?'rgba(232,130,12,.3)':'rgba(255,50,50,.4)';
+      ctx.fillRect(W*.1,H-30,W*.8*pct,6);
+      ctx.strokeStyle='rgba(232,130,12,.15)';ctx.strokeRect(W*.1,H-30,W*.8,6);
+    }
+
+    drawPart(currentPart,slideX,H/2,Math.min(W,H)*.55);
+
+    // Spotlight
+    if(partReady&&!judged){
+      var grad=ctx.createRadialGradient(slideX,H/2,0,slideX,H/2,200);
+      grad.addColorStop(0,'rgba(232,130,12,.03)');grad.addColorStop(1,'transparent');
+      ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+    }
+  }
+
+  requestAnimationFrame(gameLoop);
+}
+
+function startGame(){
+  overlay.style.display='none';
+  score=0;wave=1;streak=0;maxStreak=0;lives=3;factIdx=0;
+  document.getElementById('hWave').textContent='1';
+  document.getElementById('hScore').textContent='0';
+  document.getElementById('hStreak').textContent='0';
+  document.getElementById('hLives').textContent='\u2764\u2764\u2764';
+  gameActive=true;lastTick=0;
+  nextPart();
+}
+
+// Keyboard
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key==='d'||e.key===' ')judge(true);
+  if(e.key==='ArrowLeft'||e.key==='a'||e.key==='x')judge(false);
+});
+
+requestAnimationFrame(gameLoop);
+</script>
+</body>
+</html>

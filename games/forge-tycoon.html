@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Forge Tycoon — LaserCraft Games</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#e0e0e0;font-family:'Segoe UI',system-ui,sans-serif;overflow-x:hidden;min-height:100vh}
+.back{position:fixed;top:12px;left:12px;color:#666;text-decoration:none;font-size:.8rem;z-index:200;transition:color .2s}
+.back:hover{color:#e8820c}
+.game-header{text-align:center;padding:16px;background:linear-gradient(180deg,rgba(232,130,12,.08),transparent)}
+.game-header h1{font-size:1.6rem;color:#e8820c;text-shadow:0 0 20px rgba(232,130,12,.3)}
+.stats-bar{display:flex;gap:20px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+.stat{text-align:center}
+.stat .val{font-size:1.3rem;font-weight:800;color:#e8820c}
+.stat .lbl{font-size:.65rem;color:#888;text-transform:uppercase;letter-spacing:1px}
+.main{max-width:1100px;margin:0 auto;padding:12px 16px 80px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.main{grid-template-columns:1fr}}
+.panel{background:#141414;border:1px solid #222;border-radius:12px;padding:20px;transition:border-color .3s}
+.panel:hover{border-color:rgba(232,130,12,.3)}
+.panel h2{font-size:1rem;color:#e8820c;margin-bottom:12px;text-transform:uppercase;letter-spacing:2px;font-weight:700}
+.machine{display:flex;align-items:center;gap:12px;padding:12px;background:#1a1a1a;border-radius:8px;margin-bottom:8px;border:1px solid #252525;transition:all .2s}
+.machine:hover{border-color:#e8820c;background:#1e1a14}
+.machine .icon{font-size:2rem;min-width:44px;text-align:center}
+.machine .info{flex:1}
+.machine .name{font-weight:700;font-size:.9rem}
+.machine .desc{font-size:.72rem;color:#888;margin-top:2px;line-height:1.4}
+.machine .output{font-size:.7rem;color:#e8820c;margin-top:4px}
+.machine .level-badge{font-size:.65rem;background:rgba(232,130,12,.15);color:#e8820c;padding:2px 8px;border-radius:10px;margin-top:4px;display:inline-block}
+.btn-buy{padding:8px 16px;background:linear-gradient(135deg,#e8820c,#ff9f33);color:#000;border:none;border-radius:6px;font-size:.75rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s}
+.btn-buy:hover{transform:translateY(-1px);box-shadow:0 3px 12px rgba(232,130,12,.3)}
+.btn-buy:disabled{opacity:.3;cursor:not-allowed;transform:none;box-shadow:none}
+.orders{max-height:300px;overflow-y:auto}
+.order{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#1a1a1a;border-radius:8px;margin-bottom:6px;border-left:3px solid #e8820c;transition:all .3s}
+.order.filling{border-left-color:#0c0}
+.order.done{opacity:.5;border-left-color:#444}
+.order .oinfo{flex:1}
+.order .oname{font-weight:700;font-size:.85rem}
+.order .oreq{font-size:.7rem;color:#888;margin-top:2px}
+.order .opay{font-size:.85rem;font-weight:700;color:#e8820c}
+.btn-fill{padding:6px 14px;background:#1a3a1a;color:#0c0;border:1px solid #0c0;border-radius:6px;font-size:.7rem;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-fill:hover{background:#0c0;color:#000}
+.btn-fill:disabled{opacity:.3;cursor:not-allowed}
+.progress-bar{height:4px;background:#222;border-radius:2px;margin-top:6px;overflow:hidden}
+.progress-bar .fill{height:100%;background:linear-gradient(90deg,#e8820c,#ff9f33);border-radius:2px;transition:width .3s}
+.fact-banner{background:rgba(232,130,12,.06);border:1px solid rgba(232,130,12,.15);border-radius:10px;padding:12px 16px;margin-bottom:12px;font-size:.78rem;color:#bbb;line-height:1.5}
+.fact-banner strong{color:#e8820c}
+.milestone{text-align:center;padding:10px;background:rgba(232,130,12,.08);border-radius:8px;margin-bottom:8px;font-size:.8rem;color:#e8820c;font-weight:600}
+.cert-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(232,130,12,.1);border:1px solid rgba(232,130,12,.3);border-radius:20px;font-size:.75rem;font-weight:700;color:#e8820c;margin:4px}
+.auto-indicator{font-size:.6rem;color:#0c0;margin-left:6px}
+</style>
+</head>
+<body>
+<a class="back" href="javascript:history.back()">&#8592; Back</a>
+<div class="game-header">
+  <h1>&#9881; FORGE TYCOON</h1>
+  <div class="stats-bar">
+    <div class="stat"><div class="val" id="sMoney">$0</div><div class="lbl">Cash</div></div>
+    <div class="stat"><div class="val" id="sRevenue">$0/s</div><div class="lbl">Revenue</div></div>
+    <div class="stat"><div class="val" id="sOrders">0</div><div class="lbl">Orders Filled</div></div>
+    <div class="stat"><div class="val" id="sRep">0</div><div class="lbl">Reputation</div></div>
+    <div class="stat"><div class="val" id="sYear">1995</div><div class="lbl">Year</div></div>
+  </div>
+</div>
+<div class="main">
+  <!-- MACHINES -->
+  <div class="panel" id="machinesPanel">
+    <h2>&#128295; Equipment</h2>
+    <div id="factBox" class="fact-banner"><strong>LaserCraft</strong> was founded in 1995 in Orion, Michigan. Build your shop from a single press into a full-service fabrication powerhouse!</div>
+    <div id="milestones"></div>
+    <div id="certs"></div>
+    <div id="machines"></div>
+  </div>
+  <!-- ORDERS -->
+  <div class="panel">
+    <h2>&#128220; Customer Orders</h2>
+    <div id="orders" class="orders"></div>
+  </div>
+</div>
+
+<script>
+var MACHINES=[
+  {id:'press20',name:'20-Ton Press',icon:'\u2B73',desc:'Basic metal stamping. The foundation of every fab shop.',cost:100,baseProd:2,mult:1.4,count:0,unlocked:true,
+    fact:'LaserCraft runs presses from 20 to 600 tons for progressive dies, compound blanking, and deep draws.'},
+  {id:'press200',name:'200-Ton Press',icon:'\u2B73',desc:'Medium-duty stamping for automotive brackets and panels.',cost:800,baseProd:10,mult:1.5,count:0,unlocked:false,reqRep:5,
+    fact:'Progressive die stamping at LaserCraft handles high-volume runs with tight tolerances.'},
+  {id:'pressbrake',name:'CNC Press Brake',icon:'\u2507',desc:'Precision bending for steel and aluminum parts.',cost:2500,baseProd:25,mult:1.5,count:0,unlocked:false,reqRep:15,
+    fact:'LaserCraft\'s NC press brake handles complex bends in steel and aluminum with repeatable accuracy.'},
+  {id:'laser3',name:'3-Axis Laser',icon:'\u26A1',desc:'Flat sheet laser cutting. Fast, clean, accurate.',cost:8000,baseProd:60,mult:1.6,count:0,unlocked:false,reqRep:30,
+    fact:'CNC laser cutting eliminates tooling costs and handles short runs or prototypes with ease.'},
+  {id:'laser5',name:'5-Axis Laser',icon:'\u26A1',desc:'Cuts formed parts and tubes in 3D space. Elite capability.',cost:25000,baseProd:150,mult:1.6,count:0,unlocked:false,reqRep:60,
+    fact:'LaserCraft operates TWO 5-axis lasers for cutting complex 3D contours on formed metal parts.'},
+  {id:'cnc',name:'CNC Machining Center',icon:'\u2699',desc:'Precision milling and drilling. Kirksite dies and fixtures.',cost:50000,baseProd:300,mult:1.7,count:0,unlocked:false,reqRep:100,
+    fact:'CNC machining at LaserCraft creates Kirksite dies, fixtures, and precision-machined components.'},
+  {id:'press600',name:'600-Ton Press',icon:'\u2B73',desc:'Heavy-duty stamping. Massive structural parts.',cost:100000,baseProd:500,mult:1.7,count:0,unlocked:false,reqRep:150,
+    fact:'600 tons of force — LaserCraft\'s heaviest press handles large structural stampings for automotive and industrial.'},
+  {id:'weld',name:'Robotic Welding Cell',icon:'\uD83E\uDD16',desc:'Automated MIG/TIG welding for assemblies.',cost:200000,baseProd:800,mult:1.8,count:0,unlocked:false,reqRep:200,
+    fact:'LaserCraft\'s robotic welding cells produce consistent, high-strength welds on seat frames and assemblies.'},
+  {id:'cmm',name:'CMM Inspection',icon:'\uD83D\uDD2C',desc:'Coordinate Measuring Machine. 100% quality verification.',cost:400000,baseProd:1200,mult:1.8,count:0,unlocked:false,reqRep:300,
+    fact:'LaserCraft\'s CMM room provides dimensional inspection to verify every part meets spec before shipping.'},
+  {id:'cad',name:'CAD/CAM Department',icon:'\uD83D\uDCBB',desc:'CATIA V5, Unigraphics, AutoCAD, Mastercam — full digital capability.',cost:800000,baseProd:2000,mult:1.9,count:0,unlocked:false,reqRep:500,
+    fact:'LaserCraft\'s CAD team works in CATIA V5, Unigraphics, AutoCAD & Mastercam — they recover data from ANY format.'}
+];
+
+var MILESTONES=[
+  {rep:10,name:'First Big Client',msg:'An automotive supplier notices your work!'},
+  {rep:50,name:'ISO 9001 Certified',msg:'Quality management system verified. New doors open.',badge:'ISO 9001'},
+  {rep:100,name:'Tier 2 Supplier',msg:'Major OEM contracts available. You\'re on the map.'},
+  {rep:200,name:'Full Service Fab',msg:'Stamp, cut, machine, weld, inspect — all under one roof.'},
+  {rep:500,name:'Industry Leader',msg:'30+ years of precision. Just like the real LaserCraft.'}
+];
+var milestoneDone={};
+
+var ORDER_NAMES=[
+  'Automotive Bracket','Seat Frame Weldment','Laser-Cut Panel','Stamped Housing',
+  'CNC-Machined Fixture','Tube Assembly','Structural Bracket','Die Insert',
+  'Inspection Gauge','Progressive Die Run','Prototype Panel','Assembly Sub-Frame',
+  'Cross-Member Stamping','Laser-Cut Tube Profile','Robotic Weld Assembly'
+];
+
+var money=500,totalOrders=0,reputation=0,year=1995;
+var orders=[],maxOrders=5;
+var autoFillRate=0;
+var perSecond=0;
+
+function fmt(n){
+  if(n>=1e9)return '$'+(n/1e9).toFixed(1)+'B';
+  if(n>=1e6)return '$'+(n/1e6).toFixed(1)+'M';
+  if(n>=1e3)return '$'+(n/1e3).toFixed(1)+'K';
+  return '$'+Math.floor(n);
+}
+
+function getMachineCost(m){return Math.floor(m.cost*Math.pow(m.mult,m.count))}
+function getMachineProd(m){return m.baseProd*(m.count||0)}
+
+function calcPerSecond(){
+  var ps=0;
+  for(var i=0;i<MACHINES.length;i++) ps+=getMachineProd(MACHINES[i]);
+  perSecond=ps;
+  return ps;
+}
+
+function genOrder(){
+  var baseVal=50+reputation*10+Math.random()*reputation*20;
+  var name=ORDER_NAMES[Math.floor(Math.random()*ORDER_NAMES.length)];
+  var req=Math.floor(baseVal*.3)+5;
+  return{name:name,required:req,progress:0,value:Math.floor(baseVal),done:false};
+}
+
+function renderMachines(){
+  var html='';
+  for(var i=0;i<MACHINES.length;i++){
+    var m=MACHINES[i];
+    if(!m.unlocked&&reputation<(m.reqRep||0)){
+      html+='<div class="machine" style="opacity:.3"><div class="icon">?</div><div class="info"><div class="name">??? Locked</div><div class="desc">Reach '+m.reqRep+' reputation to unlock</div></div></div>';
+      continue;
+    }
+    if(!m.unlocked)m.unlocked=true;
+    var cost=getMachineCost(m);
+    var prod=m.baseProd;
+    html+='<div class="machine"><div class="icon">'+m.icon+'</div><div class="info">'+
+      '<div class="name">'+m.name+(m.count>0?' <span class="level-badge">x'+m.count+'</span>':'')+'</div>'+
+      '<div class="desc">'+m.desc+'</div>'+
+      '<div class="output">+$'+prod+'/s each'+(m.count>0?' (total: $'+getMachineProd(m)+'/s)':'')+'</div>'+
+      '</div>'+
+      '<button class="btn-buy" onclick="buyMachine('+i+')" '+(money<cost?'disabled':'')+'>'+fmt(cost)+'</button></div>';
+  }
+  document.getElementById('machines').innerHTML=html;
+}
+
+function renderOrders(){
+  var html='';
+  for(var i=0;i<orders.length;i++){
+    var o=orders[i];
+    if(o.done)continue;
+    var pct=Math.min(100,Math.floor(o.progress/o.required*100));
+    html+='<div class="order'+(pct>0?' filling':'')+'">'+
+      '<div class="oinfo"><div class="oname">'+o.name+'</div>'+
+      '<div class="oreq">Parts: '+Math.floor(o.progress)+' / '+o.required+'</div>'+
+      '<div class="progress-bar"><div class="fill" style="width:'+pct+'%"></div></div></div>'+
+      '<div class="opay">'+fmt(o.value)+'</div>'+
+      '<button class="btn-fill" onclick="fillOrder('+i+')" '+(perSecond<=0?'disabled':'')+'>FILL</button></div>';
+  }
+  document.getElementById('orders').innerHTML=html;
+}
+
+function renderMilestones(){
+  var html='';
+  for(var i=0;i<MILESTONES.length;i++){
+    var m=MILESTONES[i];
+    if(reputation>=m.rep&&!milestoneDone[i]){
+      milestoneDone[i]=true;
+      document.getElementById('factBox').innerHTML='<strong>'+m.name+'!</strong> '+m.msg;
+    }
+  }
+  // Certs
+  var chtml='';
+  if(milestoneDone[1])chtml+='<span class="cert-badge">\u2705 ISO 9001</span>';
+  if(milestoneDone[2])chtml+='<span class="cert-badge">\u2B50 Tier 2</span>';
+  if(milestoneDone[3])chtml+='<span class="cert-badge">\u26A1 Full Service</span>';
+  if(milestoneDone[4])chtml+='<span class="cert-badge">\uD83C\uDFC6 Industry Leader</span>';
+  document.getElementById('certs').innerHTML=chtml;
+}
+
+function buyMachine(idx){
+  var m=MACHINES[idx];
+  var cost=getMachineCost(m);
+  if(money<cost)return;
+  money-=cost;m.count++;
+  calcPerSecond();
+  // Show fact
+  document.getElementById('factBox').innerHTML='<strong>'+m.name+':</strong> '+m.fact;
+  renderMachines();
+}
+
+function fillOrder(idx){
+  var o=orders[idx];
+  // Start auto-filling (production goes to order)
+  o.filling=true;
+}
+
+function tick(){
+  // Production fills active orders
+  var ps=perSecond/10; // per tick (100ms)
+  var remaining=ps;
+  for(var i=0;i<orders.length;i++){
+    var o=orders[i];
+    if(o.done)continue;
+    if(o.filling&&remaining>0){
+      var need=o.required-o.progress;
+      var give=Math.min(remaining,need);
+      o.progress+=give;
+      remaining-=give;
+      if(o.progress>=o.required){
+        o.done=true;
+        money+=o.value;
+        totalOrders++;
+        reputation+=Math.max(1,Math.floor(o.value/100));
+      }
+    }
+  }
+  // Passive income from unfilled production
+  money+=remaining*0.5;
+
+  // Year progression
+  year=1995+Math.floor(totalOrders/3);
+
+  // Spawn orders
+  var active=orders.filter(function(o){return !o.done}).length;
+  if(active<maxOrders&&Math.random()<.05){
+    orders.push(genOrder());
+    if(orders.length>20)orders=orders.filter(function(o){return !o.done});
+  }
+
+  // Update UI
+  document.getElementById('sMoney').textContent=fmt(money);
+  document.getElementById('sRevenue').textContent='$'+Math.floor(perSecond)+'/s';
+  document.getElementById('sOrders').textContent=totalOrders;
+  document.getElementById('sRep').textContent=reputation;
+  document.getElementById('sYear').textContent=year;
+
+  renderMachines();
+  renderOrders();
+  renderMilestones();
+}
+
+// Init
+orders.push(genOrder());orders.push(genOrder());orders.push(genOrder());
+calcPerSecond();
+renderMachines();renderOrders();
+setInterval(tick,100);
+</script>
+</body>
+</html>

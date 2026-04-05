@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<title>Laser Precision — LaserCraft Games</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#e0e0e0;font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;user-select:none}
+canvas{border:2px solid #e8820c;border-radius:8px;cursor:crosshair;touch-action:none}
+.hud{position:fixed;top:20px;left:50%;transform:translateX(-50%);display:flex;gap:30px;font-size:14px;font-weight:700;letter-spacing:1px;z-index:10}
+.hud span{color:#e8820c}
+.hud .label{color:#888;text-transform:uppercase;font-size:10px;display:block}
+#overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;text-align:center;padding:20px}
+#overlay h1{font-size:2.5rem;color:#e8820c;margin-bottom:10px;text-shadow:0 0 30px rgba(232,130,12,.4)}
+#overlay h2{font-size:1.8rem;color:#e8820c;margin-bottom:10px}
+#overlay p{color:#aaa;max-width:500px;line-height:1.6;margin-bottom:6px;font-size:.95rem}
+#overlay .fact{background:rgba(232,130,12,.08);border:1px solid rgba(232,130,12,.2);border-radius:10px;padding:14px 20px;margin:16px 0;max-width:460px;font-size:.85rem;color:#ccc;line-height:1.5}
+#overlay .fact strong{color:#e8820c}
+.btn{padding:14px 36px;background:linear-gradient(135deg,#e8820c,#ff9f33);color:#000;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:16px;letter-spacing:1px;transition:all .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(232,130,12,.4)}
+.back{position:fixed;top:16px;left:16px;color:#666;text-decoration:none;font-size:.8rem;z-index:200;transition:color .2s}
+.back:hover{color:#e8820c}
+.stars{color:#e8820c;font-size:1.8rem;margin:8px 0}
+#levelInfo{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2rem;color:#e8820c;font-weight:800;z-index:50;pointer-events:none;opacity:0;transition:opacity .4s;text-shadow:0 0 30px rgba(232,130,12,.5)}
+</style>
+</head>
+<body>
+<a class="back" href="javascript:history.back()">← Back</a>
+<div class="hud">
+  <div><span class="label">Level</span><span id="hLevel">1</span></div>
+  <div><span class="label">Score</span><span id="hScore">0</span></div>
+  <div><span class="label">Accuracy</span><span id="hAcc">100%</span></div>
+  <div><span class="label">Time</span><span id="hTime">0s</span></div>
+  <div><span class="label">Combo</span><span id="hCombo">x1</span></div>
+</div>
+<canvas id="c"></canvas>
+<div id="levelInfo"></div>
+<div id="overlay">
+  <h1>⚡ LASER PRECISION</h1>
+  <p>You are LaserCraft's CNC laser. Trace the blueprint path with your mouse to cut metal parts.</p>
+  <p>Stay on the line. Speed matters. Accuracy earns stars.</p>
+  <div class="fact">
+    <strong>About LaserCraft:</strong> Founded in 1995 in Orion, Michigan. They operate 3 CNC laser machines — including two 5-axis units — cutting steel, aluminum, and Kirksite dies with tolerances of ±0.005".
+  </div>
+  <button class="btn" onclick="startGame()">FIRE THE LASER</button>
+</div>
+
+<script>
+var c=document.getElementById('c'),ctx=c.getContext('2d');
+var W,H;
+function resize(){
+  var s=Math.min(window.innerWidth-40,window.innerHeight-100,700);
+  W=c.width=s;H=c.height=s;
+}
+resize();window.addEventListener('resize',resize);
+
+var overlay=document.getElementById('overlay');
+var levelInfo=document.getElementById('levelInfo');
+
+var FACTS=[
+  "LaserCraft has been precision fabricating since 1995 — over 30 years of metal mastery.",
+  "Their CNC lasers include two 5-axis machines capable of cutting complex 3D contours.",
+  "LaserCraft is ISO 9001 certified — every part meets rigorous quality standards.",
+  "They handle everything from 20-ton to 600-ton press operations under one roof.",
+  "LaserCraft's robotic welding cells deliver consistent, high-strength welds on seats, frames, and assemblies.",
+  "Their CAD department works in CATIA V5, Unigraphics, AutoCAD, and Mastercam — any format, any data.",
+  "Located at 151 Premier Drive, Orion Township, MI — serving automotive and industrial clients.",
+  "LaserCraft's CMM inspection ensures 100% quality verification before parts ship.",
+  "From raw steel to finished assembly — LaserCraft does it all: stamp, cut, machine, weld, inspect.",
+  "Their 3-axis laser handles flat sheet cutting while 5-axis units tackle formed parts and tubes."
+];
+var factIdx=0;
+
+var score=0,level=1,combo=1,maxCombo=1,totalDist=0,onPathDist=0;
+var paths=[],currentPath=null,pathIdx=0,cutting=false,trailPts=[];
+var sparks=[],particles=[];
+var gameActive=false,levelTime=0,levelStart=0;
+var mouseX=-1,mouseY=-1,mouseDown=false;
+
+// Path generation
+function genPath(complexity){
+  var pts=[],num=5+complexity*2,margin=80;
+  // start point
+  var sx=margin+Math.random()*(W-margin*2),sy=margin+Math.random()*(H-margin*2);
+  pts.push({x:sx,y:sy});
+  for(var i=1;i<num;i++){
+    var angle=Math.random()*Math.PI*2;
+    var dist=60+Math.random()*80+complexity*10;
+    var nx=pts[i-1].x+Math.cos(angle)*dist;
+    var ny=pts[i-1].y+Math.sin(angle)*dist;
+    nx=Math.max(margin,Math.min(W-margin,nx));
+    ny=Math.max(margin,Math.min(H-margin,ny));
+    pts.push({x:nx,y:ny});
+  }
+  return pts;
+}
+
+function genLevel(){
+  paths=[];
+  var numPaths=Math.min(level,4);
+  for(var i=0;i<numPaths;i++) paths.push(genPath(level));
+  pathIdx=0;currentPath=paths[0];
+  trailPts=[];cutting=false;
+  levelStart=Date.now();
+}
+
+// Smooth path interpolation
+function getPathPoints(pts,density){
+  var out=[];
+  for(var i=0;i<pts.length-1;i++){
+    var a=pts[i],b=pts[i+1];
+    var d=Math.sqrt((b.x-a.x)*(b.x-a.x)+(b.y-a.y)*(b.y-a.y));
+    var steps=Math.max(1,Math.floor(d/density));
+    for(var s=0;s<steps;s++){
+      var t=s/steps;
+      out.push({x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t});
+    }
+  }
+  out.push(pts[pts.length-1]);
+  return out;
+}
+
+function distToPath(px,py,pts){
+  var min=Infinity;
+  for(var i=0;i<pts.length-1;i++){
+    var a=pts[i],b=pts[i+1];
+    var dx=b.x-a.x,dy=b.y-a.y;
+    var len2=dx*dx+dy*dy;
+    var t=len2===0?0:Math.max(0,Math.min(1,((px-a.x)*dx+(py-a.y)*dy)/len2));
+    var cx=a.x+t*dx,cy=a.y+t*dy;
+    var dd=(px-cx)*(px-cx)+(py-cy)*(py-cy);
+    if(dd<min)min=dd;
+  }
+  return Math.sqrt(min);
+}
+
+function addSparks(x,y,onPath){
+  for(var i=0;i<(onPath?3:1);i++){
+    var angle=Math.random()*Math.PI*2;
+    var speed=1+Math.random()*3;
+    sparks.push({x:x,y:y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,life:20+Math.random()*20,max:40,
+      r:onPath?1:0.5,color:onPath?'232,130,12':'255,60,60'});
+  }
+}
+
+function addParticle(x,y){
+  particles.push({x:x,y:y,vx:(Math.random()-.5)*2,vy:-Math.random()*3-1,life:40,max:40,r:Math.random()*2+1});
+}
+
+// Input
+c.addEventListener('mousedown',function(e){mouseDown=true;handleInput(e)});
+c.addEventListener('mousemove',function(e){handleInput(e)});
+c.addEventListener('mouseup',function(){mouseDown=false});
+c.addEventListener('touchstart',function(e){e.preventDefault();mouseDown=true;handleTouch(e)},{passive:false});
+c.addEventListener('touchmove',function(e){e.preventDefault();handleTouch(e)},{passive:false});
+c.addEventListener('touchend',function(){mouseDown=false});
+
+function handleInput(e){
+  var r=c.getBoundingClientRect();
+  mouseX=e.clientX-r.left;mouseY=e.clientY-r.top;
+}
+function handleTouch(e){
+  var r=c.getBoundingClientRect();
+  mouseX=e.touches[0].clientX-r.left;mouseY=e.touches[0].clientY-r.top;
+}
+
+function showLevelText(text){
+  levelInfo.textContent=text;levelInfo.style.opacity='1';
+  setTimeout(function(){levelInfo.style.opacity='0'},1500);
+}
+
+// Game loop
+function update(){
+  if(!gameActive)return;
+  levelTime=((Date.now()-levelStart)/1000).toFixed(1);
+  document.getElementById('hTime').textContent=levelTime+'s';
+
+  if(mouseDown&&currentPath){
+    cutting=true;
+    var d=distToPath(mouseX,mouseY,currentPath);
+    var threshold=15+Math.max(0,5-level);
+    var onPath=d<threshold;
+
+    trailPts.push({x:mouseX,y:mouseY,on:onPath,t:Date.now()});
+    totalDist++;
+    if(onPath){
+      onPathDist++;
+      combo=Math.min(combo+0.02,10);
+      score+=Math.floor(combo);
+      addSparks(mouseX,mouseY,true);
+    }else{
+      combo=Math.max(1,combo-0.5);
+      addSparks(mouseX,mouseY,false);
+    }
+
+    // Check if near end of path
+    var end=currentPath[currentPath.length-1];
+    var dEnd=Math.sqrt((mouseX-end.x)*(mouseX-end.x)+(mouseY-end.y)*(mouseY-end.y));
+    if(dEnd<25&&trailPts.length>20){
+      // Path complete
+      pathIdx++;
+      for(var i=0;i<20;i++)addParticle(end.x,end.y);
+      if(pathIdx<paths.length){
+        currentPath=paths[pathIdx];trailPts=[];
+        showLevelText('NEXT CUT');
+      }else{
+        completeLevel();
+      }
+    }
+  }
+
+  if(combo>maxCombo)maxCombo=combo;
+  var acc=totalDist>0?Math.round(onPathDist/totalDist*100):100;
+  document.getElementById('hScore').textContent=score;
+  document.getElementById('hAcc').textContent=acc+'%';
+  document.getElementById('hCombo').textContent='x'+Math.floor(combo);
+}
+
+function completeLevel(){
+  gameActive=false;
+  var acc=totalDist>0?Math.round(onPathDist/totalDist*100):100;
+  var stars3=acc>=90?3:acc>=70?2:1;
+  var starStr='';for(var i=0;i<3;i++)starStr+=i<stars3?'★':'☆';
+  var bonus=stars3*100*level;
+  score+=bonus;
+
+  overlay.innerHTML='<h2>LEVEL '+level+' COMPLETE</h2>'+
+    '<div class="stars">'+starStr+'</div>'+
+    '<p>Accuracy: <span style="color:#e8820c">'+acc+'%</span> | Time: <span style="color:#e8820c">'+levelTime+'s</span></p>'+
+    '<p>Max Combo: <span style="color:#e8820c">x'+Math.floor(maxCombo)+'</span> | Bonus: <span style="color:#e8820c">+'+bonus+'</span></p>'+
+    '<div class="fact"><strong>Did You Know?</strong> '+FACTS[factIdx%FACTS.length]+'</div>'+
+    '<button class="btn" onclick="nextLevel()">NEXT LEVEL</button>';
+  factIdx++;
+  overlay.style.display='flex';
+}
+
+function nextLevel(){
+  level++;totalDist=0;onPathDist=0;combo=1;maxCombo=1;
+  sparks=[];particles=[];trailPts=[];
+  document.getElementById('hLevel').textContent=level;
+  overlay.style.display='none';
+  genLevel();
+  showLevelText('LEVEL '+level);
+  gameActive=true;
+}
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+
+  // Grid
+  ctx.strokeStyle='rgba(232,130,12,.04)';ctx.lineWidth=1;
+  for(var x=0;x<W;x+=30){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
+  for(var y=0;y<H;y+=30){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+
+  // Draw all paths
+  for(var p=0;p<paths.length;p++){
+    var pts=paths[p];
+    var isActive=p===pathIdx;
+    var isDone=p<pathIdx;
+
+    // Path line
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x,pts[0].y);
+    for(var i=1;i<pts.length;i++)ctx.lineTo(pts[i].x,pts[i].y);
+    ctx.strokeStyle=isDone?'rgba(0,200,0,.3)':isActive?'rgba(232,130,12,.5)':'rgba(232,130,12,.15)';
+    ctx.lineWidth=isDone?2:isActive?(15+Math.max(0,5-level)):8;
+    ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();
+
+    // Blueprint dashes
+    if(isActive){
+      ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);
+      for(var i=1;i<pts.length;i++)ctx.lineTo(pts[i].x,pts[i].y);
+      ctx.setLineDash([8,8]);ctx.strokeStyle='rgba(232,130,12,.8)';ctx.lineWidth=1.5;ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // Start/end markers
+    if(isActive||isDone){
+      // Start
+      ctx.beginPath();ctx.arc(pts[0].x,pts[0].y,8,0,Math.PI*2);
+      ctx.fillStyle=isDone?'rgba(0,200,0,.5)':'rgba(232,130,12,.6)';ctx.fill();
+      ctx.strokeStyle=isDone?'#0c0':'#e8820c';ctx.lineWidth=2;ctx.stroke();
+      // End
+      var ep=pts[pts.length-1];
+      ctx.beginPath();ctx.arc(ep.x,ep.y,8,0,Math.PI*2);
+      ctx.fillStyle=isDone?'rgba(0,200,0,.5)':'rgba(255,50,50,.4)';ctx.fill();
+      ctx.strokeStyle=isDone?'#0c0':'#f33';ctx.lineWidth=2;ctx.stroke();
+      if(!isDone){
+        ctx.font='bold 8px Segoe UI';ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';
+        ctx.fillText('S',pts[0].x,pts[0].y);ctx.fillText('E',ep.x,ep.y);
+      }
+    }
+  }
+
+  // Trail
+  for(var i=1;i<trailPts.length;i++){
+    var a=trailPts[i-1],b=trailPts[i];
+    ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+    ctx.strokeStyle=b.on?'rgba(232,130,12,.9)':'rgba(255,60,60,.7)';
+    ctx.lineWidth=b.on?3:2;ctx.lineCap='round';ctx.stroke();
+  }
+
+  // Sparks
+  for(var i=sparks.length-1;i>=0;i--){
+    var s=sparks[i];
+    s.x+=s.vx;s.y+=s.vy;s.life--;
+    if(s.life<=0){sparks.splice(i,1);continue}
+    var a=s.life/s.max;
+    ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle='rgba('+s.color+','+a+')';ctx.fill();
+  }
+
+  // Particles
+  for(var i=particles.length-1;i>=0;i--){
+    var p=particles[i];
+    p.x+=p.vx;p.y+=p.vy;p.vy+=.05;p.life--;
+    if(p.life<=0){particles.splice(i,1);continue}
+    var a=p.life/p.max;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r*a,0,Math.PI*2);
+    ctx.fillStyle='rgba(232,130,12,'+a+')';ctx.fill();
+  }
+
+  // Laser cursor
+  if(gameActive&&mouseX>0){
+    var grd=ctx.createRadialGradient(mouseX,mouseY,0,mouseX,mouseY,30);
+    grd.addColorStop(0,'rgba(232,130,12,'+(mouseDown?.4:.15)+')');
+    grd.addColorStop(1,'rgba(232,130,12,0)');
+    ctx.beginPath();ctx.arc(mouseX,mouseY,30,0,Math.PI*2);ctx.fillStyle=grd;ctx.fill();
+    if(mouseDown){
+      ctx.beginPath();ctx.arc(mouseX,mouseY,2,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();
+    }
+  }
+
+  requestAnimationFrame(draw);
+}
+
+function startGame(){
+  overlay.style.display='none';
+  score=0;level=1;combo=1;maxCombo=1;totalDist=0;onPathDist=0;factIdx=0;
+  document.getElementById('hLevel').textContent='1';
+  genLevel();
+  showLevelText('LEVEL 1');
+  gameActive=true;
+}
+
+draw();
+</script>
+</body>
+</html>
