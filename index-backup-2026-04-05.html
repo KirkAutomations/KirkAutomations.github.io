@@ -170,48 +170,6 @@ body:hover #cursor-glow{opacity:.7}
 .theme-dot:hover::after{opacity:1}
 
 /* ═══════════════════════════════════════════════════════
-   ANIMATION SWITCHER (left rail)
-   ═══════════════════════════════════════════════════════ */
-#animSwitcher{
-  position:fixed;top:50%;left:16px;transform:translateY(-50%);
-  z-index:9999;display:flex;flex-direction:column;gap:6px;align-items:center;
-  padding:10px 6px;background:rgba(20,20,30,.75);
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  border-radius:30px;border:1px solid rgba(255,255,255,.06);
-}
-[data-theme="arctic"] #animSwitcher,[data-theme="sand"] #animSwitcher{
-  background:rgba(255,255,255,.82);border-color:rgba(0,0,0,.06);
-}
-.anim-label{
-  writing-mode:vertical-rl;text-orientation:mixed;
-  font-size:.55rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
-  color:var(--text-secondary);opacity:.6;padding:4px 0;margin-bottom:2px;
-  transition:opacity .3s;
-}
-#animSwitcher:hover .anim-label{opacity:1}
-.anim-dot{
-  width:18px;height:18px;border-radius:50%;cursor:pointer;
-  border:2px solid transparent;transition:all .25s;display:flex;
-  align-items:center;justify-content:center;font-size:9px;
-  background:var(--bg-card);color:var(--text-secondary);
-}
-.anim-dot:hover{transform:scale(1.35);border-color:rgba(255,255,255,.8)}
-[data-theme="arctic"] .anim-dot:hover,[data-theme="sand"] .anim-dot:hover{border-color:rgba(0,0,0,.4)}
-.anim-dot.active{border-color:var(--accent);box-shadow:0 0 8px var(--accent-glow);transform:scale(1.25);color:var(--accent)}
-.anim-dot[data-label]::before{
-  content:attr(data-label);position:absolute;left:30px;top:50%;
-  transform:translateY(-50%);background:var(--bg-card);color:var(--text-primary);
-  padding:4px 10px;border-radius:6px;font-size:11px;white-space:nowrap;
-  opacity:0;pointer-events:none;transition:opacity .2s;
-  border:1px solid var(--border-color);box-shadow:0 2px 8px rgba(0,0,0,.15);
-}
-.anim-dot:hover::before{opacity:1}
-@media(max-width:768px){
-  #animSwitcher{left:8px;gap:4px;padding:8px 5px}
-  .anim-dot{width:14px;height:14px;font-size:7px}
-}
-
-/* ═══════════════════════════════════════════════════════
    NAVIGATION
    ═══════════════════════════════════════════════════════ */
 nav{
@@ -631,21 +589,6 @@ footer{
   <div class="theme-dot" data-theme="ocean" data-label="Ocean Depth" style="background:#00b8d4"></div>
 </div>
 
-<!-- ═══════════════════ ANIMATION SWITCHER ═══════════════════ -->
-<div id="animSwitcher">
-  <div class="anim-label">FX</div>
-  <div class="anim-dot active" data-anim="particles" data-label="Particles" style="position:relative">⚛</div>
-  <div class="anim-dot" data-anim="matrix" data-label="Matrix Rain" style="position:relative">▓</div>
-  <div class="anim-dot" data-anim="starfield" data-label="Starfield" style="position:relative">✦</div>
-  <div class="anim-dot" data-anim="aurora" data-label="Aurora Waves" style="position:relative">◠</div>
-  <div class="anim-dot" data-anim="fireflies" data-label="Fireflies" style="position:relative">●</div>
-  <div class="anim-dot" data-anim="mesh" data-label="Geo Mesh" style="position:relative">◇</div>
-  <div class="anim-dot" data-anim="lightning" data-label="Lightning" style="position:relative">⚡</div>
-  <div class="anim-dot" data-anim="bubbles" data-label="Bubbles" style="position:relative">○</div>
-  <div class="anim-dot" data-anim="helix" data-label="DNA Helix" style="position:relative">🧬</div>
-  <div class="anim-dot" data-anim="blobs" data-label="Liquid Blobs" style="position:relative">◉</div>
-</div>
-
 <!-- ═══════════════════ NAVIGATION ═══════════════════ -->
 <nav id="mainNav">
   <div class="nav-logo">
@@ -1023,15 +966,49 @@ document.getElementById('themeSwitcher').addEventListener('click',function(e){
   if(t)applyTheme(t);
 });
 
-/* ── 2. ANIMATION ENGINE (10 effects) ── */
+/* ── 2. PARTICLES ── */
 var canvas=document.getElementById('particle-canvas');
 var ctx=canvas.getContext('2d');
+var particles=[];
 var mouseX=-9999,mouseY=-9999;
-var W,H;
-function sizeCanvas(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
+var PCOUNT=65,CDIST=140,MRAD=180;
+
+function sizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}
 sizeCanvas();window.addEventListener('resize',sizeCanvas);
 
 function getPColor(){return(getComputedStyle(html).getPropertyValue('--particle-color')||'37,88,217').trim()}
+var pColor=getPColor();
+
+for(var i=0;i<PCOUNT;i++) particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*1.6+.8});
+
+function tickP(){
+  pColor=getPColor();
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(var i=0;i<particles.length;i++){
+    var p=particles[i];
+    var dx=p.x-mouseX,dy=p.y-mouseY,dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist<MRAD&&dist>0){var f=(MRAD-dist)/MRAD;p.vx+=(dx/dist)*f*.35;p.vy+=(dy/dist)*f*.35}
+    p.vx*=.99;p.vy*=.99;p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0)p.x=canvas.width;if(p.x>canvas.width)p.x=0;
+    if(p.y<0)p.y=canvas.height;if(p.y>canvas.height)p.y=0;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.283);
+    ctx.fillStyle='rgba('+pColor+',.45)';ctx.fill();
+  }
+  for(i=0;i<particles.length;i++){
+    for(var j=i+1;j<particles.length;j++){
+      var dx2=particles[i].x-particles[j].x,dy2=particles[i].y-particles[j].y;
+      var d2=Math.sqrt(dx2*dx2+dy2*dy2);
+      if(d2<CDIST){
+        ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);
+        ctx.lineTo(particles[j].x,particles[j].y);
+        ctx.strokeStyle='rgba('+pColor+','+(1-d2/CDIST)*.1+')';
+        ctx.lineWidth=.5;ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(tickP);
+}
+tickP();
 
 var glow=document.getElementById('cursor-glow');
 document.addEventListener('mousemove',function(e){
@@ -1041,449 +1018,16 @@ document.addEventListener('mousemove',function(e){
 document.addEventListener('touchmove',function(e){mouseX=e.touches[0].clientX;mouseY=e.touches[0].clientY},{passive:true});
 document.addEventListener('touchend',function(){mouseX=mouseY=-9999},{passive:true});
 
-var currentAnim='particles';
-var animState={};
-var animFrame=null;
-
-/* ─── ANIMATION DEFINITIONS ─── */
-var ANIMS={};
-
-/* 1. PARTICLES — mouse repulsion + connection lines */
-ANIMS.particles={
-  init:function(){
-    var ps=[];for(var i=0;i<65;i++)ps.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*1.6+.8});
-    animState.ps=ps;
-  },
-  tick:function(){
-    var pc=getPColor(),ps=animState.ps;
-    ctx.clearRect(0,0,W,H);
-    for(var i=0;i<ps.length;i++){
-      var p=ps[i],dx=p.x-mouseX,dy=p.y-mouseY,dist=Math.sqrt(dx*dx+dy*dy);
-      if(dist<180&&dist>0){var f=(180-dist)/180;p.vx+=(dx/dist)*f*.35;p.vy+=(dy/dist)*f*.35}
-      p.vx*=.99;p.vy*=.99;p.x+=p.vx;p.y+=p.vy;
-      if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;
-      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.283);ctx.fillStyle='rgba('+pc+',.45)';ctx.fill();
-    }
-    for(i=0;i<ps.length;i++)for(var j=i+1;j<ps.length;j++){
-      var dx2=ps[i].x-ps[j].x,dy2=ps[i].y-ps[j].y,d2=Math.sqrt(dx2*dx2+dy2*dy2);
-      if(d2<140){ctx.beginPath();ctx.moveTo(ps[i].x,ps[i].y);ctx.lineTo(ps[j].x,ps[j].y);ctx.strokeStyle='rgba('+pc+','+(1-d2/140)*.1+')';ctx.lineWidth=.5;ctx.stroke()}
-    }
-  }
-};
-
-/* 2. MATRIX RAIN — falling chars, mouse creates void */
-ANIMS.matrix={
-  init:function(){
-    var cols=Math.ceil(W/16);
-    var drops=[];for(var i=0;i<cols;i++)drops[i]=Math.random()*-100;
-    animState.drops=drops;animState.cols=cols;
-    var chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*(){}[]|;:<>?/~';
-    animState.chars=chars;
-  },
-  tick:function(){
-    var pc=getPColor(),d=animState.drops,ch=animState.chars;
-    ctx.fillStyle='rgba('+(currentTheme==='arctic'||currentTheme==='sand'?'245,247,255':'0,0,0')+',.06)';
-    ctx.fillRect(0,0,W,H);
-    ctx.font='14px JetBrains Mono,monospace';
-    for(var i=0;i<d.length;i++){
-      var x=i*16,y=d[i]*16;
-      var dx=x-mouseX,dy=y-mouseY,dist=Math.sqrt(dx*dx+dy*dy);
-      if(dist<120){d[i]=Math.random()*-50;continue}
-      var c=ch[Math.floor(Math.random()*ch.length)];
-      var bright=Math.random()>.92;
-      ctx.fillStyle=bright?'rgba('+pc+',1)':'rgba('+pc+',.35)';
-      ctx.fillText(c,x,y);
-      if(d[i]*16>H&&Math.random()>.975)d[i]=0;
-      d[i]+=.5+Math.random()*.5;
-    }
-  }
-};
-
-/* 3. STARFIELD — 3D flying through stars, mouse steers */
-ANIMS.starfield={
-  init:function(){
-    var stars=[];for(var i=0;i<400;i++)stars.push({x:(Math.random()-.5)*W*2,y:(Math.random()-.5)*H*2,z:Math.random()*W});
-    animState.stars=stars;
-  },
-  tick:function(){
-    var pc=getPColor(),stars=animState.stars;
-    ctx.clearRect(0,0,W,H);
-    var cx=W/2,cy=H/2;
-    var steerX=(mouseX>0?(mouseX-cx)/cx:0)*.5;
-    var steerY=(mouseY>0?(mouseY-cy)/cy:0)*.5;
-    for(var i=0;i<stars.length;i++){
-      var s=stars[i];
-      s.z-=3;
-      s.x-=steerX*6;
-      s.y-=steerY*6;
-      if(s.z<=0){s.x=(Math.random()-.5)*W*2;s.y=(Math.random()-.5)*H*2;s.z=W}
-      var k=128/s.z;
-      var px=s.x*k+cx,py=s.y*k+cy;
-      if(px<0||px>W||py<0||py>H){s.x=(Math.random()-.5)*W*2;s.y=(Math.random()-.5)*H*2;s.z=W;continue}
-      var sz=Math.max(0,(1-s.z/W)*3);
-      var alpha=Math.max(0,(1-s.z/W)*.7);
-      ctx.beginPath();ctx.arc(px,py,sz,0,6.283);ctx.fillStyle='rgba('+pc+','+alpha+')';ctx.fill();
-      // streak
-      var k2=128/(s.z+6);
-      var px2=s.x*k2+cx,py2=s.y*k2+cy;
-      ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px2,py2);ctx.strokeStyle='rgba('+pc+','+(alpha*.3)+')';ctx.lineWidth=sz*.5;ctx.stroke();
-    }
-  }
-};
-
-/* 4. AURORA WAVES — flowing ribbons that shift with cursor */
-ANIMS.aurora={
-  init:function(){animState.t=0},
-  tick:function(){
-    var pc=getPColor(),t=animState.t;
-    ctx.clearRect(0,0,W,H);
-    var mx=mouseX>0?mouseX/W:.5,my=mouseY>0?mouseY/H:.5;
-    for(var band=0;band<5;band++){
-      ctx.beginPath();
-      var baseY=H*.3+band*H*.12+my*60;
-      for(var x=0;x<=W;x+=4){
-        var y=baseY+Math.sin(x*.003+t*.02+band*1.5)*50+Math.sin(x*.007+t*.015+band)*30+Math.cos(x*.005+t*.01+mx*3)*20;
-        x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
-      }
-      ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();
-      var alpha=(.08-.01*band);
-      ctx.fillStyle='rgba('+pc+','+alpha+')';ctx.fill();
-    }
-    animState.t=t+1;
-  }
-};
-
-/* 5. FIREFLIES — glowing orbs scatter from cursor, drift back */
-ANIMS.fireflies={
-  init:function(){
-    var ff=[];for(var i=0;i<50;i++)ff.push({x:Math.random()*W,y:Math.random()*H,vx:0,vy:0,r:Math.random()*4+2,phase:Math.random()*6.28,speed:Math.random()*.5+.2});
-    animState.ff=ff;animState.t=0;
-  },
-  tick:function(){
-    var pc=getPColor(),ff=animState.ff,t=animState.t;
-    ctx.clearRect(0,0,W,H);
-    for(var i=0;i<ff.length;i++){
-      var f=ff[i];
-      var dx=f.x-mouseX,dy=f.y-mouseY,dist=Math.sqrt(dx*dx+dy*dy);
-      if(dist<150&&dist>0){var push=(150-dist)/150;f.vx+=(dx/dist)*push*2;f.vy+=(dy/dist)*push*2}
-      f.vx+=Math.sin(t*.01+f.phase)*.02;
-      f.vy+=Math.cos(t*.013+f.phase)*.02;
-      f.vx*=.97;f.vy*=.97;
-      f.x+=f.vx;f.y+=f.vy;
-      if(f.x<-20)f.x=W+20;if(f.x>W+20)f.x=-20;
-      if(f.y<-20)f.y=H+20;if(f.y>H+20)f.y=-20;
-      var glow2=(.4+.3*Math.sin(t*.03+f.phase));
-      var grad=ctx.createRadialGradient(f.x,f.y,0,f.x,f.y,f.r*4);
-      grad.addColorStop(0,'rgba('+pc+','+glow2+')');
-      grad.addColorStop(.4,'rgba('+pc+','+(glow2*.3)+')');
-      grad.addColorStop(1,'rgba('+pc+',0)');
-      ctx.beginPath();ctx.arc(f.x,f.y,f.r*4,0,6.283);ctx.fillStyle=grad;ctx.fill();
-      ctx.beginPath();ctx.arc(f.x,f.y,f.r*.6,0,6.283);ctx.fillStyle='rgba('+pc+','+glow2+')';ctx.fill();
-    }
-    animState.t=t+1;
-  }
-};
-
-/* 6. GEOMETRIC MESH — deformable grid of connected nodes */
-ANIMS.mesh={
-  init:function(){
-    var sp=80,nodes=[];
-    for(var x=0;x<W+sp;x+=sp)for(var y=0;y<H+sp;y+=sp)nodes.push({ox:x,oy:y,x:x,y:y});
-    animState.nodes=nodes;animState.sp=sp;
-  },
-  tick:function(){
-    var pc=getPColor(),nodes=animState.nodes,sp=animState.sp;
-    ctx.clearRect(0,0,W,H);
-    for(var i=0;i<nodes.length;i++){
-      var n=nodes[i];
-      var dx=n.ox-mouseX,dy=n.oy-mouseY,dist=Math.sqrt(dx*dx+dy*dy);
-      if(dist<200&&dist>0){var f=(200-dist)/200;n.x=n.ox+dx/dist*f*40;n.y=n.oy+dy/dist*f*40}
-      else{n.x+=(n.ox-n.x)*.1;n.y+=(n.oy-n.y)*.1}
-    }
-    // draw lines
-    for(i=0;i<nodes.length;i++){
-      var a=nodes[i];
-      for(var j=i+1;j<nodes.length;j++){
-        var b=nodes[j];
-        var d=Math.sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));
-        if(d<sp*1.5){
-          ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
-          ctx.strokeStyle='rgba('+pc+','+(1-d/(sp*1.5))*.12+')';ctx.lineWidth=.5;ctx.stroke();
-        }
-      }
-      ctx.beginPath();ctx.arc(a.x,a.y,1.5,0,6.283);ctx.fillStyle='rgba('+pc+',.25)';ctx.fill();
-    }
-  }
-};
-
-/* 7. LIGHTNING — electric arcs that branch toward mouse */
-ANIMS.lightning={
-  init:function(){animState.bolts=[];animState.timer=0;animState.t=0},
-  tick:function(){
-    var pc=getPColor(),t=animState.t;
-    ctx.fillStyle='rgba('+(currentTheme==='arctic'||currentTheme==='sand'?'245,247,255':'0,0,0')+',.15)';
-    ctx.fillRect(0,0,W,H);
-    // spawn bolt every ~40 frames
-    if(t%40===0||Math.random()<.02){
-      var sx=Math.random()*W,sy=0;
-      var tx=mouseX>0?mouseX:W/2,ty=mouseY>0?mouseY:H*.7;
-      animState.bolts.push({segments:buildBolt(sx,sy,tx,ty,6),life:20,max:20});
-    }
-    for(var i=animState.bolts.length-1;i>=0;i--){
-      var b=animState.bolts[i];
-      var alpha=(b.life/b.max)*.7;
-      drawBolt(b.segments,pc,alpha);
-      b.life--;
-      if(b.life<=0)animState.bolts.splice(i,1);
-    }
-    animState.t=t+1;
-  }
-};
-function buildBolt(x1,y1,x2,y2,depth){
-  if(depth===0)return[{x:x1,y:y1},{x:x2,y:y2}];
-  var mx=(x1+x2)/2+(Math.random()-.5)*(Math.abs(x2-x1)*.4+30);
-  var my=(y1+y2)/2+(Math.random()-.5)*(Math.abs(y2-y1)*.4+30);
-  var left=buildBolt(x1,y1,mx,my,depth-1);
-  var right=buildBolt(mx,my,x2,y2,depth-1);
-  // occasional branch
-  var segs=left.concat(right.slice(1));
-  if(depth>2&&Math.random()<.3){
-    var bp=segs[Math.floor(segs.length/2)];
-    var bx=bp.x+(Math.random()-.5)*80,by=bp.y+Math.random()*60+20;
-    segs=segs.concat([{x:bp.x,y:bp.y,branch:true},{x:bx,y:by}]);
-  }
-  return segs;
-}
-function drawBolt(segs,pc,alpha){
-  ctx.beginPath();ctx.moveTo(segs[0].x,segs[0].y);
-  for(var i=1;i<segs.length;i++){
-    if(segs[i].branch){ctx.stroke();ctx.beginPath();ctx.moveTo(segs[i].x,segs[i].y);continue}
-    ctx.lineTo(segs[i].x,segs[i].y);
-  }
-  ctx.strokeStyle='rgba('+pc+','+alpha+')';ctx.lineWidth=2;ctx.stroke();
-  // glow
-  ctx.strokeStyle='rgba('+pc+','+(alpha*.3)+')';ctx.lineWidth=6;
-  ctx.beginPath();ctx.moveTo(segs[0].x,segs[0].y);
-  for(var j=1;j<segs.length;j++){
-    if(segs[j].branch){ctx.stroke();ctx.beginPath();ctx.moveTo(segs[j].x,segs[j].y);continue}
-    ctx.lineTo(segs[j].x,segs[j].y);
-  }
-  ctx.stroke();
-}
-
-/* 8. BUBBLES — rising bubbles, mouse creates vortex pull */
-ANIMS.bubbles={
-  init:function(){
-    var bs=[];for(var i=0;i<40;i++)bs.push({x:Math.random()*W,y:H+Math.random()*200,r:Math.random()*20+8,vy:-(Math.random()*.8+.3),vx:0,wobble:Math.random()*6.28});
-    animState.bs=bs;animState.t=0;
-  },
-  tick:function(){
-    var pc=getPColor(),bs=animState.bs,t=animState.t;
-    ctx.clearRect(0,0,W,H);
-    for(var i=0;i<bs.length;i++){
-      var b=bs[i];
-      b.y+=b.vy;
-      b.x+=Math.sin(t*.02+b.wobble)*.3+b.vx;
-      b.vx*=.95;
-      // mouse vortex
-      var dx=b.x-mouseX,dy=b.y-mouseY,dist=Math.sqrt(dx*dx+dy*dy);
-      if(dist<180&&dist>0){
-        // tangential pull (swirl)
-        b.vx+=(-dy/dist)*.3*(180-dist)/180;
-        b.vy+=(dx/dist)*.3*(180-dist)/180;
-      }
-      if(b.y<-b.r*2){b.y=H+b.r;b.x=Math.random()*W}
-      // draw bubble
-      ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,6.283);
-      ctx.strokeStyle='rgba('+pc+',.2)';ctx.lineWidth=1.5;ctx.stroke();
-      // highlight
-      ctx.beginPath();ctx.arc(b.x-b.r*.25,b.y-b.r*.25,b.r*.3,0,6.283);
-      ctx.fillStyle='rgba('+pc+',.08)';ctx.fill();
-      // inner glow
-      var grad=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r);
-      grad.addColorStop(0,'rgba('+pc+',.03)');grad.addColorStop(1,'rgba('+pc+',0)');
-      ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,6.283);ctx.fillStyle=grad;ctx.fill();
-    }
-    animState.t=t+1;
-  }
-};
-
-/* 9. DNA HELIX — rotating double helix, mouse controls rotation */
-ANIMS.helix={
-  init:function(){animState.t=0},
-  tick:function(){
-    var pc=getPColor(),t=animState.t;
-    ctx.clearRect(0,0,W,H);
-    var cx=W/2,cy=H/2;
-    var rotSpeed=mouseX>0?(mouseX-cx)/cx*.03:.01;
-    var tilt=mouseY>0?(mouseY-cy)/cy*.3:0;
-    var numNodes=60,spacing=H*1.2/numNodes;
-    var startY=-H*.1;
-    var points1=[],points2=[];
-    for(var i=0;i<numNodes;i++){
-      var y=startY+i*spacing;
-      var angle=i*.2+t*.02+rotSpeed*t;
-      var radius=80+Math.sin(i*.1)*20;
-      var x1=cx+Math.cos(angle)*radius;
-      var x2=cx+Math.cos(angle+Math.PI)*radius;
-      var z1=Math.sin(angle);
-      var z2=Math.sin(angle+Math.PI);
-      points1.push({x:x1,y:y+tilt*i*.5,z:z1,r:3+z1*1.5});
-      points2.push({x:x2,y:y+tilt*i*.5,z:z2,r:3+z2*1.5});
-    }
-    // draw rungs (back ones first)
-    for(var i=0;i<numNodes;i+=3){
-      var a1=Math.max(0,.15+points1[i].z*.1),a2=Math.max(0,.15+points2[i].z*.1);
-      if(points1[i].z<0&&points2[i].z<0){
-        ctx.beginPath();ctx.moveTo(points1[i].x,points1[i].y);ctx.lineTo(points2[i].x,points2[i].y);
-        ctx.strokeStyle='rgba('+pc+','+(Math.min(a1,a2))+')';ctx.lineWidth=1;ctx.stroke();
-      }
-    }
-    // draw strands (back)
-    for(var s=0;s<2;s++){
-      var pts=s===0?points1:points2;
-      ctx.beginPath();
-      for(var i=0;i<pts.length;i++){
-        if(pts[i].z<0){i===0?ctx.moveTo(pts[i].x,pts[i].y):ctx.lineTo(pts[i].x,pts[i].y)}
-        else{ctx.moveTo(pts[i].x,pts[i].y)}
-      }
-      ctx.strokeStyle='rgba('+pc+',.15)';ctx.lineWidth=2;ctx.stroke();
-    }
-    // front rungs
-    for(var i=0;i<numNodes;i+=3){
-      var a1f=Math.max(0,.15+points1[i].z*.15),a2f=Math.max(0,.15+points2[i].z*.15);
-      if(points1[i].z>=0||points2[i].z>=0){
-        ctx.beginPath();ctx.moveTo(points1[i].x,points1[i].y);ctx.lineTo(points2[i].x,points2[i].y);
-        ctx.strokeStyle='rgba('+pc+','+(Math.max(a1f,a2f))+')';ctx.lineWidth=1;ctx.stroke();
-      }
-    }
-    // front strands
-    for(var s=0;s<2;s++){
-      var pts=s===0?points1:points2;
-      ctx.beginPath();
-      for(var i=0;i<pts.length;i++){
-        if(pts[i].z>=0){i===0?ctx.moveTo(pts[i].x,pts[i].y):ctx.lineTo(pts[i].x,pts[i].y)}
-        else{ctx.moveTo(pts[i].x,pts[i].y)}
-      }
-      ctx.strokeStyle='rgba('+pc+',.35)';ctx.lineWidth=2;ctx.stroke();
-    }
-    // nodes
-    for(var s=0;s<2;s++){
-      var pts=s===0?points1:points2;
-      for(var i=0;i<pts.length;i++){
-        var alpha=Math.max(.1,.25+pts[i].z*.2);
-        ctx.beginPath();ctx.arc(pts[i].x,pts[i].y,Math.max(.5,pts[i].r),0,6.283);
-        ctx.fillStyle='rgba('+pc+','+alpha+')';ctx.fill();
-      }
-    }
-    animState.t=t+1;
-  }
-};
-
-/* 10. LIQUID BLOBS — metaballs that merge and follow cursor */
-ANIMS.blobs={
-  init:function(){
-    var blobs=[];for(var i=0;i<8;i++)blobs.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*1.5,vy:(Math.random()-.5)*1.5,r:Math.random()*60+40});
-    animState.blobs=blobs;
-    // create offscreen canvas for metaball computation
-    var scale=4;
-    var oc=document.createElement('canvas');oc.width=Math.ceil(W/scale);oc.height=Math.ceil(H/scale);
-    animState.oc=oc;animState.octx=oc.getContext('2d');animState.scale=scale;
-  },
-  tick:function(){
-    var pc=getPColor(),blobs=animState.blobs,oc=animState.oc,octx=animState.octx,scale=animState.scale;
-    var ow=oc.width,oh=oc.height;
-    ctx.clearRect(0,0,W,H);
-    // move blobs
-    for(var i=0;i<blobs.length;i++){
-      var b=blobs[i];
-      // attract to mouse gently
-      if(mouseX>0){
-        var dx=mouseX-b.x,dy=mouseY-b.y,dist=Math.sqrt(dx*dx+dy*dy);
-        if(dist>1){b.vx+=dx/dist*.08;b.vy+=dy/dist*.08}
-      }
-      b.vx*=.99;b.vy*=.99;b.x+=b.vx;b.y+=b.vy;
-      if(b.x<-b.r)b.x=W+b.r;if(b.x>W+b.r)b.x=-b.r;
-      if(b.y<-b.r)b.y=H+b.r;if(b.y>H+b.r)b.y=-b.r;
-    }
-    // compute metaball field on low-res canvas
-    var id=octx.createImageData(ow,oh);
-    var data=id.data;
-    var pcs=pc.split(',');var pr=parseInt(pcs[0]),pg=parseInt(pcs[1]),pb=parseInt(pcs[2]);
-    for(var y=0;y<oh;y++){
-      for(var x=0;x<ow;x++){
-        var sum=0;
-        var wx=x*scale,wy=y*scale;
-        for(var i=0;i<blobs.length;i++){
-          var b=blobs[i],dx=wx-b.x,dy=wy-b.y;
-          sum+=(b.r*b.r)/(dx*dx+dy*dy+1);
-        }
-        var idx=(y*ow+x)*4;
-        if(sum>.7){
-          var alpha=Math.min(1,(sum-.7)*1.5);
-          data[idx]=pr;data[idx+1]=pg;data[idx+2]=pb;data[idx+3]=Math.floor(alpha*50);
-        }
-      }
-    }
-    octx.putImageData(id,0,0);
-    ctx.imageSmoothingEnabled=true;
-    ctx.drawImage(oc,0,0,ow,oh,0,0,W,H);
-    // draw blob centers as soft glows
-    for(var i=0;i<blobs.length;i++){
-      var b=blobs[i];
-      var grad=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r);
-      grad.addColorStop(0,'rgba('+pc+',.12)');grad.addColorStop(1,'rgba('+pc+',0)');
-      ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,6.283);ctx.fillStyle=grad;ctx.fill();
-    }
-  }
-};
-
-/* ─── ANIMATION LOOP ─── */
-function animLoop(){
-  if(ANIMS[currentAnim]&&ANIMS[currentAnim].tick)ANIMS[currentAnim].tick();
-  animFrame=requestAnimationFrame(animLoop);
-}
-function switchAnim(name){
-  if(!ANIMS[name])return;
-  currentAnim=name;
-  animState={};
-  ctx.clearRect(0,0,W,H);
-  // clear any trail effects (matrix/lightning use fill-over)
-  ctx.globalAlpha=1;
-  ANIMS[name].init();
-  try{localStorage.setItem('ka-anim',name)}catch(e){}
-  var dots=document.querySelectorAll('#animSwitcher .anim-dot');
-  for(var i=0;i<dots.length;i++)dots[i].classList.toggle('active',dots[i].getAttribute('data-anim')===name);
-}
-
-// init saved or default
-var savedAnim;try{savedAnim=localStorage.getItem('ka-anim')}catch(e){}
-if(savedAnim&&ANIMS[savedAnim])currentAnim=savedAnim;
-switchAnim(currentAnim);
-animLoop();
-
-// switcher clicks
-document.getElementById('animSwitcher').addEventListener('click',function(e){
-  var dot=e.target.closest('.anim-dot');
-  if(!dot)return;
-  var a=dot.getAttribute('data-anim');
-  if(a)switchAnim(a);
-});
-
-// reinit on resize
-window.addEventListener('resize',function(){if(ANIMS[currentAnim])switchAnim(currentAnim)});
-
 /* ── 3. HERO GRID BG ── */
 (function(){
   var g=document.getElementById('heroGrid');if(!g)return;
   var c=document.createElement('canvas');c.style.cssText='width:100%;height:100%';g.appendChild(c);
-  var cx2=c.getContext('2d');
+  var cx=c.getContext('2d');
   function draw(){
     var w=c.width=g.offsetWidth,h=c.height=g.offsetHeight,sp=40;
-    cx2.clearRect(0,0,w,h);
-    var pc=getPColor();
+    cx.clearRect(0,0,w,h);
     for(var x=0;x<w;x+=sp)for(var y=0;y<h;y+=sp){
-      cx2.beginPath();cx2.arc(x,y,1.2,0,6.283);cx2.fillStyle='rgba('+pc+',.3)';cx2.fill();
+      cx.beginPath();cx.arc(x,y,1.2,0,6.283);cx.fillStyle='rgba('+pColor+',.3)';cx.fill();
     }
   }
   draw();window.addEventListener('resize',draw);
