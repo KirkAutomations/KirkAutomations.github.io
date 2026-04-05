@@ -1,0 +1,1195 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="arctic">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kirk Automations — Custom Software & AI Agents for Engineering & Business</title>
+<meta name="description" content="Kirk Automations builds custom automation software, AI agents, and OpenClaw deployments for engineering companies and businesses. Save thousands of engineering hours.">
+<meta name="keywords" content="automation, custom software, engineering, CATIA, CAD automation, AI agents, OpenClaw, Kirk Automations, Michigan">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════
+   THEME ENGINE — 10 Professional Color Themes
+   ═══════════════════════════════════════════════════════ */
+:root{--transition-speed:.45s;--glow-intensity:.45}
+
+/* 1. Midnight — Deep navy + amber/gold instrument panel */
+[data-theme="midnight"]{
+  --bg-primary:#080c18;--bg-secondary:#0e1428;--bg-card:#141c32;
+  --bg-card-hover:#1a2540;--text-primary:#e8ecf4;--text-secondary:#7a8aaa;
+  --accent:#f0b429;--accent-glow:rgba(240,180,41,.3);--accent-secondary:#ff9f43;
+  --gradient-start:#f0b429;--gradient-end:#ff9f43;
+  --border-color:rgba(240,180,41,.12);--particle-color:240,180,41;
+}
+/* 2. Cyber Teal — Teal core + magenta pop */
+[data-theme="cyberteal"]{
+  --bg-primary:#04090d;--bg-secondary:#081620;--bg-card:#0c2230;
+  --bg-card-hover:#123040;--text-primary:#d8f4f8;--text-secondary:#6cc4d0;
+  --accent:#00ddb5;--accent-glow:rgba(0,221,181,.3);--accent-secondary:#f050a0;
+  --gradient-start:#00ddb5;--gradient-end:#f050a0;
+  --border-color:rgba(0,221,181,.14);--particle-color:0,221,181;
+}
+/* 3. Solar Flare — Hot orange amber */
+[data-theme="solarflare"]{
+  --bg-primary:#0f0800;--bg-secondary:#1a1005;--bg-card:#2a1a0a;
+  --bg-card-hover:#3a2510;--text-primary:#fff3e0;--text-secondary:#ffab40;
+  --accent:#ff6d00;--accent-glow:rgba(255,109,0,.3);--accent-secondary:#ffd740;
+  --gradient-start:#ff6d00;--gradient-end:#ffd740;
+  --border-color:rgba(255,109,0,.12);--particle-color:255,109,0;
+}
+/* 4. Arctic — Clean light (DEFAULT) */
+[data-theme="arctic"]{
+  --bg-primary:#f5f7ff;--bg-secondary:#e6ecfa;--bg-card:#ffffff;
+  --bg-card-hover:#eef2ff;--text-primary:#141830;--text-secondary:#4a5578;
+  --accent:#2558d9;--accent-glow:rgba(37,88,217,.18);--accent-secondary:#0094e8;
+  --gradient-start:#2558d9;--gradient-end:#0094e8;
+  --border-color:rgba(37,88,217,.10);--particle-color:37,88,217;
+}
+/* 5. Emerald — Industrial green-gold */
+[data-theme="emerald"]{
+  --bg-primary:#040d08;--bg-secondary:#081a0f;--bg-card:#0e2a18;
+  --bg-card-hover:#143a22;--text-primary:#e2f5e8;--text-secondary:#6ecf8a;
+  --accent:#00e676;--accent-glow:rgba(0,230,118,.3);--accent-secondary:#ffd600;
+  --gradient-start:#00e676;--gradient-end:#b2ff59;
+  --border-color:rgba(0,230,118,.14);--particle-color:0,230,118;
+}
+/* 6. Royal — Deep amethyst + rose gold */
+[data-theme="royal"]{
+  --bg-primary:#0c0616;--bg-secondary:#140a24;--bg-card:#1e1038;
+  --bg-card-hover:#28184a;--text-primary:#efe0ff;--text-secondary:#b08cd8;
+  --accent:#b388ff;--accent-glow:rgba(179,136,255,.3);--accent-secondary:#ff80ab;
+  --gradient-start:#b388ff;--gradient-end:#ff80ab;
+  --border-color:rgba(179,136,255,.14);--particle-color:179,136,255;
+}
+/* 7. Crimson — Industrial red + chrome */
+[data-theme="crimson"]{
+  --bg-primary:#100408;--bg-secondary:#1c0810;--bg-card:#2c0e1a;
+  --bg-card-hover:#3c1424;--text-primary:#ffe0e8;--text-secondary:#d88898;
+  --accent:#ff2d55;--accent-glow:rgba(255,45,85,.3);--accent-secondary:#b0bec5;
+  --gradient-start:#ff2d55;--gradient-end:#ff6b81;
+  --border-color:rgba(255,45,85,.14);--particle-color:255,45,85;
+}
+/* 8. Warm Sand — Light warm */
+[data-theme="sand"]{
+  --bg-primary:#faf8f5;--bg-secondary:#f0ece5;--bg-card:#ffffff;
+  --bg-card-hover:#faf5ee;--text-primary:#2a2520;--text-secondary:#8a7a6a;
+  --accent:#c17900;--accent-glow:rgba(193,121,0,.18);--accent-secondary:#e6a030;
+  --gradient-start:#c17900;--gradient-end:#e6a030;
+  --border-color:rgba(193,121,0,.10);--particle-color:193,121,0;
+}
+/* 9. Neon Noir — Industrial cyan on pitch black (CNC screen) */
+[data-theme="neonnoir"]{
+  --bg-primary:#000000;--bg-secondary:#060808;--bg-card:#0c1214;
+  --bg-card-hover:#121c20;--text-primary:#e0f8f0;--text-secondary:#508888;
+  --accent:#00ffcc;--accent-glow:rgba(0,255,204,.35);--accent-secondary:#ff3366;
+  --gradient-start:#00ffcc;--gradient-end:#00ccff;
+  --border-color:rgba(0,255,204,.12);--particle-color:0,255,204;
+}
+/* 10. Ocean Depth — Deep sea + bioluminescence */
+[data-theme="ocean"]{
+  --bg-primary:#020610;--bg-secondary:#040c1c;--bg-card:#081430;
+  --bg-card-hover:#0c1e44;--text-primary:#d0e8ff;--text-secondary:#5090c0;
+  --accent:#00b8d4;--accent-glow:rgba(0,184,212,.3);--accent-secondary:#18ffff;
+  --gradient-start:#00b8d4;--gradient-end:#18ffff;
+  --border-color:rgba(0,184,212,.14);--particle-color:0,184,212;
+}
+
+/* ═══════════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:var(--bg-primary);color:var(--text-primary);
+  line-height:1.6;overflow-x:hidden;
+  transition:background var(--transition-speed),color var(--transition-speed);
+}
+a{color:var(--accent);text-decoration:none;transition:all .3s}
+a:hover{filter:brightness(1.2)}
+::selection{background:var(--accent);color:var(--bg-primary)}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:var(--bg-secondary)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:4px}
+
+/* ═══════════════════════════════════════════════════════
+   PARTICLE CANVAS + CURSOR GLOW
+   ═══════════════════════════════════════════════════════ */
+#particle-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#cursor-glow{
+  position:fixed;width:700px;height:700px;border-radius:50%;
+  background:radial-gradient(circle,var(--accent-glow) 0%,transparent 65%);
+  pointer-events:none;z-index:1;transform:translate(-50%,-50%);
+  opacity:0;transition:opacity .5s;
+}
+body:hover #cursor-glow{opacity:.7}
+
+/* Light themes: softer glow */
+[data-theme="arctic"] #cursor-glow,[data-theme="sand"] #cursor-glow{
+  width:600px;height:600px;
+}
+[data-theme="arctic"] body:hover #cursor-glow,[data-theme="sand"] body:hover #cursor-glow{opacity:.4}
+
+/* ═══════════════════════════════════════════════════════
+   THEME SWITCHER
+   ═══════════════════════════════════════════════════════ */
+#themeSwitcher{
+  position:fixed;top:50%;right:16px;transform:translateY(-50%);
+  z-index:9999;display:flex;flex-direction:column;gap:6px;align-items:center;
+  padding:10px 6px;background:rgba(20,20,30,.75);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-radius:30px;border:1px solid rgba(255,255,255,.06);
+}
+.theme-label{
+  writing-mode:vertical-rl;text-orientation:mixed;
+  font-size:.55rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text-secondary);opacity:.6;padding:4px 0;margin-bottom:2px;
+  transition:opacity .3s;
+}
+#themeSwitcher:hover .theme-label{opacity:1}
+[data-theme="arctic"] #themeSwitcher,[data-theme="sand"] #themeSwitcher{
+  background:rgba(255,255,255,.82);border-color:rgba(0,0,0,.06);
+}
+.theme-dot{
+  width:18px;height:18px;border-radius:50%;cursor:pointer;
+  border:2px solid transparent;transition:all .25s;display:block;position:relative;
+}
+.theme-dot:hover{transform:scale(1.35);border-color:rgba(255,255,255,.8)}
+[data-theme="arctic"] .theme-dot:hover,[data-theme="sand"] .theme-dot:hover{border-color:rgba(0,0,0,.4)}
+.theme-dot.active{border-color:#fff;box-shadow:0 0 8px rgba(255,255,255,.5);transform:scale(1.25)}
+[data-theme="arctic"] .theme-dot.active,[data-theme="sand"] .theme-dot.active{border-color:#333;box-shadow:0 0 8px rgba(0,0,0,.2)}
+.theme-dot[data-label]::after{
+  content:attr(data-label);position:absolute;right:30px;top:50%;
+  transform:translateY(-50%);background:var(--bg-card);color:var(--text-primary);
+  padding:4px 10px;border-radius:6px;font-size:11px;white-space:nowrap;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+  border:1px solid var(--border-color);box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+.theme-dot:hover::after{opacity:1}
+
+/* ═══════════════════════════════════════════════════════
+   NAVIGATION
+   ═══════════════════════════════════════════════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:999;
+  padding:18px 40px;display:flex;align-items:center;justify-content:space-between;
+  background:transparent;transition:all .35s;
+}
+nav.scrolled{
+  background:rgba(10,10,15,.88);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border-color);padding:12px 40px;
+}
+[data-theme="arctic"] nav.scrolled,[data-theme="sand"] nav.scrolled{background:rgba(245,247,255,.92)}
+
+.nav-logo{font-size:1.4rem;font-weight:800;letter-spacing:-.5px;display:flex;gap:0}
+.nav-logo-kirk{
+  background:linear-gradient(135deg,var(--gradient-start),var(--gradient-end));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.nav-logo-auto{
+  color:var(--text-secondary);font-weight:400;
+  -webkit-text-fill-color:var(--text-secondary);
+}
+
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{
+  color:var(--text-secondary);font-size:.85rem;font-weight:500;
+  letter-spacing:.5px;text-transform:uppercase;transition:color .3s;position:relative;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;
+  background:var(--accent);transition:width .3s;
+}
+.nav-links a:hover{color:var(--text-primary);-webkit-text-fill-color:unset}
+.nav-links a:hover::after{width:100%}
+
+.nav-cta{
+  padding:10px 24px!important;
+  background:linear-gradient(135deg,var(--gradient-start),var(--gradient-end))!important;
+  color:#fff!important;-webkit-text-fill-color:#fff!important;
+  border-radius:8px;font-weight:600!important;
+  letter-spacing:1px!important;font-size:.8rem!important;
+  box-shadow:0 4px 15px var(--accent-glow);transition:all .3s!important;
+}
+.nav-cta:hover{transform:translateY(-2px)!important;box-shadow:0 8px 25px var(--accent-glow)!important}
+.nav-cta::after{display:none!important}
+
+.mobile-menu-btn{display:none;background:none;border:none;color:var(--text-primary);font-size:1.5rem;cursor:pointer}
+
+/* ═══════════════════════════════════════════════════════
+   HERO
+   ═══════════════════════════════════════════════════════ */
+.hero{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:120px 40px 80px;position:relative;z-index:2;
+}
+.hero-content{max-width:920px;position:relative;z-index:2}
+
+.hero-grid{position:absolute;inset:0;overflow:hidden;opacity:.06;pointer-events:none}
+
+/* OpenClaw badge — BIGGER */
+.hero-badge{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:12px 28px;background:var(--bg-card);
+  border:2px solid var(--accent);border-radius:50px;
+  font-size:1rem;font-weight:600;color:var(--accent);
+  margin-bottom:32px;cursor:pointer;transition:all .3s;
+  animation:pulse-border 2s ease-in-out infinite;
+}
+.hero-badge:hover{background:var(--accent);color:var(--bg-primary);transform:scale(1.05)}
+.hero-badge .badge-new{
+  font-weight:800;font-size:1.1rem;letter-spacing:1px;
+}
+.hero-badge .dot{
+  width:10px;height:10px;background:var(--accent);border-radius:50%;
+  animation:blink 1.4s ease-in-out infinite;flex-shrink:0;
+}
+.hero-badge:hover .dot{background:var(--bg-primary)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes pulse-border{0%,100%{box-shadow:0 0 0 0 var(--accent-glow)}50%{box-shadow:0 0 0 10px transparent}}
+
+.hero h1{
+  font-size:clamp(2.5rem,5.5vw,4.5rem);font-weight:900;
+  line-height:1.1;letter-spacing:-2px;margin-bottom:24px;
+}
+.hero h1 .line-static{display:block}
+.gradient-text{
+  background:linear-gradient(135deg,var(--gradient-start),var(--gradient-end));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.typing-cursor{
+  display:inline-block;width:3px;height:.8em;background:var(--accent);
+  margin-left:2px;animation:cblink 1s step-end infinite;vertical-align:baseline;
+}
+@keyframes cblink{0%,100%{opacity:1}50%{opacity:0}}
+
+.hero-sub{
+  font-size:clamp(1rem,1.8vw,1.2rem);color:var(--text-secondary);
+  max-width:640px;margin:0 auto 36px;line-height:1.7;
+}
+.hero-sub strong{color:var(--text-primary)}
+
+.hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+.btn{
+  display:inline-flex;align-items:center;gap:8px;padding:14px 30px;
+  font-size:.95rem;font-weight:600;border-radius:10px;cursor:pointer;
+  border:none;transition:all .3s cubic-bezier(.4,0,.2,1);
+  text-transform:uppercase;letter-spacing:.5px;position:relative;overflow:hidden;
+  font-family:inherit;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--gradient-start),var(--gradient-end));
+  color:#fff;box-shadow:0 4px 20px var(--accent-glow);
+}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 8px 30px var(--accent-glow)}
+.btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border-color)}
+.btn-secondary:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 4px 20px var(--accent-glow)}
+
+.btn .ripple{
+  position:absolute;border-radius:50%;background:rgba(255,255,255,.3);
+  transform:scale(0);animation:ripple-go .6s linear;pointer-events:none;
+}
+@keyframes ripple-go{to{transform:scale(4);opacity:0}}
+
+.scroll-indicator{
+  position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  color:var(--text-secondary);font-size:.7rem;text-transform:uppercase;
+  letter-spacing:2px;animation:bob 2s ease-in-out infinite;
+}
+.scroll-indicator .mouse{
+  width:24px;height:36px;border:2px solid var(--text-secondary);
+  border-radius:12px;position:relative;
+}
+.scroll-indicator .mouse::after{
+  content:'';position:absolute;top:6px;left:50%;transform:translateX(-50%);
+  width:4px;height:8px;background:var(--accent);border-radius:2px;
+  animation:scroll-wheel 1.5s ease-in-out infinite;
+}
+@keyframes scroll-wheel{0%{transform:translateX(-50%) translateY(0);opacity:1}100%{transform:translateX(-50%) translateY(12px);opacity:0}}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+
+.tech-stack{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:28px}
+.tech-badge{
+  padding:5px 12px;background:var(--bg-card);border:1px solid var(--border-color);
+  border-radius:20px;font-size:.72rem;font-weight:600;color:var(--text-secondary);
+  letter-spacing:.4px;transition:all .3s;
+}
+.tech-badge:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+
+/* ═══════════════════════════════════════════════════════
+   SECTION BASICS
+   ═══════════════════════════════════════════════════════ */
+section{position:relative;z-index:2;padding:100px 40px}
+.container{max-width:1200px;margin:0 auto}
+.section-header{text-align:center;margin-bottom:60px}
+.section-label{
+  display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:3px;
+  text-transform:uppercase;color:var(--accent);margin-bottom:12px;
+}
+.section-title{font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-1px;margin-bottom:14px}
+.section-desc{font-size:1.05rem;color:var(--text-secondary);max-width:600px;margin:0 auto}
+
+/* ═══════════════════════════════════════════════════════
+   SCROLL REVEAL
+   ═══════════════════════════════════════════════════════ */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-left{opacity:0;transform:translateX(-30px);transition:opacity .7s ease,transform .7s ease}
+.reveal-left.visible{opacity:1;transform:translateX(0)}
+.reveal-right{opacity:0;transform:translateX(30px);transition:opacity .7s ease,transform .7s ease}
+.reveal-right.visible{opacity:1;transform:translateX(0)}
+.stagger .reveal:nth-child(2){transition-delay:.08s}
+.stagger .reveal:nth-child(3){transition-delay:.16s}
+.stagger .reveal:nth-child(4){transition-delay:.24s}
+.stagger .reveal:nth-child(5){transition-delay:.32s}
+.stagger .reveal:nth-child(6){transition-delay:.40s}
+
+/* ═══════════════════════════════════════════════════════
+   STATS BAR
+   ═══════════════════════════════════════════════════════ */
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;padding:60px 0}
+.stat-item{
+  text-align:center;padding:28px 16px;border-radius:16px;
+  background:var(--bg-card);border:1px solid var(--border-color);transition:all .3s;
+}
+.stat-item:hover{border-color:var(--accent);transform:translateY(-4px)}
+.stat-number{
+  font-size:2.6rem;font-weight:900;line-height:1;margin-bottom:6px;
+  background:linear-gradient(135deg,var(--gradient-start),var(--gradient-end));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.stat-label{font-size:.8rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;font-weight:600}
+
+/* ═══════════════════════════════════════════════════════
+   SERVICES GRID
+   ═══════════════════════════════════════════════════════ */
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:24px}
+.service-card{
+  background:var(--bg-card);border:1px solid var(--border-color);
+  border-radius:16px;padding:36px 28px;transition:all .35s;
+  position:relative;overflow:hidden;cursor:default;
+}
+.service-card::before{
+  content:'';position:absolute;top:0;left:0;width:100%;height:3px;
+  background:linear-gradient(90deg,var(--gradient-start),var(--gradient-end));
+  transform:scaleX(0);transform-origin:left;transition:transform .4s;
+}
+.service-card:hover::before{transform:scaleX(1)}
+.service-card:hover{
+  background:var(--bg-card-hover);border-color:var(--accent);
+  box-shadow:0 8px 35px var(--accent-glow);transform:translateY(-5px);
+}
+.service-icon{font-size:2.4rem;margin-bottom:18px;display:inline-block;transition:transform .35s}
+.service-card:hover .service-icon{transform:scale(1.12)}
+.service-card h3{font-size:1.2rem;font-weight:700;margin-bottom:10px}
+.service-card p{color:var(--text-secondary);font-size:.92rem;line-height:1.7}
+
+
+
+/* ═══════════════════════════════════════════════════════
+   OPENCLAW SECTION
+   ═══════════════════════════════════════════════════════ */
+.openclaw-section{padding:100px 40px;position:relative;overflow:hidden}
+.openclaw-section::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,var(--accent-glow),transparent 60%);opacity:.06;
+}
+.openclaw-card{
+  max-width:800px;margin:0 auto;background:var(--bg-card);
+  border:2px solid var(--accent);border-radius:20px;
+  padding:56px 48px;text-align:center;position:relative;
+  box-shadow:0 0 50px var(--accent-glow);
+}
+.openclaw-icon{font-size:3rem;margin-bottom:18px;display:inline-block;animation:floaty 3s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.openclaw-card h2{font-size:2.1rem;font-weight:800;margin-bottom:14px}
+.openclaw-card>p{color:var(--text-secondary);font-size:1.05rem;margin-bottom:28px;line-height:1.7}
+.signup-form{display:flex;gap:12px;max-width:480px;margin:0 auto 14px}
+.signup-form input[type="email"]{
+  flex:1;padding:14px 18px;background:var(--bg-primary);border:1px solid var(--border-color);
+  border-radius:10px;color:var(--text-primary);font-size:.92rem;font-family:inherit;
+  transition:border-color .3s;outline:none;
+}
+.signup-form input[type="email"]:focus{border-color:var(--accent)}
+.signup-form input[type="email"]::placeholder{color:var(--text-secondary)}
+.signup-form button{
+  padding:14px 24px;background:linear-gradient(135deg,var(--gradient-start),var(--gradient-end));
+  color:#fff;border:none;border-radius:10px;font-weight:700;font-size:.88rem;
+  cursor:pointer;transition:all .3s;white-space:nowrap;font-family:inherit;
+}
+.signup-form button:hover{transform:translateY(-2px);box-shadow:0 4px 18px var(--accent-glow)}
+.signup-note{font-size:.78rem;color:var(--text-secondary);opacity:.7}
+.signup-success{display:none;color:var(--accent);font-weight:600;font-size:1.1rem;margin-top:16px}
+
+/* ═══════════════════════════════════════════════════════
+   VALUE PROPS
+   ═══════════════════════════════════════════════════════ */
+.value-section{padding:80px 40px}
+.value-block{
+  display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;
+  max-width:1100px;margin:0 auto 80px;
+}
+.value-block:last-child{margin-bottom:0}
+.value-block.reverse{direction:rtl}
+.value-block.reverse>*{direction:ltr}
+.value-text h3{font-size:1.7rem;font-weight:800;margin-bottom:14px;letter-spacing:-.5px}
+.value-text p{color:var(--text-secondary);font-size:1rem;line-height:1.7;margin-bottom:16px}
+.value-visual{
+  background:var(--bg-card);border:1px solid var(--border-color);border-radius:16px;
+  padding:40px;display:flex;align-items:center;justify-content:center;
+  font-size:4rem;min-height:240px;transition:all .3s;
+}
+.value-visual:hover{border-color:var(--accent);box-shadow:0 0 30px var(--accent-glow)}
+
+/* ═══════════════════════════════════════════════════════
+   PROCESS TIMELINE
+   ═══════════════════════════════════════════════════════ */
+.process-timeline{max-width:700px;margin:0 auto;position:relative}
+.process-timeline::before{
+  content:'';position:absolute;top:0;bottom:0;left:30px;width:2px;
+  background:linear-gradient(to bottom,var(--gradient-start),var(--gradient-end));
+}
+.process-step{display:flex;gap:24px;margin-bottom:40px;align-items:flex-start;position:relative}
+.step-num{
+  width:60px;height:60px;min-width:60px;border-radius:50%;
+  background:var(--bg-card);border:2px solid var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:1.2rem;color:var(--accent);z-index:1;transition:all .3s;
+}
+.process-step:hover .step-num{background:var(--accent);color:var(--bg-primary);box-shadow:0 0 20px var(--accent-glow)}
+.step-content h3{font-size:1.15rem;font-weight:700;margin-bottom:6px}
+.step-content p{color:var(--text-secondary);font-size:.92rem;line-height:1.6}
+
+/* ═══════════════════════════════════════════════════════
+   TESTIMONIALS
+   ═══════════════════════════════════════════════════════ */
+.testimonials-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+.testimonial-card{
+  background:var(--bg-card);border:1px solid var(--border-color);
+  border-radius:16px;padding:32px;transition:all .3s;
+}
+.testimonial-card:hover{border-color:var(--accent);transform:translateY(-4px)}
+.quote-mark{font-size:3rem;color:var(--accent);opacity:.3;line-height:1;margin-bottom:10px}
+.testimonial-card p{color:var(--text-secondary);font-size:.92rem;line-height:1.7;margin-bottom:16px;font-style:italic}
+.testimonial-author{font-weight:700;font-size:.88rem}
+.testimonial-role{font-size:.78rem;color:var(--text-secondary)}
+
+/* ═══════════════════════════════════════════════════════
+   CTA
+   ═══════════════════════════════════════════════════════ */
+.cta-section{text-align:center;padding:120px 40px}
+.cta-section h2{font-size:clamp(2rem,4vw,3.2rem);font-weight:900;letter-spacing:-1px;margin-bottom:16px}
+.cta-section p{color:var(--text-secondary);font-size:1.05rem;margin-bottom:36px;max-width:500px;margin-left:auto;margin-right:auto}
+.cta-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+
+/* ═══════════════════════════════════════════════════════
+   CONTACT
+   ═══════════════════════════════════════════════════════ */
+.contact-section{padding:100px 40px}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;max-width:1000px;margin:0 auto}
+.contact-info h3{font-size:1.4rem;font-weight:700;margin-bottom:18px}
+.contact-info p{color:var(--text-secondary);line-height:1.7;margin-bottom:24px}
+.contact-detail{display:flex;align-items:center;gap:12px;margin-bottom:14px;color:var(--text-secondary);font-size:.92rem}
+.contact-detail .icon{font-size:1.1rem}
+.contact-form{display:flex;flex-direction:column;gap:14px}
+.contact-form input,.contact-form textarea,.contact-form select{
+  padding:14px 18px;background:var(--bg-card);border:1px solid var(--border-color);
+  border-radius:10px;color:var(--text-primary);font-size:.92rem;
+  font-family:inherit;transition:border-color .3s;outline:none;
+}
+.contact-form input:focus,.contact-form textarea:focus,.contact-form select:focus{border-color:var(--accent)}
+.contact-form textarea{min-height:120px;resize:vertical}
+.contact-form select option{background:var(--bg-card);color:var(--text-primary)}
+
+/* ═══════════════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════════════ */
+footer{
+  position:relative;z-index:2;padding:36px 40px;text-align:center;
+  border-top:1px solid var(--border-color);color:var(--text-secondary);font-size:.82rem;
+}
+
+/* (Game portal removed — games are now standalone pages in /games/) */
+
+.secret-found{
+  position:fixed;top:20px;left:50%;transform:translateX(-50%);
+  background:var(--accent);color:var(--bg-primary);padding:12px 24px;
+  border-radius:10px;font-weight:700;z-index:10001;
+  animation:secret-pop .5s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 4px 20px var(--accent-glow);
+}
+@keyframes secret-pop{0%{transform:translateX(-50%) scale(0)}100%{transform:translateX(-50%) scale(1)}}
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE
+   ═══════════════════════════════════════════════════════ */
+@media(max-width:768px){
+  nav{padding:12px 20px}
+  .nav-links{display:none}
+  .mobile-menu-btn{display:block}
+  .nav-links.mobile-open{
+    display:flex;flex-direction:column;position:fixed;top:56px;
+    left:0;right:0;background:var(--bg-secondary);padding:20px;gap:16px;
+    border-bottom:1px solid var(--border-color);z-index:998;
+  }
+  section{padding:60px 20px}
+  .hero{padding:100px 20px 60px;min-height:auto}
+  .hero h1{font-size:2.1rem;letter-spacing:-1px}
+  .hero-badge{font-size:.88rem;padding:10px 20px}
+  .stats-bar{grid-template-columns:repeat(2,1fr);gap:12px}
+  .services-grid{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr;gap:40px}
+  .value-block,.value-block.reverse{grid-template-columns:1fr;gap:30px;direction:ltr}
+  #themeSwitcher{right:8px;gap:4px;padding:8px 5px}
+  .theme-dot{width:14px;height:14px}
+  .openclaw-card{padding:36px 20px}
+  .signup-form{flex-direction:column}
+  .scroll-indicator{display:none}
+}
+</style>
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+<div id="cursor-glow"></div>
+
+<!-- ═══════════════════ THEME SWITCHER ═══════════════════ -->
+<div id="themeSwitcher">
+  <div class="theme-label">Theme</div>
+  <div class="theme-dot" data-theme="midnight" data-label="Midnight" style="background:#f0b429"></div>
+  <div class="theme-dot" data-theme="cyberteal" data-label="Cyber Teal" style="background:#00ddb5"></div>
+  <div class="theme-dot" data-theme="solarflare" data-label="Solar Flare" style="background:#ff6d00"></div>
+  <div class="theme-dot active" data-theme="arctic" data-label="Arctic" style="background:#2558d9"></div>
+  <div class="theme-dot" data-theme="emerald" data-label="Emerald" style="background:#00e676"></div>
+  <div class="theme-dot" data-theme="royal" data-label="Royal Purple" style="background:#b388ff"></div>
+  <div class="theme-dot" data-theme="crimson" data-label="Crimson" style="background:#ff2d55"></div>
+  <div class="theme-dot" data-theme="sand" data-label="Warm Sand" style="background:#c17900"></div>
+  <div class="theme-dot" data-theme="neonnoir" data-label="Neon Noir" style="background:#00ffcc"></div>
+  <div class="theme-dot" data-theme="ocean" data-label="Ocean Depth" style="background:#00b8d4"></div>
+</div>
+
+<!-- ═══════════════════ NAVIGATION ═══════════════════ -->
+<nav id="mainNav">
+  <div class="nav-logo">
+    <span class="nav-logo-kirk">Kirk</span><span class="nav-logo-auto">Automations</span>
+  </div>
+  <div class="nav-links" id="navLinks">
+    <a href="#services">Services</a>
+    <a href="#openclaw">OpenClaw</a>
+    <a href="#process">Process</a>
+    <a href="#results">Results</a>
+    <a href="#contact" class="nav-cta">Get Started</a>
+  </div>
+  <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">☰</button>
+</nav>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section class="hero" id="hero">
+  <div class="hero-grid" id="heroGrid"></div>
+  <div class="hero-content">
+    <a href="#openclaw" class="hero-badge">
+      <span class="dot"></span>
+      <span><span class="badge-new">NEW</span> — We Now Deploy OpenClaw AI Agents</span>
+    </a>
+    <h1>
+      <span class="line-static">Profit Through Automating</span>
+      <span class="gradient-text" id="heroRotate">CAD Checks.</span><span class="typing-cursor"></span>
+    </h1>
+    <p class="hero-sub">
+      Work done by humans on a computer can be automated with custom software.
+      Eliminate human error. Save time. <strong>More profit.</strong>
+    </p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn btn-primary magnetic">Start a Project →</a>
+      <a href="#services" class="btn btn-secondary magnetic">Discover Solutions</a>
+    </div>
+    <div class="tech-stack">
+      <span class="tech-badge">CATIA V5</span>
+      <span class="tech-badge">NX / Siemens</span>
+      <span class="tech-badge">SolidWorks</span>
+      <span class="tech-badge">AutoCAD</span>
+      <span class="tech-badge">Python</span>
+      <span class="tech-badge">C# / .NET</span>
+      <span class="tech-badge">VBA</span>
+      <span class="tech-badge">JavaScript</span>
+      <span class="tech-badge">AI / LLM</span>
+      <span class="tech-badge">OpenClaw</span>
+      <span class="tech-badge">Excel</span>
+      <span class="tech-badge">Web Apps</span>
+    </div>
+  </div>
+  <div class="scroll-indicator"><div class="mouse"></div>Scroll</div>
+</section>
+
+<!-- ═══════════════════ STATS ═══════════════════ -->
+<section>
+  <div class="container">
+    <div class="stats-bar stagger">
+      <div class="stat-item reveal">
+        <div class="stat-number" data-target="11500" data-suffix="+">0</div>
+        <div class="stat-label">Engineering Hours Saved</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-number" data-target="50" data-suffix="+">0</div>
+        <div class="stat-label">Automations Delivered</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-number" data-target="2" data-prefix="$" data-suffix="M+">0</div>
+        <div class="stat-label">Client Savings</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-number" data-target="0" data-suffix="" data-final="0 Build Delays">0</div>
+        <div class="stat-label">Plant Build Delays</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ SERVICES ═══════════════════ -->
+<section id="services">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">What We Build</div>
+      <h2 class="section-title">Engineering-Grade Automation</h2>
+      <p class="section-desc">Custom software specific to your design rules and specs. Save engineering hours year over year.</p>
+    </div>
+    <div class="services-grid stagger">
+
+      <div class="service-card reveal">
+        <div class="service-icon">⚙️</div>
+        <h3>Automated CAD Checks</h3>
+        <p>CATIA, NX, AutoCAD, SolidWorks — our automations open 3D models, run clearance checks against your specs, and generate pass/fail reports. Weeks of manual work → minutes.</p>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon">📐</div>
+        <h3>Automated Drawings</h3>
+        <p>Using 3D CAD and a few selections from an engineer, a 2D drawing is generated — formatted, dimensioned, and ready for the manufacturing plant. Saving 1,200+ hours/year.</p>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon">📊</div>
+        <h3>Automated Excel &amp; BOM Work</h3>
+        <p>Engineers combining customer data with internal Parts Lists/BOMs? Our automations merge documents, calculate quantities, and generate Excel files in your exact format.</p>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon">🤖</div>
+        <h3>AI Agents &amp; OpenClaw</h3>
+        <p>Deploy intelligent AI agents that handle repetitive work, answer questions, process data, and integrate with your existing tools. Your own 24/7 digital workforce.</p>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon">🌐</div>
+        <h3>Custom Web Applications</h3>
+        <p>Internal tools, dashboards, client portals — purpose-built web applications that do exactly what your business needs. No bloated SaaS. No compromises.</p>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon">🔗</div>
+        <h3>System Integration</h3>
+        <p>Connect CAD systems, ERP, email, cloud storage, and databases into seamless automated workflows. Data flows where it needs to — automatically.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ VALUE PROPS ═══════════════════ -->
+<section class="value-section">
+  <div class="value-block reveal">
+    <div class="value-text">
+      <h3>Custom Software Specific To Your Design Rules And Specs</h3>
+      <p>Save engineering hours year over year with automations that perform what was previously tedious, manual engineering work. Your specs. Your rules. Our code.</p>
+    </div>
+    <div class="value-visual">🏭</div>
+  </div>
+  <div class="value-block reverse reveal">
+    <div class="value-text">
+      <h3>Quality Software For High Stakes Decisions</h3>
+      <p>Our experienced programmers and extensive libraries eliminate human error and prevent last minute trips to Plant Builds. When the stakes are high, you need software you can trust.</p>
+    </div>
+    <div class="value-visual">🛡️</div>
+  </div>
+  <div class="value-block reveal">
+    <div class="value-text">
+      <h3>Extend Human Abilities With Computations Only A Computer Can Do</h3>
+      <p>Unlock new capabilities for your company by using the power of computers to do heavy lifting. Things no human could do manually — at scale, with precision, around the clock.</p>
+    </div>
+    <div class="value-visual">🚀</div>
+  </div>
+</section>
+
+<!-- ═══════════════════ OPENCLAW ═══════════════════ -->
+<section class="openclaw-section" id="openclaw">
+  <div class="openclaw-card reveal">
+    <div class="openclaw-icon">🐾</div>
+    <h2>We Now Deploy <span class="gradient-text">OpenClaw</span> AI Agents</h2>
+    <p>
+      OpenClaw is an AI agent platform that gives your business a 24/7 intelligent assistant.
+      It connects to your tools, learns your workflows, and handles the work that eats your team's time.
+      We deploy, customize, and support it for your specific business needs.
+    </p>
+    <form class="signup-form" id="signupForm">
+      <input type="email" name="email" placeholder="Enter your business email" required autocomplete="email">
+      <button type="submit">Get Info →</button>
+    </form>
+    <p class="signup-note">We'll reach out within 24 hours to discuss how OpenClaw can work for you.</p>
+    <div class="signup-success" id="signupSuccess">✓ Got it! We'll be in touch soon.</div>
+  </div>
+</section>
+
+<!-- ═══════════════════ PROCESS ═══════════════════ -->
+<section id="process">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">How We Work</div>
+      <h2 class="section-title">From Problem to Production</h2>
+      <p class="section-desc">A proven process refined across dozens of engineering automation projects.</p>
+    </div>
+    <div class="process-timeline">
+      <div class="process-step reveal">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>Discovery Call</h3>
+          <p>We learn your workflow, pain points, and goals. No sales pitch — just understanding your problem deeply enough to solve it right the first time.</p>
+        </div>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>Architecture &amp; Scope</h3>
+          <p>We design the solution, define deliverables, and give you a fixed-price quote. No surprises. No scope creep billing.</p>
+        </div>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>Build &amp; Iterate</h3>
+          <p>Rapid development with your team's input. You see progress weekly — not at the end of a black-box sprint.</p>
+        </div>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h3>Deploy &amp; Support</h3>
+          <p>Production deployment with documentation and training. We don't disappear — ongoing support is part of the deal.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ TESTIMONIALS ═══════════════════ -->
+<section id="results">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Results</div>
+      <h2 class="section-title">What Our Clients Say</h2>
+    </div>
+    <div class="testimonials-grid stagger">
+      <div class="testimonial-card reveal">
+        <div class="quote-mark">"</div>
+        <p>Kirk Automations cut our drawing generation time from 3 days to 15 minutes. The ROI was immediate and the quality improvement was even more impressive than the time savings.</p>
+        <div class="testimonial-author">Senior Engineering Manager</div>
+        <div class="testimonial-role">Automotive OEM Supplier</div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="quote-mark">"</div>
+        <p>We were spending 200+ hours per quarter on manual CAD checks. Now it's fully automated — zero errors in the last 8 months of production runs. No more last-minute plant build surprises.</p>
+        <div class="testimonial-author">Quality Director</div>
+        <div class="testimonial-role">Tier 1 Manufacturing</div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="quote-mark">"</div>
+        <p>Their AI agent handles our weekly data reconciliation that used to take a full-time person two days. It runs overnight and the report is ready by morning.</p>
+        <div class="testimonial-author">Operations VP</div>
+        <div class="testimonial-role">Industrial Equipment Company</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CTA ═══════════════════ -->
+<section class="cta-section">
+  <div class="container reveal">
+    <h2>Ready to Stop Wasting<br><span class="gradient-text">Engineering Hours?</span></h2>
+    <p>Every week you wait is another week of manual work that didn't need to happen.</p>
+    <div class="cta-actions">
+      <a href="#contact" class="btn btn-primary magnetic">Start a Conversation →</a>
+      <a href="mailto:michael.kirk@kirkautomations.com" class="btn btn-secondary magnetic">Email Directly</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CONTACT ═══════════════════ -->
+<section class="contact-section" id="contact">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Contact</div>
+      <h2 class="section-title">Let's Talk About Your Project</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info reveal-left">
+        <h3>Kirk Automations</h3>
+        <p>Custom automation software and AI agents for engineering companies and businesses. Based in Michigan, serving clients nationwide.</p>
+        <div class="contact-detail"><span class="icon">📧</span><a href="mailto:michael.kirk@kirkautomations.com">michael.kirk@kirkautomations.com</a></div>
+        <div class="contact-detail"><span class="icon">📱</span><a href="tel:5869145944">(586) 914-5944</a></div>
+        <div class="contact-detail"><span class="icon">📍</span><span>Michigan, USA</span></div>
+      </div>
+      <form class="contact-form reveal-right" id="contactForm">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <input type="text" name="company" placeholder="Company Name">
+        <select name="service">
+          <option value="" disabled selected>What do you need?</option>
+          <option value="cad-automation">CAD Automation (CATIA, NX, SolidWorks)</option>
+          <option value="excel-automation">Excel / BOM Automation</option>
+          <option value="ai-agents">AI Agents / OpenClaw</option>
+          <option value="web-app">Custom Web Application</option>
+          <option value="integration">System Integration</option>
+          <option value="other">Something Else</option>
+        </select>
+        <textarea name="message" placeholder="Tell us about your project..." rows="4"></textarea>
+        <button type="submit" class="btn btn-primary magnetic" style="width:100%;justify-content:center">Send Message →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ EASTER EGG ═══════════════════ -->
+<div style="text-align:center;padding:30px 20px 0;position:relative;z-index:2">
+  <div id="easterEggTeaser" style="display:inline-flex;align-items:center;gap:8px;padding:10px 24px;
+    background:var(--bg-card);border:1px dashed var(--border-color);border-radius:50px;
+    cursor:pointer;font-size:.85rem;color:var(--text-secondary);transition:all .3s;user-select:none"
+    onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
+    onmouseout="this.style.borderColor='var(--border-color)';this.style.color='var(--text-secondary)'"
+    onclick="document.getElementById('easterEggGames').style.display='grid';this.style.display='none'">
+    🎮 <span>Psst... click here for a surprise</span>
+  </div>
+  <div id="easterEggGames" style="display:none;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:16px;max-width:900px;margin:20px auto 0;padding:0 20px">
+    <a href="games/savings-snake.html" style="display:flex;align-items:center;gap:14px;padding:18px 20px;
+      background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;
+      text-decoration:none;color:var(--text-primary);transition:all .3s"
+      onmouseover="this.style.borderColor='var(--accent)';this.style.transform='translateY(-3px)'"
+      onmouseout="this.style.borderColor='var(--border-color)';this.style.transform=''">
+      <span style="font-size:2rem">🐍</span>
+      <div><strong style="font-size:.95rem">Savings Snake</strong>
+      <div style="font-size:.78rem;color:var(--text-secondary)">Eat automations, save hours</div></div>
+    </a>
+    <a href="games/automation-blaster.html" style="display:flex;align-items:center;gap:14px;padding:18px 20px;
+      background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;
+      text-decoration:none;color:var(--text-primary);transition:all .3s"
+      onmouseover="this.style.borderColor='var(--accent)';this.style.transform='translateY(-3px)'"
+      onmouseout="this.style.borderColor='var(--border-color)';this.style.transform=''">
+      <span style="font-size:2rem">🚀</span>
+      <div><strong style="font-size:.95rem">Automation Blaster</strong>
+      <div style="font-size:.78rem;color:var(--text-secondary)">Shoot down manual work — space invader</div></div>
+    </a>
+    <a href="games/automation-empire.html" style="display:flex;align-items:center;gap:14px;padding:18px 20px;
+      background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;
+      text-decoration:none;color:var(--text-primary);transition:all .3s"
+      onmouseover="this.style.borderColor='var(--accent)';this.style.transform='translateY(-3px)'"
+      onmouseout="this.style.borderColor='var(--border-color)';this.style.transform=''">
+      <span style="font-size:2rem">🏭</span>
+      <div><strong style="font-size:.95rem">Automation Empire</strong>
+      <div style="font-size:.78rem;color:var(--text-secondary)">Idle clicker — build your automation business</div></div>
+    </a>
+    <a href="games/automation-defense.html" style="display:flex;align-items:center;gap:14px;padding:18px 20px;
+      background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;
+      text-decoration:none;color:var(--text-primary);transition:all .3s"
+      onmouseover="this.style.borderColor='var(--accent)';this.style.transform='translateY(-3px)'"
+      onmouseout="this.style.borderColor='var(--border-color)';this.style.transform=''">
+      <span style="font-size:2rem">🏰</span>
+      <div><strong style="font-size:.95rem">Automation Defense</strong>
+      <div style="font-size:.78rem;color:var(--text-secondary)">Tower defense — protect the plant build</div></div>
+    </a>
+    <a href="games/pipeline-builder.html" style="display:flex;align-items:center;gap:14px;padding:18px 20px;
+      background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;
+      text-decoration:none;color:var(--text-primary);transition:all .3s"
+      onmouseover="this.style.borderColor='var(--accent)';this.style.transform='translateY(-3px)'"
+      onmouseout="this.style.borderColor='var(--border-color)';this.style.transform=''">
+      <span style="font-size:2rem">🔗</span>
+      <div><strong style="font-size:.95rem">Pipeline Builder</strong>
+      <div style="font-size:.78rem;color:var(--text-secondary)">Connect the automation workflow</div></div>
+    </a>
+    <a href="games/automation-runner.html" style="display:flex;align-items:center;gap:14px;padding:18px 20px;
+      background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;
+      text-decoration:none;color:var(--text-primary);transition:all .3s"
+      onmouseover="this.style.borderColor='var(--accent)';this.style.transform='translateY(-3px)'"
+      onmouseout="this.style.borderColor='var(--border-color)';this.style.transform=''">
+      <span style="font-size:2rem">🏃</span>
+      <div><strong style="font-size:.95rem">Process Runner</strong>
+      <div style="font-size:.78rem;color:var(--text-secondary)">Endless runner — dodge paperwork</div></div>
+    </a>
+    <a href="games/automation-rpg.html" style="display:flex;align-items:center;gap:14px;padding:18px 20px;
+      background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;
+      text-decoration:none;color:var(--text-primary);transition:all .3s"
+      onmouseover="this.style.borderColor='var(--accent)';this.style.transform='translateY(-3px)'"
+      onmouseout="this.style.borderColor='var(--border-color)';this.style.transform=''">
+      <span style="font-size:2rem">⚔️</span>
+      <div><strong style="font-size:.95rem">The Automation Quest</strong>
+      <div style="font-size:.78rem;color:var(--text-secondary)">RPG — fight manual process monsters</div></div>
+    </a>
+    <a href="games/roi-calculator.html" style="display:flex;align-items:center;gap:14px;padding:18px 20px;
+      background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;
+      text-decoration:none;color:var(--text-primary);transition:all .3s"
+      onmouseover="this.style.borderColor='var(--accent)';this.style.transform='translateY(-3px)'"
+      onmouseout="this.style.borderColor='var(--border-color)';this.style.transform=''">
+      <span style="font-size:2rem">📊</span>
+      <div><strong style="font-size:.95rem">ROI Calculator</strong>
+      <div style="font-size:.78rem;color:var(--text-secondary)">Calculate your team's real savings</div></div>
+    </a>
+    <a href="games/cad-platformer.html" style="display:flex;align-items:center;gap:14px;padding:18px 20px;
+      background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;
+      text-decoration:none;color:var(--text-primary);transition:all .3s"
+      onmouseover="this.style.borderColor='var(--accent)';this.style.transform='translateY(-3px)'"
+      onmouseout="this.style.borderColor='var(--border-color)';this.style.transform=''">
+      <span style="font-size:2rem">🎮</span>
+      <div><strong style="font-size:.95rem">CAD Jumper</strong>
+      <div style="font-size:.78rem;color:var(--text-secondary)">Platformer — jump through CAD worlds</div></div>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2023–2026 Kirk Automations. Built with precision. ⚡ &nbsp;|&nbsp; <a href="projects.html" style="color:var(--text-secondary);font-size:.82rem">Our Projects</a></p>
+</footer>
+
+
+
+<!-- ═══════════════════════════════════════════════════════
+     JAVASCRIPT
+     ═══════════════════════════════════════════════════════ -->
+<script>
+(function(){
+"use strict";
+var html = document.documentElement;
+
+/* ── 1. THEME ENGINE ── */
+var saved; try{saved=localStorage.getItem('ka-theme')}catch(e){}
+var currentTheme = saved || 'arctic';
+
+function applyTheme(name){
+  html.setAttribute('data-theme',name);
+  currentTheme=name;
+  try{localStorage.setItem('ka-theme',name)}catch(e){}
+  var dots=document.querySelectorAll('#themeSwitcher .theme-dot');
+  for(var i=0;i<dots.length;i++) dots[i].classList.toggle('active',dots[i].getAttribute('data-theme')===name);
+}
+applyTheme(currentTheme);
+document.getElementById('themeSwitcher').addEventListener('click',function(e){
+  var dot=e.target.closest('.theme-dot');
+  if(!dot)return;
+  var t=dot.getAttribute('data-theme');
+  if(t)applyTheme(t);
+});
+
+/* ── 2. PARTICLES ── */
+var canvas=document.getElementById('particle-canvas');
+var ctx=canvas.getContext('2d');
+var particles=[];
+var mouseX=-9999,mouseY=-9999;
+var PCOUNT=65,CDIST=140,MRAD=180;
+
+function sizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}
+sizeCanvas();window.addEventListener('resize',sizeCanvas);
+
+function getPColor(){return(getComputedStyle(html).getPropertyValue('--particle-color')||'37,88,217').trim()}
+var pColor=getPColor();
+
+for(var i=0;i<PCOUNT;i++) particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*1.6+.8});
+
+function tickP(){
+  pColor=getPColor();
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(var i=0;i<particles.length;i++){
+    var p=particles[i];
+    var dx=p.x-mouseX,dy=p.y-mouseY,dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist<MRAD&&dist>0){var f=(MRAD-dist)/MRAD;p.vx+=(dx/dist)*f*.35;p.vy+=(dy/dist)*f*.35}
+    p.vx*=.99;p.vy*=.99;p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0)p.x=canvas.width;if(p.x>canvas.width)p.x=0;
+    if(p.y<0)p.y=canvas.height;if(p.y>canvas.height)p.y=0;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.283);
+    ctx.fillStyle='rgba('+pColor+',.45)';ctx.fill();
+  }
+  for(i=0;i<particles.length;i++){
+    for(var j=i+1;j<particles.length;j++){
+      var dx2=particles[i].x-particles[j].x,dy2=particles[i].y-particles[j].y;
+      var d2=Math.sqrt(dx2*dx2+dy2*dy2);
+      if(d2<CDIST){
+        ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);
+        ctx.lineTo(particles[j].x,particles[j].y);
+        ctx.strokeStyle='rgba('+pColor+','+(1-d2/CDIST)*.1+')';
+        ctx.lineWidth=.5;ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(tickP);
+}
+tickP();
+
+var glow=document.getElementById('cursor-glow');
+document.addEventListener('mousemove',function(e){
+  mouseX=e.clientX;mouseY=e.clientY;
+  glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px';
+});
+document.addEventListener('touchmove',function(e){mouseX=e.touches[0].clientX;mouseY=e.touches[0].clientY},{passive:true});
+document.addEventListener('touchend',function(){mouseX=mouseY=-9999},{passive:true});
+
+/* ── 3. HERO GRID BG ── */
+(function(){
+  var g=document.getElementById('heroGrid');if(!g)return;
+  var c=document.createElement('canvas');c.style.cssText='width:100%;height:100%';g.appendChild(c);
+  var cx=c.getContext('2d');
+  function draw(){
+    var w=c.width=g.offsetWidth,h=c.height=g.offsetHeight,sp=40;
+    cx.clearRect(0,0,w,h);
+    for(var x=0;x<w;x+=sp)for(var y=0;y<h;y+=sp){
+      cx.beginPath();cx.arc(x,y,1.2,0,6.283);cx.fillStyle='rgba('+pColor+',.3)';cx.fill();
+    }
+  }
+  draw();window.addEventListener('resize',draw);
+})();
+
+/* ── 4. SCROLL REVEAL ── */
+var revealEls=document.querySelectorAll('.reveal,.reveal-left,.reveal-right');
+function revealCheck(){
+  var wH=window.innerHeight;
+  for(var i=0;i<revealEls.length;i++){
+    if(revealEls[i].classList.contains('visible'))continue;
+    if(revealEls[i].getBoundingClientRect().top<wH-50) revealEls[i].classList.add('visible');
+  }
+}
+if('IntersectionObserver' in window){
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){if(en.isIntersecting)en.target.classList.add('visible')});
+  },{threshold:.06,rootMargin:'0px 0px -30px 0px'});
+  for(var i=0;i<revealEls.length;i++)obs.observe(revealEls[i]);
+}
+window.addEventListener('scroll',revealCheck,{passive:true});
+window.addEventListener('resize',revealCheck,{passive:true});
+revealCheck();
+
+/* ── 5. COUNTER ANIMATION ── */
+var counters=document.querySelectorAll('.stat-number[data-target]');
+var cDone={};
+function animC(){
+  for(var i=0;i<counters.length;i++){
+    if(cDone[i])continue;
+    var el=counters[i];
+    if(el.getBoundingClientRect().top<window.innerHeight-20){
+      cDone[i]=true;
+      (function(el){
+        var target=parseInt(el.getAttribute('data-target'));
+        var prefix=el.getAttribute('data-prefix')||'';
+        var suffix=el.getAttribute('data-suffix')||'';
+        var final_text=el.getAttribute('data-final')||'';
+        if(final_text){el.textContent=final_text;return}
+        var cur=0,step=target/60;
+        var iv=setInterval(function(){
+          cur+=step;if(cur>=target){cur=target;clearInterval(iv)}
+          el.textContent=prefix+Math.floor(cur).toLocaleString()+suffix;
+        },16);
+      })(el);
+    }
+  }
+}
+window.addEventListener('scroll',animC,{passive:true});animC();
+
+/* ── 6. NAV SCROLL ── */
+var nav=document.getElementById('mainNav');
+window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',window.scrollY>50)},{passive:true});
+
+/* ── 7. MOBILE MENU ── */
+document.getElementById('mobileMenuBtn').addEventListener('click',function(){
+  document.getElementById('navLinks').classList.toggle('mobile-open');
+});
+document.querySelectorAll('.nav-links a').forEach(function(a){
+  a.addEventListener('click',function(){document.getElementById('navLinks').classList.remove('mobile-open')});
+});
+
+/* ── 8. MAGNETIC + RIPPLE ── */
+document.querySelectorAll('.magnetic').forEach(function(btn){
+  btn.addEventListener('mousemove',function(e){
+    var r=btn.getBoundingClientRect();
+    btn.style.transform='translate('+(e.clientX-r.left-r.width/2)*.1+'px,'+(e.clientY-r.top-r.height/2)*.1+'px)';
+  });
+  btn.addEventListener('mouseleave',function(){btn.style.transform=''});
+  btn.addEventListener('click',function(e){
+    var rip=document.createElement('span');rip.className='ripple';
+    var r=btn.getBoundingClientRect(),sz=Math.max(r.width,r.height);
+    rip.style.cssText='left:'+(e.clientX-r.left)+'px;top:'+(e.clientY-r.top)+'px;width:'+sz+'px;height:'+sz+'px';
+    btn.appendChild(rip);setTimeout(function(){rip.remove()},600);
+  });
+});
+
+/* ── 9. HERO TEXT ROTATION ── */
+var heroWords=['CAD Checks.','Drawing Generation.','Excel Reports.','Data Conversion.','Spec Compliance.','Quality Reviews.','Parts Lists.'];
+var wIdx=0;var rotEl=document.getElementById('heroRotate');
+setInterval(function(){
+  wIdx=(wIdx+1)%heroWords.length;
+  rotEl.style.opacity='0';rotEl.style.transform='translateY(8px)';
+  setTimeout(function(){
+    rotEl.textContent=heroWords[wIdx];
+    rotEl.style.opacity='1';rotEl.style.transform='translateY(0)';
+  },300);
+},3000);
+rotEl.style.transition='opacity .3s,transform .3s';
+
+/* ── 10. SMOOTH SCROLL ── */
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    var tgt=document.querySelector(a.getAttribute('href'));
+    if(tgt){e.preventDefault();tgt.scrollIntoView({behavior:'smooth',block:'start'})}
+  });
+});
+
+/* ── 11. FORMS ── */
+document.getElementById('signupForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  var email=this.querySelector('input[type="email"]').value;
+  try{var leads=JSON.parse(localStorage.getItem('ka-leads')||'[]');leads.push({email:email,date:new Date().toISOString()});localStorage.setItem('ka-leads',JSON.stringify(leads))}catch(ex){}
+  try{fetch('https://formspree.io/f/xyzgbkwl',{method:'POST',body:JSON.stringify({email:email,_subject:'Kirk Automations — OpenClaw Interest',source:'kirkautomations.com'}),headers:{'Content-Type':'application/json','Accept':'application/json'}})}catch(ex){}
+  this.style.display='none';document.querySelector('.signup-note').style.display='none';
+  document.getElementById('signupSuccess').style.display='block';
+});
+document.getElementById('contactForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  var fd=new FormData(this),data={};fd.forEach(function(v,k){data[k]=v});
+  data._subject='Kirk Automations — New Lead';
+  try{fetch('https://formspree.io/f/xyzgbkwl',{method:'POST',body:JSON.stringify(data),headers:{'Content-Type':'application/json','Accept':'application/json'}})}catch(ex){}
+  this.innerHTML='<div style="text-align:center;padding:40px"><h3 style="color:var(--accent);margin-bottom:8px">✓ Message Sent!</h3><p style="color:var(--text-secondary)">We\'ll get back to you within 24 hours.</p></div>';
+});
+
+function showNotif(text){
+  var el=document.createElement('div');el.className='secret-found';el.textContent=text;
+  document.body.appendChild(el);setTimeout(function(){el.remove()},3000);
+}
+
+/* ── (Games are now standalone HTML files in /games/) ── */
+
+var kSeq=[];
+var KONAMI=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+document.addEventListener('keydown',function(e){
+  kSeq.push(e.key);if(kSeq.length>KONAMI.length)kSeq.shift();
+  if(kSeq.join(',')=== KONAMI.join(',')){
+    kSeq=[];showNotif('🎉 KONAMI CODE! Cycling all themes!');
+    var names=['midnight','cyberteal','solarflare','arctic','emerald','royal','crimson','sand','neonnoir','ocean'];
+    var ci=0;var cyc=setInterval(function(){applyTheme(names[ci%names.length]);ci++;if(ci>=names.length*2)clearInterval(cyc)},200);
+  }
+});
+
+console.log('%c🐾 Kirk Automations','font-size:20px;font-weight:bold;color:#2558d9');
+console.log('%cKonami code works. Games at /games/. 10 themes on the right.','color:#888');
+
+})();
+</script>
+</body>
+</html>
