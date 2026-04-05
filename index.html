@@ -209,6 +209,9 @@ body:hover #cursor-glow{opacity:.7}
 @media(max-width:768px){
   #animSwitcher{left:8px;gap:4px;padding:8px 5px}
   .anim-dot{width:14px;height:14px;font-size:7px}
+  .voice-switcher{bottom:24px;left:8px}
+  .voice-dot{width:14px;height:14px;font-size:7px}
+  .voice-toggle{width:30px;height:30px;font-size:12px}
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -584,6 +587,67 @@ footer{
 @keyframes secret-pop{0%{transform:translateX(-50%) scale(0)}100%{transform:translateX(-50%) scale(1)}}
 
 /* ═══════════════════════════════════════════════════════
+   VOICE SWITCHER (bottom-left, collapsible)
+   ═══════════════════════════════════════════════════════ */
+.voice-switcher{
+  position:fixed;bottom:32px;left:16px;z-index:9999;
+  display:flex;flex-direction:column;align-items:center;
+}
+.voice-options{
+  display:flex;flex-direction:column;gap:6px;align-items:center;
+  padding:10px 6px;background:rgba(20,20,30,.75);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-radius:30px;border:1px solid rgba(255,255,255,.06);
+  max-height:0;overflow:hidden;opacity:0;
+  transition:max-height .35s cubic-bezier(.4,0,.2,1),opacity .25s,padding .35s,margin .35s;
+  padding:0 6px;margin-bottom:0;
+}
+[data-theme="arctic"] .voice-options,[data-theme="sand"] .voice-options{
+  background:rgba(255,255,255,.82);border-color:rgba(0,0,0,.06);
+}
+.voice-switcher.expanded .voice-options{
+  max-height:320px;opacity:1;padding:10px 6px;margin-bottom:8px;
+}
+.voice-label{
+  font-size:.55rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text-secondary);opacity:.5;margin-bottom:4px;
+  transition:opacity .3s;
+}
+.voice-switcher:hover .voice-label{opacity:1}
+.voice-dot{
+  width:18px;height:18px;border-radius:50%;cursor:pointer;
+  border:2px solid transparent;transition:all .25s;display:flex;
+  align-items:center;justify-content:center;font-size:9px;font-weight:700;
+  color:#fff;position:relative;
+}
+.voice-dot:hover{transform:scale(1.35);border-color:rgba(255,255,255,.8)}
+[data-theme="arctic"] .voice-dot:hover,[data-theme="sand"] .voice-dot:hover{border-color:rgba(0,0,0,.4)}
+.voice-dot.active{border-color:var(--accent);box-shadow:0 0 8px var(--accent-glow);transform:scale(1.25)}
+.voice-dot[data-label]::after{
+  content:attr(data-label);position:absolute;left:30px;top:50%;
+  transform:translateY(-50%);background:var(--bg-card);color:var(--text-primary);
+  padding:4px 10px;border-radius:6px;font-size:11px;white-space:nowrap;font-weight:400;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+  border:1px solid var(--border-color);box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+.voice-dot:hover::after{opacity:1}
+.voice-toggle{
+  width:36px;height:36px;border-radius:50%;cursor:pointer;
+  background:rgba(20,20,30,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.06);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:800;color:var(--accent);
+  transition:all .3s;
+}
+.voice-toggle:hover{transform:scale(1.1);border-color:var(--accent);box-shadow:0 0 12px var(--accent-glow)}
+[data-theme="arctic"] .voice-toggle,[data-theme="sand"] .voice-toggle{
+  background:rgba(255,255,255,.82);border-color:rgba(0,0,0,.06);
+}
+/* copy fade transition */
+[data-copy]{transition:opacity .3s ease}
+body.voice-fading [data-copy]{opacity:0}
+
+/* ═══════════════════════════════════════════════════════
    MOBILE
    ═══════════════════════════════════════════════════════ */
 @media(max-width:768px){
@@ -646,16 +710,31 @@ footer{
   <div class="anim-dot" data-anim="blobs" data-label="Liquid Blobs" style="position:relative">◉</div>
 </div>
 
+<!-- ═══════════════════ VOICE SWITCHER ═══════════════════ -->
+<div class="voice-switcher" id="voiceSwitcher">
+  <div class="voice-options" id="voiceOptions">
+    <div class="voice-dot active" data-voice="professional" data-label="Professional" style="background:#2558d9">P</div>
+    <div class="voice-dot" data-voice="engineer" data-label="Engineer" style="background:#00e676">E</div>
+    <div class="voice-dot" data-voice="closer" data-label="Closer" style="background:#ff2d55">C</div>
+    <div class="voice-dot" data-voice="visionary" data-label="Visionary" style="background:#b388ff">V</div>
+    <div class="voice-dot" data-voice="straighttalk" data-label="Straight Talk" style="background:#ff9f43">S</div>
+    <div class="voice-dot" data-voice="challenger" data-label="Challenger" style="background:#ff6b6b">X</div>
+    <div class="voice-dot" data-voice="founder" data-label="Founder" style="background:#f0b429">F</div>
+  </div>
+  <div class="voice-label">Voice</div>
+  <div class="voice-toggle" id="voiceToggle">P</div>
+</div>
+
 <!-- ═══════════════════ NAVIGATION ═══════════════════ -->
 <nav id="mainNav">
   <div class="nav-logo">
     <span class="nav-logo-kirk">Kirk</span><span class="nav-logo-auto">Automations</span>
   </div>
   <div class="nav-links" id="navLinks">
-    <a href="#services">Services</a>
-    <a href="#openclaw">OpenClaw</a>
-    <a href="#results">Results</a>
-    <a href="#contact" class="nav-cta">Get Started</a>
+    <a href="#services" data-copy="nav-services">Services</a>
+    <a href="#openclaw" data-copy="nav-openclaw">OpenClaw</a>
+    <a href="#results" data-copy="nav-results">Results</a>
+    <a href="#contact" class="nav-cta" data-copy="nav-cta">Get Started</a>
   </div>
   <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">☰</button>
 </nav>
@@ -666,19 +745,19 @@ footer{
   <div class="hero-content">
     <a href="#openclaw" class="hero-badge">
       <span class="dot"></span>
-      <span>We Deploy OpenClaw AI Agents</span>
+      <span data-copy="hero-badge">We Deploy OpenClaw AI Agents</span>
     </a>
     <h1>
-      <span class="line-static">Profit Through Automating</span>
+      <span class="line-static" data-copy="hero-h1">Profit Through Automating</span>
       <span class="gradient-text" id="heroRotate">CAD Checks.</span><span class="typing-cursor"></span>
     </h1>
-    <p class="hero-sub">
+    <p class="hero-sub" data-copy="hero-sub" data-html="1">
       Work done by humans on a computer can be automated with custom software.
       Eliminate human error. Save time. <strong>More profit.</strong>
     </p>
     <div class="hero-actions">
-      <a href="#contact" class="btn btn-primary magnetic">Start a Project →</a>
-      <a href="#services" class="btn btn-secondary magnetic">Discover Solutions</a>
+      <a href="#contact" class="btn btn-primary magnetic" data-copy="hero-btn1">Start a Project &rarr;</a>
+      <a href="#services" class="btn btn-secondary magnetic" data-copy="hero-btn2">Discover Solutions</a>
     </div>
     <div class="tech-stack">
       <span class="tech-badge">CATIA V5</span>
@@ -704,19 +783,19 @@ footer{
     <div class="stats-bar stagger">
       <div class="stat-item reveal">
         <div class="stat-number" data-target="11500" data-suffix="+">0</div>
-        <div class="stat-label">Engineering Hours Saved</div>
+        <div class="stat-label" data-copy="stat-1">Engineering Hours Saved</div>
       </div>
       <div class="stat-item reveal">
         <div class="stat-number" data-target="50" data-suffix="+">0</div>
-        <div class="stat-label">Automations Delivered</div>
+        <div class="stat-label" data-copy="stat-2">Automations Delivered</div>
       </div>
       <div class="stat-item reveal">
         <div class="stat-number" data-target="2" data-prefix="$" data-suffix="M+">0</div>
-        <div class="stat-label">Client Savings</div>
+        <div class="stat-label" data-copy="stat-3">Client Savings</div>
       </div>
       <div class="stat-item reveal">
         <div class="stat-number" data-target="0" data-suffix="" data-final="0 Build Delays">0</div>
-        <div class="stat-label">Plant Build Delays</div>
+        <div class="stat-label" data-copy="stat-4">Plant Build Delays</div>
       </div>
     </div>
   </div>
@@ -726,46 +805,46 @@ footer{
 <section id="services">
   <div class="container">
     <div class="section-header reveal">
-      <div class="section-label">What We Build</div>
-      <h2 class="section-title">Engineering-Grade Automation</h2>
-      <p class="section-desc">Custom software specific to your design rules and specs. Save engineering hours year over year.</p>
+      <div class="section-label" data-copy="svc-label">What We Build</div>
+      <h2 class="section-title" data-copy="svc-title">Engineering-Grade Automation</h2>
+      <p class="section-desc" data-copy="svc-desc">Custom software specific to your design rules and specs. Save engineering hours year over year.</p>
     </div>
     <div class="services-grid stagger">
 
       <div class="service-card reveal">
         <div class="service-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></div>
-        <h3>Automated CAD Checks</h3>
-        <p>CATIA, NX, AutoCAD, SolidWorks - our automations open 3D models, run clearance checks against your specs, and generate pass/fail reports. Weeks of manual work, minutes of runtime.</p>
+        <h3 data-copy="svc-1-t">Automated CAD Checks</h3>
+        <p data-copy="svc-1-d">CATIA, NX, AutoCAD, SolidWorks - our automations open 3D models, run clearance checks against your specs, and generate pass/fail reports. Weeks of manual work, minutes of runtime.</p>
       </div>
 
       <div class="service-card reveal">
         <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/><line x1="14" y1="15" x2="18" y2="15"/><line x1="14" y1="12" x2="18" y2="12"/></svg></div>
-        <h3>Automated Drawings</h3>
-        <p>Using 3D CAD and a few selections from an engineer, a 2D drawing is generated - formatted, dimensioned, and ready for the manufacturing plant. Saving 1,200+ hours/year.</p>
+        <h3 data-copy="svc-2-t">Automated Drawings</h3>
+        <p data-copy="svc-2-d">Using 3D CAD and a few selections from an engineer, a 2D drawing is generated - formatted, dimensioned, and ready for the manufacturing plant. Saving 1,200+ hours/year.</p>
       </div>
 
       <div class="service-card reveal">
         <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M3 3h18v18H3z"/><path d="M3 9h18M9 3v18"/><path d="M14 14l2 2 3-3"/></svg></div>
-        <h3>Automated Excel &amp; BOM Work</h3>
-        <p>Engineers combining customer data with internal Parts Lists/BOMs? Our automations merge documents, calculate quantities, and generate Excel files in your exact format.</p>
+        <h3 data-copy="svc-3-t">Automated Excel &amp; BOM Work</h3>
+        <p data-copy="svc-3-d">Engineers combining customer data with internal Parts Lists/BOMs? Our automations merge documents, calculate quantities, and generate Excel files in your exact format.</p>
       </div>
 
       <div class="service-card reveal">
         <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M12 2a4 4 0 014 4v5H8V6a4 4 0 014-4z"/><circle cx="12" cy="16" r="1.5"/></svg></div>
-        <h3>AI Agents &amp; OpenClaw</h3>
-        <p>Deploy intelligent AI agents that handle repetitive work, answer questions, process data, and integrate with your existing tools. Your own 24/7 digital workforce.</p>
+        <h3 data-copy="svc-4-t">AI Agents &amp; OpenClaw</h3>
+        <p data-copy="svc-4-d">Deploy intelligent AI agents that handle repetitive work, answer questions, process data, and integrate with your existing tools. Your own 24/7 digital workforce.</p>
       </div>
 
       <div class="service-card reveal">
         <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
-        <h3>Custom Web Applications</h3>
-        <p>Internal tools, dashboards, client portals - purpose-built web applications that do exactly what your business needs. No bloated SaaS. No compromises.</p>
+        <h3 data-copy="svc-5-t">Custom Web Applications</h3>
+        <p data-copy="svc-5-d">Internal tools, dashboards, client portals - purpose-built web applications that do exactly what your business needs. No bloated SaaS. No compromises.</p>
       </div>
 
       <div class="service-card reveal">
         <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
-        <h3>System Integration</h3>
-        <p>Connect CAD systems, ERP, email, cloud storage, and databases into seamless automated workflows. Data flows where it needs to - automatically.</p>
+        <h3 data-copy="svc-6-t">System Integration</h3>
+        <p data-copy="svc-6-d">Connect CAD systems, ERP, email, cloud storage, and databases into seamless automated workflows. Data flows where it needs to - automatically.</p>
       </div>
 
     </div>
@@ -776,22 +855,22 @@ footer{
 <section class="value-section">
   <div class="value-block reveal">
     <div class="value-text">
-      <h3>Custom Software Specific To Your Design Rules And Specs</h3>
-      <p>Save engineering hours year over year with automations that perform what was previously tedious, manual engineering work. Your specs. Your rules. Our code.</p>
+      <h3 data-copy="val-1-t">Custom Software Specific To Your Design Rules And Specs</h3>
+      <p data-copy="val-1-d">Save engineering hours year over year with automations that perform what was previously tedious, manual engineering work. Your specs. Your rules. Our code.</p>
     </div>
     <div class="value-visual"><svg viewBox="0 0 200 160"><rect x="20" y="30" width="60" height="100" rx="4" class="vv-line"/><rect x="120" y="30" width="60" height="100" rx="4" class="vv-line"/><path d="M80 60h40M80 80h40M80 100h40" class="vv-accent"/><circle cx="50" cy="55" r="3" class="vv-dot"/><circle cx="50" cy="75" r="3" class="vv-dot"/><circle cx="50" cy="95" r="3" class="vv-dot"/><path d="M135 65l8 8 12-16" class="vv-line" style="stroke-width:2.5;opacity:1"/><path d="M135 90l8 8 12-16" class="vv-line" style="stroke-width:2.5;opacity:1"/></svg></div>
   </div>
   <div class="value-block reverse reveal">
     <div class="value-text">
-      <h3>Quality Software For High Stakes Decisions</h3>
-      <p>Our experienced programmers and extensive libraries eliminate human error and prevent last minute trips to Plant Builds. When the stakes are high, you need software you can trust.</p>
+      <h3 data-copy="val-2-t">Quality Software For High Stakes Decisions</h3>
+      <p data-copy="val-2-d">Our experienced programmers and extensive libraries eliminate human error and prevent last minute trips to Plant Builds. When the stakes are high, you need software you can trust.</p>
     </div>
     <div class="value-visual"><svg viewBox="0 0 200 160"><path d="M100 15L170 60v65l-70 40-70-40V60z" class="vv-line" style="stroke-width:1.5"/><path d="M100 35L150 60v45l-50 28-50-28V60z" class="vv-fill"/><path d="M85 90l12 12 25-30" style="stroke:var(--accent);stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round"/></svg></div>
   </div>
   <div class="value-block reveal">
     <div class="value-text">
-      <h3>Extend Human Abilities With Computations Only A Computer Can Do</h3>
-      <p>Unlock new capabilities for your company by using the power of computers to do heavy lifting. Things no human could do manually - at scale, with precision, around the clock.</p>
+      <h3 data-copy="val-3-t">Extend Human Abilities With Computations Only A Computer Can Do</h3>
+      <p data-copy="val-3-d">Unlock new capabilities for your company by using the power of computers to do heavy lifting. Things no human could do manually - at scale, with precision, around the clock.</p>
     </div>
     <div class="value-visual"><svg viewBox="0 0 200 160"><circle cx="100" cy="80" r="50" class="vv-line"/><circle cx="100" cy="80" r="35" class="vv-accent"/><circle cx="100" cy="80" r="18" class="vv-fill"/><path d="M100 80L100 30M100 80L140 60M100 80L130 115" style="stroke:var(--accent);stroke-width:1.5;fill:none;stroke-linecap:round"/><circle cx="100" cy="30" r="4" class="vv-dot"/><circle cx="140" cy="60" r="4" class="vv-dot"/><circle cx="130" cy="115" r="4" class="vv-dot"/><circle cx="60" cy="60" r="3" class="vv-dot" style="opacity:.4"/><circle cx="62" cy="110" r="3" class="vv-dot" style="opacity:.4"/></svg></div>
   </div>
@@ -801,15 +880,15 @@ footer{
 <section class="openclaw-section" id="openclaw">
   <div class="openclaw-card reveal">
     <div class="openclaw-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 00-3 3c0 1.5 1 2.5 1 4H8a3 3 0 00-3 3v2a3 3 0 003 3h.5l.5 3h6l.5-3h.5a3 3 0 003-3v-2a3 3 0 00-3-3h-2c0-1.5 1-2.5 1-4a3 3 0 00-3-3z"/><circle cx="9.5" cy="13" r="1" fill="var(--accent)"/><circle cx="14.5" cy="13" r="1" fill="var(--accent)"/></svg></div>
-    <h2>We Now Deploy <span class="gradient-text">OpenClaw</span> AI Agents</h2>
-    <p>
+    <h2 data-copy="oc-title" data-html="1">We Now Deploy <span class="gradient-text">OpenClaw</span> AI Agents</h2>
+    <p data-copy="oc-desc">
       OpenClaw is an AI agent platform that gives your business a 24/7 intelligent assistant.
       It connects to your tools, learns your workflows, and handles the work that eats your team's time.
       We deploy, customize, and support it for your specific business needs.
     </p>
     <form class="signup-form" id="signupForm">
       <input type="email" name="email" placeholder="Enter your business email" required autocomplete="email">
-      <button type="submit">Get Info →</button>
+      <button type="submit" data-copy="oc-btn">Get Info &rarr;</button>
     </form>
     <p class="signup-note">We'll reach out within 24 hours to discuss how OpenClaw can work for you.</p>
     <div class="signup-success" id="signupSuccess">✓ Got it! We'll be in touch soon.</div>
@@ -822,27 +901,27 @@ footer{
 <section id="results">
   <div class="container">
     <div class="section-header reveal">
-      <div class="section-label">Results</div>
-      <h2 class="section-title">What Our Clients Say</h2>
+      <div class="section-label" data-copy="test-label">Results</div>
+      <h2 class="section-title" data-copy="test-title">What Our Clients Say</h2>
     </div>
     <div class="testimonials-grid stagger">
       <div class="testimonial-card reveal">
         <div class="quote-mark">"</div>
-        <p>Kirk Automations cut our drawing generation time from 3 days to 15 minutes. The ROI was immediate and the quality improvement was even more impressive than the time savings.</p>
-        <div class="testimonial-author">Senior Engineering Manager</div>
-        <div class="testimonial-role">Automotive OEM Supplier</div>
+        <p data-copy="test-1-q">Kirk Automations cut our drawing generation time from 3 days to 15 minutes. The ROI was immediate and the quality improvement was even more impressive than the time savings.</p>
+        <div class="testimonial-author" data-copy="test-1-a">Senior Engineering Manager</div>
+        <div class="testimonial-role" data-copy="test-1-r">Automotive OEM Supplier</div>
       </div>
       <div class="testimonial-card reveal">
-        <div class="quote-mark">"</div>
-        <p>We were spending 200+ hours per quarter on manual CAD checks. Now it's fully automated - zero errors in the last 8 months of production runs. No more last-minute plant build surprises.</p>
-        <div class="testimonial-author">Quality Director</div>
-        <div class="testimonial-role">Tier 1 Manufacturing</div>
+        <div class="quote-mark">&ldquo;</div>
+        <p data-copy="test-2-q">We were spending 200+ hours per quarter on manual CAD checks. Now it's fully automated - zero errors in the last 8 months of production runs. No more last-minute plant build surprises.</p>
+        <div class="testimonial-author" data-copy="test-2-a">Quality Director</div>
+        <div class="testimonial-role" data-copy="test-2-r">Tier 1 Manufacturing</div>
       </div>
       <div class="testimonial-card reveal">
-        <div class="quote-mark">"</div>
-        <p>Their AI agent handles our weekly data reconciliation that used to take a full-time person two days. It runs overnight and the report is ready by morning.</p>
-        <div class="testimonial-author">Operations VP</div>
-        <div class="testimonial-role">Industrial Equipment Company</div>
+        <div class="quote-mark">&ldquo;</div>
+        <p data-copy="test-3-q">Their AI agent handles our weekly data reconciliation that used to take a full-time person two days. It runs overnight and the report is ready by morning.</p>
+        <div class="testimonial-author" data-copy="test-3-a">Operations VP</div>
+        <div class="testimonial-role" data-copy="test-3-r">Industrial Equipment Company</div>
       </div>
     </div>
   </div>
@@ -854,13 +933,13 @@ footer{
 <section class="contact-section" id="contact">
   <div class="container">
     <div class="section-header reveal">
-      <div class="section-label">Contact</div>
-      <h2 class="section-title">Let's Talk About Your Project</h2>
+      <div class="section-label" data-copy="ct-label">Contact</div>
+      <h2 class="section-title" data-copy="ct-title">Let&rsquo;s Talk About Your Project</h2>
     </div>
     <div class="contact-grid">
       <div class="contact-info reveal-left">
-        <h3>Kirk Automations</h3>
-        <p>Custom automation software and AI agents for engineering companies and businesses. Based in Michigan, serving clients nationwide.</p>
+        <h3 data-copy="ct-company">Kirk Automations</h3>
+        <p data-copy="ct-desc">Custom automation software and AI agents for engineering companies and businesses. Based in Michigan, serving clients nationwide.</p>
         <div class="contact-detail"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg></span><a href="mailto:michael.kirk@kirkautomations.com">michael.kirk@kirkautomations.com</a></div>
         <div class="contact-detail"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg></span><a href="tel:5869145944">(586) 914-5944</a></div>
         <div class="contact-detail"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></span><span>Michigan, USA</span></div>
@@ -879,7 +958,7 @@ footer{
           <option value="other">Something Else</option>
         </select>
         <textarea name="message" placeholder="Tell us about your project..." rows="4"></textarea>
-        <button type="submit" class="btn btn-primary magnetic" style="width:100%;justify-content:center">Send Message →</button>
+        <button type="submit" class="btn btn-primary magnetic" style="width:100%;justify-content:center" data-copy="ct-btn">Send Message &rarr;</button>
       </form>
     </div>
   </div>
@@ -1618,7 +1697,287 @@ document.addEventListener('keydown',function(e){
 });
 
 console.log('%c🐾 Kirk Automations','font-size:20px;font-weight:bold;color:#2558d9');
-console.log('%cKonami code works. Games at /games/. 10 themes on the right.','color:#888');
+console.log('%cKonami code works. Games at /games/. 10 themes on the right. 7 voices on the left.','color:#888');
+
+/* ── 12. VOICE / COPYWRITING ENGINE ── */
+var VOICES={
+professional:{
+'nav-services':'Services','nav-openclaw':'OpenClaw','nav-results':'Results','nav-cta':'Get Started',
+'hero-badge':'We Deploy OpenClaw AI Agents','hero-h1':'Profit Through Automating',
+'hero-sub':'Work done by humans on a computer can be automated with custom software. Eliminate human error. Save time. <strong>More profit.</strong>',
+'hero-btn1':'Start a Project \u2192','hero-btn2':'Discover Solutions',
+'stat-1':'Engineering Hours Saved','stat-2':'Automations Delivered','stat-3':'Client Savings','stat-4':'Plant Build Delays',
+'svc-label':'What We Build','svc-title':'Engineering-Grade Automation',
+'svc-desc':'Custom software specific to your design rules and specs. Save engineering hours year over year.',
+'svc-1-t':'Automated CAD Checks','svc-1-d':'CATIA, NX, AutoCAD, SolidWorks - our automations open 3D models, run clearance checks against your specs, and generate pass/fail reports. Weeks of manual work, minutes of runtime.',
+'svc-2-t':'Automated Drawings','svc-2-d':'Using 3D CAD and a few selections from an engineer, a 2D drawing is generated - formatted, dimensioned, and ready for the manufacturing plant. Saving 1,200+ hours/year.',
+'svc-3-t':'Automated Excel &amp; BOM Work','svc-3-d':'Engineers combining customer data with internal Parts Lists/BOMs? Our automations merge documents, calculate quantities, and generate Excel files in your exact format.',
+'svc-4-t':'AI Agents &amp; OpenClaw','svc-4-d':'Deploy intelligent AI agents that handle repetitive work, answer questions, process data, and integrate with your existing tools. Your own 24/7 digital workforce.',
+'svc-5-t':'Custom Web Applications','svc-5-d':'Internal tools, dashboards, client portals - purpose-built web applications that do exactly what your business needs. No bloated SaaS. No compromises.',
+'svc-6-t':'System Integration','svc-6-d':'Connect CAD systems, ERP, email, cloud storage, and databases into seamless automated workflows. Data flows where it needs to - automatically.',
+'val-1-t':'Custom Software Specific To Your Design Rules And Specs','val-1-d':'Save engineering hours year over year with automations that perform what was previously tedious, manual engineering work. Your specs. Your rules. Our code.',
+'val-2-t':'Quality Software For High Stakes Decisions','val-2-d':'Our experienced programmers and extensive libraries eliminate human error and prevent last minute trips to Plant Builds. When the stakes are high, you need software you can trust.',
+'val-3-t':'Extend Human Abilities With Computations Only A Computer Can Do','val-3-d':'Unlock new capabilities for your company by using the power of computers to do heavy lifting. Things no human could do manually - at scale, with precision, around the clock.',
+'oc-title':'We Now Deploy <span class="gradient-text">OpenClaw</span> AI Agents',
+'oc-desc':'OpenClaw is an AI agent platform that gives your business a 24/7 intelligent assistant. It connects to your tools, learns your workflows, and handles the work that eats your team\u2019s time. We deploy, customize, and support it for your specific business needs.',
+'oc-btn':'Get Info \u2192',
+'test-label':'Results','test-title':'What Our Clients Say',
+'test-1-q':'Kirk Automations cut our drawing generation time from 3 days to 15 minutes. The ROI was immediate and the quality improvement was even more impressive than the time savings.',
+'test-1-a':'Senior Engineering Manager','test-1-r':'Automotive OEM Supplier',
+'test-2-q':'We were spending 200+ hours per quarter on manual CAD checks. Now it\u2019s fully automated - zero errors in the last 8 months of production runs. No more last-minute plant build surprises.',
+'test-2-a':'Quality Director','test-2-r':'Tier 1 Manufacturing',
+'test-3-q':'Their AI agent handles our weekly data reconciliation that used to take a full-time person two days. It runs overnight and the report is ready by morning.',
+'test-3-a':'Operations VP','test-3-r':'Industrial Equipment Company',
+'ct-label':'Contact','ct-title':'Let\u2019s Talk About Your Project',
+'ct-company':'Kirk Automations','ct-desc':'Custom automation software and AI agents for engineering companies and businesses. Based in Michigan, serving clients nationwide.',
+'ct-btn':'Send Message \u2192'
+},
+engineer:{
+'nav-services':'Capabilities','nav-openclaw':'AI Platform','nav-results':'Validation','nav-cta':'Request Spec Review',
+'hero-badge':'COM Automation \u2022 API Integration \u2022 AI Agents','hero-h1':'Validated Automation For',
+'hero-sub':'Production-grade COM and API-driven automation across CATIA V5, NX, SolidWorks, and AutoCAD. Deterministic validation pipelines with full traceability. <strong>Zero tolerance for manual error.</strong>',
+'hero-btn1':'Submit RFQ \u2192','hero-btn2':'View Tech Stack',
+'stat-1':'Eng. Hours Recovered','stat-2':'Validated Pipelines','stat-3':'Documented Savings','stat-4':'Production Escapes',
+'svc-label':'Technical Capabilities','svc-title':'Deterministic Automation Pipelines',
+'svc-desc':'COM-level automation with parameterized validation against GD&amp;T specs, BOM schemas, and OEM-specific design rules.',
+'svc-1-t':'CAD Validation Automation','svc-1-d':'COM-driven batch processing across CATIA V5 (VBA/VBScript), NX (NXOpen), SolidWorks API, and AutoCAD ObjectARX. Automated clearance checks against GD&amp;T callouts with configurable tolerance bands and pass/fail reporting.',
+'svc-2-t':'Drawing Generation Pipeline','svc-2-d':'Parametric 2D drawing extraction from 3D models via API hooks. Automated view placement, dimension schemes per ASME Y14.5, title block population, and revision control. 1,200+ hours/year eliminated per program.',
+'svc-3-t':'BOM &amp; Data Automation','svc-3-d':'Structured BOM extraction with schema validation, cross-reference merging against customer-supplied datasets, quantity rollups, and output in client-specified Excel/CSV formats with full audit trail.',
+'svc-4-t':'AI Agent Deployment','svc-4-d':'OpenClaw agent configuration with tool-calling, RAG pipelines, and structured output chains. Integrates with REST APIs, file systems, databases, and CAD COM interfaces for autonomous task execution.',
+'svc-5-t':'Custom Engineering Tools','svc-5-d':'Single-page and full-stack web applications built to spec. Real-time dashboards, data entry portals, and workflow management systems with REST/GraphQL backends and zero external dependencies where required.',
+'svc-6-t':'System-Level Integration','svc-6-d':'Middleware connecting CAD environments, ERP systems (SAP/Oracle), PLM platforms, SMTP, cloud storage APIs, and relational databases. Event-driven data pipelines with error handling and retry logic.',
+'val-1-t':'Spec-Driven Development','val-1-d':'Every automation is built against your documented design rules, tolerance specifications, and process standards. No generic templates. Code validates against your exact engineering criteria.',
+'val-2-t':'Production-Validated Reliability','val-2-d':'Extensive regression testing, edge case coverage, and validation against known-good datasets. Our libraries handle the failure modes that manual processes miss. Zero production escapes attributable to automation.',
+'val-3-t':'Computational Analysis At Scale','val-3-d':'Batch processing thousands of parts through clearance checks, interference detection, and compliance validation in minutes. Operations that would require person-months of manual review.',
+'oc-title':'<span class="gradient-text">OpenClaw</span> AI Agent Platform',
+'oc-desc':'Multi-tool AI agent framework with persistent memory, tool-calling chains, and configurable system prompts. Deploys on your infrastructure with full API access to your engineering stack. We handle configuration, fine-tuning, and ongoing support.',
+'oc-btn':'Request Architecture Review \u2192',
+'test-label':'Validation Results','test-title':'Verified Performance Metrics',
+'test-1-q':'Their drawing automation processes our full CATIA assembly and generates dimensioned 2D outputs in under 15 minutes. Previously a 3-day manual effort with frequent revision errors.',
+'test-1-a':'Sr. Engineering Manager','test-1-r':'Automotive OEM Tier 1',
+'test-2-q':'200+ hours per quarter of manual CAD validation eliminated. 8 months of production data shows zero escapes from their automated checks. The tolerance validation catches issues we used to miss.',
+'test-2-a':'Quality Assurance Director','test-2-r':'Tier 1 Stamping &amp; Assembly',
+'test-3-q':'Their AI agent runs our weekly cross-system data reconciliation autonomously. 16 hours of manual work replaced by an overnight batch process with structured exception reporting.',
+'test-3-a':'VP Operations','test-3-r':'Industrial OEM',
+'ct-label':'Technical Inquiry','ct-title':'Submit Your Requirements',
+'ct-company':'Kirk Automations','ct-desc':'Production-grade automation and AI agent deployment for engineering and manufacturing. Michigan-based, serving OEMs and suppliers across North America.',
+'ct-btn':'Submit Inquiry \u2192'
+},
+closer:{
+'nav-services':'Solutions','nav-openclaw':'AI Advantage','nav-results':'ROI Proof','nav-cta':'Get Your Quote',
+'hero-badge':'$2M+ in Client Savings and Counting','hero-h1':'Stop Losing Money On',
+'hero-sub':'Every hour your engineers spend on manual work is money walking out the door. Your competitors already automated this. <strong>When will you?</strong>',
+'hero-btn1':'Calculate Your Savings \u2192','hero-btn2':'See the Proof',
+'stat-1':'Hours You Could Save','stat-2':'Automations Deployed','stat-3':'Proven Client Savings','stat-4':'Missed Deadlines',
+'svc-label':'The ROI Is Real','svc-title':'Solutions That Pay For Themselves',
+'svc-desc':'Every automation we deliver has measurable, documented savings. Most clients see full ROI within 90 days.',
+'svc-1-t':'CAD Checks That Run Themselves','svc-1-d':'Your engineers are spending weeks doing what our software does in minutes. Same specs, same checks, zero mistakes. That\u2019s not an upgrade \u2014 that\u2019s a competitive weapon.',
+'svc-2-t':'Drawings Generated Instantly','svc-2-d':'1,200 hours per year. That\u2019s what one client was burning on manual drawings. Now they click a button and get production-ready 2D output in minutes. What would your team do with 1,200 extra hours?',
+'svc-3-t':'Excel &amp; BOM Automation','svc-3-d':'Stop paying senior engineers to copy-paste between spreadsheets. Our automations merge, validate, and output BOMs in your exact format. Faster, cheaper, and error-free.',
+'svc-4-t':'AI Agents Working 24/7','svc-4-d':'While your team sleeps, an AI agent handles data processing, answers routine questions, and prepares reports. It\u2019s like hiring a new employee who never calls in sick and costs a fraction of the salary.',
+'svc-5-t':'Web Apps Built To Convert','svc-5-d':'Internal tools that eliminate bottlenecks and client portals that close deals. Every application we build is designed to either save money or make money. Usually both.',
+'svc-6-t':'Connected Systems, Zero Waste','svc-6-d':'Data sitting in silos is data losing you money. We connect your CAD, ERP, email, and cloud tools into one automated pipeline. No more re-keying. No more version conflicts.',
+'val-1-t':'Built For Your Bottom Line','val-1-d':'Every automation is custom-built for your exact process. That means maximum savings from day one \u2014 not months of configuration trying to bend a generic tool to fit your workflow.',
+'val-2-t':'Too Expensive To Get Wrong','val-2-d':'One missed spec check can cost hundreds of thousands at a plant build. Our software catches what humans miss, every single time. The question isn\u2019t whether you can afford us \u2014 it\u2019s whether you can afford not to.',
+'val-3-t':'Capabilities Your Competitors Already Have','val-3-d':'The companies beating you on timelines and quality aren\u2019t working harder. They automated the manual work years ago. Every month you wait is another month they\u2019re pulling ahead.',
+'oc-title':'<span class="gradient-text">OpenClaw</span> \u2014 Your Unfair Advantage',
+'oc-desc':'An AI agent that knows your business, runs your workflows, and works around the clock. Your competitors are already deploying AI. The only question is whether you\u2019ll lead or follow.',
+'oc-btn':'Get a Free Assessment \u2192',
+'test-label':'Proof It Works','test-title':'Real Numbers From Real Clients',
+'test-1-q':'The ROI hit us before the first invoice was paid. Drawing generation went from 3 days to 15 minutes. We redeployed two engineers to higher-value work the same month.',
+'test-1-a':'Senior Engineering Manager','test-1-r':'Automotive OEM Supplier',
+'test-2-q':'200+ hours per quarter back in our budget. In 8 months, zero quality escapes from automated checks. The math was obvious \u2014 we should have done this years ago.',
+'test-2-a':'Quality Director','test-2-r':'Tier 1 Manufacturing',
+'test-3-q':'Our AI agent replaced a full-time role in data reconciliation. It runs overnight, costs a fraction, and the reports are actually better. The savings compound every single month.',
+'test-3-a':'Operations VP','test-3-r':'Industrial Equipment Company',
+'ct-label':'Ready?','ct-title':'Let\u2019s Calculate Your Savings',
+'ct-company':'Kirk Automations','ct-desc':'We\u2019ve delivered $2M+ in documented savings to engineering companies. Let us show you exactly what your automation ROI looks like.',
+'ct-btn':'Get Your Quote \u2192'
+},
+visionary:{
+'nav-services':'The Future','nav-openclaw':'AI Revolution','nav-results':'Impact','nav-cta':'Join the Shift',
+'hero-badge':'Pioneering the Industry 4.0 Transition','hero-h1':'The Future of Engineering Is',
+'hero-sub':'We are at the inflection point where artificial intelligence and deterministic automation converge to redefine what engineering teams can achieve. <strong>The transformation starts now.</strong>',
+'hero-btn1':'Shape the Future \u2192','hero-btn2':'Explore the Vision',
+'stat-1':'Human Hours Unlocked','stat-2':'Intelligent Systems Deployed','stat-3':'Value Created','stat-4':'Process Failures',
+'svc-label':'The New Paradigm','svc-title':'Intelligent Automation for Industry 4.0',
+'svc-desc':'A new generation of software that doesn\u2019t just automate tasks \u2014 it transforms how engineering organizations think, operate, and compete.',
+'svc-1-t':'Intelligent Design Validation','svc-1-d':'Imagine a world where every 3D model is validated against your complete specification library the moment it\u2019s saved. That world exists now. We build the bridge to get you there.',
+'svc-2-t':'Generative Drawing Systems','svc-2-d':'The drawing board went digital decades ago. Now the drawings themselves are generated \u2014 intelligent systems that understand your standards and produce manufacturing-ready output autonomously.',
+'svc-3-t':'Autonomous Data Orchestration','svc-3-d':'The future of BOM management isn\u2019t faster spreadsheets. It\u2019s systems that understand data relationships, validate automatically, and produce outputs without human intervention.',
+'svc-4-t':'AI-Native Operations','svc-4-d':'AI agents represent the most significant shift in business operations since the internet. Intelligent assistants that learn, adapt, and work alongside your team to amplify every human decision.',
+'svc-5-t':'Purpose-Built Digital Platforms','svc-5-d':'The era of one-size-fits-all software is ending. The future belongs to organizations with tools built exactly for their unique workflows, challenges, and competitive advantages.',
+'svc-6-t':'The Connected Enterprise','svc-6-d':'Isolated systems are a relic. The next generation of competitive advantage comes from seamlessly integrated digital ecosystems where data flows freely and intelligently across your entire operation.',
+'val-1-t':'Built for Your Unique Competitive Edge','val-1-d':'Generic tools create generic companies. The organizations that will dominate the next decade are the ones with custom-built digital infrastructure designed around their specific strengths.',
+'val-2-t':'Precision Engineering Meets Intelligent Software','val-2-d':'When the margin for error is measured in thousandths of an inch, you need software that matches that precision. We bring the same engineering rigor to code that you bring to your products.',
+'val-3-t':'Augmenting Human Intelligence at Scale','val-3-d':'The goal isn\u2019t to replace engineers. It\u2019s to give them superpowers. Computational capabilities that no human could replicate, freeing brilliant minds for the work that actually requires them.',
+'oc-title':'<span class="gradient-text">OpenClaw</span> \u2014 The AI Agent Revolution',
+'oc-desc':'We stand at the dawn of a new era in business intelligence. OpenClaw represents the next evolution \u2014 AI agents that don\u2019t just respond, they reason, act, and learn. We\u2019re deploying this future for forward-thinking companies today.',
+'oc-btn':'Be an Early Adopter \u2192',
+'test-label':'Transformation Stories','test-title':'The Impact of Intelligent Automation',
+'test-1-q':'What Kirk Automations delivered didn\u2019t just save time \u2014 it changed how our engineering team thinks about their work. Drawing generation went from a chore to a non-event. That shift in mindset is the real ROI.',
+'test-1-a':'Senior Engineering Manager','test-1-r':'Automotive OEM Supplier',
+'test-2-q':'We went from reactive quality control to proactive quality assurance. Automated validation doesn\u2019t just catch errors faster \u2014 it fundamentally changes your relationship with risk.',
+'test-2-a':'Quality Director','test-2-r':'Tier 1 Manufacturing',
+'test-3-q':'The AI agent didn\u2019t just automate a process. It revealed how much untapped potential was hidden in our data. We\u2019re making decisions now that we couldn\u2019t even see before.',
+'test-3-a':'Operations VP','test-3-r':'Industrial Equipment Company',
+'ct-label':'The Next Step','ct-title':'Ready to Lead the Transformation?',
+'ct-company':'Kirk Automations','ct-desc':'We help engineering organizations transition from manual processes to intelligent, automated systems. The companies that move now will define the next decade.',
+'ct-btn':'Start the Conversation \u2192'
+},
+straighttalk:{
+'nav-services':'What We Do','nav-openclaw':'AI Stuff','nav-results':'Proof','nav-cta':'Talk to Us',
+'hero-badge':'We Write Software That Does Your Boring Work','hero-h1':'We Automate The Stuff',
+'hero-sub':'Your engineers are doing repetitive computer work that software could handle. We build that software. It\u2019s faster, it doesn\u2019t make mistakes, and it works weekends. <strong>Pretty simple.</strong>',
+'hero-btn1':'Let\u2019s Chat \u2192','hero-btn2':'See What We Do',
+'stat-1':'Hours of Tedious Work Gone','stat-2':'Tools We\u2019ve Built','stat-3':'Money Saved for Clients','stat-4':'Plant Build Fires',
+'svc-label':'The Short Version','svc-title':'We Build Software That Does Your Tedious Work',
+'svc-desc':'If a person is doing it on a computer over and over, we can probably automate it. Here\u2019s what that looks like.',
+'svc-1-t':'CAD Checks on Autopilot','svc-1-d':'You know those spec checks your engineers do manually on every model? We write software that does the exact same thing in minutes. Same rules, same checks, no human needed.',
+'svc-2-t':'Drawings That Make Themselves','svc-2-d':'Feed it a 3D model, click a few things, and out comes a fully dimensioned 2D drawing ready for the shop floor. One client saved 1,200 hours a year doing this.',
+'svc-3-t':'Spreadsheet &amp; BOM Automation','svc-3-d':'If your engineers are copying data between spreadsheets and parts lists, stop. We build tools that merge everything automatically in your exact format. No more copy-paste marathons.',
+'svc-4-t':'AI Assistants That Actually Help','svc-4-d':'Think of it like a really smart coworker who\u2019s always available. It handles data, answers questions, and does the repetitive stuff your team hates. It\u2019s called OpenClaw, and yes, it\u2019s as useful as it sounds.',
+'svc-5-t':'Web Apps for Your Specific Problem','svc-5-d':'Need an internal tool? A dashboard? Something your team uses every day that doesn\u2019t exist as off-the-shelf software? We build it. From scratch. Exactly how you need it.',
+'svc-6-t':'Making Your Systems Talk to Each Other','svc-6-d':'Your CAD system doesn\u2019t talk to your ERP. Your ERP doesn\u2019t talk to your email. We fix that. Data goes where it needs to go, automatically, without someone manually moving it around.',
+'val-1-t':'Built Around How You Actually Work','val-1-d':'We don\u2019t sell you a product and hope it fits. We learn your process, your rules, your formats \u2014 and then build software that fits like a glove. Your way, not ours.',
+'val-2-t':'When Getting It Wrong Costs a Fortune','val-2-d':'A missed spec check can blow up at a plant build. That\u2019s expensive. Our software doesn\u2019t have bad days, doesn\u2019t get tired, and doesn\u2019t skip steps. It just checks everything, every time.',
+'val-3-t':'Let Computers Do What Computers Are Good At','val-3-d':'Some tasks are just better suited for machines. Processing thousands of parts, cross-referencing data, checking tolerances \u2014 that\u2019s what computers were made for. Let your people do the thinking.',
+'oc-title':'<span class="gradient-text">OpenClaw</span> \u2014 AI That Works For You',
+'oc-desc':'It\u2019s an AI that connects to your tools and handles the work that eats your time. We set it up, customize it for your business, and make sure it does what you need. No hype, just useful.',
+'oc-btn':'Tell Me More \u2192',
+'test-label':'Don\u2019t Take Our Word','test-title':'Here\u2019s What Actually Happened',
+'test-1-q':'Drawings went from a 3-day process to 15 minutes. Honestly, we didn\u2019t believe it until we saw it running. The time savings were obvious from week one.',
+'test-1-a':'Engineering Manager','test-1-r':'Auto Parts Supplier',
+'test-2-q':'We used to spend 200+ hours every quarter on manual CAD checks. Now it just\u2026 runs. Eight months and counting with zero issues. Should have done it sooner.',
+'test-2-a':'Quality Lead','test-2-r':'Manufacturing Company',
+'test-3-q':'We had a person spending two full days a week reconciling data between systems. The AI does it overnight. That person now works on things that actually matter.',
+'test-3-a':'Ops Director','test-3-r':'Equipment Manufacturer',
+'ct-label':'Get in Touch','ct-title':'Want to Talk About It?',
+'ct-company':'Kirk Automations','ct-desc':'We build automation software for engineering and manufacturing companies. Based in Michigan. We\u2019ll tell you straight if we can help or not.',
+'ct-btn':'Send a Message \u2192'
+},
+challenger:{
+'nav-services':'The Problem','nav-openclaw':'The Weapon','nav-results':'Hard Evidence','nav-cta':'Face the Numbers',
+'hero-badge':'How Many Hours Did Your Team Waste This Week?','hero-h1':'Your Manual Process Is Costing You',
+'hero-sub':'Every engineer doing repetitive computer work by hand is a failure of leadership, not effort. The technology to automate this has existed for years. <strong>What\u2019s your excuse?</strong>',
+'hero-btn1':'Confront the Numbers \u2192','hero-btn2':'See What You\u2019re Missing',
+'stat-1':'Hours Your Team is Wasting','stat-2':'Problems We\u2019ve Solved','stat-3':'Money Left on the Table','stat-4':'Preventable Failures',
+'svc-label':'Hard Truths','svc-title':'Your Manual Processes Are a Liability',
+'svc-desc':'Every one of these problems has a proven solution. The only variable is how long you wait before implementing it.',
+'svc-1-t':'Still Checking CAD Models By Hand?','svc-1-d':'Your competitors aren\u2019t. They automated spec validation years ago. Every model your engineers manually check is an invitation for human error and a waste of talent on work a machine does better.',
+'svc-2-t':'Manual Drawings in 2026. Really?','svc-2-d':'1,200 hours per year. That\u2019s what one company was burning before they called us. Their engineers now spend that time on actual engineering. What are yours spending it on?',
+'svc-3-t':'Engineers as Data Entry Clerks','svc-3-d':'If your highest-paid technical talent is copying numbers between Excel sheets, something is broken. BOM automation isn\u2019t a nice-to-have. It\u2019s table stakes for a serious operation.',
+'svc-4-t':'No AI Strategy? That\u2019s a Strategy to Lose.','svc-4-d':'AI agents are already deployed at your competitors, your suppliers, and your customers. If you\u2019re still evaluating, you\u2019re already behind. We deploy OpenClaw in weeks, not quarters.',
+'svc-5-t':'Generic Software for a Unique Business?','svc-5-d':'You\u2019re forcing your workflow into someone else\u2019s template and wondering why it doesn\u2019t work. Custom-built tools aren\u2019t a luxury. They\u2019re what serious companies invest in.',
+'svc-6-t':'Siloed Systems Are Bleeding You','svc-6-d':'Every time someone manually moves data between systems, you\u2019re paying for their time, accepting their errors, and slowing everything down. Connected systems aren\u2019t optional anymore.',
+'val-1-t':'Off-the-Shelf Won\u2019t Cut It','val-1-d':'Cookie-cutter solutions produce cookie-cutter results. If your process is unique enough to be a competitive advantage, your tools should be too. Generic automation is barely better than no automation.',
+'val-2-t':'One Missed Check Can Cost You Everything','val-2-d':'A spec error that reaches a plant build doesn\u2019t just cost money \u2014 it costs credibility, contracts, and careers. Your manual review process has a failure rate. Our automated one doesn\u2019t.',
+'val-3-t':'Your Engineers Are Underperforming (It\u2019s Not Their Fault)','val-3-d':'Brilliant engineers doing mindless repetitive work isn\u2019t a staffing problem. It\u2019s an automation problem. Give them the computational leverage they deserve and watch what they actually build.',
+'oc-title':'<span class="gradient-text">OpenClaw</span> \u2014 Or Fall Behind',
+'oc-desc':'AI agents are the biggest operational shift since ERP. Companies that deploy now build compounding advantages. Companies that wait will spend years catching up. We make the deployment painless. You just have to decide.',
+'oc-btn':'Stop Waiting \u2192',
+'test-label':'The Evidence','test-title':'Results That Speak for Themselves',
+'test-1-q':'We resisted automating for two years because we thought our process was too complex. It wasn\u2019t. Kirk Automations built it in weeks. We lost two years of savings for nothing.',
+'test-1-a':'Senior Engineering Manager','test-1-r':'Automotive OEM Supplier',
+'test-2-q':'Zero quality escapes in 8 months of automated checking. Our manual process had 3 in the same period last year. Each one cost us six figures. The automation paid for itself on the first catch.',
+'test-2-a':'Quality Director','test-2-r':'Tier 1 Manufacturing',
+'test-3-q':'We were paying a full-time salary for data reconciliation a machine does better overnight. That\u2019s not optimization \u2014 that was waste, and we didn\u2019t see it until someone showed us the alternative.',
+'test-3-a':'Operations VP','test-3-r':'Industrial Equipment Company',
+'ct-label':'Decision Time','ct-title':'Ready to Stop Wasting Time?',
+'ct-company':'Kirk Automations','ct-desc':'We automate the manual processes that are costing you hours, money, and competitive position. The only risk is doing nothing.',
+'ct-btn':'Make the Call \u2192'
+},
+founder:{
+'nav-services':'Our Work','nav-openclaw':'OpenClaw','nav-results':'Stories','nav-cta':'Work With Me',
+'hero-badge':'From One Engineer to Another','hero-h1':'I Built This to Automate',
+'hero-sub':'I\u2019m Michael Kirk. I started this company because I watched too many brilliant engineers waste their days on work a computer should handle. So I built the software to fix it. <strong>That\u2019s the whole story.</strong>',
+'hero-btn1':'Let\u2019s Work Together \u2192','hero-btn2':'Hear My Story',
+'stat-1':'Engineering Hours I\u2019ve Saved','stat-2':'Automations I\u2019ve Delivered','stat-3':'Savings I\u2019ve Generated','stat-4':'Plant Build Delays',
+'svc-label':'What I Build','svc-title':'Automations I\u2019ve Spent a Career Perfecting',
+'svc-desc':'Every one of these started with a real problem I saw on the shop floor or in the engineering office. I didn\u2019t learn this from a textbook.',
+'svc-1-t':'CAD Checks \u2014 Where It All Started','svc-1-d':'My first real automation was a CATIA V5 spec checker. I watched an engineer spend three weeks on checks that took my software 20 minutes. That moment changed everything for me.',
+'svc-2-t':'Drawing Generation','svc-2-d':'I\u2019ve personally saved clients over 1,200 hours a year with drawing automation. The engineer picks a few options, and the system generates a production-ready drawing. I\u2019ve built dozens of these.',
+'svc-3-t':'Excel &amp; BOM Automation','svc-3-d':'I can\u2019t count how many times I\u2019ve walked into a company and found senior engineers manually merging spreadsheets. It\u2019s painful to watch. These tools pay for themselves in the first month.',
+'svc-4-t':'AI Agents \u2014 My Newest Obsession','svc-4-d':'I deploy OpenClaw AI agents now, and honestly, it\u2019s the most exciting thing I\u2019ve ever worked on. An AI that actually connects to your tools and does real work. I use it myself every single day.',
+'svc-5-t':'Custom Web Applications','svc-5-d':'When a client needs a tool that doesn\u2019t exist, I build it. Internal dashboards, data entry systems, client portals \u2014 I\u2019ve shipped dozens. Clean, fast, built exactly to spec.',
+'svc-6-t':'System Integration','svc-6-d':'Most companies I work with have great individual systems that don\u2019t talk to each other. I connect them. CAD to ERP, email to database, cloud to local. I\u2019ve done it enough times to know the pitfalls.',
+'val-1-t':'Your Rules, My Code','val-1-d':'I don\u2019t sell templates. Every automation I build starts with me learning your specific design rules, your formats, your specs. Then I write code that follows them exactly. That\u2019s the only way it works.',
+'val-2-t':'I Understand What\u2019s At Stake','val-2-d':'I\u2019ve seen what happens when a spec error makes it to a plant build. It\u2019s ugly. That\u2019s why I obsess over validation and edge cases in my code. When it goes through my software, it\u2019s right.',
+'val-3-t':'I Give Engineers Superpowers','val-3-d':'The most rewarding part of my job is watching an engineer realize they just got 10 hours a week back. That\u2019s 10 hours for creative problem-solving instead of mindless repetition. That\u2019s why I do this.',
+'oc-title':'I Now Deploy <span class="gradient-text">OpenClaw</span> AI Agents',
+'oc-desc':'This is the future of what I do. OpenClaw AI agents that connect to your tools, learn your workflows, and handle the work that eats your time. I set it up, I customize it, and I support it personally. This is the most impactful technology I\u2019ve ever deployed.',
+'oc-btn':'Talk to Me Directly \u2192',
+'test-label':'Their Words','test-title':'What My Clients Tell Me',
+'test-1-q':'Michael personally understood our process before writing a single line of code. Drawing generation went from 3 days to 15 minutes. The quality improvement surprised even us.',
+'test-1-a':'Senior Engineering Manager','test-1-r':'Automotive OEM Supplier',
+'test-2-q':'We trusted Kirk Automations because Michael comes from engineering, not just software. 8 months of automated checks, zero escapes. He built exactly what we needed.',
+'test-2-a':'Quality Director','test-2-r':'Tier 1 Manufacturing',
+'test-3-q':'Michael set up an AI agent that handles our weekly data reconciliation overnight. He was personally available for every question during deployment. Rare in this industry.',
+'test-3-a':'Operations VP','test-3-r':'Industrial Equipment Company',
+'ct-label':'Reach Out','ct-title':'I\u2019d Like to Hear About Your Project',
+'ct-company':'Kirk Automations','ct-desc':'I\u2019m Michael Kirk, and I\u2019ve spent my career building automation software for engineering companies. If you\u2019re dealing with manual processes that shouldn\u2019t be manual, let\u2019s talk.',
+'ct-btn':'Send Me a Message \u2192'
+}
+};
+
+var currentVoice='professional';
+var voiceLetters={professional:'P',engineer:'E',closer:'C',visionary:'V',straighttalk:'S',challenger:'X',founder:'F'};
+var htmlKeys={'hero-sub':1,'oc-title':1,'svc-3-t':1,'svc-4-t':1};
+
+function applyVoice(name,instant){
+  if(!VOICES[name])return;
+  var data=VOICES[name];
+  currentVoice=name;
+  try{localStorage.setItem('ka-voice',name)}catch(e){}
+  // update dots
+  var dots=document.querySelectorAll('#voiceOptions .voice-dot');
+  for(var i=0;i<dots.length;i++) dots[i].classList.toggle('active',dots[i].getAttribute('data-voice')===name);
+  document.getElementById('voiceToggle').textContent=voiceLetters[name]||'P';
+
+  var els=document.querySelectorAll('[data-copy]');
+  if(instant){
+    for(var i=0;i<els.length;i++){
+      var key=els[i].getAttribute('data-copy');
+      if(data[key]!=null){
+        if(els[i].hasAttribute('data-html')||htmlKeys[key]) els[i].innerHTML=data[key];
+        else els[i].textContent=data[key];
+      }
+    }
+    return;
+  }
+  // animated swap
+  document.body.classList.add('voice-fading');
+  setTimeout(function(){
+    for(var i=0;i<els.length;i++){
+      var key=els[i].getAttribute('data-copy');
+      if(data[key]!=null){
+        if(els[i].hasAttribute('data-html')||htmlKeys[key]) els[i].innerHTML=data[key];
+        else els[i].textContent=data[key];
+      }
+    }
+    document.body.classList.remove('voice-fading');
+  },300);
+}
+
+// expand/collapse
+var switcher=document.getElementById('voiceSwitcher');
+document.getElementById('voiceToggle').addEventListener('click',function(e){
+  e.stopPropagation();
+  switcher.classList.toggle('expanded');
+});
+document.addEventListener('click',function(e){
+  if(!switcher.contains(e.target)) switcher.classList.remove('expanded');
+});
+document.getElementById('voiceOptions').addEventListener('click',function(e){
+  var dot=e.target.closest('.voice-dot');
+  if(!dot)return;
+  var v=dot.getAttribute('data-voice');
+  if(v){applyVoice(v);switcher.classList.remove('expanded')}
+});
+
+// init saved voice
+var savedVoice;try{savedVoice=localStorage.getItem('ka-voice')}catch(e){}
+if(savedVoice&&VOICES[savedVoice]){applyVoice(savedVoice,true)}
 
 })();
 </script>
