@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pipeline Money Finder | Kirk Automations</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a0a0f;color:#e0e0e0;min-height:100vh}
+.header{background:linear-gradient(135deg,#1a1a2e,#16213e);padding:24px 32px;border-bottom:2px solid #e6b800}
+.header h1{font-size:28px;color:#e6b800;font-weight:700}
+.header p{color:#888;margin-top:4px;font-size:14px}
+.stats-bar{display:flex;gap:16px;padding:20px 32px;flex-wrap:wrap}
+.stat-card{background:#12121a;border:1px solid #222;border-radius:10px;padding:18px 24px;flex:1;min-width:180px;cursor:pointer;transition:all .2s}
+.stat-card:hover{border-color:#e6b800;transform:translateY(-2px)}
+.stat-card.active{border-color:#e6b800;background:#1a1a2e}
+.stat-num{font-size:32px;font-weight:700;color:#e6b800}
+.stat-label{font-size:13px;color:#888;margin-top:4px}
+.stat-sub{font-size:11px;color:#555;margin-top:2px}
+.content{padding:20px 32px}
+.section{margin-bottom:24px}
+.section h2{font-size:18px;color:#e6b800;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.table-wrap{overflow-x:auto;border-radius:8px;border:1px solid #222}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#1a1a2e;color:#e6b800;padding:10px 14px;text-align:left;font-weight:600;position:sticky;top:0;cursor:pointer}
+th:hover{color:#fff}
+td{padding:10px 14px;border-top:1px solid #1a1a2a}
+tr:hover td{background:#12121a}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+.tag-hot{background:#e6b80022;color:#e6b800;border:1px solid #e6b80044}
+.tag-warm{background:#ff880022;color:#ff8800;border:1px solid #ff880044}
+.tag-cold{background:#44444422;color:#888;border:1px solid #44444444}
+.tag-action{background:#00cc6622;color:#00cc66;border:1px solid #00cc6644}
+.days{color:#ff4444;font-weight:600}
+.days.ok{color:#00cc66}
+.filter-bar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.filter-bar input{background:#12121a;border:1px solid #333;color:#e0e0e0;padding:8px 14px;border-radius:6px;font-size:13px;width:280px}
+.filter-bar input:focus{outline:none;border-color:#e6b800}
+.filter-bar select{background:#12121a;border:1px solid #333;color:#e0e0e0;padding:8px 14px;border-radius:6px;font-size:13px}
+.btn{background:#e6b800;color:#0a0a0f;border:none;padding:8px 16px;border-radius:6px;font-weight:600;cursor:pointer;font-size:13px}
+.btn:hover{background:#ffd000}
+.hidden{display:none}
+.money{color:#00cc66;font-weight:700;font-size:14px}
+#csvUpload{display:none}
+.tab-row{display:flex;gap:2px;margin-bottom:20px}
+.tab{padding:10px 20px;background:#12121a;border:1px solid #222;border-bottom:none;border-radius:8px 8px 0 0;cursor:pointer;color:#888;font-weight:600;font-size:13px;transition:all .2s}
+.tab.active{background:#1a1a2e;color:#e6b800;border-color:#e6b800}
+.tab:hover{color:#e6b800}
+.panel{display:none}
+.panel.active{display:block}
+.action-text{color:#e6b800;font-style:italic;font-size:12px}
+.priority-row{background:#e6b80008}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>&#9889; Pipeline Money Finder</h1>
+  <p>Drop your Pipedrive CSVs &mdash; find forgotten revenue in 30 seconds</p>
+</div>
+
+<div class="stats-bar" id="statsBar">
+  <div class="stat-card" onclick="showTab('stale')">
+    <div class="stat-num" id="staleCount">-</div>
+    <div class="stat-label">Stale Deals</div>
+    <div class="stat-sub">No activity in 30+ days</div>
+  </div>
+  <div class="stat-card" onclick="showTab('untouched')">
+    <div class="stat-num" id="untouchedCount">-</div>
+    <div class="stat-label">Untouched Leads</div>
+    <div class="stat-sub">Never contacted</div>
+  </div>
+  <div class="stat-card" onclick="showTab('followup')">
+    <div class="stat-num" id="followupCount">-</div>
+    <div class="stat-label">Follow-up Due</div>
+    <div class="stat-sub">Overdue activities</div>
+  </div>
+  <div class="stat-card" onclick="showTab('ghost')">
+    <div class="stat-num" id="ghostCount">-</div>
+    <div class="stat-label">Ghost Contacts</div>
+    <div class="stat-sub">People with no deals</div>
+  </div>
+</div>
+
+<div class="content">
+  <div class="filter-bar">
+    <input type="text" id="search" placeholder="Search deals, leads, contacts..." oninput="filterTable()">
+    <button class="btn" onclick="document.getElementById('csvUpload').click()">&#128193; Load CSVs</button>
+    <button class="btn" onclick="exportActionList()">&#128203; Export Action List</button>
+    <input type="file" id="csvUpload" multiple accept=".csv" onchange="handleFiles(event)">
+  </div>
+
+  <div class="tab-row">
+    <div class="tab active" onclick="showTab('stale')">Stale Deals</div>
+    <div class="tab" onclick="showTab('untouched')">Untouched Leads</div>
+    <div class="tab" onclick="showTab('followup')">Follow-up Due</div>
+    <div class="tab" onclick="showTab('ghost')">Ghost Contacts</div>
+    <div class="tab" onclick="showTab('all')">All Deals</div>
+  </div>
+
+  <div class="panel active" id="panel-stale">
+    <div class="section">
+      <h2>&#128176; Stale Deals &mdash; Money Sitting on the Table</h2>
+      <div class="table-wrap"><table id="staleTable">
+        <thead><tr><th>Deal</th><th>Company</th><th>Contact</th><th>Stage</th><th>Days Stale</th><th>Last Activity</th><th>Suggested Action</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-untouched">
+    <div class="section">
+      <h2>&#128165; Untouched Leads &mdash; Free Money You Haven't Picked Up</h2>
+      <div class="table-wrap"><table id="untouchedTable">
+        <thead><tr><th>Lead</th><th>Contact</th><th>Org</th><th>Created</th><th>Days Old</th><th>Source</th><th>Suggested Action</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-followup">
+    <div class="section">
+      <h2>&#9200; Overdue Follow-ups &mdash; Promises You're Breaking</h2>
+      <div class="table-wrap"><table id="followupTable">
+        <thead><tr><th>Activity</th><th>Type</th><th>Deal</th><th>Contact</th><th>Due Date</th><th>Days Overdue</th><th>Suggested Action</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-ghost">
+    <div class="section">
+      <h2>&#128123; Ghost Contacts &mdash; People Who Know You Exist</h2>
+      <div class="table-wrap"><table id="ghostTable">
+        <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Org</th><th>Added</th><th>Days Since</th><th>Suggested Action</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-all">
+    <div class="section">
+      <h2>&#128202; All Open Deals</h2>
+      <div class="table-wrap"><table id="allTable">
+        <thead><tr><th>Deal</th><th>Company</th><th>Contact</th><th>Stage</th><th>Value</th><th>Created</th><th>Last Activity</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let data = { deals: [], leads: [], people: [], activities: [], orgs: [] };
+const now = new Date();
+
+function parseCSV(text) {
+  const lines = text.split('\n');
+  if (lines.length < 2) return [];
+  const headers = parseCSVLine(lines[0]);
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    if (!lines[i].trim()) continue;
+    const vals = parseCSVLine(lines[i]);
+    const obj = {};
+    headers.forEach((h, idx) => obj[h.trim()] = (vals[idx] || '').trim());
+    rows.push(obj);
+  }
+  return rows;
+}
+
+function parseCSVLine(line) {
+  const result = [];
+  let current = '';
+  let inQuote = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (inQuote) {
+      if (c === '"' && line[i+1] === '"') { current += '"'; i++; }
+      else if (c === '"') inQuote = false;
+      else current += c;
+    } else {
+      if (c === '"') inQuote = true;
+      else if (c === ',') { result.push(current); current = ''; }
+      else current += c;
+    }
+  }
+  result.push(current);
+  return result;
+}
+
+function daysSince(dateStr) {
+  if (!dateStr) return 9999;
+  const d = new Date(dateStr);
+  if (isNaN(d)) return 9999;
+  return Math.floor((now - d) / 86400000);
+}
+
+function handleFiles(e) {
+  const files = Array.from(e.target.files);
+  let loaded = 0;
+  files.forEach(f => {
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const rows = parseCSV(ev.target.result);
+      const name = f.name.toLowerCase();
+      if (name.includes('deal')) data.deals = rows;
+      else if (name.includes('lead')) data.leads = rows;
+      else if (name.includes('people') || name.includes('person')) data.people = rows;
+      else if (name.includes('activit')) data.activities = rows;
+      else if (name.includes('org')) data.orgs = rows;
+      loaded++;
+      if (loaded === files.length) analyze();
+    };
+    reader.readAsText(f);
+  });
+}
+
+function analyze() {
+  buildStaleDeals();
+  buildUntouchedLeads();
+  buildOverdueFollowups();
+  buildGhostContacts();
+  buildAllDeals();
+}
+
+function suggestAction(stage, daysSt) {
+  if (daysSt > 180) return 'Send "checking in" email &mdash; or close it';
+  if (daysSt > 90) return 'Call them. 90 days cold = almost lost';
+  if (daysSt > 60) return 'Email + schedule meeting this week';
+  if (stage === 'Qualified') return 'Book intro call / demo';
+  if (stage === 'Contact Made') return 'Send proposal or case study';
+  if (stage === 'Proposal Made') return 'Follow up on proposal decision';
+  if (stage === 'Negotiations Started') return 'Push for close &mdash; send contract';
+  return 'Reach out this week';
+}
+
+function buildStaleDeals() {
+  const stale = data.deals
+    .filter(d => d.Status === 'Open')
+    .map(d => ({ ...d, _days: daysSince(d['Last activity date'] || d['Update time']) }))
+    .filter(d => d._days > 30)
+    .sort((a,b) => b._days - a._days);
+
+  document.getElementById('staleCount').textContent = stale.length;
+  const tbody = document.querySelector('#staleTable tbody');
+  tbody.innerHTML = stale.map(d => `
+    <tr class="${d._days > 90 ? 'priority-row' : ''}">
+      <td><strong>${esc(d.Title)}</strong></td>
+      <td>${esc(d.Organization)}</td>
+      <td>${esc(d['Contact person'])}</td>
+      <td><span class="tag ${d.Stage==='Negotiations Started'?'tag-hot':d.Stage==='Proposal Made'?'tag-warm':'tag-cold'}">${esc(d.Stage)}</span></td>
+      <td><span class="days">${d._days}d</span></td>
+      <td>${esc(d['Last activity date'] || 'Never')}</td>
+      <td><span class="action-text">${suggestAction(d.Stage, d._days)}</span></td>
+    </tr>
+  `).join('');
+}
+
+function buildUntouchedLeads() {
+  const untouched = data.leads
+    .filter(l => l['Archive status'] !== 'Archived')
+    .map(l => ({ ...l, _days: daysSince(l['Lead created']) }))
+    .filter(l => l.Seen === 'Not seen' || l._days > 14)
+    .sort((a,b) => b._days - a._days);
+
+  document.getElementById('untouchedCount').textContent = untouched.length;
+  const tbody = document.querySelector('#untouchedTable tbody');
+  tbody.innerHTML = untouched.map(l => `
+    <tr>
+      <td><strong>${esc(l.Title)}</strong></td>
+      <td>${esc(l['Contact person'])}</td>
+      <td>${esc(l.Organization)}</td>
+      <td>${esc(l['Lead created']?.split(' ')[0] || '')}</td>
+      <td><span class="days">${l._days}d</span></td>
+      <td>${esc(l.Source || 'Unknown')}</td>
+      <td><span class="action-text">${l._days > 60 ? 'Send intro email NOW' : 'Research + reach out this week'}</span></td>
+    </tr>
+  `).join('');
+}
+
+function buildOverdueFollowups() {
+  const overdue = data.activities
+    .filter(a => a.Done !== 'Done' && a['Due date'])
+    .map(a => ({ ...a, _days: daysSince(a['Due date']) }))
+    .filter(a => a._days > 0)
+    .sort((a,b) => b._days - a._days);
+
+  document.getElementById('followupCount').textContent = overdue.length;
+  const tbody = document.querySelector('#followupTable tbody');
+  tbody.innerHTML = overdue.map(a => `
+    <tr class="${a._days > 30 ? 'priority-row' : ''}">
+      <td><strong>${esc(a.Subject)}</strong></td>
+      <td>${esc(a.Type)}</td>
+      <td>${esc(a.Deal)}</td>
+      <td>${esc(a['Contact person'])}</td>
+      <td>${esc(a['Due date'])}</td>
+      <td><span class="days">${a._days}d</span></td>
+      <td><span class="action-text">${a._days > 30 ? 'Reschedule or close out' : 'Do it today'}</span></td>
+    </tr>
+  `).join('');
+}
+
+function buildGhostContacts() {
+  const ghosts = data.people
+    .filter(p => (p['Open deals'] === '0' || !p['Open deals']) && (p['Won deals'] === '0' || !p['Won deals']))
+    .map(p => ({ ...p, _days: daysSince(p['Person created']) }))
+    .filter(p => p._days > 30)
+    .sort((a,b) => b._days - a._days);
+
+  document.getElementById('ghostCount').textContent = ghosts.length;
+  const tbody = document.querySelector('#ghostTable tbody');
+  tbody.innerHTML = ghosts.slice(0, 200).map(p => {
+    const email = p['Email - Work'] || p['Email - Home'] || p['Email - Other'] || '';
+    const phone = p['Phone - Work'] || p['Phone - Mobile'] || p['Phone - Other'] || '';
+    return `
+    <tr>
+      <td><strong>${esc(p.Name)}</strong></td>
+      <td>${esc(email)}</td>
+      <td>${esc(phone)}</td>
+      <td>${esc(p.Organization)}</td>
+      <td>${esc(p['Person created']?.split(' ')[0] || '')}</td>
+      <td><span class="days">${p._days}d</span></td>
+      <td><span class="action-text">${email ? 'Send value-add email' : phone ? 'Quick call' : 'Find contact info'}</span></td>
+    </tr>
+  `}).join('');
+}
+
+function buildAllDeals() {
+  const deals = data.deals.filter(d => d.Status === 'Open').sort((a,b) => {
+    const stages = ['Negotiations Started','Proposal Made','Contact Made','Qualified'];
+    return stages.indexOf(a.Stage) - stages.indexOf(b.Stage);
+  });
+  const tbody = document.querySelector('#allTable tbody');
+  tbody.innerHTML = deals.map(d => `
+    <tr>
+      <td><strong>${esc(d.Title)}</strong></td>
+      <td>${esc(d.Organization)}</td>
+      <td>${esc(d['Contact person'])}</td>
+      <td><span class="tag ${d.Stage==='Negotiations Started'?'tag-hot':d.Stage==='Proposal Made'?'tag-warm':'tag-cold'}">${esc(d.Stage)}</span></td>
+      <td>${d.Value && d.Value !== '0' ? '<span class="money">$'+esc(d.Value)+'</span>' : '-'}</td>
+      <td>${esc(d['Deal created']?.split(' ')[0] || '')}</td>
+      <td>${esc(d['Last activity date'] || 'Never')}</td>
+    </tr>
+  `).join('');
+}
+
+function showTab(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t => {
+    if (t.textContent.toLowerCase().includes(name === 'stale' ? 'stale' : name === 'untouched' ? 'untouched' : name === 'followup' ? 'follow' : name === 'ghost' ? 'ghost' : 'all'))
+      t.classList.add('active');
+  });
+}
+
+function filterTable() {
+  const q = document.getElementById('search').value.toLowerCase();
+  document.querySelectorAll('.panel.active tbody tr').forEach(tr => {
+    tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+function exportActionList() {
+  let csv = 'Type,Name,Company,Contact,Days,Action\n';
+  document.querySelectorAll('.panel.active tbody tr').forEach(tr => {
+    const cells = Array.from(tr.querySelectorAll('td')).map(td => '"' + td.textContent.replace(/"/g,'""') + '"');
+    csv += cells.join(',') + '\n';
+  });
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'action-list.csv';
+  a.click();
+}
+
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// Auto-load if CSVs are embedded (for pre-loaded version)
+</script>
+</body>
+</html>
