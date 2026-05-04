@@ -252,13 +252,13 @@ function draw(now) {
     const flash = keyFlash[i];
     
     // Lane pillar
-    X.globalAlpha = 0.1 + flash * 0.2;
+    X.globalAlpha = 0.15 + flash * 0.3;
     X.fillStyle = LANE_COLORS[i];
     X.fillRect(cx - laneWidth/2, 0, laneWidth, H);
     X.globalAlpha = 1;
     
     // Hit zone
-    X.fillStyle = `rgba(255,255,255,${0.15 + flash * 0.3})`;
+    X.fillStyle = `rgba(255,255,255,${0.3 + flash * 0.4})`;
     X.fillRect(cx - laneWidth/2, hitLine - 5, laneWidth, 10);
     
     // Key label

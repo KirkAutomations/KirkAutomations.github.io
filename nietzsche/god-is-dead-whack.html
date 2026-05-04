@@ -63,6 +63,7 @@ const genuine = [
 ];
 
 let score, lives, combo, holes, gameOver, spawnTimer, speedMs, totalHits;
+const START_LIVES = 7;
 
 const COLS = 3, ROWS = 3;
 const HOLE_SIZE = 120;
@@ -86,8 +87,8 @@ function getHolePositions() {
 }
 
 function startGame() {
-  score = 0; lives = 5; combo = 0; gameOver = false; totalHits = 0;
-  speedMs = 1500;
+  score = 0; lives = START_LIVES; combo = 0; gameOver = false; totalHits = 0;
+  speedMs = 2000;
   holes = getHolePositions();
   document.getElementById('overlay').style.display = 'none';
   updateHUD();
@@ -119,7 +120,7 @@ function spawnItem() {
       }
       hole.item = null;
     }
-  }, 2000 - Math.min(totalHits * 10, 800));
+  }, 3500 - Math.min(totalHits * 15, 1500));
 }
 
 function updateHUD() {

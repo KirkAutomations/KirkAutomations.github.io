@@ -32,8 +32,8 @@ resize();
 addEventListener('resize', resize);
 
 const ZONES = [
-  { name: 'Cave', yStart: 0, color1: '#0a0a12', color2: '#1a1a2a', platColor: '#2a2a3a', textColor: '#666', fog: 0.8 },
-  { name: 'Forest', yStart: -2000, color1: '#0a1a0a', color2: '#1a2a1a', platColor: '#2a3a2a', textColor: '#4a8', fog: 0.3 },
+  { name: 'Cave', yStart: 0, color1: '#12121f', color2: '#222238', platColor: '#3a3a4f', textColor: '#666', fog: 0.8 },
+  { name: 'Forest', yStart: -2000, color1: '#0a1a0a', color2: '#1a2a1a', platColor: '#3a4f3a', textColor: '#4a8', fog: 0.3 },
   { name: 'Summit', yStart: -4000, color1: '#1a1a3a', color2: '#3a2a5a', platColor: '#5a4a7a', textColor: '#d4af37', fog: 0 },
 ];
 
@@ -304,10 +304,10 @@ function draw() {
     const p = player;
     const sy = p.y - cy;
     // Robe body
-    X.fillStyle = '#3a2a1a';
+    X.fillStyle = '#5a4a2a';
     X.fillRect(p.x, sy, p.w, p.h);
     // Head
-    X.fillStyle = '#5a4a3a';
+    X.fillStyle = '#7a6a4a';
     X.beginPath();
     X.arc(p.x + p.w/2, sy - 4, 7, 0, Math.PI * 2);
     X.fill();

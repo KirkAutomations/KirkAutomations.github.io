@@ -221,7 +221,7 @@ function draw() {
   
   // Background pulse
   const pulse = 0.03 + (state === 'play' ? (100 - sanity) / 100 * 0.05 : 0);
-  const bgBright = Math.floor(5 + Math.sin(Date.now() / 1000) * 3);
+  const bgBright = Math.floor(15 + Math.sin(Date.now() / 1000) * 5);
   X.fillStyle = `rgb(${bgBright},0,${bgBright * 2})`;
   X.fillRect(0, 0, W, H);
   
@@ -240,7 +240,7 @@ function draw() {
   for (let i = 0; i < 8; i++) {
     const a = (Date.now() / 2000 + i * Math.PI / 4) % (Math.PI * 2);
     const r = abyssRadius * (0.5 + 0.3 * Math.sin(Date.now() / 1000 + i));
-    X.strokeStyle = `rgba(30,0,60,${0.3 + 0.2 * Math.sin(i)})`;
+    X.strokeStyle = `rgba(80,20,140,${0.4 + 0.2 * Math.sin(i)})`;
     X.lineWidth = 2;
     X.beginPath();
     X.arc(cx, cy, r, a, a + Math.PI * 0.5);
@@ -301,7 +301,7 @@ function draw() {
   for (const f of fragments) {
     if (f.collected) continue;
     const glow = 0.5 + 0.5 * Math.sin(f.glow);
-    X.globalAlpha = 0.3 * glow;
+    X.globalAlpha = 0.6 + 0.4 * glow;
     X.fillStyle = '#0ff';
     X.beginPath();
     X.arc(f.x, f.y, 15, 0, Math.PI * 2);
@@ -335,17 +335,17 @@ function draw() {
   // Cursor gaze
   X.fillStyle = `rgba(0,255,255,0.8)`;
   X.beginPath();
-  X.arc(mx, my, 4, 0, Math.PI * 2);
+  X.arc(mx, my, 6, 0, Math.PI * 2);
   X.fill();
   X.strokeStyle = `rgba(0,255,255,0.3)`;
   X.lineWidth = 1;
   X.beginPath();
-  X.arc(mx, my, 15, 0, Math.PI * 2);
+  X.arc(mx, my, 25, 0, Math.PI * 2);
   X.stroke();
   
   // Sanity bar
   if (state === 'play') {
-    X.fillStyle = '#111';
+    X.fillStyle = '#222';
     X.fillRect(W - 220, 15, 204, 24);
     const sanityColor = sanity > 60 ? '#0ff' : sanity > 30 ? '#ff0' : '#f00';
     X.fillStyle = sanityColor;

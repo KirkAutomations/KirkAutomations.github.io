@@ -157,14 +157,14 @@ function draw(now) {
   // Split background
   // Left: Dionysus (warm)
   const leftGrad = X.createLinearGradient(0, 0, W/2, H);
-  leftGrad.addColorStop(0, `rgba(100,20,20,${0.3 + chaos * 0.4})`);
+  leftGrad.addColorStop(0, `rgba(140,30,30,${0.4 + chaos * 0.4})`);
   leftGrad.addColorStop(1, `rgba(60,10,10,${0.2 + chaos * 0.3})`);
   X.fillStyle = leftGrad;
   X.fillRect(0, 0, W/2, H);
   
   // Right: Apollo (cool)
   const rightGrad = X.createLinearGradient(W/2, 0, W, H);
-  rightGrad.addColorStop(0, `rgba(20,20,80,${0.3 + order * 0.4})`);
+  rightGrad.addColorStop(0, `rgba(30,30,120,${0.4 + order * 0.4})`);
   rightGrad.addColorStop(1, `rgba(10,10,50,${0.2 + order * 0.3})`);
   X.fillStyle = rightGrad;
   X.fillRect(W/2, 0, W/2, H);

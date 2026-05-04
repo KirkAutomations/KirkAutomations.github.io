@@ -242,7 +242,7 @@ function draw() {
   X.clearRect(0, 0, W, H);
   
   // Grid background
-  X.strokeStyle = 'rgba(0,255,255,0.05)';
+  X.strokeStyle = 'rgba(0,255,255,0.12)';
   X.lineWidth = 1;
   const gridSize = 40;
   for (let gx = 0; gx < W; gx += gridSize) { X.beginPath(); X.moveTo(gx, 0); X.lineTo(gx, H); X.stroke(); }
@@ -257,7 +257,7 @@ function draw() {
     X.fill();
     X.strokeStyle = `rgba(150,150,150,${alpha})`;
     X.stroke();
-    X.fillStyle = `rgba(150,150,150,${alpha * 0.5})`;
+    X.fillStyle = `rgba(200,200,200,${alpha})`;
     X.font = '10px Georgia';
     X.textAlign = 'center';
     X.fillText('COMFORT ZONE', cz.x, cz.y);
@@ -276,11 +276,11 @@ function draw() {
   
   // Last Men
   for (const lm of lastMen) {
-    X.fillStyle = '#505050';
+    X.fillStyle = '#808080';
     X.beginPath();
     X.arc(lm.x, lm.y, 6, 0, Math.PI * 2);
     X.fill();
-    X.fillStyle = '#404040';
+    X.fillStyle = '#707070';
     X.fillRect(lm.x - 4, lm.y - 12, 8, 8);
   }
   
