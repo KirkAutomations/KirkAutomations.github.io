@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The Last Man</title>
+<style>
+  * { margin: 0; padding: 0; }
+  body { background: #000; overflow: hidden; cursor: crosshair; }
+  canvas { display: block; }
+  #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; flex-direction: column; font-family: Georgia, serif; z-index: 10; }
+  #overlay h1 { font-size: 42px; margin-bottom: 15px; }
+  #overlay p { font-size: 20px; color: #888; margin: 5px; }
+  #overlay button { margin-top: 25px; padding: 15px 40px; font-size: 20px; background: transparent; border: 2px solid; cursor: pointer; font-family: Georgia; }
+  #overlay button:hover { color: #000 !important; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="overlay">
+  <h1 style="color:#0ff">The Last Man</h1>
+  <p style="color:#0ff">"The time of the most despicable man is coming,</p>
+  <p style="color:#0ff">he who can no longer despise himself."</p>
+  <p style="color:#555; margin-top:10px">— Thus Spoke Zarathustra</p>
+  <p style="color:#aaa; margin-top:20px">WASD to move · Mouse to aim · Click to project Will</p>
+  <button style="color:#0ff; border-color:#0ff" onmouseover="this.style.background='#0ff'" onmouseout="this.style.background='transparent'" onclick="startGame()">Rise Above the Herd</button>
+</div>
+<script>
+const C = document.getElementById('c');
+const X = C.getContext('2d');
+let W, H;
+function resize() { W = C.width = innerWidth; H = C.height = innerHeight; }
+resize();
+addEventListener('resize', resize);
+
+const COLORS = ['#ff0055','#00ff88','#0088ff','#ffcc00','#ff00ff','#00ffff','#ff8800','#88ff00'];
+
+let state = 'menu';
+let player, lastMen, allies, blasts, particles, powerUps;
+let wave, hp, maxHp, score, comfortZones;
+let keys = {}, mx = W/2, my = H/2;
+
+addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
+addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+function startGame() {
+  document.getElementById('overlay').style.display = 'none';
+  player = { x: W/2, y: H/2, color: COLORS[0], colorIdx: 0, trail: [] };
+  lastMen = []; allies = []; blasts = []; particles = []; powerUps = []; comfortZones = [];
+  wave = 0; hp = 100; maxHp = 100; score = 0;
+  spawnWave();
+  state = 'play';
+}
+
+function spawnWave() {
+  wave++;
+  const count = 5 + wave * 3;
+  for (let i = 0; i < count; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 300 + Math.random() * 300;
+    lastMen.push({
+      x: player.x + Math.cos(angle) * dist,
+      y: player.y + Math.sin(angle) * dist,
+      speed: 0.5 + wave * 0.1 + Math.random() * 0.3
+    });
+  }
+  // Comfort zones
+  if (wave > 1) {
+    for (let i = 0; i < Math.min(wave - 1, 4); i++) {
+      comfortZones.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: 60 + Math.random() * 40,
+        life: 600
+      });
+    }
+  }
+  // Power-ups
+  if (Math.random() < 0.6 || wave <= 2) {
+    const types = ['lightning','mountain','star'];
+    powerUps.push({
+      x: Math.random() * W, y: Math.random() * H,
+      type: types[Math.floor(Math.random() * types.length)],
+      life: 500
+    });
+  }
+}
+
+addEventListener('click', () => {
+  if (state !== 'play') return;
+  const angle = Math.atan2(my - player.y, mx - player.x);
+  blasts.push({ x: player.x, y: player.y, angle, r: 0, maxR: 120, speed: 8 });
+  // Particles
+  for (let i = 0; i < 6; i++) {
+    const a = angle + (Math.random() - 0.5) * 0.5;
+    particles.push({ x: player.x, y: player.y, vx: Math.cos(a) * (3 + Math.random() * 5), vy: Math.sin(a) * (3 + Math.random() * 5), life: 0.8, color: player.color });
+  }
+});
+
+function update() {
+  if (state !== 'play') return;
+  const spd = 4;
+  let dx = 0, dy = 0;
+  if (keys.w || keys.arrowup) dy -= 1;
+  if (keys.s || keys.arrowdown) dy += 1;
+  if (keys.a || keys.arrowleft) dx -= 1;
+  if (keys.d || keys.arrowright) dx += 1;
+  
+  // Check comfort zone slow
+  let inComfort = false;
+  for (const cz of comfortZones) {
+    if (Math.hypot(player.x - cz.x, player.y - cz.y) < cz.r) { inComfort = true; break; }
+  }
+  
+  const moveSpd = inComfort ? spd * 0.4 : spd;
+  if (dx || dy) {
+    const len = Math.hypot(dx, dy);
+    player.x += (dx / len) * moveSpd;
+    player.y += (dy / len) * moveSpd;
+  }
+  player.x = Math.max(10, Math.min(W - 10, player.x));
+  player.y = Math.max(10, Math.min(H - 10, player.y));
+  
+  // Player color cycle
+  player.colorIdx += 0.02;
+  player.color = COLORS[Math.floor(player.colorIdx) % COLORS.length];
+  
+  // Trail
+  player.trail.push({ x: player.x, y: player.y, life: 1, color: player.color });
+  if (player.trail.length > 30) player.trail.shift();
+  for (const t of player.trail) t.life -= 0.03;
+  
+  // Last Men movement
+  for (const lm of lastMen) {
+    const d = Math.hypot(player.x - lm.x, player.y - lm.y);
+    if (d > 5) {
+      lm.x += ((player.x - lm.x) / d) * lm.speed;
+      lm.y += ((player.y - lm.y) / d) * lm.speed;
+    }
+    // Collision with player
+    if (d < 15) {
+      hp -= 0.5;
+      if (hp <= 0) die();
+    }
+  }
+  
+  // Allies
+  for (let i = allies.length - 1; i >= 0; i--) {
+    const a = allies[i];
+    a.life -= 0.003;
+    a.saturation = a.life;
+    // Attack nearest last man
+    let nearest = null, nearDist = 200;
+    for (const lm of lastMen) {
+      const d = Math.hypot(a.x - lm.x, a.y - lm.y);
+      if (d < nearDist) { nearest = lm; nearDist = d; }
+    }
+    if (nearest) {
+      const d = Math.hypot(nearest.x - a.x, nearest.y - a.y);
+      a.x += ((nearest.x - a.x) / d) * 2;
+      a.y += ((nearest.y - a.y) / d) * 2;
+      if (d < 10) {
+        lastMen.splice(lastMen.indexOf(nearest), 1);
+        score += 5;
+      }
+    }
+    if (a.life <= 0) { allies.splice(i, 1); lastMen.push({ x: a.x, y: a.y, speed: 0.5 + wave * 0.1 }); }
+  }
+  
+  // Blasts
+  for (let i = blasts.length - 1; i >= 0; i--) {
+    const b = blasts[i];
+    b.x += Math.cos(b.angle) * b.speed;
+    b.y += Math.sin(b.angle) * b.speed;
+    b.r += 0.5;
+    
+    // Hit last men
+    for (let j = lastMen.length - 1; j >= 0; j--) {
+      if (Math.hypot(lastMen[j].x - b.x, lastMen[j].y - b.y) < b.r + 10) {
+        const lm = lastMen.splice(j, 1)[0];
+        allies.push({ x: lm.x, y: lm.y, life: 1, color: COLORS[Math.floor(Math.random() * COLORS.length)] });
+        score += 10;
+        for (let k = 0; k < 5; k++) particles.push({ x: lm.x, y: lm.y, vx: (Math.random()-0.5)*8, vy: (Math.random()-0.5)*8, life: 0.6, color: COLORS[Math.floor(Math.random() * COLORS.length)] });
+      }
+    }
+    
+    if (b.r > b.maxR || b.x < -50 || b.x > W + 50 || b.y < -50 || b.y > H + 50) blasts.splice(i, 1);
+  }
+  
+  // Particles
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx; p.y += p.vy; p.life -= 0.02;
+    p.vx *= 0.98; p.vy *= 0.98;
+    if (p.life <= 0) particles.splice(i, 1);
+  }
+  
+  // Power-ups
+  for (let i = powerUps.length - 1; i >= 0; i--) {
+    const pu = powerUps[i];
+    pu.life--;
+    if (pu.life <= 0) { powerUps.splice(i, 1); continue; }
+    if (Math.hypot(player.x - pu.x, player.y - pu.y) < 25) {
+      if (pu.type === 'lightning') {
+        // Area blast
+        for (let j = lastMen.length - 1; j >= 0; j--) {
+          if (Math.hypot(lastMen[j].x - player.x, lastMen[j].y - player.y) < 200) {
+            const lm = lastMen.splice(j, 1)[0];
+            allies.push({ x: lm.x, y: lm.y, life: 1, color: '#ffcc00' });
+            score += 10;
+          }
+        }
+        for (let k = 0; k < 30; k++) particles.push({ x: player.x, y: player.y, vx: (Math.random()-0.5)*15, vy: (Math.random()-0.5)*15, life: 1, color: '#ffcc00' });
+      } else if (pu.type === 'mountain') {
+        hp = Math.min(maxHp, hp + 30);
+      } else if (pu.type === 'star') {
+        // Speed boost (implemented as clearing nearby comfort zones)
+        comfortZones = comfortZones.filter(cz => Math.hypot(cz.x - player.x, cz.y - player.y) > 200);
+      }
+      powerUps.splice(i, 1);
+    }
+  }
+  
+  // Comfort zones decay
+  for (let i = comfortZones.length - 1; i >= 0; i--) {
+    comfortZones[i].life--;
+    if (comfortZones[i].life <= 0) comfortZones.splice(i, 1);
+  }
+  
+  // Wave complete
+  if (lastMen.length === 0 && allies.length === 0) spawnWave();
+}
+
+function die() {
+  state = 'dead';
+  const ol = document.getElementById('overlay');
+  ol.innerHTML = `<h1 style="color:#808080">You Have Become the Last Man</h1><p style="color:#666">Wave ${wave} · Score ${score}</p><p style="color:#444; font-style:italic">"The last man blinks."</p><button style="color:#0ff; border-color:#0ff" onmouseover="this.style.background='#0ff';this.style.color='#000'" onmouseout="this.style.background='transparent';this.style.color='#0ff'" onclick="startGame()">Rise Again</button>`;
+  ol.style.display = 'flex';
+}
+
+function draw() {
+  X.clearRect(0, 0, W, H);
+  
+  // Grid background
+  X.strokeStyle = 'rgba(0,255,255,0.05)';
+  X.lineWidth = 1;
+  const gridSize = 40;
+  for (let gx = 0; gx < W; gx += gridSize) { X.beginPath(); X.moveTo(gx, 0); X.lineTo(gx, H); X.stroke(); }
+  for (let gy = 0; gy < H; gy += gridSize) { X.beginPath(); X.moveTo(0, gy); X.lineTo(W, gy); X.stroke(); }
+  
+  // Comfort zones
+  for (const cz of comfortZones) {
+    const alpha = Math.min(cz.life / 100, 0.3);
+    X.fillStyle = `rgba(100,100,100,${alpha})`;
+    X.beginPath();
+    X.arc(cz.x, cz.y, cz.r, 0, Math.PI * 2);
+    X.fill();
+    X.strokeStyle = `rgba(150,150,150,${alpha})`;
+    X.stroke();
+    X.fillStyle = `rgba(150,150,150,${alpha * 0.5})`;
+    X.font = '10px Georgia';
+    X.textAlign = 'center';
+    X.fillText('COMFORT ZONE', cz.x, cz.y);
+  }
+  
+  // Player trail
+  for (const t of player?.trail || []) {
+    if (t.life <= 0) continue;
+    X.globalAlpha = t.life * 0.5;
+    X.fillStyle = t.color;
+    X.beginPath();
+    X.arc(t.x, t.y, 4, 0, Math.PI * 2);
+    X.fill();
+  }
+  X.globalAlpha = 1;
+  
+  // Last Men
+  for (const lm of lastMen) {
+    X.fillStyle = '#505050';
+    X.beginPath();
+    X.arc(lm.x, lm.y, 6, 0, Math.PI * 2);
+    X.fill();
+    X.fillStyle = '#404040';
+    X.fillRect(lm.x - 4, lm.y - 12, 8, 8);
+  }
+  
+  // Allies
+  for (const a of allies) {
+    const alpha = a.life;
+    X.globalAlpha = alpha;
+    X.fillStyle = a.color;
+    X.beginPath();
+    X.arc(a.x, a.y, 6, 0, Math.PI * 2);
+    X.fill();
+    X.globalAlpha = alpha * 0.3;
+    X.beginPath();
+    X.arc(a.x, a.y, 12, 0, Math.PI * 2);
+    X.fill();
+    X.globalAlpha = 1;
+  }
+  
+  // Blasts
+  for (const b of blasts) {
+    const alpha = 1 - b.r / b.maxR;
+    X.globalAlpha = alpha;
+    X.strokeStyle = player?.color || '#0ff';
+    X.lineWidth = 3;
+    X.beginPath();
+    X.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+    X.stroke();
+    X.globalAlpha = alpha * 0.2;
+    X.fillStyle = player?.color || '#0ff';
+    X.fill();
+    X.globalAlpha = 1;
+  }
+  
+  // Particles
+  for (const p of particles) {
+    X.globalAlpha = p.life;
+    X.fillStyle = p.color;
+    X.beginPath();
+    X.arc(p.x, p.y, 2 + p.life * 3, 0, Math.PI * 2);
+    X.fill();
+  }
+  X.globalAlpha = 1;
+  
+  // Power-ups
+  for (const pu of powerUps) {
+    const bob = Math.sin(Date.now() / 300) * 3;
+    const icons = { lightning: '⚡', mountain: '🏔️', star: '⭐' };
+    const colors = { lightning: '#ffcc00', mountain: '#88ff88', star: '#00ffff' };
+    X.fillStyle = colors[pu.type];
+    X.globalAlpha = 0.3;
+    X.beginPath();
+    X.arc(pu.x, pu.y + bob, 18, 0, Math.PI * 2);
+    X.fill();
+    X.globalAlpha = 1;
+    X.font = '20px serif';
+    X.textAlign = 'center';
+    X.textBaseline = 'middle';
+    X.fillText(icons[pu.type], pu.x, pu.y + bob);
+  }
+  
+  // Player
+  if (state === 'play' && player) {
+    // Glow
+    X.globalAlpha = 0.2;
+    X.fillStyle = player.color;
+    X.beginPath();
+    X.arc(player.x, player.y, 20 + Math.sin(Date.now() / 200) * 4, 0, Math.PI * 2);
+    X.fill();
+    X.globalAlpha = 1;
+    // Body
+    X.fillStyle = player.color;
+    X.beginPath();
+    X.arc(player.x, player.y, 10, 0, Math.PI * 2);
+    X.fill();
+    X.fillStyle = '#fff';
+    X.beginPath();
+    X.arc(player.x, player.y, 4, 0, Math.PI * 2);
+    X.fill();
+    // Aim line
+    X.strokeStyle = `rgba(255,255,255,0.15)`;
+    X.lineWidth = 1;
+    X.beginPath();
+    X.moveTo(player.x, player.y);
+    X.lineTo(mx, my);
+    X.stroke();
+  }
+  
+  // HUD
+  if (state === 'play') {
+    // HP bar
+    const barW = 200, barH = 16;
+    X.fillStyle = '#111';
+    X.fillRect(15, 15, barW + 4, barH + 4);
+    const hpFrac = hp / maxHp;
+    const hpColor = hpFrac > 0.5 ? '#0ff' : hpFrac > 0.25 ? '#ffcc00' : '#ff0044';
+    X.fillStyle = hpColor;
+    X.fillRect(17, 17, barW * hpFrac, barH);
+    
+    X.fillStyle = '#aaa';
+    X.font = '16px Georgia';
+    X.textAlign = 'left';
+    X.fillText(`Wave ${wave}`, 15, 50);
+    X.fillText(`Score ${score}`, 15, 70);
+    X.fillText(`Herd: ${lastMen.length}`, 15, 90);
+    X.fillText(`Allies: ${allies.length}`, 15, 110);
+    
+    // Desaturation effect when low HP
+    if (hpFrac < 0.3) {
+      X.fillStyle = `rgba(128,128,128,${(0.3 - hpFrac) * 0.5})`;
+      X.fillRect(0, 0, W, H);
+    }
+  }
+  
+  update();
+  requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+</body>
+</html>

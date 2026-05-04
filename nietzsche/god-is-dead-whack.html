@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>God is Dead</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a1a; overflow: hidden; font-family: 'Georgia', serif; cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><text y="28" font-size="28">🔨</text></svg>') 16 28, auto; }
+  canvas { display: block; }
+  #hud { position: fixed; top: 0; left: 0; right: 0; padding: 15px 30px; display: flex; justify-content: space-between; color: #d4af37; font-size: 24px; text-shadow: 0 0 10px rgba(212,175,55,0.5); z-index: 10; }
+  #quote { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); color: #888; font-style: italic; font-size: 18px; opacity: 0; transition: opacity 0.5s; text-align: center; width: 80%; }
+  #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; flex-direction: column; color: #d4af37; font-size: 36px; z-index: 20; }
+  #overlay button { margin-top: 20px; padding: 15px 40px; font-size: 24px; background: #d4af37; color: #0a0a1a; border: none; cursor: pointer; font-family: Georgia; }
+  #overlay button:hover { background: #ffd700; }
+  .combo { position: fixed; font-size: 48px; color: #ffd700; font-weight: bold; pointer-events: none; z-index: 5; animation: comboFloat 1s ease-out forwards; }
+  @keyframes comboFloat { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-80px) scale(1.5); } }
+</style>
+</head>
+<body>
+<div id="hud">
+  <span>⚡ Score: <span id="score">0</span></span>
+  <span>🔥 Combo: <span id="combo">0</span>x</span>
+  <span>❤️ Lives: <span id="lives">5</span></span>
+</div>
+<div id="quote"></div>
+<canvas id="c"></canvas>
+<div id="overlay">
+  <div id="finalMsg"></div>
+  <button onclick="startGame()">Smash Again</button>
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const quotes = [
+  '"God is dead. God remains dead. And we have killed him."',
+  '"There are no facts, only interpretations."',
+  '"He who has a why to live can bear almost any how."',
+  '"In heaven, all the interesting people are missing."',
+  '"The individual has always had to struggle to keep from being overwhelmed by the tribe."',
+  '"Without music, life would be a mistake."',
+  '"That which does not kill us makes us stronger."',
+  '"Man is something that shall be overcome."',
+  '"The snake which cannot cast its skin has to die."',
+  '"Whoever fights monsters should see to it that he does not become a monster."'
+];
+
+const idols = [
+  { label: '🐄', name: 'Golden Calf' },
+  { label: '👑', name: 'Crown' },
+  { label: '💰', name: 'Money' },
+  { label: '📱', name: 'Phone' },
+  { label: '📺', name: 'TV' },
+  { label: '🏛️', name: 'Temple' },
+];
+const genuine = [
+  { label: '⭐', name: 'Dancing Star' },
+  { label: '🧒', name: 'Child' },
+  { label: '🌅', name: 'Sunrise' },
+];
+
+let score, lives, combo, holes, gameOver, spawnTimer, speedMs, totalHits;
+
+const COLS = 3, ROWS = 3;
+const HOLE_SIZE = 120;
+
+function getHolePositions() {
+  const gapX = (canvas.width - COLS * HOLE_SIZE) / (COLS + 1);
+  const gapY = (canvas.height - ROWS * HOLE_SIZE) / (ROWS + 1);
+  const positions = [];
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      positions.push({
+        x: gapX + c * (HOLE_SIZE + gapX),
+        y: gapY + r * (HOLE_SIZE + gapY) + 40,
+        item: null,
+        timer: 0,
+        shaking: 0
+      });
+    }
+  }
+  return positions;
+}
+
+function startGame() {
+  score = 0; lives = 5; combo = 0; gameOver = false; totalHits = 0;
+  speedMs = 1500;
+  holes = getHolePositions();
+  document.getElementById('overlay').style.display = 'none';
+  updateHUD();
+  clearInterval(spawnTimer);
+  spawnTimer = setInterval(spawnItem, speedMs);
+  requestAnimationFrame(draw);
+}
+
+function spawnItem() {
+  if (gameOver) return;
+  const empty = holes.filter(h => !h.item);
+  if (empty.length === 0) return;
+  const hole = empty[Math.floor(Math.random() * empty.length)];
+  const isGenuine = Math.random() < 0.2;
+  const pool = isGenuine ? genuine : idols;
+  hole.item = pool[Math.floor(Math.random() * pool.length)];
+  hole.item.isGenuine = isGenuine;
+  hole.timer = Date.now();
+  hole.popPhase = 0;
+  
+  // Auto-disappear
+  setTimeout(() => {
+    if (hole.item && hole.timer) {
+      if (!hole.item.isGenuine) {
+        lives--;
+        combo = 0;
+        updateHUD();
+        if (lives <= 0) endGame();
+      }
+      hole.item = null;
+    }
+  }, 2000 - Math.min(totalHits * 10, 800));
+}
+
+function updateHUD() {
+  document.getElementById('score').textContent = score;
+  document.getElementById('combo').textContent = combo;
+  document.getElementById('lives').textContent = lives;
+}
+
+function showQuote() {
+  const el = document.getElementById('quote');
+  el.textContent = quotes[Math.floor(Math.random() * quotes.length)];
+  el.style.opacity = 1;
+  setTimeout(() => el.style.opacity = 0, 3000);
+}
+
+function showCombo(x, y, text) {
+  const el = document.createElement('div');
+  el.className = 'combo';
+  el.textContent = text;
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1000);
+}
+
+let shakeX = 0, shakeY = 0, shakeDecay = 0;
+function triggerShake() { shakeDecay = 8; }
+
+canvas.addEventListener('click', (e) => {
+  if (gameOver) return;
+  const mx = e.clientX, my = e.clientY;
+  
+  for (const hole of holes) {
+    if (!hole.item) continue;
+    const cx = hole.x + HOLE_SIZE / 2;
+    const cy = hole.y + HOLE_SIZE / 2;
+    const dist = Math.hypot(mx - cx, my - cy);
+    if (dist < HOLE_SIZE / 2) {
+      if (hole.item.isGenuine) {
+        // Hit genuine — bad!
+        lives--;
+        combo = 0;
+        showCombo(mx, my, '💔 -1 life');
+        hole.item = null;
+        updateHUD();
+        if (lives <= 0) endGame();
+      } else {
+        // Hit idol — good!
+        combo++;
+        totalHits++;
+        const points = 10 * Math.max(combo, 1);
+        score += points;
+        showCombo(mx, my, `+${points}`);
+        triggerShake();
+        hole.item = null;
+        updateHUD();
+        if (totalHits % 10 === 0) showQuote();
+        if (totalHits % 15 === 0) {
+          speedMs = Math.max(400, speedMs - 100);
+          clearInterval(spawnTimer);
+          spawnTimer = setInterval(spawnItem, speedMs);
+        }
+      }
+      return;
+    }
+  }
+  combo = 0;
+  updateHUD();
+});
+
+function endGame() {
+  gameOver = true;
+  clearInterval(spawnTimer);
+  document.getElementById('finalMsg').innerHTML = `GOD IS DEAD<br><span style="font-size:24px">Final Score: ${score}</span><br><span style="font-size:18px;color:#888">${quotes[Math.floor(Math.random() * quotes.length)]}</span>`;
+  document.getElementById('overlay').style.display = 'flex';
+}
+
+function draw() {
+  if (shakeDecay > 0) {
+    shakeX = (Math.random() - 0.5) * shakeDecay;
+    shakeY = (Math.random() - 0.5) * shakeDecay;
+    shakeDecay *= 0.85;
+  } else { shakeX = shakeY = 0; }
+
+  ctx.save();
+  ctx.translate(shakeX, shakeY);
+  ctx.clearRect(-10, -10, canvas.width + 20, canvas.height + 20);
+  
+  // Dark marble background
+  const bg = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+  bg.addColorStop(0, '#0a0a1a');
+  bg.addColorStop(0.5, '#1a1a2e');
+  bg.addColorStop(1, '#0a0a1a');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Draw holes
+  for (const hole of holes) {
+    // Pedestal
+    const cx = hole.x + HOLE_SIZE / 2;
+    const cy = hole.y + HOLE_SIZE / 2;
+    
+    ctx.beginPath();
+    ctx.ellipse(cx, cy + HOLE_SIZE * 0.35, HOLE_SIZE * 0.5, HOLE_SIZE * 0.18, 0, 0, Math.PI * 2);
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fill();
+    ctx.strokeStyle = '#333';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    if (hole.item) {
+      const age = (Date.now() - hole.timer) / 1000;
+      const pop = Math.min(age * 5, 1);
+      const scale = pop;
+      
+      // Glow
+      const glowColor = hole.item.isGenuine ? 'rgba(100,180,255,0.3)' : 'rgba(255,215,0,0.3)';
+      ctx.beginPath();
+      ctx.arc(cx, cy - 10, HOLE_SIZE * 0.4, 0, Math.PI * 2);
+      ctx.fillStyle = glowColor;
+      ctx.fill();
+
+      // Emoji
+      ctx.font = `${60 * scale}px serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(hole.item.label, cx, cy - 10 * scale);
+      
+      // Label
+      ctx.font = '12px Georgia';
+      ctx.fillStyle = hole.item.isGenuine ? '#88ccff' : '#d4af37';
+      ctx.fillText(hole.item.name, cx, cy + 35);
+    }
+  }
+  
+  ctx.restore();
+  if (!gameOver) requestAnimationFrame(draw);
+}
+
+startGame();
+</script>
+</body>
+</html>

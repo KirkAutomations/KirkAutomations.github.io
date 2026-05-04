@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Will to Power</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; color: #ccc; font-family: Georgia, serif; overflow: hidden; user-select: none; }
+  #game { display: flex; height: 100vh; }
+  #main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+  #orb { width: 200px; height: 200px; border-radius: 50%; cursor: pointer; position: relative; transition: box-shadow 0.1s, transform 0.1s; }
+  #orb:active { transform: scale(0.95); }
+  #stage { font-size: 28px; margin-bottom: 20px; text-shadow: 0 0 10px currentColor; }
+  #will { font-size: 48px; margin-top: 20px; font-weight: bold; }
+  #progress { width: 300px; height: 12px; background: #222; border-radius: 6px; margin-top: 15px; overflow: hidden; }
+  #progressBar { height: 100%; border-radius: 6px; transition: width 0.3s; }
+  #nextStage { font-size: 14px; color: #666; margin-top: 8px; }
+  #panel { width: 320px; background: #1a1a1a; padding: 20px; overflow-y: auto; border-left: 1px solid #333; }
+  #panel h2 { color: #d4af37; margin-bottom: 15px; font-size: 20px; }
+  .upgrade { background: #222; padding: 12px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; border: 1px solid #333; transition: all 0.2s; }
+  .upgrade:hover { border-color: #d4af37; background: #2a2a2a; }
+  .upgrade.locked { opacity: 0.4; cursor: not-allowed; }
+  .upgrade h3 { color: #d4af37; font-size: 16px; margin-bottom: 4px; }
+  .upgrade p { font-size: 12px; color: #888; }
+  .upgrade .cost { color: #aaa; font-size: 14px; margin-top: 4px; }
+  .floater { position: absolute; pointer-events: none; font-weight: bold; animation: floatUp 1s ease-out forwards; }
+  @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-80px) scale(1.3); } }
+  #particles { position: absolute; inset: 0; pointer-events: none; }
+  #transcend { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; flex-direction: column; z-index: 100; }
+  #transcend h1 { font-size: 64px; color: #fff; text-shadow: 0 0 40px #fff, 0 0 80px #d4af37; }
+  #transcend p { font-size: 24px; color: #d4af37; margin-top: 20px; font-style: italic; }
+</style>
+</head>
+<body>
+<div id="game">
+  <div id="main">
+    <canvas id="particles"></canvas>
+    <div id="stage">The Last Man</div>
+    <div id="orb" onclick="clickOrb(event)"></div>
+    <div id="will">0</div>
+    <div id="progress"><div id="progressBar"></div></div>
+    <div id="nextStage"></div>
+  </div>
+  <div id="panel">
+    <h2>⚡ Upgrades</h2>
+    <div id="upgradeList"></div>
+    <div style="margin-top:20px; padding-top:15px; border-top:1px solid #333">
+      <p style="font-size:12px; color:#555">Will/sec: <span id="wps">0</span></p>
+      <p style="font-size:12px; color:#555">Click power: <span id="cpp">1</span></p>
+      <p style="font-size:12px; color:#555">Total clicks: <span id="tc">0</span></p>
+    </div>
+  </div>
+</div>
+<div id="transcend">
+  <h1>ÜBERMENSCH</h1>
+  <p>"Man is something that shall be overcome."</p>
+  <p style="color:#888; font-size:16px; margin-top:40px">You have transcended. ⚡</p>
+</div>
+<script>
+const stages = [
+  { name: 'The Last Man', threshold: 0, color: '#808080', orbBg: 'radial-gradient(circle, #666, #333)', quote: '"The earth has become small."' },
+  { name: 'The Camel', threshold: 100, color: '#c2a060', orbBg: 'radial-gradient(circle, #c2a060, #8b6914)', quote: '"Thou shalt — thus speaks the great dragon."' },
+  { name: 'The Lion', threshold: 1000, color: '#d4af37', orbBg: 'radial-gradient(circle, #ffd700, #b8860b)', quote: '"I will! — thus speaks the lion."' },
+  { name: 'The Child', threshold: 10000, color: '#fff', orbBg: 'radial-gradient(circle, #fff, #ddd)', quote: '"A new beginning, a sacred Yes."' },
+  { name: 'Übermensch', threshold: 100000, color: '#ffd700', orbBg: 'radial-gradient(circle, #fff, #ffd700, #ff8800)', quote: '"Man is a rope over an abyss."' },
+];
+
+const upgrades = [
+  { name: 'Self-Overcoming', desc: 'Auto-generate Will', baseCost: 10, costMult: 1.5, effect: 'wps', value: 1, owned: 0, icon: '🔄' },
+  { name: 'Amor Fati', desc: 'Multiply click power', baseCost: 50, costMult: 2, effect: 'clickMult', value: 2, owned: 0, icon: '💛' },
+  { name: 'Eternal Return', desc: 'Passive Will income', baseCost: 200, costMult: 1.8, effect: 'wps', value: 5, owned: 0, icon: '♾️' },
+  { name: 'Dionysian Frenzy', desc: 'Temporary 10x boost (10s)', baseCost: 500, costMult: 3, effect: 'frenzy', value: 10, owned: 0, icon: '🍷' },
+  { name: 'Zarathustra\'s Wisdom', desc: 'Double all income', baseCost: 2000, costMult: 2.5, effect: 'globalMult', value: 2, owned: 0, icon: '📜' },
+  { name: 'Dancing Star', desc: 'Massive auto-Will', baseCost: 10000, costMult: 2, effect: 'wps', value: 50, owned: 0, icon: '⭐' },
+];
+
+let will = 0, totalClicks = 0, clickPower = 1, willPerSec = 0, globalMult = 1, frenzyMult = 1;
+let currentStage = 0;
+let pCanvas, pCtx, particlesList = [];
+
+function init() {
+  pCanvas = document.getElementById('particles');
+  pCtx = pCanvas.getContext('2d');
+  pCanvas.width = pCanvas.parentElement.clientWidth;
+  pCanvas.height = pCanvas.parentElement.clientHeight;
+  renderUpgrades();
+  updateDisplay();
+  setInterval(tick, 100);
+  requestAnimationFrame(drawParticles);
+}
+
+function clickOrb(e) {
+  const power = clickPower * globalMult * frenzyMult;
+  will += power;
+  totalClicks++;
+  
+  // Floater
+  const f = document.createElement('div');
+  f.className = 'floater';
+  f.textContent = '+' + formatNum(power);
+  f.style.color = stages[currentStage].color;
+  f.style.fontSize = (16 + Math.min(power, 100) * 0.3) + 'px';
+  f.style.left = (e.clientX - 30 + Math.random() * 60) + 'px';
+  f.style.top = (e.clientY - 30) + 'px';
+  document.getElementById('main').appendChild(f);
+  setTimeout(() => f.remove(), 1000);
+  
+  // Particles
+  for (let i = 0; i < 3 + Math.min(power / 10, 10); i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 1 + Math.random() * 3;
+    particlesList.push({
+      x: pCanvas.width / 2, y: pCanvas.height / 2,
+      vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+      life: 1, color: stages[currentStage].color
+    });
+  }
+  
+  checkStage();
+  updateDisplay();
+}
+
+function tick() {
+  const income = willPerSec * globalMult * frenzyMult / 10;
+  if (income > 0) will += income;
+  checkStage();
+  updateDisplay();
+}
+
+function checkStage() {
+  for (let i = stages.length - 1; i >= 0; i--) {
+    if (will >= stages[i].threshold && i > currentStage) {
+      currentStage = i;
+      if (i === stages.length - 1) transcend();
+      break;
+    }
+  }
+}
+
+function transcend() {
+  const el = document.getElementById('transcend');
+  el.style.display = 'flex';
+  el.style.animation = 'none';
+  el.offsetHeight; // reflow
+  el.style.opacity = 0;
+  el.style.transition = 'opacity 3s';
+  setTimeout(() => el.style.opacity = 1, 100);
+}
+
+function buyUpgrade(idx) {
+  const u = upgrades[idx];
+  const cost = Math.floor(u.baseCost * Math.pow(u.costMult, u.owned));
+  if (will < cost) return;
+  will -= cost;
+  u.owned++;
+  
+  if (u.effect === 'wps') willPerSec += u.value;
+  else if (u.effect === 'clickMult') clickPower *= u.value;
+  else if (u.effect === 'globalMult') globalMult *= u.value;
+  else if (u.effect === 'frenzy') {
+    frenzyMult = u.value;
+    setTimeout(() => frenzyMult = 1, 10000);
+  }
+  
+  renderUpgrades();
+  updateDisplay();
+}
+
+function renderUpgrades() {
+  const list = document.getElementById('upgradeList');
+  list.innerHTML = '';
+  upgrades.forEach((u, i) => {
+    const cost = Math.floor(u.baseCost * Math.pow(u.costMult, u.owned));
+    const canBuy = will >= cost;
+    const div = document.createElement('div');
+    div.className = 'upgrade' + (canBuy ? '' : ' locked');
+    div.innerHTML = `<h3>${u.icon} ${u.name} (${u.owned})</h3><p>${u.desc}</p><div class="cost">Cost: ${formatNum(cost)} Will</div>`;
+    div.onclick = () => buyUpgrade(i);
+    list.appendChild(div);
+  });
+}
+
+function updateDisplay() {
+  const s = stages[currentStage];
+  const next = stages[currentStage + 1];
+  
+  document.getElementById('stage').textContent = s.name;
+  document.getElementById('stage').style.color = s.color;
+  document.getElementById('orb').style.background = s.orbBg;
+  document.getElementById('orb').style.boxShadow = `0 0 40px ${s.color}40, 0 0 80px ${s.color}20`;
+  document.getElementById('will').textContent = formatNum(Math.floor(will)) + ' Will';
+  document.getElementById('will').style.color = s.color;
+  
+  if (next) {
+    const progress = Math.min(1, (will - s.threshold) / (next.threshold - s.threshold));
+    document.getElementById('progressBar').style.width = (progress * 100) + '%';
+    document.getElementById('progressBar').style.background = s.color;
+    document.getElementById('nextStage').textContent = `${next.name} at ${formatNum(next.threshold)} Will`;
+  } else {
+    document.getElementById('progressBar').style.width = '100%';
+    document.getElementById('progressBar').style.background = '#ffd700';
+    document.getElementById('nextStage').textContent = s.quote;
+  }
+  
+  document.getElementById('wps').textContent = formatNum(willPerSec * globalMult * frenzyMult);
+  document.getElementById('cpp').textContent = formatNum(clickPower * globalMult * frenzyMult);
+  document.getElementById('tc').textContent = totalClicks;
+  
+  // Update upgrade affordability
+  renderUpgrades();
+}
+
+function formatNum(n) {
+  if (n >= 1e9) return (n / 1e9).toFixed(1) + 'B';
+  if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
+  if (n >= 1e4) return (n / 1e3).toFixed(1) + 'K';
+  return Math.floor(n).toString();
+}
+
+function drawParticles() {
+  pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+  for (let i = particlesList.length - 1; i >= 0; i--) {
+    const p = particlesList[i];
+    p.x += p.vx; p.y += p.vy;
+    p.vy += 0.02;
+    p.life -= 0.02;
+    if (p.life <= 0) { particlesList.splice(i, 1); continue; }
+    pCtx.globalAlpha = p.life;
+    pCtx.fillStyle = p.color;
+    pCtx.beginPath();
+    pCtx.arc(p.x, p.y, 2 + p.life * 3, 0, Math.PI * 2);
+    pCtx.fill();
+  }
+  pCtx.globalAlpha = 1;
+  requestAnimationFrame(drawParticles);
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Thus Climbed Zarathustra</title>
+<style>
+  * { margin: 0; padding: 0; }
+  body { background: #000; overflow: hidden; }
+  canvas { display: block; }
+  #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; flex-direction: column; color: #d4af37; font-family: Georgia, serif; z-index: 10; text-align: center; }
+  #overlay h1 { font-size: 48px; margin-bottom: 15px; }
+  #overlay p { font-size: 18px; color: #888; margin: 5px 20px; }
+  #overlay button { margin-top: 25px; padding: 15px 40px; font-size: 20px; background: transparent; border: 2px solid #d4af37; color: #d4af37; cursor: pointer; font-family: Georgia; }
+  #overlay button:hover { background: #d4af37; color: #000; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="overlay">
+  <h1>Thus Climbed Zarathustra</h1>
+  <p>"I teach you the Übermensch.</p>
+  <p>Man is something that shall be overcome."</p>
+  <p style="color:#aaa; margin-top:20px; font-style:normal">Arrow keys / WASD to move · Space to jump · Wall-jump off walls</p>
+  <button onclick="startGame()">Begin the Ascent</button>
+</div>
+<script>
+const C = document.getElementById('c');
+const X = C.getContext('2d');
+let W, H;
+function resize() { W = C.width = innerWidth; H = C.height = innerHeight; }
+resize();
+addEventListener('resize', resize);
+
+const ZONES = [
+  { name: 'Cave', yStart: 0, color1: '#0a0a12', color2: '#1a1a2a', platColor: '#2a2a3a', textColor: '#666', fog: 0.8 },
+  { name: 'Forest', yStart: -2000, color1: '#0a1a0a', color2: '#1a2a1a', platColor: '#2a3a2a', textColor: '#4a8', fog: 0.3 },
+  { name: 'Summit', yStart: -4000, color1: '#1a1a3a', color2: '#3a2a5a', platColor: '#5a4a7a', textColor: '#d4af37', fog: 0 },
+];
+
+const APHORISMS = [
+  'What does not kill me\nmakes me stronger',
+  'God is dead',
+  'Become who you are',
+  'There are no facts\nonly interpretations',
+  'Without music\nlife would be a mistake',
+  'He who has a why\ncan bear any how',
+  'The individual must\nstruggle against the tribe',
+  'You must have chaos\nto birth a dancing star',
+  'Man is a rope\nover an abyss',
+  'Love your fate',
+  'The higher we soar\nthe smaller we appear',
+  'In heaven all the\ninteresting people are missing',
+];
+
+let state = 'menu', player, platforms, aphorisms, particles, camera, score, collected;
+let keys = {};
+addEventListener('keydown', e => { keys[e.key.toLowerCase()] = true; if (e.code === 'Space') e.preventDefault(); });
+addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+
+function startGame() {
+  document.getElementById('overlay').style.display = 'none';
+  
+  player = { x: W/2, y: H - 80, vx: 0, vy: 0, w: 16, h: 36, onGround: false, wallDir: 0, jumpBuffer: 0, coyoteTime: 0, facing: 1 };
+  platforms = [];
+  aphorisms = [];
+  particles = [];
+  camera = { y: 0, targetY: 0 };
+  score = 0;
+  collected = 0;
+  
+  // Generate platforms procedurally
+  const totalHeight = 6000;
+  let py = H - 40;
+  
+  // Ground
+  platforms.push({ x: 0, y: py, w: W, h: 30, zone: 0 });
+  
+  // Climbing platforms
+  while (py > -totalHeight) {
+    const gap = 60 + Math.random() * 80;
+    py -= gap;
+    const pw = 60 + Math.random() * 120;
+    const px = Math.random() * (W - pw);
+    const zone = py > ZONES[1].yStart ? 0 : py > ZONES[2].yStart ? 1 : 2;
+    platforms.push({ x: px, y: py, w: pw, h: 12, zone });
+    
+    // Wall platforms on sides
+    if (Math.random() < 0.3) {
+      const side = Math.random() < 0.5 ? 0 : W - 20;
+      platforms.push({ x: side, y: py - 30, w: 20, h: 60, zone, isWall: true });
+    }
+    
+    // Aphorisms on some platforms
+    if (Math.random() < 0.25) {
+      aphorisms.push({ x: px + pw/2, y: py - 30, text: APHORISMS[Math.floor(Math.random() * APHORISMS.length)], collected: false });
+    }
+  }
+  
+  // Summit platform
+  platforms.push({ x: W/4, y: -totalHeight + 50, w: W/2, h: 20, zone: 2, isSummit: true });
+  aphorisms.push({ x: W/2, y: -totalHeight + 20, text: 'THUS SPOKE\nZARATHUSTRA', collected: false, isFinal: true });
+  
+  state = 'play';
+}
+
+function update() {
+  if (state !== 'play') return;
+  const p = player;
+  const spd = 5, jumpPow = -11, gravity = 0.45, wallSlide = 0.8;
+  
+  // Horizontal
+  let dx = 0;
+  if (keys['arrowleft'] || keys['a']) dx = -1;
+  if (keys['arrowright'] || keys['d']) dx = 1;
+  p.vx = dx * spd;
+  if (dx) p.facing = dx;
+  
+  // Jump buffer
+  if (keys[' '] || keys['arrowup'] || keys['w']) p.jumpBuffer = 6;
+  else p.jumpBuffer = Math.max(0, p.jumpBuffer - 1);
+  
+  // Coyote time
+  if (p.onGround) p.coyoteTime = 6;
+  else p.coyoteTime = Math.max(0, p.coyoteTime - 1);
+  
+  // Jump
+  if (p.jumpBuffer > 0 && p.coyoteTime > 0) {
+    p.vy = jumpPow;
+    p.onGround = false;
+    p.jumpBuffer = 0;
+    p.coyoteTime = 0;
+    for (let i = 0; i < 5; i++) particles.push({ x: p.x + p.w/2, y: p.y + p.h, vx: (Math.random()-0.5)*3, vy: Math.random()*2, life: 0.5, color: '#888' });
+  }
+  
+  // Wall jump
+  if (p.jumpBuffer > 0 && !p.onGround && p.wallDir !== 0) {
+    p.vy = jumpPow * 0.9;
+    p.vx = -p.wallDir * spd * 1.5;
+    p.jumpBuffer = 0;
+    p.wallDir = 0;
+    for (let i = 0; i < 5; i++) particles.push({ x: p.x + (p.wallDir > 0 ? 0 : p.w), y: p.y + p.h/2, vx: -p.wallDir * Math.random()*3, vy: (Math.random()-0.5)*3, life: 0.5, color: '#aaa' });
+  }
+  
+  // Gravity
+  p.vy += gravity;
+  if (p.wallDir !== 0 && p.vy > 0) p.vy = Math.min(p.vy, wallSlide); // Wall slide
+  
+  // Move
+  p.x += p.vx;
+  p.y += p.vy;
+  
+  // Screen wrap
+  if (p.x > W) p.x = -p.w;
+  if (p.x + p.w < 0) p.x = W;
+  
+  // Collision
+  p.onGround = false;
+  p.wallDir = 0;
+  for (const pl of platforms) {
+    if (p.x + p.w > pl.x && p.x < pl.x + pl.w) {
+      // Landing on top
+      if (p.vy >= 0 && p.y + p.h > pl.y && p.y + p.h < pl.y + pl.h + p.vy + 5) {
+        p.y = pl.y - p.h;
+        p.vy = 0;
+        p.onGround = true;
+      }
+    }
+    // Wall detection
+    if (p.y + p.h > pl.y + 5 && p.y < pl.y + pl.h - 5) {
+      if (p.x + p.w > pl.x && p.x + p.w < pl.x + 10 && p.vx > 0) p.wallDir = 1;
+      if (p.x < pl.x + pl.w && p.x > pl.x + pl.w - 10 && p.vx < 0) p.wallDir = -1;
+    }
+  }
+  
+  // Collect aphorisms
+  for (const a of aphorisms) {
+    if (a.collected) continue;
+    if (Math.abs(p.x + p.w/2 - a.x) < 30 && Math.abs(p.y - a.y) < 30) {
+      a.collected = true;
+      collected++;
+      score += 100;
+      for (let i = 0; i < 12; i++) particles.push({ x: a.x, y: a.y, vx: (Math.random()-0.5)*6, vy: (Math.random()-0.5)*6, life: 1, color: '#d4af37' });
+      if (a.isFinal) win();
+    }
+  }
+  
+  // Fall death
+  if (p.y > camera.y + H + 100) {
+    // Respawn at nearest platform below camera
+    const visible = platforms.filter(pl => pl.y > camera.y && pl.y < camera.y + H);
+    if (visible.length) {
+      const pl = visible[visible.length - 1];
+      p.x = pl.x + pl.w/2 - p.w/2;
+      p.y = pl.y - p.h;
+    } else {
+      p.y = H - 80;
+      camera.y = 0;
+    }
+    p.vy = 0;
+    score = Math.max(0, score - 50);
+  }
+  
+  // Camera
+  camera.targetY = p.y - H * 0.4;
+  camera.y += (camera.targetY - camera.y) * 0.08;
+  
+  // Particles
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const pt = particles[i];
+    pt.x += pt.vx; pt.y += pt.vy; pt.vy += 0.02; pt.life -= 0.02;
+    if (pt.life <= 0) particles.splice(i, 1);
+  }
+  
+  // Trail
+  if (Math.abs(p.vx) > 0 || p.vy < -2) {
+    particles.push({ x: p.x + p.w/2, y: p.y + p.h, vx: (Math.random()-0.5)*0.5, vy: 0.5, life: 0.3, color: '#555' });
+  }
+}
+
+function win() {
+  state = 'win';
+  const ol = document.getElementById('overlay');
+  ol.innerHTML = `<h1 style="text-shadow:0 0 40px #ffd700">☀️ The Summit</h1><p style="color:#d4af37; font-size:24px">Score: ${score} | Aphorisms: ${collected}</p><p>"Great star! What would your happiness be if you had not those for whom you shine?"</p><button onclick="startGame()">Descend and Climb Again</button>`;
+  ol.style.display = 'flex';
+}
+
+function getZone(y) {
+  if (y > ZONES[1].yStart) return ZONES[0];
+  if (y > ZONES[2].yStart) return ZONES[1];
+  return ZONES[2];
+}
+
+function draw() {
+  X.clearRect(0, 0, W, H);
+  const cy = camera.y;
+  const zone = getZone(cy + H/2);
+  
+  // Background gradient
+  const bg = X.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0, zone.color1);
+  bg.addColorStop(1, zone.color2);
+  X.fillStyle = bg;
+  X.fillRect(0, 0, W, H);
+  
+  // Fog/atmosphere
+  if (zone.fog > 0) {
+    X.fillStyle = `rgba(0,0,0,${zone.fog * 0.3})`;
+    X.fillRect(0, 0, W, H);
+  }
+  
+  // Platforms
+  for (const pl of platforms) {
+    const sy = pl.y - cy;
+    if (sy > H + 20 || sy + pl.h < -20) continue;
+    const z = getZone(pl.y);
+    
+    if (pl.isSummit) {
+      X.fillStyle = '#d4af37';
+      X.fillRect(pl.x, sy, pl.w, pl.h);
+      X.fillStyle = '#ffd700';
+      X.globalAlpha = 0.3 + 0.2 * Math.sin(Date.now() / 500);
+      X.fillRect(pl.x - 5, sy - 5, pl.w + 10, pl.h + 10);
+      X.globalAlpha = 1;
+    } else {
+      X.fillStyle = z.platColor;
+      X.fillRect(pl.x, sy, pl.w, pl.h);
+      X.fillStyle = 'rgba(255,255,255,0.1)';
+      X.fillRect(pl.x, sy, pl.w, 2);
+    }
+  }
+  
+  // Aphorisms
+  for (const a of aphorisms) {
+    if (a.collected) continue;
+    const sy = a.y - cy;
+    if (sy > H + 20 || sy < -40) continue;
+    const glow = 0.5 + 0.5 * Math.sin(Date.now() / 400);
+    X.globalAlpha = glow;
+    X.fillStyle = '#d4af37';
+    X.beginPath();
+    X.arc(a.x, sy, 12, 0, Math.PI * 2);
+    X.fill();
+    X.globalAlpha = 0.6;
+    X.font = '9px Georgia';
+    X.textAlign = 'center';
+    X.fillStyle = '#ffd700';
+    const lines = a.text.split('\n');
+    lines.forEach((line, i) => X.fillText(line, a.x, sy - 20 + i * 11));
+    X.globalAlpha = 1;
+  }
+  
+  // Particles
+  for (const pt of particles) {
+    X.globalAlpha = pt.life;
+    X.fillStyle = pt.color;
+    X.beginPath();
+    X.arc(pt.x, pt.y - cy, 2, 0, Math.PI * 2);
+    X.fill();
+  }
+  X.globalAlpha = 1;
+  
+  // Player
+  if (state === 'play') {
+    const p = player;
+    const sy = p.y - cy;
+    // Robe body
+    X.fillStyle = '#3a2a1a';
+    X.fillRect(p.x, sy, p.w, p.h);
+    // Head
+    X.fillStyle = '#5a4a3a';
+    X.beginPath();
+    X.arc(p.x + p.w/2, sy - 4, 7, 0, Math.PI * 2);
+    X.fill();
+    // Staff
+    X.strokeStyle = '#8a7a5a';
+    X.lineWidth = 2;
+    X.beginPath();
+    X.moveTo(p.x + (p.facing > 0 ? p.w + 3 : -3), sy - 10);
+    X.lineTo(p.x + (p.facing > 0 ? p.w + 3 : -3), sy + p.h);
+    X.stroke();
+    
+    // Wall slide indicator
+    if (player.wallDir !== 0 && !player.onGround) {
+      X.fillStyle = 'rgba(255,255,255,0.3)';
+      X.font = '10px Georgia';
+      X.textAlign = 'center';
+      X.fillText('⬆️', p.x + p.w/2, sy - 15);
+    }
+  }
+  
+  // HUD
+  X.fillStyle = '#d4af37';
+  X.font = '18px Georgia';
+  X.textAlign = 'left';
+  X.fillText(`Score: ${score}`, 15, 30);
+  X.fillText(`📜 ${collected}`, 15, 55);
+  
+  // Zone name
+  X.textAlign = 'right';
+  X.fillStyle = zone.textColor;
+  X.fillText(zone.name, W - 15, 30);
+  
+  // Height indicator
+  const maxH = 6000;
+  const progress = Math.min(1, Math.max(0, -player?.y || 0) / maxH);
+  X.fillStyle = '#222';
+  X.fillRect(W - 10, 50, 5, H - 100);
+  X.fillStyle = '#d4af37';
+  X.fillRect(W - 10, 50 + (H - 100) * (1 - progress), 5, (H - 100) * progress);
+  
+  update();
+  requestAnimationFrame(draw);
+}
+
+requestAnimationFrame(draw);
+</script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dionysus vs Apollo</title>
+<style>
+  * { margin: 0; padding: 0; }
+  body { background: #111; overflow: hidden; font-family: Georgia, serif; }
+  canvas { display: block; }
+  #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; flex-direction: column; z-index: 10; text-align: center; }
+  #overlay h1 { font-size: 44px; margin-bottom: 15px; }
+  #overlay p { font-size: 18px; margin: 5px 20px; }
+  #overlay button { margin-top: 25px; padding: 15px 40px; font-size: 20px; background: transparent; border: 2px solid #d4af37; color: #d4af37; cursor: pointer; font-family: Georgia; }
+  #overlay button:hover { background: #d4af37; color: #000; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="overlay">
+  <h1><span style="color:#e74c3c">Dionysus</span> vs <span style="color:#3498db">Apollo</span></h1>
+  <p style="color:#888">"Without the Dionysian, Apollo is lifeless form.</p>
+  <p style="color:#888">Without the Apollonian, Dionysus is formless chaos."</p>
+  <p style="color:#aaa; margin-top:20px; font-style:normal"><b>A/D</b> — Generate chaos (Dionysus) &nbsp;&nbsp; <b>←/→</b> — Shape order (Apollo)</p>
+  <p style="color:#666">Balance them for 90 seconds. Harmony creates beauty.</p>
+  <button onclick="startGame()">Create</button>
+</div>
+<script>
+const C = document.getElementById('c');
+const X = C.getContext('2d');
+let W, H;
+function resize() { W = C.width = innerWidth; H = C.height = innerHeight; }
+resize();
+addEventListener('resize', resize);
+
+let state = 'menu';
+let chaos, order, score, timeLeft, particles, artPieces, harmony;
+let chaosDecay, orderDecay;
+let keys = {};
+
+addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
+addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+
+function startGame() {
+  document.getElementById('overlay').style.display = 'none';
+  chaos = 0; order = 0; score = 0; timeLeft = 90; harmony = 0;
+  particles = []; artPieces = [];
+  chaosDecay = 0.005; orderDecay = 0.005;
+  state = 'play';
+  lastTick = performance.now();
+}
+
+let lastTick;
+
+function update(now) {
+  if (state !== 'play') return;
+  const dt = Math.min((now - lastTick) / 1000, 0.05);
+  lastTick = now;
+  
+  timeLeft -= dt;
+  if (timeLeft <= 0) { endGame(); return; }
+  
+  // Input
+  if (keys['a']) { chaos = Math.min(1, chaos + 0.02); spawnChaosParticle(); }
+  if (keys['d']) { chaos = Math.min(1, chaos + 0.01); spawnChaosParticle(); }
+  if (keys['arrowleft']) { order = Math.min(1, order + 0.015); spawnOrderParticle(); }
+  if (keys['arrowright']) { order = Math.min(1, order + 0.02); spawnOrderParticle(); }
+  
+  // Decay
+  chaos = Math.max(0, chaos - chaosDecay);
+  order = Math.max(0, order - orderDecay);
+  
+  // Balance calculation
+  const diff = Math.abs(chaos - order);
+  const avg = (chaos + order) / 2;
+  const balanced = diff < 0.15 && avg > 0.2;
+  
+  if (balanced) {
+    harmony = Math.min(1, harmony + dt * 0.3);
+    score += dt * 10 * (1 + harmony * 5) * avg * 4;
+    
+    // Create art in the center when balanced
+    if (Math.random() < 0.1 * avg) {
+      artPieces.push({
+        x: W/2 + (Math.random() - 0.5) * 200,
+        y: H/2 + (Math.random() - 0.5) * 200,
+        r: 3 + Math.random() * 8,
+        color: `hsl(${40 + Math.random() * 20}, ${70 + harmony * 30}%, ${50 + harmony * 30}%)`,
+        born: now,
+        life: 3 + harmony * 5
+      });
+    }
+  } else {
+    harmony = Math.max(0, harmony - dt * 0.5);
+  }
+  
+  // Overflow (too much chaos without order)
+  if (chaos > 0.8 && order < 0.3) {
+    score = Math.max(0, score - dt * 20);
+    // Screen flash red
+  }
+  
+  // Stagnation (too much order without chaos)
+  if (order > 0.8 && chaos < 0.3) {
+    // No score gain — stagnation
+  }
+  
+  // Update particles
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx; p.y += p.vy;
+    p.life -= 0.015;
+    if (p.type === 'chaos') { p.vx += (Math.random() - 0.5) * 0.5; p.vy += (Math.random() - 0.5) * 0.5; }
+    if (p.life <= 0) particles.splice(i, 1);
+  }
+  
+  // Update art pieces
+  for (let i = artPieces.length - 1; i >= 0; i--) {
+    artPieces[i].life -= dt;
+    if (artPieces[i].life <= 0) artPieces.splice(i, 1);
+  }
+}
+
+function spawnChaosParticle() {
+  const x = W * 0.25 + (Math.random() - 0.5) * W * 0.3;
+  const y = H/2 + (Math.random() - 0.5) * H * 0.6;
+  particles.push({ x, y, vx: (Math.random()-0.5)*4 + 1, vy: (Math.random()-0.5)*4, life: 1, type: 'chaos',
+    color: `hsl(${Math.random()*40}, 80%, ${40 + Math.random()*30}%)` });
+}
+
+function spawnOrderParticle() {
+  const x = W * 0.75 + (Math.random() - 0.5) * W * 0.3;
+  const y = H/2 + (Math.random() - 0.5) * H * 0.6;
+  particles.push({ x, y, vx: (Math.random()-0.5)*1 - 1, vy: (Math.random()-0.5)*1, life: 1, type: 'order',
+    color: `hsl(${200 + Math.random()*40}, 60%, ${40 + Math.random()*30}%)` });
+}
+
+function endGame() {
+  state = 'end';
+  const rating = score > 2000 ? 'Masterwork' : score > 1000 ? 'Harmonious' : score > 500 ? 'Discordant' : 'Silence';
+  const ol = document.getElementById('overlay');
+  ol.innerHTML = `
+    <h1 style="color:#d4af37">${rating}</h1>
+    <p style="color:#d4af37; font-size:28px">Score: ${Math.floor(score)}</p>
+    <p style="color:#888">Art created: ${artPieces.length} fragments</p>
+    <p style="color:#888">Peak harmony: ${(harmony * 100).toFixed(0)}%</p>
+    <p style="color:#555; font-style:italic; margin-top:15px">"Art is the highest task and truly metaphysical activity of this life."</p>
+    <button onclick="startGame()">Create Again</button>`;
+  ol.style.display = 'flex';
+}
+
+function draw(now) {
+  if (state === 'play') update(now);
+  if (state === 'menu') { requestAnimationFrame(draw); return; }
+  
+  X.clearRect(0, 0, W, H);
+  
+  // Split background
+  // Left: Dionysus (warm)
+  const leftGrad = X.createLinearGradient(0, 0, W/2, H);
+  leftGrad.addColorStop(0, `rgba(100,20,20,${0.3 + chaos * 0.4})`);
+  leftGrad.addColorStop(1, `rgba(60,10,10,${0.2 + chaos * 0.3})`);
+  X.fillStyle = leftGrad;
+  X.fillRect(0, 0, W/2, H);
+  
+  // Right: Apollo (cool)
+  const rightGrad = X.createLinearGradient(W/2, 0, W, H);
+  rightGrad.addColorStop(0, `rgba(20,20,80,${0.3 + order * 0.4})`);
+  rightGrad.addColorStop(1, `rgba(10,10,50,${0.2 + order * 0.3})`);
+  X.fillStyle = rightGrad;
+  X.fillRect(W/2, 0, W/2, H);
+  
+  // Center harmony zone
+  if (harmony > 0.05) {
+    const hGrad = X.createRadialGradient(W/2, H/2, 0, W/2, H/2, 200 * harmony);
+    hGrad.addColorStop(0, `rgba(255,215,0,${harmony * 0.3})`);
+    hGrad.addColorStop(1, 'rgba(255,215,0,0)');
+    X.fillStyle = hGrad;
+    X.beginPath();
+    X.arc(W/2, H/2, 200 * harmony, 0, Math.PI * 2);
+    X.fill();
+  }
+  
+  // Dividing line
+  X.strokeStyle = `rgba(255,255,255,${0.1 + harmony * 0.3})`;
+  X.lineWidth = 1;
+  X.setLineDash([5, 10]);
+  X.beginPath();
+  X.moveTo(W/2, 0);
+  X.lineTo(W/2, H);
+  X.stroke();
+  X.setLineDash([]);
+  
+  // Art pieces
+  for (const a of artPieces) {
+    const age = Math.min(a.life / 2, 1);
+    X.globalAlpha = age;
+    X.fillStyle = a.color;
+    X.beginPath();
+    X.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+    X.fill();
+  }
+  X.globalAlpha = 1;
+  
+  // Particles
+  for (const p of particles) {
+    X.globalAlpha = p.life;
+    X.fillStyle = p.color;
+    X.beginPath();
+    X.arc(p.x, p.y, 3, 0, Math.PI * 2);
+    X.fill();
+  }
+  X.globalAlpha = 1;
+  
+  // Overflow/stagnation flash
+  if (state === 'play') {
+    if (chaos > 0.8 && order < 0.3) {
+      X.fillStyle = `rgba(255,0,0,${(chaos - 0.8) * 0.5})`;
+      X.fillRect(0, 0, W, H);
+    }
+    if (order > 0.8 && chaos < 0.3) {
+      X.fillStyle = `rgba(128,128,128,${(order - 0.8) * 0.5})`;
+      X.fillRect(0, 0, W, H);
+    }
+  }
+  
+  // HUD
+  if (state === 'play') {
+    // Chaos meter (left)
+    X.fillStyle = '#222';
+    X.fillRect(20, H - 50, W * 0.35, 20);
+    X.fillStyle = `hsl(0, 80%, ${40 + chaos * 30}%)`;
+    X.fillRect(20, H - 50, W * 0.35 * chaos, 20);
+    X.fillStyle = '#e74c3c';
+    X.font = '14px Georgia';
+    X.textAlign = 'left';
+    X.fillText('🍷 Dionysus (A/D)', 20, H - 60);
+    
+    // Order meter (right)
+    X.fillStyle = '#222';
+    X.fillRect(W * 0.65 - 20, H - 50, W * 0.35, 20);
+    X.fillStyle = `hsl(210, 60%, ${40 + order * 30}%)`;
+    X.fillRect(W * 0.65 - 20, H - 50, W * 0.35 * order, 20);
+    X.fillStyle = '#3498db';
+    X.textAlign = 'right';
+    X.fillText('Apollo (←/→) 🏛️', W - 20, H - 60);
+    
+    // Center info
+    X.textAlign = 'center';
+    X.fillStyle = '#d4af37';
+    X.font = '16px Georgia';
+    X.fillText(`Harmony: ${(harmony * 100).toFixed(0)}%`, W/2, H - 55);
+    
+    // Timer + score
+    X.fillStyle = '#d4af37';
+    X.font = '22px Georgia';
+    X.textAlign = 'left';
+    X.fillText(`Score: ${Math.floor(score)}`, 15, 30);
+    X.textAlign = 'right';
+    X.fillText(`${Math.ceil(timeLeft)}s`, W - 15, 30);
+    
+    // Labels
+    X.globalAlpha = 0.5;
+    X.font = '36px Georgia';
+    X.textAlign = 'center';
+    X.fillStyle = '#e74c3c';
+    X.fillText('CHAOS', W * 0.25, H/2 - H * 0.35);
+    X.fillStyle = '#3498db';
+    X.fillText('ORDER', W * 0.75, H/2 - H * 0.35);
+    if (harmony > 0.3) {
+      X.fillStyle = '#d4af37';
+      X.font = `${20 + harmony * 16}px Georgia`;
+      X.fillText('ART', W/2, H/2 - H * 0.35);
+    }
+    X.globalAlpha = 1;
+  }
+  
+  requestAnimationFrame(draw);
+}
+
+requestAnimationFrame(draw);
+</script>
+</body>
+</html>

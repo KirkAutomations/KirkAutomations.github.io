@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Amor Fati</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a15; overflow: hidden; font-family: Georgia, serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+  #game { position: relative; }
+  #board { display: grid; gap: 12px; perspective: 1000px; }
+  .card { width: 120px; height: 150px; cursor: pointer; position: relative; transform-style: preserve-3d; transition: transform 0.5s ease, left 0.8s ease, top 0.8s ease; }
+  .card.flipped { transform: rotateY(180deg); }
+  .card.matched { transform: rotateY(180deg); }
+  .card.matched .front { box-shadow: 0 0 20px rgba(212,175,55,0.5); }
+  .card .front, .card .back { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 8px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+  .card .back { background: linear-gradient(135deg, #1a1a2e, #2a2a4e); border: 2px solid #333; transform: rotateY(0deg); }
+  .card .back::after { content: '🧔'; font-size: 36px; opacity: 0.3; }
+  .card .front { background: linear-gradient(135deg, #1a1a1a, #2a2a2a); border: 2px solid #d4af37; transform: rotateY(180deg); padding: 10px; }
+  .card .front .icon { font-size: 36px; margin-bottom: 8px; }
+  .card .front .label { font-size: 11px; color: #d4af37; text-align: center; }
+  #hud { position: fixed; top: 15px; left: 0; right: 0; display: flex; justify-content: center; gap: 40px; color: #888; font-size: 16px; z-index: 10; }
+  #hud span { color: #d4af37; }
+  #quote { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); color: #d4af37; font-style: italic; font-size: 16px; text-align: center; width: 80%; opacity: 0; transition: opacity 0.5s; }
+  #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; flex-direction: column; color: #d4af37; z-index: 20; text-align: center; }
+  #overlay h1 { font-size: 42px; margin-bottom: 15px; }
+  #overlay p { font-size: 18px; color: #888; margin: 5px; }
+  #overlay button { margin-top: 20px; padding: 15px 40px; font-size: 20px; background: transparent; border: 2px solid #d4af37; color: #d4af37; cursor: pointer; font-family: Georgia; }
+  #overlay button:hover { background: #d4af37; color: #000; }
+  .burst { position: fixed; pointer-events: none; width: 8px; height: 8px; border-radius: 50%; background: #ffd700; z-index: 15; }
+</style>
+</head>
+<body>
+<div id="hud">
+  <div>⏱️ <span id="timer">0</span>s</div>
+  <div>📜 <span id="pairs">0</span> / <span id="totalPairs">8</span></div>
+  <div>🔀 Chaos: <span id="chaosLevel">Calm</span></div>
+</div>
+<div id="game">
+  <div id="board"></div>
+</div>
+<div id="quote"></div>
+<div id="overlay">
+  <h1>Amor Fati</h1>
+  <p>"My formula for greatness: amor fati —</p>
+  <p>love your fate, even the shuffling cards."</p>
+  <button onclick="startGame(1)">Easy (4×4)</button>
+  <button onclick="startGame(2)">Medium (4×5)</button>
+  <button onclick="startGame(3)">Hard (5×6)</button>
+</div>
+
+<script>
+const concepts = [
+  { icon: '⚡', name: 'Übermensch', quote: '"Man is something that shall be overcome."' },
+  { icon: '♾️', name: 'Eternal Return', quote: '"The eternal hourglass is turned again and again."' },
+  { icon: '🔥', name: 'Will to Power', quote: '"What is good? All that heightens the feeling of power."' },
+  { icon: '💛', name: 'Amor Fati', quote: '"Love of fate — want nothing to be different."' },
+  { icon: '🍷', name: 'Dionysus', quote: '"One must have chaos to give birth to a dancing star."' },
+  { icon: '🏛️', name: 'Apollo', quote: '"The dream-artist of beautiful illusions."' },
+  { icon: '🕳️', name: 'Abyss', quote: '"If you gaze into the abyss, the abyss gazes also into you."' },
+  { icon: '🏔️', name: 'Zarathustra', quote: '"I teach you the Übermensch."' },
+  { icon: '🦁', name: 'The Lion', quote: '"I will! The spirit creates freedom."' },
+  { icon: '🐪', name: 'The Camel', quote: '"Thou shalt — says the great dragon."' },
+  { icon: '👶', name: 'The Child', quote: '"A new beginning, a sacred Yes."' },
+  { icon: '⭐', name: 'Dancing Star', quote: '"One must still have chaos in oneself."' },
+  { icon: '🗡️', name: 'Revaluation', quote: '"The revaluation of all values."' },
+  { icon: '🌅', name: 'Great Noon', quote: '"The hour of the great contempt."' },
+  { icon: '🎭', name: 'Masks', quote: '"Every profound spirit needs a mask."' },
+];
+
+let cards, flipped, matched, timerStart, timerInterval, pairsFound, totalPairsCount;
+let shuffleInterval, shuffleSpeed, difficulty;
+
+function startGame(diff) {
+  difficulty = diff;
+  document.getElementById('overlay').style.display = 'none';
+  
+  const configs = { 1: [4,4], 2: [4,5], 3: [5,6] };
+  const [cols, rows] = configs[diff];
+  const numPairs = (cols * rows) / 2;
+  totalPairsCount = numPairs;
+  
+  document.getElementById('totalPairs').textContent = numPairs;
+  
+  // Pick concepts
+  const picked = concepts.slice(0, numPairs);
+  let deck = [];
+  picked.forEach(c => { deck.push({...c}); deck.push({...c}); });
+  
+  // Shuffle
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  
+  // Setup board
+  const board = document.getElementById('board');
+  board.style.gridTemplateColumns = `repeat(${cols}, 120px)`;
+  board.innerHTML = '';
+  
+  cards = [];
+  deck.forEach((concept, idx) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="back"></div>
+      <div class="front">
+        <div class="icon">${concept.icon}</div>
+        <div class="label">${concept.name}</div>
+      </div>
+    `;
+    card.dataset.name = concept.name;
+    card.dataset.quote = concept.quote;
+    card.addEventListener('click', () => flipCard(card));
+    board.appendChild(card);
+    cards.push(card);
+  });
+  
+  flipped = [];
+  matched = 0;
+  pairsFound = 0;
+  document.getElementById('pairs').textContent = 0;
+  
+  // Start timer
+  timerStart = Date.now();
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    document.getElementById('timer').textContent = Math.floor((Date.now() - timerStart) / 1000);
+  }, 200);
+  
+  // Start shuffle chaos
+  shuffleSpeed = [0, 3000, 2000, 1200][diff];
+  clearInterval(shuffleInterval);
+  shuffleInterval = setInterval(shuffleUnmatched, shuffleSpeed);
+  updateChaosLabel();
+}
+
+function flipCard(card) {
+  if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
+  if (flipped.length >= 2) return;
+  
+  card.classList.add('flipped');
+  flipped.push(card);
+  
+  if (flipped.length === 2) {
+    setTimeout(checkMatch, 600);
+  }
+}
+
+function checkMatch() {
+  const [a, b] = flipped;
+  if (a.dataset.name === b.dataset.name) {
+    a.classList.add('matched');
+    b.classList.add('matched');
+    pairsFound++;
+    document.getElementById('pairs').textContent = pairsFound;
+    
+    // Show quote
+    const q = document.getElementById('quote');
+    q.textContent = a.dataset.quote;
+    q.style.opacity = 1;
+    setTimeout(() => q.style.opacity = 0, 3000);
+    
+    // Burst particles
+    burstAt(a); burstAt(b);
+    
+    if (pairsFound === totalPairsCount) winGame();
+  } else {
+    setTimeout(() => {
+      a.classList.remove('flipped');
+      b.classList.remove('flipped');
+    }, 800);
+  }
+  flipped = [];
+}
+
+function burstAt(el) {
+  const rect = el.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  for (let i = 0; i < 12; i++) {
+    const p = document.createElement('div');
+    p.className = 'burst';
+    p.style.left = cx + 'px';
+    p.style.top = cy + 'px';
+    const angle = (i / 12) * Math.PI * 2;
+    const dist = 40 + Math.random() * 60;
+    const tx = cx + Math.cos(angle) * dist;
+    const ty = cy + Math.sin(angle) * dist;
+    document.body.appendChild(p);
+    p.animate([
+      { left: cx + 'px', top: cy + 'px', opacity: 1 },
+      { left: tx + 'px', top: ty + 'px', opacity: 0 }
+    ], { duration: 600, easing: 'ease-out' });
+    setTimeout(() => p.remove(), 600);
+  }
+}
+
+function shuffleUnmatched() {
+  const unmatched = cards.filter(c => !c.classList.contains('matched') && !c.classList.contains('flipped'));
+  if (unmatched.length < 2) return;
+  
+  // Swap two random unmatched cards' positions in the grid
+  const board = document.getElementById('board');
+  const i = Math.floor(Math.random() * unmatched.length);
+  let j = Math.floor(Math.random() * unmatched.length);
+  if (j === i) j = (j + 1) % unmatched.length;
+  
+  const a = unmatched[i], b = unmatched[j];
+  const aIdx = Array.from(board.children).indexOf(a);
+  const bIdx = Array.from(board.children).indexOf(b);
+  
+  if (aIdx < bIdx) {
+    board.insertBefore(b, a);
+    const ref = board.children[bIdx];
+    if (ref) board.insertBefore(a, ref);
+    else board.appendChild(a);
+  } else {
+    board.insertBefore(a, b);
+    const ref = board.children[aIdx];
+    if (ref) board.insertBefore(b, ref);
+    else board.appendChild(b);
+  }
+}
+
+function updateChaosLabel() {
+  const labels = { 1: 'Gentle', 2: 'Restless', 3: 'Frenzy' };
+  document.getElementById('chaosLevel').textContent = labels[difficulty];
+}
+
+function winGame() {
+  clearInterval(timerInterval);
+  clearInterval(shuffleInterval);
+  const time = Math.floor((Date.now() - timerStart) / 1000);
+  setTimeout(() => {
+    const ol = document.getElementById('overlay');
+    ol.innerHTML = `<h1>Amor Fati ❤️</h1><p style="color:#d4af37; font-size:24px">Time: ${time}s</p><p>You embraced the chaos and found all pairs.</p><p style="color:#555; font-style:italic; margin-top:10px">"My formula for greatness: amor fati."</p><button onclick="startGame(1)">Easy</button><button onclick="startGame(2)">Medium</button><button onclick="startGame(3)">Hard</button>`;
+    ol.style.display = 'flex';
+  }, 1000);
+}
+
+// Show menu
+document.getElementById('overlay').style.display = 'flex';
+</script>
+</body>
+</html>

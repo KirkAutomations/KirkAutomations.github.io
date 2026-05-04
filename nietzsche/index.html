@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nietzsche Games — 10 Games for $0.17 | A Philosophical Arcade</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,700;1,400&display=swap');
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    background: #0a0a0f;
+    color: #ccc;
+    font-family: 'EB Garamond', Georgia, serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 20% 50%, rgba(100,0,150,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(150,100,0,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(0,100,150,0.05) 0%, transparent 50%);
+    z-index: -1;
+    animation: bgShift 20s ease-in-out infinite alternate;
+  }
+  @keyframes bgShift {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(30deg); }
+  }
+  
+  header {
+    text-align: center;
+    padding: 60px 20px 30px;
+    position: relative;
+  }
+  
+  header h1 {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: clamp(36px, 6vw, 72px);
+    color: #d4af37;
+    text-shadow: 0 0 40px rgba(212,175,55,0.3);
+    letter-spacing: 4px;
+    margin-bottom: 15px;
+  }
+  
+  header .subtitle {
+    font-size: clamp(16px, 2.5vw, 22px);
+    color: #888;
+    font-style: italic;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  
+  header .meta {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 24px 60px;
+  }
+  
+  .card {
+    background: linear-gradient(135deg, rgba(20,20,30,0.9), rgba(15,15,25,0.95));
+    border: 1px solid #222;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    position: relative;
+  }
+  
+  .card:hover {
+    border-color: #d4af37;
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(212,175,55,0.15);
+  }
+  
+  .card-icon {
+    font-size: 48px;
+    padding: 30px 24px 10px;
+    text-align: center;
+  }
+  
+  .card-body {
+    padding: 0 24px 24px;
+  }
+  
+  .card-body h2 {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 22px;
+    color: #d4af37;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+  
+  .card-body .genre {
+    font-size: 13px;
+    color: #888;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+  
+  .card-body p {
+    font-size: 15px;
+    color: #999;
+    line-height: 1.5;
+    text-align: center;
+  }
+  
+  .card-body .controls {
+    margin-top: 12px;
+    font-size: 12px;
+    color: #555;
+    text-align: center;
+  }
+  
+  .card::after {
+    content: 'PLAY ▸';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 12px;
+    background: linear-gradient(transparent, rgba(212,175,55,0.1));
+    color: #d4af37;
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 3px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .card:hover::after { opacity: 1; }
+  
+  footer {
+    text-align: center;
+    padding: 30px;
+    color: #333;
+    font-size: 14px;
+    border-top: 1px solid #1a1a1a;
+  }
+  
+  footer a { color: #666; }
+  
+  .quote-banner {
+    text-align: center;
+    padding: 20px 40px;
+    color: #555;
+    font-style: italic;
+    font-size: 18px;
+    max-width: 700px;
+    margin: 0 auto 10px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⚡ NIETZSCHE GAMES</h1>
+  <div class="subtitle">"One must still have chaos in oneself to give birth to a dancing star."</div>
+  <div class="meta">10 philosophical games · Generated for $0.17 · HTML5 · No install required</div>
+</header>
+
+<div class="quote-banner">"I say unto you: one must still have chaos in oneself to be able to give birth to a dancing star."<br>— Thus Spoke Zarathustra</div>
+
+<div class="grid">
+  
+  <a class="card" href="eternal-recurrence-runner.html">
+    <div class="card-icon">🏃‍♂️</div>
+    <div class="card-body">
+      <h2>Eternal Recurrence</h2>
+      <div class="genre">Endless Runner</div>
+      <p>Run through eternity. Every 500 points, the demon asks: would you live this again? Say yes for power. Say no for comfort.</p>
+      <div class="controls">Space / Click to jump · Y / N at recurrence</div>
+    </div>
+  </a>
+  
+  <a class="card" href="ubermensch-clicker.html">
+    <div class="card-icon">⚡</div>
+    <div class="card-body">
+      <h2>Will to Power</h2>
+      <div class="genre">Idle Clicker</div>
+      <p>Ascend from Last Man to Übermensch. Click for Will. Buy Self-Overcoming, Amor Fati, and Dionysian Frenzy. Transcend at 100K.</p>
+      <div class="controls">Click the orb · Buy upgrades on the right</div>
+    </div>
+  </a>
+  
+  <a class="card" href="god-is-dead-whack.html">
+    <div class="card-icon">🔨</div>
+    <div class="card-body">
+      <h2>God is Dead</h2>
+      <div class="genre">Whack-a-Mole</div>
+      <p>Smash false idols with Nietzsche's hammer. Don't hit the genuine things — dancing stars, children, sunrises. Combos and quotes.</p>
+      <div class="controls">Click idols to smash · Avoid blue items</div>
+    </div>
+  </a>
+  
+  <a class="card" href="abyss-gazer.html">
+    <div class="card-icon">👁️</div>
+    <div class="card-body">
+      <h2>Abyss Gazer</h2>
+      <div class="genre">Horror Puzzle</div>
+      <p>The abyss gazes back. Collect orbiting truth fragments while a giant eye tracks you. Tendrils reach. Sanity drains. 5 levels.</p>
+      <div class="controls">Mouse cursor is your gaze · Stay away from the center</div>
+    </div>
+  </a>
+  
+  <a class="card" href="last-man-survival.html">
+    <div class="card-icon">🌟</div>
+    <div class="card-body">
+      <h2>The Last Man</h2>
+      <div class="genre">Survival Arena</div>
+      <p>You're a colorful individual in a grey herd. Project Will to convert them. They shuffle back. Comfort Zones slow you. Don't conform.</p>
+      <div class="controls">WASD to move · Click to blast Will · Collect power-ups</div>
+    </div>
+  </a>
+  
+  <a class="card" href="dancing-star-rhythm.html">
+    <div class="card-icon">⭐</div>
+    <div class="card-body">
+      <h2>Dancing Star</h2>
+      <div class="genre">Rhythm Game</div>
+      <p>Chaotic notes wobble and shift lanes. Hit them to birth a constellation. Higher combos tame the chaos. 2 minutes of creation.</p>
+      <div class="controls">D F J K keys · Hit notes at the line · Sound on</div>
+    </div>
+  </a>
+  
+  <a class="card" href="beyond-good-and-evil.html">
+    <div class="card-icon">⚖️</div>
+    <div class="card-body">
+      <h2>Beyond Good and Evil</h2>
+      <div class="genre">Moral Choice</div>
+      <p>10 dilemmas. Three choices each: Good, Evil, or Beyond. Only the Nietzschean path raises your Authenticity flame. What nature are you?</p>
+      <div class="controls">Click your choice · Watch the flame</div>
+    </div>
+  </a>
+  
+  <a class="card" href="zarathustra-mountain.html">
+    <div class="card-icon">🏔️</div>
+    <div class="card-body">
+      <h2>Thus Climbed Zarathustra</h2>
+      <div class="genre">Platformer</div>
+      <p>Climb from Cave through Forest to Summit. Collect aphorisms. Wall-jump. Avoid the fall. Reach the sunrise to transcend.</p>
+      <div class="controls">Arrow keys / WASD · Space to jump · Wall-jump off edges</div>
+    </div>
+  </a>
+  
+  <a class="card" href="dionysus-vs-apollo.html">
+    <div class="card-icon">🎭</div>
+    <div class="card-body">
+      <h2>Dionysus vs Apollo</h2>
+      <div class="genre">Balance Game</div>
+      <p>Generate chaos (left) and shape order (right). Balance them to create art in the center. 90 seconds. Overflow or stagnate and lose.</p>
+      <div class="controls">A/D for chaos · ←/→ for order · Find the balance</div>
+    </div>
+  </a>
+  
+  <a class="card" href="amor-fati-memory.html">
+    <div class="card-icon">🃏</div>
+    <div class="card-body">
+      <h2>Amor Fati</h2>
+      <div class="genre">Memory / Cards</div>
+      <p>Match philosophical concepts. The twist: unmatched cards shuffle positions while you play. Embrace the chaos. Love your fate.</p>
+      <div class="controls">Click to flip · 3 difficulty levels · Race the clock</div>
+    </div>
+  </a>
+  
+</div>
+
+<footer>
+  Built for <b style="color:#d4af37">$0.17</b> — Qwen 2.5 Coder 14B on a $0.16/hr RTX 3090 (Vast.ai) · Polished by c_Callicles ⚡<br>
+  <span style="color:#444">AI generation: $0.01 | GPU rental: $0.16 | Claude Opus equivalent: ~$8 | Savings: 97%</span><br>
+  <a href="https://github.com/KirkAutomations/KirkAutomations.github.io/tree/main/nietzsche">Source</a> · <a href="https://kirkautomations.github.io">Kirk Automations</a>
+</footer>
+
+<script>
+// Floating particles
+const canvas = document.createElement('canvas');
+canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:-1';
+document.body.appendChild(canvas);
+const ctx = canvas.getContext('2d');
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+addEventListener('resize', () => { canvas.width = innerWidth; canvas.height = innerHeight; });
+
+const stars = [];
+for (let i = 0; i < 60; i++) stars.push({ x: Math.random()*innerWidth, y: Math.random()*innerHeight, s: Math.random()*1.5+0.5, v: Math.random()*0.2+0.05, b: Math.random() });
+
+function drawStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (const s of stars) {
+    s.y -= s.v;
+    if (s.y < 0) { s.y = canvas.height; s.x = Math.random() * canvas.width; }
+    const bright = 0.2 + 0.3 * Math.sin(Date.now()/2000 + s.b * 10);
+    ctx.globalAlpha = bright;
+    ctx.fillStyle = '#d4af37';
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.s, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(drawStars);
+}
+drawStars();
+</script>
+</body>
+</html>

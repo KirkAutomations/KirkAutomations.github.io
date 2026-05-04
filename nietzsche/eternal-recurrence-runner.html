@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Eternal Recurrence</title>
+<style>
+  * { margin: 0; padding: 0; }
+  body { background: #0d0d1a; overflow: hidden; }
+  canvas { display: block; }
+  #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; flex-direction: column; color: #d4af37; font-family: Georgia, serif; z-index: 10; }
+  #overlay h1 { font-size: 48px; margin-bottom: 10px; }
+  #overlay .quote { font-size: 20px; font-style: italic; color: #aaa; margin: 20px 40px; text-align: center; }
+  #overlay .choice { margin-top: 20px; }
+  #overlay button { padding: 15px 40px; font-size: 20px; margin: 0 10px; border: 2px solid #d4af37; background: transparent; color: #d4af37; cursor: pointer; font-family: Georgia; transition: all 0.3s; }
+  #overlay button:hover { background: #d4af37; color: #0d0d1a; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="overlay">
+  <h1 id="olTitle">Eternal Recurrence</h1>
+  <div class="quote" id="olQuote"></div>
+  <div class="choice" id="olChoice"></div>
+</div>
+<script>
+const C = document.getElementById('c');
+const X = C.getContext('2d');
+let W, H;
+function resize() { W = C.width = innerWidth; H = C.height = innerHeight; }
+resize();
+addEventListener('resize', resize);
+
+const quotes = [
+  '"What if a demon said: This life, you must live once more and innumerable times more?"',
+  '"The eternal hourglass of existence is turned upside down again and again."',
+  '"To redeem the past and to transform every It was into a Thus I willed it."',
+  '"My formula for greatness: amor fati."',
+  '"Was that life? Well then! Once more!"',
+];
+
+let state = 'title'; // title, play, recur, dead
+let score = 0, speed = 4, recurrences = 0, multiplier = 1;
+let groundY, runner, obstacles = [], stars = [], particles = [], bgStars = [];
+let scrollX = 0, mountainOffset = 0;
+
+// Background stars
+for (let i = 0; i < 200; i++) bgStars.push({ x: Math.random() * 2000, y: Math.random() * 0.6, s: Math.random() * 2 + 0.5, b: Math.random() });
+
+function init() {
+  groundY = H * 0.75;
+  runner = { x: 120, y: groundY, vy: 0, w: 24, h: 48, onGround: true, frame: 0 };
+  obstacles = []; stars = []; particles = [];
+  score = 0; speed = 4; recurrences = 0; multiplier = 1;
+}
+
+function jump() {
+  if (runner.onGround) { runner.vy = -14; runner.onGround = false; }
+}
+
+// Input
+addEventListener('keydown', e => {
+  if (e.code === 'Space') { e.preventDefault(); if (state === 'play') jump(); else if (state === 'title') { init(); state = 'play'; } }
+  if (state === 'recur') {
+    if (e.key === 'y' || e.key === 'Y') { multiplier += 0.5; state = 'play'; hideOverlay(); }
+    if (e.key === 'n' || e.key === 'N') { speed = Math.max(3, speed - 1); score = Math.floor(score * 0.5); state = 'play'; hideOverlay(); }
+  }
+  if (state === 'dead' && e.code === 'Space') { init(); state = 'play'; hideOverlay(); }
+});
+addEventListener('mousedown', () => { if (state === 'play') jump(); else if (state === 'title') { init(); state = 'play'; } });
+addEventListener('touchstart', () => { if (state === 'play') jump(); else if (state === 'title') { init(); state = 'play'; } });
+
+function showOverlay(title, quote, choices) {
+  const ol = document.getElementById('overlay');
+  document.getElementById('olTitle').textContent = title;
+  document.getElementById('olQuote').textContent = quote;
+  document.getElementById('olChoice').innerHTML = choices;
+  ol.style.display = 'flex';
+}
+function hideOverlay() { document.getElementById('overlay').style.display = 'none'; }
+
+function spawnObstacle() {
+  const type = Math.random() < 0.4 ? 'gap' : 'tomb';
+  obstacles.push({ x: W + 50, type, w: type === 'gap' ? 80 : 30, h: type === 'gap' ? 200 : 40 + Math.random() * 30 });
+}
+function spawnStar() {
+  stars.push({ x: W + 20, y: groundY - 60 - Math.random() * 100, r: 8, pulse: Math.random() * Math.PI * 2 });
+}
+
+function update() {
+  if (state !== 'play') return;
+  
+  runner.frame += 0.2;
+  runner.vy += 0.7;
+  runner.y += runner.vy;
+  if (runner.y >= groundY) { runner.y = groundY; runner.vy = 0; runner.onGround = true; }
+
+  scrollX += speed;
+  mountainOffset += speed * 0.3;
+
+  // Spawn
+  if (Math.random() < 0.015) spawnObstacle();
+  if (Math.random() < 0.02) spawnStar();
+
+  // Update obstacles
+  for (let i = obstacles.length - 1; i >= 0; i--) {
+    obstacles[i].x -= speed;
+    if (obstacles[i].x + obstacles[i].w < 0) obstacles.splice(i, 1);
+  }
+
+  // Update stars
+  for (let i = stars.length - 1; i >= 0; i--) {
+    stars[i].x -= speed;
+    stars[i].pulse += 0.1;
+    if (stars[i].x < -20) stars.splice(i, 1);
+    // Collect
+    const dx = runner.x + runner.w/2 - stars[i]?.x;
+    const dy = runner.y - runner.h/2 - stars[i]?.y;
+    if (stars[i] && Math.hypot(dx, dy) < 25) {
+      score += Math.floor(10 * multiplier);
+      for (let j = 0; j < 8; j++) particles.push({ x: stars[i].x, y: stars[i].y, vx: (Math.random()-0.5)*6, vy: (Math.random()-0.5)*6, life: 1, color: '#ffd700' });
+      stars.splice(i, 1);
+    }
+  }
+
+  // Collision
+  for (const ob of obstacles) {
+    if (ob.type === 'tomb') {
+      const ox = ob.x, oy = groundY - ob.h;
+      if (runner.x + runner.w > ox && runner.x < ox + ob.w && runner.y > oy) {
+        die(); return;
+      }
+    } else if (ob.type === 'gap') {
+      if (runner.x + runner.w > ob.x && runner.x < ob.x + ob.w && runner.onGround) {
+        die(); return;
+      }
+    }
+  }
+
+  // Particles
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx; p.y += p.vy; p.life -= 0.02;
+    if (p.life <= 0) particles.splice(i, 1);
+  }
+
+  // Runner trail
+  if (Math.random() < 0.5) particles.push({ x: runner.x, y: runner.y, vx: -1 - Math.random(), vy: (Math.random()-0.5)*2, life: 0.5, color: '#8b00ff' });
+
+  // Score
+  score += 0.1 * multiplier;
+
+  // Recurrence check
+  if (Math.floor(score) > 0 && Math.floor(score) % 500 === 0 && Math.floor(score) !== Math.floor(score - 0.1 * multiplier)) {
+    recurrences++;
+    state = 'recur';
+    speed += 0.5;
+    showOverlay('Eternal Recurrence #' + recurrences, quotes[recurrences % quotes.length],
+      '<button onclick="multiplier+=0.5;state=\'play\';hideOverlay()">Y — Amor Fati (x' + (multiplier+0.5).toFixed(1) + ')</button>' +
+      '<button onclick="speed=Math.max(3,speed-1);score=Math.floor(score*0.5);state=\'play\';hideOverlay()">N — Reject (halve score)</button>');
+  }
+}
+
+function die() {
+  state = 'dead';
+  for (let i = 0; i < 30; i++) particles.push({ x: runner.x, y: runner.y - runner.h/2, vx: (Math.random()-0.5)*10, vy: (Math.random()-0.5)*10, life: 1, color: '#ff0000' });
+  showOverlay('DEATH', `Final Score: ${Math.floor(score)} | Recurrences: ${recurrences}`, '<button onclick="init();state=\'play\';hideOverlay()">Return Eternally (Space)</button>');
+}
+
+function draw() {
+  // Sky gradient
+  const sky = X.createLinearGradient(0, 0, 0, H);
+  sky.addColorStop(0, '#0d0d1a');
+  sky.addColorStop(0.4, '#1a0a2e');
+  sky.addColorStop(0.7, '#2d1b4e');
+  sky.addColorStop(1, '#1a0a2e');
+  X.fillStyle = sky;
+  X.fillRect(0, 0, W, H);
+
+  // Stars
+  for (const s of bgStars) {
+    const sx = ((s.x * W / 2000) - mountainOffset * (0.05 + s.y * 0.1) % W + W) % W;
+    const sy = s.y * groundY;
+    const bright = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(Date.now() / 1000 + s.b * 10));
+    X.globalAlpha = bright;
+    X.fillStyle = '#fff';
+    X.beginPath();
+    X.arc(sx, sy, s.s, 0, Math.PI * 2);
+    X.fill();
+  }
+  X.globalAlpha = 1;
+
+  // Mountains (parallax)
+  X.fillStyle = '#150a28';
+  X.beginPath();
+  X.moveTo(0, groundY);
+  for (let i = 0; i <= W; i += 60) {
+    const mh = 80 + 60 * Math.sin((i + mountainOffset * 0.5) * 0.005) + 40 * Math.sin((i + mountainOffset * 0.5) * 0.012);
+    X.lineTo(i, groundY - mh);
+  }
+  X.lineTo(W, groundY);
+  X.fill();
+
+  X.fillStyle = '#1f0f35';
+  X.beginPath();
+  X.moveTo(0, groundY);
+  for (let i = 0; i <= W; i += 40) {
+    const mh = 50 + 40 * Math.sin((i + mountainOffset) * 0.008) + 30 * Math.sin((i + mountainOffset) * 0.02);
+    X.lineTo(i, groundY - mh);
+  }
+  X.lineTo(W, groundY);
+  X.fill();
+
+  // Ground
+  X.fillStyle = '#1a1a2a';
+  X.fillRect(0, groundY + runner.h, W, H - groundY);
+  X.strokeStyle = '#333';
+  X.lineWidth = 2;
+  X.beginPath();
+  X.moveTo(0, groundY + runner.h);
+  X.lineTo(W, groundY + runner.h);
+  X.stroke();
+
+  // Obstacles
+  for (const ob of obstacles) {
+    if (ob.type === 'tomb') {
+      X.fillStyle = '#444';
+      const th = ob.h;
+      X.fillRect(ob.x, groundY - th, ob.w, th + runner.h);
+      X.fillStyle = '#555';
+      X.fillRect(ob.x - 4, groundY - th, ob.w + 8, 6);
+      // Cross
+      X.fillStyle = '#666';
+      X.fillRect(ob.x + ob.w/2 - 2, groundY - th + 8, 4, 15);
+      X.fillRect(ob.x + ob.w/2 - 6, groundY - th + 12, 12, 4);
+    } else {
+      // Gap
+      X.fillStyle = '#000';
+      X.fillRect(ob.x, groundY + runner.h, ob.w, H - groundY);
+    }
+  }
+
+  // Collectible stars
+  for (const s of stars) {
+    const glow = 0.6 + 0.4 * Math.sin(s.pulse);
+    X.globalAlpha = glow;
+    X.fillStyle = '#ffd700';
+    X.beginPath();
+    drawStar(X, s.x, s.y, 5, s.r, s.r * 0.4);
+    X.fill();
+    X.globalAlpha = 0.3 * glow;
+    X.beginPath();
+    X.arc(s.x, s.y, s.r * 2, 0, Math.PI * 2);
+    X.fill();
+    X.globalAlpha = 1;
+  }
+
+  // Particles
+  for (const p of particles) {
+    X.globalAlpha = p.life;
+    X.fillStyle = p.color;
+    X.beginPath();
+    X.arc(p.x, p.y, 2 + p.life * 3, 0, Math.PI * 2);
+    X.fill();
+  }
+  X.globalAlpha = 1;
+
+  // Runner
+  if (state !== 'title') {
+    const rx = runner.x, ry = runner.y;
+    // Body silhouette
+    X.fillStyle = '#222';
+    X.fillRect(rx, ry - runner.h, runner.w, runner.h);
+    // Cape
+    const capeWave = Math.sin(runner.frame * 2) * 8;
+    X.fillStyle = '#8b00ff';
+    X.beginPath();
+    X.moveTo(rx + runner.w, ry - runner.h * 0.8);
+    X.quadraticCurveTo(rx + runner.w + 20 + capeWave, ry - runner.h * 0.5, rx + runner.w + 10, ry);
+    X.lineTo(rx + runner.w, ry);
+    X.fill();
+    // Head
+    X.fillStyle = '#333';
+    X.beginPath();
+    X.arc(rx + runner.w/2, ry - runner.h - 8, 10, 0, Math.PI * 2);
+    X.fill();
+  }
+
+  // HUD
+  X.fillStyle = '#d4af37';
+  X.font = '20px Georgia';
+  X.fillText(`Score: ${Math.floor(score)}`, 15, 30);
+  X.fillText(`x${multiplier.toFixed(1)}`, 15, 55);
+  X.fillText(`Recurrences: ${recurrences}`, W - 200, 30);
+
+  // Title screen
+  if (state === 'title') {
+    X.fillStyle = 'rgba(0,0,0,0.5)';
+    X.fillRect(0, 0, W, H);
+    X.fillStyle = '#d4af37';
+    X.font = '56px Georgia';
+    X.textAlign = 'center';
+    X.fillText('Eternal Recurrence', W/2, H/2 - 40);
+    X.font = '22px Georgia';
+    X.fillStyle = '#aaa';
+    X.fillText('"What if you had to live this life again and again?"', W/2, H/2 + 10);
+    X.fillStyle = '#d4af37';
+    X.font = '18px Georgia';
+    X.fillText('Press SPACE or Click to Begin', W/2, H/2 + 60);
+    X.textAlign = 'left';
+  }
+
+  requestAnimationFrame(draw);
+}
+
+function drawStar(ctx, cx, cy, spikes, outerR, innerR) {
+  let rot = -Math.PI / 2, step = Math.PI / spikes;
+  ctx.moveTo(cx + Math.cos(rot) * outerR, cy + Math.sin(rot) * outerR);
+  for (let i = 0; i < spikes; i++) {
+    ctx.lineTo(cx + Math.cos(rot) * outerR, cy + Math.sin(rot) * outerR);
+    rot += step;
+    ctx.lineTo(cx + Math.cos(rot) * innerR, cy + Math.sin(rot) * innerR);
+    rot += step;
+  }
+  ctx.closePath();
+}
+
+init();
+draw();
+</script>
+</body>
+</html>

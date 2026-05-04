@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Beyond Good and Evil</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #1a1410; font-family: Georgia, serif; overflow: hidden; }
+  #game { width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; }
+  #card { width: 700px; max-width: 90vw; background: #f4e8c1; border-radius: 4px; padding: 50px 40px 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); position: relative; transform: perspective(800px) rotateY(0deg); transition: transform 0.6s, opacity 0.6s; }
+  #card.turning { transform: perspective(800px) rotateY(90deg); opacity: 0.3; }
+  #pageNum { position: absolute; top: 15px; right: 20px; color: #a08060; font-size: 14px; }
+  #scenario { font-size: 22px; color: #2a1a0a; line-height: 1.6; margin-bottom: 30px; text-align: center; }
+  #illustration { text-align: center; font-size: 64px; margin: 15px 0 25px; }
+  .choices { display: flex; flex-direction: column; gap: 12px; }
+  .choice { padding: 16px 20px; border: 2px solid; border-radius: 6px; cursor: pointer; font-size: 17px; font-family: Georgia; transition: all 0.3s; text-align: left; }
+  .choice:hover { transform: translateX(5px); }
+  .choice.good { border-color: #ccc; color: #555; background: rgba(255,255,255,0.5); }
+  .choice.good:hover { background: rgba(255,255,255,0.9); border-color: #999; }
+  .choice.evil { border-color: #c44; color: #922; background: rgba(255,200,200,0.3); }
+  .choice.evil:hover { background: rgba(255,200,200,0.6); border-color: #a33; }
+  .choice.beyond { border-color: #c9a030; color: #7a5a10; background: rgba(255,230,150,0.3); }
+  .choice.beyond:hover { background: rgba(255,230,150,0.6); border-color: #a08020; }
+  #flame { position: fixed; bottom: 20px; right: 30px; text-align: center; }
+  #flameIcon { font-size: 48px; transition: all 0.5s; }
+  #flameLabel { font-size: 12px; color: #a08060; margin-top: 5px; }
+  #quote { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.85); color: #d4af37; padding: 20px 40px; text-align: center; font-style: italic; font-size: 16px; transform: translateY(100%); transition: transform 0.5s; }
+  #quote.show { transform: translateY(0); }
+  #result { text-align: center; }
+  #result h1 { font-size: 36px; color: #2a1a0a; margin-bottom: 15px; }
+  #result p { font-size: 18px; color: #555; margin: 8px 0; }
+  #result .score { font-size: 48px; color: #c9a030; margin: 20px 0; }
+  #result button { padding: 15px 40px; font-size: 18px; background: #c9a030; color: #fff; border: none; cursor: pointer; font-family: Georgia; border-radius: 4px; margin-top: 15px; }
+</style>
+</head>
+<body>
+<div id="game">
+  <div id="card"></div>
+</div>
+<div id="flame">
+  <div id="flameIcon">🔥</div>
+  <div id="flameLabel">Authenticity</div>
+</div>
+<div id="quote"></div>
+
+<script>
+const scenarios = [
+  {
+    text: "Your closest friend confides they've been cheating on their partner. They beg you to keep silent.",
+    illustration: "🤫",
+    good: { label: "Promise silence to protect their feelings", text: "You preserve comfort at truth's expense." },
+    evil: { label: "Expose them publicly to punish dishonesty", text: "Vengeance disguised as justice." },
+    beyond: { label: "Tell them honestly: confess or the guilt will consume you", text: "The truth need not be cruel to be direct." },
+    quote: '"The most common lie is the one told to oneself."'
+  },
+  {
+    text: "A homeless man asks for money. You have plenty to spare.",
+    illustration: "🪙",
+    good: { label: "Give generously — it's the charitable thing to do", text: "Charity that asks nothing of the recipient." },
+    evil: { label: "Walk past — survival of the fittest", text: "Cruelty dressed in nature's vocabulary." },
+    beyond: { label: "Sit down, learn his name, ask what he actually needs", text: "To see the person, not the category." },
+    quote: '"Whoever despises himself still esteems the despiser within."'
+  },
+  {
+    text: "You discover your employer is committing fraud. Reporting it will cost you your career.",
+    illustration: "⚖️",
+    good: { label: "Report immediately — duty demands it", text: "Following the rules because they are rules." },
+    evil: { label: "Stay quiet and leverage the knowledge for promotion", text: "Power through complicity." },
+    beyond: { label: "Confront your employer directly before deciding", text: "Not hiding behind institutions. Facing the thing yourself." },
+    quote: '"He who cannot obey himself will be commanded."'
+  },
+  {
+    text: "Your child is being bullied at school. The school does nothing.",
+    illustration: "👊",
+    good: { label: "File formal complaints through proper channels", text: "Faith in systems that have already failed you." },
+    evil: { label: "Teach your child to hurt the bully back harder", text: "Creating another bully." },
+    beyond: { label: "Teach your child to understand the bully's weakness — and rise above it", text: "Strength is not the absence of pain but the mastery of it." },
+    quote: '"That which does not kill us makes us stronger."'
+  },
+  {
+    text: "You're offered a prestigious but soul-crushing career, or you can pursue your passion for barely any pay.",
+    illustration: "🔥",
+    good: { label: "Take the prestigious job — provide for your family responsibly", text: "Sacrifice dressed as duty." },
+    evil: { label: "Take the money and buy the toys you've always wanted", text: "Comfort as purpose." },
+    beyond: { label: "Pursue the passion and accept the struggle that comes with it", text: "To live is to create. What is a life without your work?" },
+    quote: '"He who has a why to live can bear almost any how."'
+  },
+  {
+    text: "A criminal who murdered someone you love has served their sentence and wants forgiveness.",
+    illustration: "⛓️",
+    good: { label: "Forgive them — everyone deserves a second chance", text: "Forgiveness as performance, not feeling." },
+    evil: { label: "Refuse and make sure they never find peace", text: "Becoming the monster you despise." },
+    beyond: { label: "Neither forgive nor punish — let go for YOUR sake, not theirs", text: "Freedom is not forgiving the chain. It is no longer wearing it." },
+    quote: '"Whoever fights monsters should see to it that he does not become a monster."'
+  },
+  {
+    text: "You learn a devastating truth about someone you admire. Publishing it would make you famous.",
+    illustration: "📰",
+    good: { label: "Suppress it — protect the person's reputation", text: "Loyalty that fears the truth." },
+    evil: { label: "Publish immediately for maximum personal gain", text: "Others' ruin as your stepping stone." },
+    beyond: { label: "Tell THEM what you know. Let them decide what happens next", text: "Honesty without exploitation. Rare among the ambitious." },
+    quote: '"There are no facts, only interpretations."'
+  },
+  {
+    text: "Your elderly parent wants to stay home alone, but it's clearly unsafe. They refuse help.",
+    illustration: "🏠",
+    good: { label: "Override their wishes — force them into care for safety", text: "Love that doesn't trust." },
+    evil: { label: "Let them fall — they made their choice", text: "Abandonment in freedom's clothing." },
+    beyond: { label: "Respect their autonomy. Visit daily. Make the home safer quietly", text: "To honor someone's will, even when it frightens you." },
+    quote: '"The surest way to corrupt a youth is to instruct him to hold in higher esteem those who think alike than those who think differently."'
+  },
+  {
+    text: "Society tells you success means wealth, status, and comfort. You feel empty despite having all three.",
+    illustration: "🏆",
+    good: { label: "Volunteer and donate — give back to feel meaning", text: "Buying meaning with the same currency that emptied you." },
+    evil: { label: "Pursue more — maybe the next thing will fill the void", text: "The hamster wheel, gilded." },
+    beyond: { label: "Tear it all down. Start from nothing. Build what YOU value", text: "Destruction in service of creation. The lion becomes the child." },
+    quote: '"You have your way. I have my way. As for the right way, the correct way, and the only way, it does not exist."'
+  },
+  {
+    text: "You stand at the end of your life. You can live it all again — exactly the same — for eternity. Do you say yes?",
+    illustration: "♾️",
+    good: { label: "Yes, because life is a gift and we should be grateful", text: "Gratitude without examination." },
+    evil: { label: "No — this life was suffering and I want it to end", text: "To reject existence is to have never truly lived it." },
+    beyond: { label: "YES — not because it was good, but because it was MINE", text: "Amor fati. The love of fate. Every wound, every joy, every mundane Tuesday — all of it, again and again, because it is yours." },
+    quote: '"My formula for greatness in a human being is amor fati: that one wants nothing to be different, not forward, not backward, not in all eternity."'
+  }
+];
+
+let currentScene = -1;
+let authenticity = 5;
+let choices = [];
+
+function showScene(idx) {
+  if (idx >= scenarios.length) { showResult(); return; }
+  currentScene = idx;
+  const s = scenarios[idx];
+  const card = document.getElementById('card');
+  card.classList.add('turning');
+  
+  setTimeout(() => {
+    card.innerHTML = `
+      <div id="pageNum">${idx + 1} / ${scenarios.length}</div>
+      <div id="illustration">${s.illustration}</div>
+      <div id="scenario">${s.text}</div>
+      <div class="choices">
+        <div class="choice good" onclick="choose('good')">${s.good.label}</div>
+        <div class="choice beyond" onclick="choose('beyond')">${s.beyond.label}</div>
+        <div class="choice evil" onclick="choose('evil')">${s.evil.label}</div>
+      </div>
+    `;
+    card.classList.remove('turning');
+  }, 600);
+  
+  document.getElementById('quote').classList.remove('show');
+}
+
+function choose(type) {
+  const s = scenarios[currentScene];
+  const response = s[type];
+  choices.push(type);
+  
+  if (type === 'beyond') authenticity += 1;
+  else authenticity = Math.max(0, authenticity - 0.5);
+  
+  updateFlame();
+  
+  // Show response + quote
+  const card = document.getElementById('card');
+  const choiceEls = card.querySelectorAll('.choice');
+  choiceEls.forEach(el => {
+    if (!el.classList.contains(type)) el.style.opacity = '0.3';
+    else el.style.borderWidth = '3px';
+  });
+  
+  // Show response text
+  const responseDiv = document.createElement('div');
+  responseDiv.style.cssText = 'margin-top:20px; padding:15px; font-style:italic; color:#666; text-align:center; font-size:16px;';
+  responseDiv.textContent = response.text;
+  card.appendChild(responseDiv);
+  
+  // Show quote
+  const q = document.getElementById('quote');
+  q.textContent = s.quote + ' — Nietzsche';
+  q.classList.add('show');
+  
+  // Next scene after delay
+  setTimeout(() => showScene(currentScene + 1), 4000);
+}
+
+function updateFlame() {
+  const icon = document.getElementById('flameIcon');
+  const size = 32 + authenticity * 6;
+  icon.style.fontSize = size + 'px';
+  icon.style.filter = authenticity > 8 ? 'drop-shadow(0 0 15px gold)' : authenticity < 3 ? 'grayscale(0.8)' : '';
+}
+
+function showResult() {
+  const beyondCount = choices.filter(c => c === 'beyond').length;
+  const rating = beyondCount >= 8 ? 'Übermensch' : beyondCount >= 6 ? 'Free Spirit' : beyondCount >= 4 ? 'Seeker' : beyondCount >= 2 ? 'Conformist' : 'Last Man';
+  const commentary = {
+    'Übermensch': 'You see past the false dichotomies. You create your own values.',
+    'Free Spirit': 'You often transcend, but convention still holds you in places.',
+    'Seeker': 'You sense there is something beyond, but haven\'t committed to finding it.',
+    'Conformist': 'Good and evil still own you. The herd thinks through you.',
+    'Last Man': '"Is not the last man the most despicable? He who can no longer despise himself."'
+  };
+  
+  const card = document.getElementById('card');
+  card.classList.add('turning');
+  setTimeout(() => {
+    card.innerHTML = `<div id="result">
+      <h1>Your Nature Revealed</h1>
+      <div class="score">${rating}</div>
+      <p>Authenticity: ${authenticity.toFixed(1)} / 15</p>
+      <p>Beyond choices: ${beyondCount} / ${scenarios.length}</p>
+      <p style="margin-top:20px; font-style:italic; color:#888">${commentary[rating]}</p>
+      <button onclick="restart()">Read Again</button>
+    </div>`;
+    card.classList.remove('turning');
+  }, 600);
+  document.getElementById('quote').classList.remove('show');
+}
+
+function restart() { currentScene = -1; authenticity = 5; choices = []; updateFlame(); showScene(0); }
+
+showScene(0);
+updateFlame();
+</script>
+</body>
+</html>
