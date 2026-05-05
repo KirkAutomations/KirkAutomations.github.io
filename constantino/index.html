@@ -361,11 +361,11 @@ body.fight-mode .quote-text { text-shadow: 0 0 30px rgba(var(--accent-rgb),0.15)
 #bg-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 5; }
 
 /* ========== ANIMATION SWITCHER ========== */
-.anim-switcher { position: fixed; left: 18px; top: 50%; transform: translateY(-50%); z-index: 1000; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 6px; background: rgba(0,0,0,0.35); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); }
-.anim-switcher .anim-label { writing-mode: vertical-rl; text-orientation: mixed; font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: rgba(var(--accent-rgb),0.7); margin-bottom: 6px; }
-.anim-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(var(--accent-rgb),0.5); background: rgba(var(--accent-rgb),0.1); cursor: pointer; transition: all 0.3s; }
-.anim-dot:hover { border-color: var(--accent); background: rgba(var(--accent-rgb),0.25); transform: scale(1.25); }
-.anim-dot.active { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+.anim-switcher { position: fixed; left: 18px; top: 50%; transform: translateY(-50%); z-index: 1000; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 5px; background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
+.anim-switcher .anim-label { writing-mode: vertical-rl; text-orientation: mixed; font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: rgba(var(--accent-rgb),0.7); margin-bottom: 4px; }
+.anim-dot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid rgba(var(--accent-rgb),0.4); background: rgba(0,0,0,0.3); cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; font-size: 13px; line-height: 1; padding: 0; }
+.anim-dot:hover { border-color: var(--accent); background: rgba(var(--accent-rgb),0.2); transform: scale(1.15); }
+.anim-dot.active { background: rgba(var(--accent-rgb),0.25); border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 900px) {
@@ -388,7 +388,9 @@ body.fight-mode .quote-text { text-shadow: 0 0 30px rgba(var(--accent-rgb),0.15)
   .fight-mode-btn { bottom: 12px; right: 12px; padding: 8px 14px; }
   .fight-mode-btn span { display: none; }
   .voice-switcher { bottom: 12px; left: 12px; }
-  .anim-switcher { display: none; }
+  .anim-switcher { left: auto; right: auto; top: auto; bottom: 60px; transform: none; flex-direction: row; position: fixed; left: 50%; transform: translateX(-50%); padding: 6px 10px; gap: 4px; border-radius: 16px; }
+  .anim-switcher .anim-label { writing-mode: horizontal-tb; text-orientation: mixed; margin-bottom: 0; margin-right: 4px; font-size: 9px; }
+  .anim-dot { width: 24px; height: 24px; font-size: 11px; }
 }
 
 /* ========== PRINT ========== */
@@ -427,16 +429,16 @@ body.fight-mode .quote-text { text-shadow: 0 0 30px rgba(var(--accent-rgb),0.15)
 <!-- Animation Switcher -->
 <div class="anim-switcher" role="radiogroup" aria-label="Background animation">
   <span class="anim-label">BG</span>
-  <button class="anim-dot active" data-anim="particles" role="radio" aria-checked="true" aria-label="Particles" title="Particles"></button>
-  <button class="anim-dot" data-anim="matrix" role="radio" aria-checked="false" aria-label="Matrix Rain" title="Matrix"></button>
-  <button class="anim-dot" data-anim="starfield" role="radio" aria-checked="false" aria-label="Starfield" title="Starfield"></button>
-  <button class="anim-dot" data-anim="aurora" role="radio" aria-checked="false" aria-label="Aurora" title="Aurora"></button>
-  <button class="anim-dot" data-anim="fireflies" role="radio" aria-checked="false" aria-label="Fireflies" title="Fireflies"></button>
-  <button class="anim-dot" data-anim="mesh" role="radio" aria-checked="false" aria-label="Geometric Mesh" title="Mesh"></button>
-  <button class="anim-dot" data-anim="lightning" role="radio" aria-checked="false" aria-label="Lightning" title="Lightning"></button>
-  <button class="anim-dot" data-anim="bubbles" role="radio" aria-checked="false" aria-label="Bubbles" title="Bubbles"></button>
-  <button class="anim-dot" data-anim="dna" role="radio" aria-checked="false" aria-label="DNA Helix" title="DNA"></button>
-  <button class="anim-dot" data-anim="blobs" role="radio" aria-checked="false" aria-label="Liquid Blobs" title="Blobs"></button>
+  <button class="anim-dot active" data-anim="particles" role="radio" aria-checked="true" aria-label="Particles" title="Particles">&#x2734;</button>
+  <button class="anim-dot" data-anim="matrix" role="radio" aria-checked="false" aria-label="Matrix Rain" title="Matrix">&#x25A7;</button>
+  <button class="anim-dot" data-anim="starfield" role="radio" aria-checked="false" aria-label="Starfield" title="Starfield">&#x2726;</button>
+  <button class="anim-dot" data-anim="aurora" role="radio" aria-checked="false" aria-label="Aurora" title="Aurora">&#x223F;</button>
+  <button class="anim-dot" data-anim="fireflies" role="radio" aria-checked="false" aria-label="Fireflies" title="Fireflies">&#x2740;</button>
+  <button class="anim-dot" data-anim="mesh" role="radio" aria-checked="false" aria-label="Geometric Mesh" title="Mesh">&#x25E3;</button>
+  <button class="anim-dot" data-anim="lightning" role="radio" aria-checked="false" aria-label="Lightning" title="Lightning">&#x26A1;</button>
+  <button class="anim-dot" data-anim="bubbles" role="radio" aria-checked="false" aria-label="Bubbles" title="Bubbles">&#x25CB;</button>
+  <button class="anim-dot" data-anim="dna" role="radio" aria-checked="false" aria-label="DNA Helix" title="DNA">&#x29BE;</button>
+  <button class="anim-dot" data-anim="blobs" role="radio" aria-checked="false" aria-label="Liquid Blobs" title="Blobs">&#x25CF;</button>
 </div>
 
 <!-- Navigation -->
