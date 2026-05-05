@@ -358,7 +358,14 @@ body.fight-mode .btn-primary { animation: btnPulse 2s ease-in-out infinite; }
 body.fight-mode .quote-text { text-shadow: 0 0 30px rgba(var(--accent-rgb),0.15); }
 
 /* ========== PARTICLE CANVAS ========== */
-#particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+#bg-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 5; }
+
+/* ========== ANIMATION SWITCHER ========== */
+.anim-switcher { position: fixed; left: 16px; top: 50%; transform: translateY(-50%); z-index: 1000; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.anim-switcher .anim-label { writing-mode: vertical-rl; text-orientation: mixed; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(var(--accent-rgb),0.4); margin-bottom: 8px; }
+.anim-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid rgba(var(--accent-rgb),0.3); background: transparent; cursor: pointer; transition: all 0.3s; }
+.anim-dot:hover { border-color: var(--accent); transform: scale(1.2); }
+.anim-dot.active { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 900px) {
@@ -381,11 +388,12 @@ body.fight-mode .quote-text { text-shadow: 0 0 30px rgba(var(--accent-rgb),0.15)
   .fight-mode-btn { bottom: 12px; right: 12px; padding: 8px 14px; }
   .fight-mode-btn span { display: none; }
   .voice-switcher { bottom: 12px; left: 12px; }
+  .anim-switcher { display: none; }
 }
 
 /* ========== PRINT ========== */
 @media print {
-  .nav, .theme-switcher, .voice-switcher, .fight-mode-btn, .cursor-glow, .scroll-progress, #particles, .loader, .hero-scroll, .hamburger, .mobile-menu { display: none !important; }
+  .nav, .theme-switcher, .voice-switcher, .fight-mode-btn, .cursor-glow, .scroll-progress, #bg-canvas, .loader, .hero-scroll, .hamburger, .mobile-menu, .anim-switcher { display: none !important; }
   body { background: #fff !important; color: #000 !important; }
   .hero { min-height: auto; padding: 40px 0; }
   section { padding: 40px 0; }
@@ -413,8 +421,23 @@ body.fight-mode .quote-text { text-shadow: 0 0 30px rgba(var(--accent-rgb),0.15)
 <!-- Cursor Glow -->
 <div class="cursor-glow" id="cursorGlow"></div>
 
-<!-- Particle Canvas -->
-<canvas id="particles"></canvas>
+<!-- Background Animation Canvas -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- Animation Switcher -->
+<div class="anim-switcher" role="radiogroup" aria-label="Background animation">
+  <span class="anim-label">BG</span>
+  <button class="anim-dot active" data-anim="particles" role="radio" aria-checked="true" aria-label="Particles" title="Particles"></button>
+  <button class="anim-dot" data-anim="matrix" role="radio" aria-checked="false" aria-label="Matrix Rain" title="Matrix"></button>
+  <button class="anim-dot" data-anim="starfield" role="radio" aria-checked="false" aria-label="Starfield" title="Starfield"></button>
+  <button class="anim-dot" data-anim="aurora" role="radio" aria-checked="false" aria-label="Aurora" title="Aurora"></button>
+  <button class="anim-dot" data-anim="fireflies" role="radio" aria-checked="false" aria-label="Fireflies" title="Fireflies"></button>
+  <button class="anim-dot" data-anim="mesh" role="radio" aria-checked="false" aria-label="Geometric Mesh" title="Mesh"></button>
+  <button class="anim-dot" data-anim="lightning" role="radio" aria-checked="false" aria-label="Lightning" title="Lightning"></button>
+  <button class="anim-dot" data-anim="bubbles" role="radio" aria-checked="false" aria-label="Bubbles" title="Bubbles"></button>
+  <button class="anim-dot" data-anim="dna" role="radio" aria-checked="false" aria-label="DNA Helix" title="DNA"></button>
+  <button class="anim-dot" data-anim="blobs" role="radio" aria-checked="false" aria-label="Liquid Blobs" title="Blobs"></button>
+</div>
 
 <!-- Navigation -->
 <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
@@ -1104,93 +1127,393 @@ window.addEventListener('scroll', function() {
   });
 })();
 
-// ===== PARTICLE SYSTEM =====
+// ===== 10 CANVAS ANIMATIONS =====
 (function() {
-  var canvas = document.getElementById('particles');
+  var canvas = document.getElementById('bg-canvas');
   var ctx = canvas.getContext('2d');
-  var particles = [];
-  var mouse = { x: -999, y: -999 };
-  var count = 50;
-  var fightModeActive = false;
+  var W, H;
+  var mx = -999, my = -999;
+  var fightActive = localStorage.getItem('constantino-fight') === 'true';
 
-  function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+  function resizeCanvas() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
   }
-  resize();
-  window.addEventListener('resize', resize);
-
-  document.addEventListener('mousemove', function(e) {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
+  resizeCanvas();
+  window.addEventListener('resize', function() {
+    resizeCanvas();
+    if (ANIMS[currentAnim] && ANIMS[currentAnim].init) ANIMS[currentAnim].init();
   });
 
-  function getColor() {
-    var s = getComputedStyle(document.documentElement);
-    return s.getPropertyValue('--particle-color').trim() || '196,30,58';
+  document.addEventListener('mousemove', function(e) {
+    mx = e.clientX;
+    my = e.clientY;
+  });
+
+  function getPC() {
+    return getComputedStyle(document.documentElement).getPropertyValue('--particle-color').trim() || '196,30,58';
   }
 
-  function createParticle() {
-    return {
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.5,
-      vy: (Math.random() - 0.5) * 0.5,
-      r: Math.random() * 2 + 1
-    };
+  function isLightTheme() {
+    return document.documentElement.getAttribute('data-theme') === 'liberty-white';
   }
 
-  for (var i = 0; i < count; i++) particles.push(createParticle());
+  var ANIMS = {};
+  var animState = {};
+  var currentAnim = localStorage.getItem('constantino-anim') || 'particles';
 
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    var c = getColor();
-    var maxP = fightModeActive ? 150 : count;
-    while (particles.length < maxP) particles.push(createParticle());
-    if (particles.length > maxP) particles.length = maxP;
-
-    for (var i = 0; i < particles.length; i++) {
-      var p = particles[i];
-      var dx = p.x - mouse.x;
-      var dy = p.y - mouse.y;
-      var dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 100 && dist > 0) {
-        p.vx += (dx / dist) * 0.5;
-        p.vy += (dy / dist) * 0.5;
+  /* ---- 1. PARTICLES ---- */
+  ANIMS.particles = {
+    init: function() {
+      var count = fightActive ? 260 : 65;
+      animState.parts = [];
+      for (var i = 0; i < count; i++) {
+        animState.parts.push({x:Math.random()*W, y:Math.random()*H, vx:(Math.random()-0.5)*1.5, vy:(Math.random()-0.5)*1.5});
       }
-      p.x += p.vx;
-      p.y += p.vy;
-      p.vx *= 0.99;
-      p.vy *= 0.99;
-      if (p.x < 0) p.x = canvas.width;
-      if (p.x > canvas.width) p.x = 0;
-      if (p.y < 0) p.y = canvas.height;
-      if (p.y > canvas.height) p.y = 0;
-
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(' + c + ',0.5)';
-      ctx.fill();
-
-      for (var j = i + 1; j < particles.length; j++) {
-        var p2 = particles[j];
-        var ddx = p.x - p2.x;
-        var ddy = p.y - p2.y;
-        var dd = Math.sqrt(ddx * ddx + ddy * ddy);
-        if (dd < 120) {
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(p2.x, p2.y);
-          ctx.strokeStyle = 'rgba(' + c + ',' + (0.15 * (1 - dd / 120)) + ')';
-          ctx.stroke();
+    },
+    tick: function() {
+      ctx.clearRect(0,0,W,H);
+      var pc = getPC(); var parts = animState.parts; if (!parts) return;
+      parts.forEach(function(p) {
+        var dx=p.x-mx, dy=p.y-my, dist=Math.sqrt(dx*dx+dy*dy);
+        if (dist<180 && dist>0) { var f=((180-dist)/180)*3; p.vx+=dx/dist*f; p.vy+=dy/dist*f; }
+        p.vx*=0.99; p.vy*=0.99; p.x+=p.vx; p.y+=p.vy;
+        if (p.x<0) p.x=W; if (p.x>W) p.x=0; if (p.y<0) p.y=H; if (p.y>H) p.y=0;
+      });
+      for (var i=0; i<parts.length; i++) {
+        for (var j=i+1; j<parts.length; j++) {
+          var dx=parts[i].x-parts[j].x, dy=parts[i].y-parts[j].y, d=dx*dx+dy*dy;
+          if (d<19600) {
+            ctx.strokeStyle='rgba('+pc+','+(1-d/19600)+')'; ctx.lineWidth=0.6;
+            ctx.beginPath(); ctx.moveTo(parts[i].x,parts[i].y); ctx.lineTo(parts[j].x,parts[j].y); ctx.stroke();
+          }
         }
       }
+      parts.forEach(function(p) { ctx.fillStyle='rgba('+pc+',0.7)'; ctx.beginPath(); ctx.arc(p.x,p.y,2,0,Math.PI*2); ctx.fill(); });
     }
-    requestAnimationFrame(animate);
-  }
-  animate();
+  };
 
-  window._setFightParticles = function(active) { fightModeActive = active; };
+  /* ---- 2. MATRIX RAIN ---- */
+  ANIMS.matrix = {
+    init: function() {
+      var fs=16; var cols=Math.ceil(W/fs);
+      animState.drops = Array.from({length:cols}, function() { return Math.random()*H/fs|0; });
+      animState.fs=fs; animState.cols=cols;
+    },
+    tick: function() {
+      var drops=animState.drops, fs=animState.fs, cols=animState.cols; if (!drops) return;
+      var pc=getPC();
+      var bg = isLightTheme() ? 'rgba(248,246,240,0.06)' : 'rgba(10,22,40,0.06)';
+      ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+      ctx.font=fs+'px JetBrains Mono,monospace';
+      for (var i=0; i<cols; i++) {
+        var dx=i*fs-mx, dy=drops[i]*fs-my;
+        if (Math.sqrt(dx*dx+dy*dy)<120) continue;
+        var ch=String.fromCharCode(0x30+Math.random()*94|0);
+        var bright=Math.random()<0.08;
+        ctx.fillStyle=bright ? 'rgba('+pc+',1)' : 'rgba('+pc+',0.4)';
+        ctx.fillText(ch,i*fs,drops[i]*fs);
+        if (drops[i]*fs>H && Math.random()>0.97) drops[i]=0;
+        drops[i]++;
+      }
+    }
+  };
+
+  /* ---- 3. STARFIELD ---- */
+  ANIMS.starfield = {
+    init: function() {
+      var count = fightActive ? 1600 : 400;
+      animState.stars = Array.from({length:count}, function() { return {x:Math.random()*W-W/2, y:Math.random()*H-H/2, z:Math.random()*W}; });
+    },
+    tick: function() {
+      ctx.clearRect(0,0,W,H); var pc=getPC();
+      var stars=animState.stars; if (!stars) return;
+      var cx2=(mx-W/2)*0.001, cy2=(my-H/2)*0.001;
+      stars.forEach(function(s) {
+        s.z -= fightActive ? 6 : 3;
+        if (s.z<1) { s.x=Math.random()*W-W/2; s.y=Math.random()*H-H/2; s.z=W; }
+        var k=128/s.z;
+        var sx=(s.x+cx2*s.z)*k+W/2;
+        var sy=(s.y+cy2*s.z)*k+H/2;
+        var pz=s.z+3; var pk=128/pz;
+        var px=(s.x+cx2*pz)*pk+W/2;
+        var py=(s.y+cy2*pz)*pk+H/2;
+        var alpha=1-s.z/W; var size=Math.max(0.5,(1-s.z/W)*2.5);
+        ctx.strokeStyle='rgba('+pc+','+alpha+')'; ctx.lineWidth=size;
+        ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(sx,sy); ctx.stroke();
+      });
+    }
+  };
+
+  /* ---- 4. AURORA WAVES ---- */
+  ANIMS.aurora = {
+    init: function() { animState.t=0; },
+    tick: function() {
+      ctx.clearRect(0,0,W,H); var pc=getPC();
+      animState.t+=0.005; var t=animState.t;
+      var mxN=mx/W, myN=my/H;
+      for (var b=0; b<5; b++) {
+        ctx.beginPath(); ctx.moveTo(0,H);
+        for (var x=0; x<=W; x+=4) {
+          var n=x/W;
+          var y=H*0.4+Math.sin(n*4+t+b*0.7+mxN*2)*80+Math.sin(n*7+t*1.3+b)*40+Math.sin(n*11+t*0.7)*20+(myN-0.5)*60;
+          ctx.lineTo(x,y);
+        }
+        ctx.lineTo(W,H); ctx.closePath();
+        ctx.fillStyle='rgba('+pc+','+(0.08-b*0.01)+')'; ctx.fill();
+      }
+    }
+  };
+
+  /* ---- 5. FIREFLIES ---- */
+  ANIMS.fireflies = {
+    init: function() {
+      var count = fightActive ? 200 : 50;
+      animState.flies = Array.from({length:count}, function() {
+        return {x:Math.random()*W, y:Math.random()*H, vx:0, vy:0, r:3+Math.random()*5, phase:Math.random()*Math.PI*2, speed:0.5+Math.random()*1.5};
+      });
+      animState.t=0;
+    },
+    tick: function() {
+      ctx.clearRect(0,0,W,H); var pc=getPC();
+      animState.t+=0.02; var t=animState.t;
+      var flies=animState.flies; if (!flies) return;
+      flies.forEach(function(f) {
+        var dx=f.x-mx, dy=f.y-my, dist=Math.sqrt(dx*dx+dy*dy);
+        if (dist<150 && dist>0) { var force=((150-dist)/150)*2; f.vx+=dx/dist*force; f.vy+=dy/dist*force; }
+        f.vx+=Math.sin(t*f.speed+f.phase)*0.1;
+        f.vy+=Math.cos(t*f.speed*0.7+f.phase)*0.1;
+        f.vx*=0.97; f.vy*=0.97;
+        f.x+=f.vx; f.y+=f.vy;
+        if (f.x<-20) f.x=W+20; if (f.x>W+20) f.x=-20;
+        if (f.y<-20) f.y=H+20; if (f.y>H+20) f.y=-20;
+        var glow=0.5+0.5*Math.sin(t*2+f.phase);
+        var grad=ctx.createRadialGradient(f.x,f.y,0,f.x,f.y,f.r*4);
+        grad.addColorStop(0,'rgba('+pc+','+(0.6*glow)+')'); grad.addColorStop(1,'transparent');
+        ctx.fillStyle=grad; ctx.beginPath(); ctx.arc(f.x,f.y,f.r*4,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle='rgba('+pc+','+glow+')'; ctx.beginPath(); ctx.arc(f.x,f.y,f.r,0,Math.PI*2); ctx.fill();
+      });
+    }
+  };
+
+  /* ---- 6. GEOMETRIC MESH ---- */
+  ANIMS.mesh = {
+    init: function() {
+      var sp=80; animState.nodes=[]; animState.sp=sp;
+      for (var x=-sp; x<=W+sp; x+=sp) {
+        for (var y=-sp; y<=H+sp; y+=sp) {
+          animState.nodes.push({ox:x, oy:y, x:x, y:y});
+        }
+      }
+    },
+    tick: function() {
+      ctx.clearRect(0,0,W,H); var pc=getPC();
+      var nodes=animState.nodes; var sp=animState.sp; if (!nodes) return;
+      nodes.forEach(function(n) {
+        var dx=n.x-mx, dy=n.y-my, dist=Math.sqrt(dx*dx+dy*dy);
+        if (dist<200 && dist>0) {
+          var push=((200-dist)/200)*40;
+          n.x=n.ox+dx/dist*push; n.y=n.oy+dy/dist*push;
+        } else {
+          n.x+=(n.ox-n.x)*0.1; n.y+=(n.oy-n.y)*0.1;
+        }
+      });
+      var maxD=sp*1.5;
+      for (var i=0; i<nodes.length; i++) {
+        for (var j=i+1; j<nodes.length; j++) {
+          var dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y, d=Math.sqrt(dx*dx+dy*dy);
+          if (d<maxD) {
+            ctx.strokeStyle='rgba('+pc+','+(1-d/maxD)*0.3+')'; ctx.lineWidth=0.5;
+            ctx.beginPath(); ctx.moveTo(nodes[i].x,nodes[i].y); ctx.lineTo(nodes[j].x,nodes[j].y); ctx.stroke();
+          }
+        }
+      }
+      nodes.forEach(function(n) { ctx.fillStyle='rgba('+pc+',0.5)'; ctx.beginPath(); ctx.arc(n.x,n.y,1.5,0,Math.PI*2); ctx.fill(); });
+    }
+  };
+
+  /* ---- 7. LIGHTNING ---- */
+  function genBolt(x1,y1,x2,y2,depth) {
+    if (depth===0) return [[x1,y1],[x2,y2]];
+    var bx=(x1+x2)/2+(Math.random()-0.5)*(y2-y1)*0.3;
+    var by=(y1+y2)/2+(Math.random()-0.5)*Math.abs(x2-x1)*0.3;
+    var pts=genBolt(x1,y1,bx,by,depth-1).concat(genBolt(bx,by,x2,y2,depth-1).slice(1));
+    if (depth>2 && Math.random()<0.3) {
+      var brx=bx+(Math.random()-0.5)*100;
+      var bry=by+50+Math.random()*100;
+      pts=pts.concat(genBolt(bx,by,brx,bry,depth-2));
+    }
+    return pts;
+  }
+
+  ANIMS.lightning = {
+    init: function() { animState.bolts=[]; animState.frame=0; },
+    tick: function() {
+      var pc=getPC();
+      var bg = isLightTheme() ? 'rgba(248,246,240,0.15)' : 'rgba(10,22,40,0.15)';
+      ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+      animState.frame++;
+      var interval = fightActive ? 10 : 40;
+      if (animState.frame%interval===0) {
+        var sx=Math.random()*W;
+        animState.bolts.push({points:genBolt(sx,0,mx||W/2,my||H/2,6), life:20});
+      }
+      animState.bolts=animState.bolts.filter(function(b) { return b.life>0; });
+      animState.bolts.forEach(function(b) {
+        var alpha=b.life/20;
+        ctx.strokeStyle='rgba('+pc+','+alpha*0.3+')'; ctx.lineWidth=6; ctx.beginPath();
+        b.points.forEach(function(p,i) { i===0 ? ctx.moveTo(p[0],p[1]) : ctx.lineTo(p[0],p[1]); }); ctx.stroke();
+        ctx.strokeStyle='rgba('+pc+','+alpha+')'; ctx.lineWidth=2; ctx.beginPath();
+        b.points.forEach(function(p,i) { i===0 ? ctx.moveTo(p[0],p[1]) : ctx.lineTo(p[0],p[1]); }); ctx.stroke();
+        b.life--;
+      });
+    }
+  };
+
+  /* ---- 8. BUBBLES ---- */
+  ANIMS.bubbles = {
+    init: function() {
+      var count = fightActive ? 160 : 40;
+      animState.bubbles = Array.from({length:count}, function() {
+        return {x:Math.random()*W, y:H+Math.random()*H, r:8+Math.random()*20, speed:0.5+Math.random()*1.5, phase:Math.random()*Math.PI*2};
+      });
+      animState.t=0;
+    },
+    tick: function() {
+      ctx.clearRect(0,0,W,H); var pc=getPC();
+      animState.t+=0.02; var t=animState.t;
+      var bubs=animState.bubbles; if (!bubs) return;
+      bubs.forEach(function(b) {
+        b.y-=b.speed; b.x+=Math.sin(t+b.phase)*0.5;
+        if (b.y<-b.r*2) { b.y=H+b.r*2; b.x=Math.random()*W; }
+        var dx=b.x-mx, dy=b.y-my, dist=Math.sqrt(dx*dx+dy*dy);
+        if (dist<180 && dist>0) {
+          var f=((180-dist)/180)*2;
+          b.x+=-dy/dist*f; b.y+=dx/dist*f;
+        }
+        ctx.strokeStyle='rgba('+pc+',0.3)'; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.stroke();
+        var hg=ctx.createRadialGradient(b.x-b.r*0.3,b.y-b.r*0.3,0,b.x,b.y,b.r);
+        hg.addColorStop(0,'rgba('+pc+',0.15)'); hg.addColorStop(1,'transparent');
+        ctx.fillStyle=hg; ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.fill();
+      });
+    }
+  };
+
+  /* ---- 9. DNA HELIX ---- */
+  ANIMS.dna = {
+    init: function() { animState.t=0; animState.nodes=60; },
+    tick: function() {
+      ctx.clearRect(0,0,W,H); var pc=getPC();
+      var n=animState.nodes;
+      var mxSpeed=(mx/W-0.5)*0.08;
+      var myTilt=(my/H-0.5)*100;
+      animState.t+=0.02+mxSpeed; var t=animState.t;
+      var cxc=W/2, cyc=H/2; var radiusBase=120;
+      var pts=[];
+      for (var i=0; i<n; i++) {
+        var angle=t+i*(Math.PI*2/30);
+        var yPos=cyc-n*5+i*10+myTilt;
+        var r=radiusBase+Math.sin(angle*0.3)*20;
+        var z1=Math.sin(angle); var z2=Math.sin(angle+Math.PI);
+        pts.push({x:cxc+Math.cos(angle)*r, y:yPos, z:z1, strand:0, i:i});
+        pts.push({x:cxc+Math.cos(angle+Math.PI)*r, y:yPos, z:z2, strand:1, i:i});
+      }
+      pts.sort(function(a,b) { return a.z-b.z; });
+      for (var i2=0; i2<n; i2+=3) {
+        var angle2=t+i2*(Math.PI*2/30);
+        var yPos2=cyc-n*5+i2*10+myTilt;
+        var r2=radiusBase+Math.sin(angle2*0.3)*20;
+        var x1=cxc+Math.cos(angle2)*r2;
+        var x2=cxc+Math.cos(angle2+Math.PI)*r2;
+        ctx.strokeStyle='rgba('+pc+',0.15)'; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.moveTo(x1,yPos2); ctx.lineTo(x2,yPos2); ctx.stroke();
+      }
+      pts.forEach(function(p) {
+        var alpha=0.3+(p.z+1)/2*0.5;
+        var size=2+(p.z+1)/2*3;
+        ctx.fillStyle='rgba('+pc+','+alpha+')';
+        ctx.beginPath(); ctx.arc(p.x,p.y,size,0,Math.PI*2); ctx.fill();
+      });
+    }
+  };
+
+  /* ---- 10. LIQUID BLOBS ---- */
+  ANIMS.blobs = {
+    init: function() {
+      var count = fightActive ? 24 : 8;
+      animState.blobs = Array.from({length:count}, function() {
+        return {x:Math.random()*W, y:Math.random()*H, vx:(Math.random()-0.5)*2, vy:(Math.random()-0.5)*2, r:40+Math.random()*60};
+      });
+      var scale=4;
+      animState.oc=document.createElement('canvas');
+      animState.oc.width=Math.ceil(W/scale); animState.oc.height=Math.ceil(H/scale);
+      animState.octx=animState.oc.getContext('2d');
+      animState.scale=scale;
+    },
+    tick: function() {
+      var blobs=animState.blobs; if (!blobs) return;
+      var pc=getPC(); var s=animState.scale;
+      var ow=animState.oc.width, oh=animState.oc.height;
+      var octx=animState.octx;
+      blobs.forEach(function(b) {
+        var dx=mx-b.x, dy=my-b.y, dist=Math.sqrt(dx*dx+dy*dy);
+        if (dist>0) { b.vx+=dx/dist*0.08; b.vy+=dy/dist*0.08; }
+        b.vx*=0.99; b.vy*=0.99; b.x+=b.vx; b.y+=b.vy;
+        if (b.x<-b.r) b.x=W+b.r; if (b.x>W+b.r) b.x=-b.r;
+        if (b.y<-b.r) b.y=H+b.r; if (b.y>H+b.r) b.y=-b.r;
+      });
+      var id=octx.createImageData(ow,oh);
+      var pcs=pc.split(',').map(Number);
+      for (var py=0; py<oh; py++) {
+        for (var px=0; px<ow; px++) {
+          var sum=0; var rx=px*s, ry=py*s;
+          blobs.forEach(function(b) { var dx=rx-b.x, dy=ry-b.y; sum+=b.r*b.r/(dx*dx+dy*dy+1); });
+          var idx=(py*ow+px)*4;
+          if (sum>0.7) {
+            var a=Math.min(1,(sum-0.7)*1.5);
+            id.data[idx]=pcs[0]; id.data[idx+1]=pcs[1]; id.data[idx+2]=pcs[2]; id.data[idx+3]=a*120|0;
+          }
+        }
+      }
+      octx.putImageData(id,0,0);
+      ctx.clearRect(0,0,W,H);
+      ctx.drawImage(animState.oc,0,0,W,H);
+      blobs.forEach(function(b) {
+        var g=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r*0.8);
+        g.addColorStop(0,'rgba('+pc+',0.08)'); g.addColorStop(1,'transparent');
+        ctx.fillStyle=g; ctx.beginPath(); ctx.arc(b.x,b.y,b.r*0.8,0,Math.PI*2); ctx.fill();
+      });
+    }
+  };
+
+  /* ---- Animation Switcher ---- */
+  function switchAnim(name) {
+    animState={}; ctx.clearRect(0,0,W,H); currentAnim=name;
+    if (ANIMS[name]) ANIMS[name].init();
+    localStorage.setItem('constantino-anim', name);
+    document.querySelectorAll('.anim-dot').forEach(function(d) {
+      var isActive = d.dataset.anim === name;
+      d.classList.toggle('active', isActive);
+      d.setAttribute('aria-checked', isActive ? 'true' : 'false');
+    });
+  }
+  document.querySelectorAll('.anim-dot').forEach(function(d) {
+    d.addEventListener('click', function() { switchAnim(d.dataset.anim); });
+    d.addEventListener('keydown', function(e) { if (e.key==='Enter') switchAnim(d.dataset.anim); });
+  });
+
+  /* Init current animation */
+  if (!ANIMS[currentAnim]) currentAnim='particles';
+  switchAnim(currentAnim);
+  function animLoop() { if (ANIMS[currentAnim] && ANIMS[currentAnim].tick) ANIMS[currentAnim].tick(); requestAnimationFrame(animLoop); }
+  animLoop();
+
+  /* Expose fight mode toggle for external use */
+  window._setFightMode = function(active) {
+    fightActive = active;
+    switchAnim(currentAnim);
+  };
 })();
 
 // ===== NAV SCROLL =====
@@ -1404,7 +1727,7 @@ window.addEventListener('scroll', function() {
     btn.classList.toggle('active', on);
     document.body.classList.toggle('fight-mode', on);
     localStorage.setItem('constantino-fight', on);
-    if (window._setFightParticles) window._setFightParticles(on);
+    if (window._setFightMode) window._setFightMode(on);
     // Screen shake on activate
     if (on) {
       document.body.style.animation = 'screenShake 0.4s ease';
