@@ -324,7 +324,7 @@ section { padding: 90px 24px; position: relative; }
 
 /* Reveal */
 .reveal { opacity: 0; transform: translateY(25px); transition: all 0.7s cubic-bezier(0.25,0.46,0.45,0.94); }
-.reveal.revealed { opacity: 1; transform: translateY(0); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
 .reveal-delay-1 { transition-delay: 0.1s; }
 .reveal-delay-2 { transition-delay: 0.2s; }
 .reveal-delay-3 { transition-delay: 0.3s; }
@@ -1854,80 +1854,7 @@ window.addEventListener('scroll', function() {
   document.head.appendChild(style);
 })();
 
-// ===== SCROLL REVEAL (IntersectionObserver) =====
-(function() {
-  var els = document.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window) {
-    var obs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('revealed');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-    els.forEach(function(el) { obs.observe(el); });
-  } else {
-    els.forEach(function(el) { el.classList.add('revealed'); });
-  }
-})();
-
-// ===== COUNTER ANIMATION =====
-(function() {
-  var counters = document.querySelectorAll('.counter-num');
-  if (!counters.length) return;
-  var obs = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (!entry.isIntersecting) return;
-      var el = entry.target;
-      obs.unobserve(el);
-      var target = parseInt(el.dataset.target) || 0;
-      var suffix = el.dataset.suffix || '';
-      var start = 0;
-      var duration = 2000;
-      var startTime = null;
-      function step(ts) {
-        if (!startTime) startTime = ts;
-        var progress = Math.min((ts - startTime) / duration, 1);
-        var eased = 1 - Math.pow(1 - progress, 3);
-        el.textContent = Math.floor(eased * target).toLocaleString() + suffix;
-        if (progress < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    });
-  }, { threshold: 0.3 });
-  counters.forEach(function(c) { obs.observe(c); });
-})();
-
-// ===== MAGNETIC BUTTONS =====
-(function() {
-  document.querySelectorAll('.magnetic-btn').forEach(function(btn) {
-    btn.addEventListener('mousemove', function(e) {
-      var rect = btn.getBoundingClientRect();
-      var x = e.clientX - rect.left - rect.width / 2;
-      var y = e.clientY - rect.top - rect.height / 2;
-      btn.style.transform = 'translate(' + (x * 0.15) + 'px, ' + (y * 0.15) + 'px)';
-    });
-    btn.addEventListener('mouseleave', function() {
-      btn.style.transform = '';
-    });
-  });
-})();
-
-// ===== CURSOR GLOW =====
-(function() {
-  var glow = document.querySelector('.cursor-glow');
-  if (!glow) {
-    glow = document.createElement('div');
-    glow.className = 'cursor-glow';
-    glow.style.cssText = 'position:fixed;width:600px;height:600px;border-radius:50%;pointer-events:none;z-index:0;background:radial-gradient(circle,rgba(var(--accent-rgb),0.06) 0%,transparent 70%);transform:translate(-50%,-50%);transition:left 0.15s ease-out,top 0.15s ease-out;';
-    document.body.appendChild(glow);
-  }
-  document.addEventListener('mousemove', function(e) {
-    glow.style.left = e.clientX + 'px';
-    glow.style.top = e.clientY + 'px';
-  });
-})();
+// (duplicates removed — handled by v4 extraction code above)
 
 // ===== CARD TILT =====
 (function() {
@@ -1942,76 +1869,7 @@ window.addEventListener('scroll', function() {
   });
 })();
 
-// ===== CANVAS: ARENA SPOTLIGHTS =====
-(function() {
-  var canvas = document.getElementById('particles');
-  if (!canvas) return;
-  var ctx = canvas.getContext('2d');
-  var W, H, particles = [], fightMode = false;
-
-  function resize() {
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  window._setFightParticles = function(on) { fightMode = on; };
-
-  function Particle() {
-    this.x = Math.random() * W;
-    this.y = Math.random() * H;
-    this.vx = (Math.random() - 0.5) * 0.3;
-    this.vy = (Math.random() - 0.5) * 0.3;
-    this.r = Math.random() * 2 + 0.5;
-    this.alpha = Math.random() * 0.5 + 0.1;
-  }
-
-  for (var i = 0; i < 80; i++) particles.push(new Particle());
-
-  function draw() {
-    try {
-      ctx.clearRect(0, 0, W, H);
-
-      // Arena spotlight cones
-      var style = getComputedStyle(document.documentElement);
-      var pc = style.getPropertyValue('--particle-color').trim() || '196,30,58';
-      var spotAlpha = fightMode ? 0.08 : 0.03;
-
-      // Left spotlight
-      var g1 = ctx.createRadialGradient(W * 0.2, 0, 0, W * 0.2, 0, H * 0.8);
-      g1.addColorStop(0, 'rgba(' + pc + ',' + spotAlpha + ')');
-      g1.addColorStop(1, 'transparent');
-      ctx.fillStyle = g1;
-      ctx.fillRect(0, 0, W, H);
-
-      // Right spotlight
-      var g2 = ctx.createRadialGradient(W * 0.8, 0, 0, W * 0.8, 0, H * 0.8);
-      g2.addColorStop(0, 'rgba(' + pc + ',' + spotAlpha + ')');
-      g2.addColorStop(1, 'transparent');
-      ctx.fillStyle = g2;
-      ctx.fillRect(0, 0, W, H);
-
-      // Particles (dust in the arena lights)
-      var speed = fightMode ? 3 : 1;
-      for (var i = 0; i < particles.length; i++) {
-        var p = particles[i];
-        p.x += p.vx * speed;
-        p.y += p.vy * speed;
-        if (p.x < 0) p.x = W;
-        if (p.x > W) p.x = 0;
-        if (p.y < 0) p.y = H;
-        if (p.y > H) p.y = 0;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r * (fightMode ? 1.5 : 1), 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(' + pc + ',' + (p.alpha * (fightMode ? 1.5 : 1)) + ')';
-        ctx.fill();
-      }
-    } catch(e) {}
-    requestAnimationFrame(draw);
-  }
-  requestAnimationFrame(draw);
-})();
+// (arena spotlights removed — using v4 particle system above)
 
 // ===== SIGNUP FORM =====
 function handleSignup(e) {
@@ -2032,14 +1890,7 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a) {
   });
 });
 
-// ===== NAV SCROLL EFFECT =====
-(function() {
-  var nav = document.querySelector('.nav');
-  if (!nav) return;
-  window.addEventListener('scroll', function() {
-    nav.classList.toggle('scrolled', window.scrollY > 60);
-  });
-})();
+// (nav scroll duplicate removed — handled above)
 </script>
 </body>
 </html>
