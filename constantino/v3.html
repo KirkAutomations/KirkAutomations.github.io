@@ -17,7 +17,7 @@
 <meta name="twitter:description" content="No special interests. No corporate puppeteers. Ready to fight to put AMERICA FIRST.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -34,7 +34,7 @@
 /* ========== RESET & BASE ========== */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 80px; }
-body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; overflow-x: hidden; background: var(--bg); color: var(--text); transition: background 0.5s ease, color 0.5s ease; }
+body { font-family: 'Inter', sans-serif; overflow-x: hidden; background: var(--bg); color: var(--text); transition: background 0.5s ease, color 0.5s ease; }
 a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
 img { max-width: 100%; }
@@ -45,137 +45,125 @@ img { max-width: 100%; }
 .skip-link { position: absolute; top: -100px; left: 0; background: var(--accent); color: #fff; padding: 8px 16px; z-index: 10000; font-weight: 600; transition: top 0.3s; }
 .skip-link:focus { top: 0; }
 
-/* ========== NOISE / GRAIN TEXTURE OVERLAY ========== */
-.grain-overlay {
-  position: fixed; inset: 0; pointer-events: none; z-index: 9997; opacity: 0.04; mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 200px 200px;
-}
-
 /* ========== THEME VARIABLES ========== */
 [data-theme="knockout-red"] {
-  --bg: #0A0A0A; --bg-alt: #111111; --bg-cream: #F5F0E8;
-  --text: #D8D4CC; --text-muted: #8A8478; --heading: #FFFFFF; --text-dark: #2A2218;
-  --accent: #C41E3A; --accent-glow: rgba(196,30,58,0.4); --accent-rgb: 196,30,58;
-  --secondary: #D4A017; --secondary-rgb: 212,160,23;
-  --nav-bg: rgba(10,10,10,0.95); --card-bg: #151515; --card-border: #2A2220;
-  --input-bg: #1A1A1A; --input-border: #333;
-  --particle-color: 196,30,58; --rope-1: #C41E3A; --rope-2: #D4A017; --rope-3: #C41E3A;
-  --footer-bg: #050505;
+  --bg: #0d1117; --bg-alt: #151b24; --card-bg: rgba(196,30,58,0.08); --card-border: rgba(196,30,58,0.2);
+  --text: #e8eaed; --text-muted: #8b949e; --heading: #ffffff;
+  --accent: #c41e3a; --accent-glow: rgba(196,30,58,0.4); --accent-rgb: 196,30,58;
+  --secondary: #d4af37; --secondary-rgb: 212,175,55;
+  --nav-bg: rgba(13,17,23,0.85); --hero-grad-1: #c41e3a; --hero-grad-2: #1a2744;
+  --particle-color: 196,30,58; --glass-bg: rgba(196,30,58,0.06); --glass-border: rgba(196,30,58,0.15);
+  --input-bg: rgba(255,255,255,0.05); --input-border: rgba(196,30,58,0.3);
+  --footer-bg: #080c12;
 }
 [data-theme="ringside-blue"] {
-  --bg: #0A0F1A; --bg-alt: #111827; --bg-cream: #EAF0F5;
-  --text: #C8D0DC; --text-muted: #6B7B8E; --heading: #F0F4FA; --text-dark: #1A2030;
-  --accent: #3B82F6; --accent-glow: rgba(59,130,246,0.4); --accent-rgb: 59,130,246;
-  --secondary: #EF4444; --secondary-rgb: 239,68,68;
-  --nav-bg: rgba(10,15,26,0.95); --card-bg: #151C2A; --card-border: #1E2A3E;
-  --input-bg: #121825; --input-border: #2A3650;
-  --particle-color: 59,130,246; --rope-1: #3B82F6; --rope-2: #FFFFFF; --rope-3: #EF4444;
-  --footer-bg: #060A12;
+  --bg: #0a0f1a; --bg-alt: #111827; --card-bg: rgba(26,39,68,0.25); --card-border: rgba(59,130,246,0.2);
+  --text: #d1d5db; --text-muted: #6b7280; --heading: #f9fafb;
+  --accent: #3b82f6; --accent-glow: rgba(59,130,246,0.4); --accent-rgb: 59,130,246;
+  --secondary: #ef4444; --secondary-rgb: 239,68,68;
+  --nav-bg: rgba(10,15,26,0.85); --hero-grad-1: #1e3a5f; --hero-grad-2: #0a0f1a;
+  --particle-color: 59,130,246; --glass-bg: rgba(59,130,246,0.06); --glass-border: rgba(59,130,246,0.15);
+  --input-bg: rgba(255,255,255,0.05); --input-border: rgba(59,130,246,0.3);
+  --footer-bg: #060a12;
 }
 [data-theme="championship-belt"] {
-  --bg: #12100A; --bg-alt: #1A1710; --bg-cream: #F5F0E0;
-  --text: #E0D8C0; --text-muted: #9A8E6E; --heading: #FFF8E1; --text-dark: #2A2518;
-  --accent: #D4AF37; --accent-glow: rgba(212,175,55,0.4); --accent-rgb: 212,175,55;
-  --secondary: #C41E3A; --secondary-rgb: 196,30,58;
-  --nav-bg: rgba(18,16,10,0.95); --card-bg: #1A1710; --card-border: #2A2518;
-  --input-bg: #1A1710; --input-border: #3A3520;
-  --particle-color: 212,175,55; --rope-1: #D4AF37; --rope-2: #C41E3A; --rope-3: #D4AF37;
-  --footer-bg: #0A0905;
+  --bg: #12100a; --bg-alt: #1a1710; --card-bg: rgba(212,175,55,0.08); --card-border: rgba(212,175,55,0.2);
+  --text: #e5dcc8; --text-muted: #9a8e6e; --heading: #fff8e1;
+  --accent: #d4af37; --accent-glow: rgba(212,175,55,0.4); --accent-rgb: 212,175,55;
+  --secondary: #c41e3a; --secondary-rgb: 196,30,58;
+  --nav-bg: rgba(18,16,10,0.85); --hero-grad-1: #d4af37; --hero-grad-2: #1a1710;
+  --particle-color: 212,175,55; --glass-bg: rgba(212,175,55,0.06); --glass-border: rgba(212,175,55,0.15);
+  --input-bg: rgba(255,255,255,0.05); --input-border: rgba(212,175,55,0.3);
+  --footer-bg: #0a0905;
 }
 [data-theme="canvas-white"] {
-  --bg: #F5F0E8; --bg-alt: #EAE5DA; --bg-cream: #FFFFFF;
-  --text: #3A3530; --text-muted: #6A6560; --heading: #1A1510; --text-dark: #1A1510;
-  --accent: #C41E3A; --accent-glow: rgba(196,30,58,0.25); --accent-rgb: 196,30,58;
-  --secondary: #1A2744; --secondary-rgb: 26,39,68;
-  --nav-bg: rgba(245,240,232,0.95); --card-bg: #FFFFFF; --card-border: #D0C8B8;
-  --input-bg: #FFFFFF; --input-border: #C0B8A8;
-  --particle-color: 26,39,68; --rope-1: #C41E3A; --rope-2: #1A2744; --rope-3: #C41E3A;
-  --footer-bg: #E0DBD0;
+  --bg: #f5f5f0; --bg-alt: #eaeae2; --card-bg: rgba(26,39,68,0.06); --card-border: rgba(26,39,68,0.15);
+  --text: #2a2a2a; --text-muted: #666; --heading: #1a2744;
+  --accent: #c41e3a; --accent-glow: rgba(196,30,58,0.25); --accent-rgb: 196,30,58;
+  --secondary: #1a2744; --secondary-rgb: 26,39,68;
+  --nav-bg: rgba(245,245,240,0.92); --hero-grad-1: #1a2744; --hero-grad-2: #c41e3a;
+  --particle-color: 26,39,68; --glass-bg: rgba(26,39,68,0.04); --glass-border: rgba(26,39,68,0.12);
+  --input-bg: rgba(0,0,0,0.03); --input-border: rgba(26,39,68,0.25);
+  --footer-bg: #e0e0d8;
 }
 [data-theme="title-fight"] {
-  --bg: #0A0A0A; --bg-alt: #141414; --bg-cream: #F5F0E0;
-  --text: #D4D4D4; --text-muted: #777; --heading: #FFD700; --text-dark: #2A2A20;
-  --accent: #DAA520; --accent-glow: rgba(218,165,32,0.5); --accent-rgb: 218,165,32;
-  --secondary: #FFFFFF; --secondary-rgb: 255,255,255;
-  --nav-bg: rgba(10,10,10,0.95); --card-bg: #151510; --card-border: #2A2A20;
-  --input-bg: #151510; --input-border: #3A3A28;
-  --particle-color: 218,165,32; --rope-1: #DAA520; --rope-2: #FFFFFF; --rope-3: #DAA520;
+  --bg: #0a0a0a; --bg-alt: #141414; --card-bg: rgba(218,165,32,0.1); --card-border: rgba(218,165,32,0.25);
+  --text: #d4d4d4; --text-muted: #777; --heading: #ffd700;
+  --accent: #daa520; --accent-glow: rgba(218,165,32,0.5); --accent-rgb: 218,165,32;
+  --secondary: #fff; --secondary-rgb: 255,255,255;
+  --nav-bg: rgba(10,10,10,0.9); --hero-grad-1: #daa520; --hero-grad-2: #0a0a0a;
+  --particle-color: 218,165,32; --glass-bg: rgba(218,165,32,0.06); --glass-border: rgba(218,165,32,0.2);
+  --input-bg: rgba(255,255,255,0.05); --input-border: rgba(218,165,32,0.35);
   --footer-bg: #050505;
 }
 [data-theme="southpaw-green"] {
-  --bg: #0D1A0D; --bg-alt: #142014; --bg-cream: #E8F0E8;
-  --text: #C8DCC8; --text-muted: #7A9A7A; --heading: #E8F5E8; --text-dark: #1A281A;
-  --accent: #228B22; --accent-glow: rgba(34,139,34,0.4); --accent-rgb: 34,139,34;
-  --secondary: #D4AF37; --secondary-rgb: 212,175,55;
-  --nav-bg: rgba(13,26,13,0.95); --card-bg: #142014; --card-border: #1E301E;
-  --input-bg: #142014; --input-border: #2A402A;
-  --particle-color: 34,139,34; --rope-1: #228B22; --rope-2: #D4AF37; --rope-3: #228B22;
+  --bg: #0d1a0d; --bg-alt: #142014; --card-bg: rgba(34,139,34,0.1); --card-border: rgba(34,139,34,0.2);
+  --text: #c8dcc8; --text-muted: #7a9a7a; --heading: #e8f5e8;
+  --accent: #228b22; --accent-glow: rgba(34,139,34,0.4); --accent-rgb: 34,139,34;
+  --secondary: #d4af37; --secondary-rgb: 212,175,55;
+  --nav-bg: rgba(13,26,13,0.88); --hero-grad-1: #228b22; --hero-grad-2: #0d1a0d;
+  --particle-color: 34,139,34; --glass-bg: rgba(34,139,34,0.06); --glass-border: rgba(34,139,34,0.15);
+  --input-bg: rgba(255,255,255,0.04); --input-border: rgba(34,139,34,0.3);
   --footer-bg: #071007;
 }
 [data-theme="corner-blue"] {
-  --bg: #0A1628; --bg-alt: #0F1E35; --bg-cream: #E8EEF5;
-  --text: #C8D8E8; --text-muted: #6889AA; --heading: #E8F0FF; --text-dark: #1A2838;
-  --accent: #6495ED; --accent-glow: rgba(100,149,237,0.4); --accent-rgb: 100,149,237;
-  --secondary: #FF6B6B; --secondary-rgb: 255,107,107;
-  --nav-bg: rgba(10,22,40,0.95); --card-bg: #0F1E35; --card-border: #1A2E4A;
-  --input-bg: #0F1E35; --input-border: #2A3E5A;
-  --particle-color: 100,149,237; --rope-1: #6495ED; --rope-2: #FF6B6B; --rope-3: #6495ED;
-  --footer-bg: #060E1A;
+  --bg: #0a1628; --bg-alt: #0f1e35; --card-bg: rgba(100,149,237,0.08); --card-border: rgba(100,149,237,0.2);
+  --text: #c8d8e8; --text-muted: #6889aa; --heading: #e8f0ff;
+  --accent: #6495ed; --accent-glow: rgba(100,149,237,0.4); --accent-rgb: 100,149,237;
+  --secondary: #ff6b6b; --secondary-rgb: 255,107,107;
+  --nav-bg: rgba(10,22,40,0.88); --hero-grad-1: #6495ed; --hero-grad-2: #0a1628;
+  --particle-color: 100,149,237; --glass-bg: rgba(100,149,237,0.06); --glass-border: rgba(100,149,237,0.15);
+  --input-bg: rgba(255,255,255,0.04); --input-border: rgba(100,149,237,0.3);
+  --footer-bg: #060e1a;
 }
 [data-theme="army-olive"] {
-  --bg: #12140F; --bg-alt: #1A1C15; --bg-cream: #F0F0E0;
-  --text: #C8C8A0; --text-muted: #888860; --heading: #E8E8C0; --text-dark: #2A2A18;
-  --accent: #8B8B00; --accent-glow: rgba(139,139,0,0.4); --accent-rgb: 139,139,0;
-  --secondary: #C41E3A; --secondary-rgb: 196,30,58;
-  --nav-bg: rgba(18,20,15,0.95); --card-bg: #1A1C15; --card-border: #2A2C1E;
-  --input-bg: #1A1C15; --input-border: #3A3C28;
-  --particle-color: 139,139,0; --rope-1: #8B8B00; --rope-2: #C41E3A; --rope-3: #8B8B00;
-  --footer-bg: #0A0B08;
+  --bg: #12140f; --bg-alt: #1a1c15; --card-bg: rgba(128,128,0,0.08); --card-border: rgba(128,128,0,0.2);
+  --text: #c8c8a0; --text-muted: #888860; --heading: #e8e8c0;
+  --accent: #8b8b00; --accent-glow: rgba(139,139,0,0.4); --accent-rgb: 139,139,0;
+  --secondary: #c41e3a; --secondary-rgb: 196,30,58;
+  --nav-bg: rgba(18,20,15,0.88); --hero-grad-1: #4a4a00; --hero-grad-2: #12140f;
+  --particle-color: 139,139,0; --glass-bg: rgba(139,139,0,0.06); --glass-border: rgba(139,139,0,0.15);
+  --input-bg: rgba(255,255,255,0.04); --input-border: rgba(139,139,0,0.3);
+  --footer-bg: #0a0b08;
 }
 [data-theme="neon-arena"] {
-  --bg: #0A0014; --bg-alt: #120020; --bg-cream: #F0E8F5;
-  --text: #E0D0F0; --text-muted: #8A6AAA; --heading: #FFFFFF; --text-dark: #2A1838;
-  --accent: #FF0080; --accent-glow: rgba(255,0,128,0.5); --accent-rgb: 255,0,128;
-  --secondary: #00FFFF; --secondary-rgb: 0,255,255;
-  --nav-bg: rgba(10,0,20,0.95); --card-bg: #150020; --card-border: #2A1838;
-  --input-bg: #150020; --input-border: #3A2848;
-  --particle-color: 255,0,128; --rope-1: #FF0080; --rope-2: #00FFFF; --rope-3: #FF0080;
+  --bg: #0a0014; --bg-alt: #120020; --card-bg: rgba(255,0,128,0.08); --card-border: rgba(255,0,128,0.2);
+  --text: #e0d0f0; --text-muted: #8a6aaa; --heading: #ffffff;
+  --accent: #ff0080; --accent-glow: rgba(255,0,128,0.5); --accent-rgb: 255,0,128;
+  --secondary: #00ffff; --secondary-rgb: 0,255,255;
+  --nav-bg: rgba(10,0,20,0.9); --hero-grad-1: #ff0080; --hero-grad-2: #0a0014;
+  --particle-color: 255,0,128; --glass-bg: rgba(255,0,128,0.06); --glass-border: rgba(255,0,128,0.15);
+  --input-bg: rgba(255,255,255,0.05); --input-border: rgba(255,0,128,0.3);
   --footer-bg: #050008;
 }
-
-/* ========== TYPOGRAPHY ========== */
-.font-headline { font-family: 'Bebas Neue', 'Impact', sans-serif; text-transform: uppercase; letter-spacing: 0.03em; }
-.font-sub { font-family: 'Oswald', 'Arial Narrow', sans-serif; text-transform: uppercase; }
-.font-body { font-family: 'DM Sans', sans-serif; }
 
 /* ========== LOADING SCREEN ========== */
 .loader { position: fixed; inset: 0; z-index: 99999; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s ease; }
 .loader.hidden { opacity: 0; pointer-events: none; }
-.loader-bell { width: 80px; height: 90px; animation: loaderSwing 1.5s ease-in-out infinite; }
-.loader-text { margin-top: 20px; font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 6px; text-transform: uppercase; color: var(--accent); }
-.loader-ding { margin-top: 6px; font-family: 'Oswald', sans-serif; font-size: 0.8rem; letter-spacing: 6px; color: var(--secondary); font-weight: 700; animation: dingFlash 0.6s ease-in-out infinite alternate; }
-@keyframes loaderSwing { 0%,100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
+.loader-icon { width: 80px; height: 80px; position: relative; animation: loaderPulse 1.2s ease-in-out infinite; }
+.loader-icon svg { width: 100%; height: 100%; }
+.loader-text { margin-top: 20px; font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); }
+.loader-ding { margin-top: 8px; font-size: 0.8rem; letter-spacing: 6px; color: var(--secondary); font-weight: 800; animation: dingFlash 0.6s ease-in-out infinite alternate; }
+@keyframes loaderPulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.15); opacity: 0.6; } }
 @keyframes dingFlash { 0% { opacity: 0.4; } 100% { opacity: 1; } }
 
 /* ========== SCROLL PROGRESS ========== */
-.scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); z-index: 10001; width: 0%; transition: width 0.1s linear; }
+.scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--secondary)); z-index: 10001; width: 0%; transition: width 0.1s linear; }
 
 /* ========== CURSOR GLOW ========== */
-.cursor-glow { position: fixed; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(var(--particle-color),0.08) 0%, transparent 70%); pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); opacity: 0; transition: opacity 0.4s ease; }
+.cursor-glow { position: fixed; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(var(--particle-color),0.1) 0%, transparent 70%); pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); opacity: 0; transition: opacity 0.4s ease; }
 body:hover .cursor-glow { opacity: 1; }
 
 /* ========== NAVIGATION ========== */
-.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 18px 0; transition: all 0.4s ease; }
-.nav.scrolled { background: var(--nav-bg); padding: 10px 0; box-shadow: 0 2px 30px rgba(0,0,0,0.5); }
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 16px 0; transition: all 0.4s ease; }
+.nav.scrolled { background: var(--nav-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: 10px 0; box-shadow: 0 1px 20px rgba(0,0,0,0.3); }
 .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; }
-.nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--heading); letter-spacing: 3px; display: flex; align-items: center; gap: 10px; }
+.nav-logo { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.3rem; color: var(--heading); letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
 .nav-logo svg { width: 28px; height: 28px; color: var(--accent); }
-.nav-links { display: flex; gap: 24px; align-items: center; }
-.nav-links a { font-family: 'Oswald', sans-serif; font-size: 0.85rem; font-weight: 500; color: var(--text-muted); transition: color 0.3s; letter-spacing: 2px; text-transform: uppercase; }
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a { font-size: 0.88rem; font-weight: 500; color: var(--text-muted); transition: color 0.3s; letter-spacing: 0.5px; text-transform: uppercase; }
 .nav-links a:hover { color: var(--accent); }
-.nav-cta { background: var(--accent); color: #fff !important; padding: 10px 22px; font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; border: none; cursor: pointer; }
+.nav-cta { background: var(--accent); color: #fff !important; padding: 10px 24px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s; border: none; cursor: pointer; }
 .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 4px 20px var(--accent-glow); }
 
 /* Hamburger */
@@ -185,505 +173,195 @@ body:hover .cursor-glow { opacity: 1; }
 .hamburger.active span:nth-child(2) { opacity: 0; }
 .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
 
-.mobile-menu { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 999; flex-direction: column; align-items: center; justify-content: center; gap: 28px; }
+.mobile-menu { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 999; flex-direction: column; align-items: center; justify-content: center; gap: 32px; }
 .mobile-menu.active { display: flex; }
-.mobile-menu a { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--heading); letter-spacing: 4px; }
+.mobile-menu a { font-size: 1.4rem; font-weight: 600; color: var(--heading); text-transform: uppercase; letter-spacing: 2px; }
 
-/* ========== HERO — FIGHT POSTER ========== */
-.hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; padding: 100px 24px 80px; }
-.hero-bg { position: absolute; inset: 0; background: var(--bg); }
-.hero-bg::before {
-  content: ''; position: absolute; top: -20%; left: 10%; width: 80%; height: 140%;
-  background: radial-gradient(ellipse at 50% 30%, rgba(var(--accent-rgb),0.12) 0%, transparent 60%);
-}
-.hero-bg::after {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(ellipse at 50% 80%, rgba(var(--secondary-rgb),0.06) 0%, transparent 50%);
-}
-/* Diagonal red stripes */
-.hero-stripes { position: absolute; inset: 0; overflow: hidden; opacity: 0.08; }
-.hero-stripes::before {
-  content: ''; position: absolute; top: -50%; left: -10%; width: 35%; height: 200%;
-  background: var(--accent); transform: rotate(-15deg);
-}
-.hero-stripes::after {
-  content: ''; position: absolute; top: -50%; right: -10%; width: 35%; height: 200%;
-  background: var(--accent); transform: rotate(15deg);
-}
+/* ========== HERO ========== */
+.hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; padding: 120px 24px 80px; }
+.hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, var(--hero-grad-1) 0%, var(--bg) 40%, var(--bg) 60%, var(--hero-grad-2) 100%); opacity: 0.5; }
+.hero-bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(var(--accent-rgb),0.15) 0%, transparent 60%); }
+.hero-stars { position: absolute; inset: 0; overflow: hidden; }
+.hero-star { position: absolute; width: 3px; height: 3px; background: rgba(var(--accent-rgb),0.5); border-radius: 50%; animation: twinkle 3s ease-in-out infinite; }
+@keyframes twinkle { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
 .hero-content { position: relative; z-index: 2; max-width: 900px; }
-
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  border: 2px solid var(--accent); padding: 6px 20px;
-  font-family: 'Oswald', sans-serif; font-size: 0.8rem; font-weight: 600;
-  text-transform: uppercase; letter-spacing: 4px; color: var(--accent); margin-bottom: 28px;
-}
-
-.hero-bell { display: block; margin: 0 auto 20px; width: 80px; height: 90px; animation: bellSwing 2.5s ease-in-out infinite; }
-@keyframes bellSwing { 0%,100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
-
-.hero h1 {
-  font-family: 'Bebas Neue', 'Impact', sans-serif;
-  line-height: 0.9; color: var(--heading); margin-bottom: 0;
-  text-transform: uppercase; letter-spacing: 0.02em;
-}
-.hero-h1-fight { font-size: clamp(4rem, 14vw, 10rem); display: block; color: var(--accent); }
-.hero-h1-like { font-size: clamp(1.8rem, 5vw, 3.5rem); display: block; color: var(--secondary); letter-spacing: 0.25em; margin: -0.05em 0; }
-.hero-h1-name {
-  font-size: clamp(3.5rem, 12vw, 9rem); display: block;
-  background: linear-gradient(180deg, var(--heading) 40%, var(--secondary) 100%);
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-}
-.hero h1 .shimmer-active {
-  background: linear-gradient(90deg, var(--heading) 0%, var(--accent) 25%, var(--secondary) 50%, var(--accent) 75%, var(--heading) 100%);
-  background-size: 200% 100%;
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-  animation: shimmer 4s linear infinite;
-}
+.hero-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 8px 20px; border-radius: 50px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); margin-bottom: 32px; backdrop-filter: blur(8px); }
+.hero-badge svg { width: 14px; height: 14px; }
+.hero-bell { display: block; margin: 0 auto 24px; width: 80px; height: 80px; color: var(--secondary); animation: bellSwing 2s ease-in-out infinite; }
+@keyframes bellSwing { 0%,100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+.hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem,8vw,5.5rem); font-weight: 900; line-height: 1.05; color: var(--heading); margin-bottom: 8px; }
+.hero h1 .shimmer { background: linear-gradient(90deg, var(--heading) 0%, var(--accent) 25%, var(--secondary) 50%, var(--accent) 75%, var(--heading) 100%); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: shimmer 4s linear infinite; }
 @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-
-.hero-tagline {
-  font-family: 'DM Sans', sans-serif; font-size: clamp(0.95rem, 2.2vw, 1.2rem);
-  color: var(--text-muted); margin-top: 20px; margin-bottom: 36px; line-height: 1.6;
-  max-width: 550px; margin-left: auto; margin-right: auto;
-}
-.hero-tagline strong { color: var(--heading); font-weight: 700; }
-
+.hero-subtitle { font-size: clamp(1rem,2.5vw,1.3rem); color: var(--text-muted); margin-top: 16px; margin-bottom: 40px; font-weight: 400; line-height: 1.6; }
 .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-.btn-primary {
-  background: var(--accent); color: #fff; padding: 16px 36px;
-  font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1rem;
-  text-transform: uppercase; letter-spacing: 3px; transition: all 0.3s;
-  border: none; cursor: pointer; position: relative; overflow: hidden;
-}
+.btn-primary { background: var(--accent); color: #fff; padding: 16px 36px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1.5px; transition: all 0.3s; border: none; cursor: pointer; position: relative; overflow: hidden; }
 .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 30px var(--accent-glow); }
-.btn-secondary {
-  background: transparent; color: var(--heading); padding: 16px 36px;
-  font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1rem;
-  text-transform: uppercase; letter-spacing: 3px; transition: all 0.3s;
-  border: 2px solid var(--accent); cursor: pointer;
-}
-.btn-secondary:hover { background: var(--accent); color: #fff; transform: translateY(-3px); }
-
-.hero-scroll { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); animation: bounce 2s infinite; }
-.hero-scroll svg { width: 24px; height: 24px; color: var(--text-muted); }
-@keyframes bounce { 0%,20%,50%,80%,100% { transform: translateX(-50%) translateY(0); } 40% { transform: translateX(-50%) translateY(-8px); } 60% { transform: translateX(-50%) translateY(-4px); } }
-
-/* ========== RING ROPE DIVIDERS ========== */
-.rope-divider {
-  position: relative; padding: 32px 24px; text-align: center;
-  display: flex; flex-direction: column; align-items: center; gap: 0;
-}
-.rope-divider .ropes {
-  display: flex; flex-direction: column; gap: 6px; width: 100%; max-width: 1100px;
-}
-.rope-divider .rope-line {
-  height: 3px; width: 100%; position: relative;
-}
-.rope-divider .rope-line:nth-child(1) { background: var(--rope-1); }
-.rope-divider .rope-line:nth-child(2) { background: var(--rope-2); opacity: 0.7; }
-.rope-divider .rope-line:nth-child(3) { background: var(--rope-3); }
-/* Turnbuckle dots at ends */
-.rope-divider .rope-line::before,
-.rope-divider .rope-line::after {
-  content: ''; position: absolute; top: 50%; transform: translateY(-50%);
-  width: 8px; height: 8px; border-radius: 50%; background: inherit;
-}
-.rope-divider .rope-line::before { left: 0; }
-.rope-divider .rope-line::after { right: 0; }
-
-.rope-divider .round-label {
-  font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem;
-  letter-spacing: 8px; color: var(--accent); margin-top: 14px;
-  text-transform: uppercase;
-}
+.btn-secondary { background: transparent; color: var(--heading); padding: 16px 36px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1.5px; transition: all 0.3s; border: 2px solid var(--glass-border); cursor: pointer; }
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-3px); }
+.hero-scroll { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); animation: bounce 2s infinite; }
+.hero-scroll svg { width: 28px; height: 28px; color: var(--text-muted); }
+@keyframes bounce { 0%,20%,50%,80%,100% { transform: translateX(-50%) translateY(0); } 40% { transform: translateX(-50%) translateY(-10px); } 60% { transform: translateX(-50%) translateY(-5px); } }
 
 /* ========== SECTIONS COMMON ========== */
-section { padding: 90px 24px; position: relative; }
+section { padding: 100px 24px; position: relative; }
 .section-inner { max-width: 1100px; margin: 0 auto; }
-.section-label {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-family: 'Oswald', sans-serif; font-size: 0.75rem; font-weight: 600;
-  text-transform: uppercase; letter-spacing: 4px; color: var(--accent); margin-bottom: 12px;
-}
+.section-label { display: inline-flex; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: var(--accent); margin-bottom: 16px; }
 .section-label svg { width: 16px; height: 16px; }
-.section-title {
-  font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.4rem, 6vw, 4rem);
-  color: var(--heading); margin-bottom: 20px; line-height: 1.0;
-  text-transform: uppercase; letter-spacing: 0.02em;
-}
+.section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem,5vw,3rem); font-weight: 900; color: var(--heading); margin-bottom: 20px; line-height: 1.15; }
 .section-desc { color: var(--text-muted); font-size: 1.05rem; line-height: 1.7; max-width: 650px; }
 
-/* Angled section tops */
-.section-angled { position: relative; }
-.section-angled::before {
-  content: ''; position: absolute; top: -30px; left: 0; right: 0; height: 60px;
-  background: inherit; transform: skewY(-1.5deg); transform-origin: top left; z-index: -1;
-}
-.section-alt { background: var(--bg-alt); }
+/* Round Dividers */
+.round-divider { text-align: center; padding: 40px 24px; position: relative; overflow: hidden; }
+.round-divider::before, .round-divider::after { content: ''; position: absolute; top: 50%; height: 2px; width: calc(50% - 120px); background: linear-gradient(90deg, transparent, var(--card-border)); }
+.round-divider::before { left: 0; }
+.round-divider::after { right: 0; background: linear-gradient(-90deg, transparent, var(--card-border)); }
+.round-divider span { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 900; letter-spacing: 6px; text-transform: uppercase; color: var(--accent); background: var(--bg); padding: 0 24px; position: relative; z-index: 1; }
+.round-divider.alt-bg span { background: var(--bg-alt); }
+.round-divider .bell-icon { display: inline-block; width: 20px; height: 20px; vertical-align: middle; margin: 0 8px; color: var(--secondary); }
 
 /* Reveal */
-.reveal { opacity: 0; transform: translateY(25px); transition: all 0.7s cubic-bezier(0.25,0.46,0.45,0.94); }
+.reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.25,0.46,0.45,0.94); }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 .reveal-delay-1 { transition-delay: 0.1s; }
 .reveal-delay-2 { transition-delay: 0.2s; }
 .reveal-delay-3 { transition-delay: 0.3s; }
 .reveal-delay-4 { transition-delay: 0.4s; }
 
-/* ========== THE FIGHTER (ABOUT) ========== */
-.fighter-section { background: var(--bg-alt); }
-.fighter-grid { display: grid; grid-template-columns: 300px 1fr; gap: 50px; align-items: start; margin-top: 40px; }
-.fighter-portrait {
-  width: 100%; aspect-ratio: 3/4; background: var(--card-bg);
-  border: 3px solid var(--accent); display: flex; align-items: center;
-  justify-content: center; position: relative; overflow: hidden;
-}
-.fighter-portrait svg { width: 120px; height: 140px; opacity: 0.4; }
-.fighter-portrait::after {
-  content: 'THE FIGHTER'; position: absolute; bottom: 12px; left: 0; right: 0;
-  font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 6px;
-  text-align: center; color: var(--accent); opacity: 0.5;
-}
-.fighter-text h3 {
-  font-family: 'Bebas Neue', sans-serif; font-size: 2rem;
-  color: var(--heading); margin-bottom: 18px; letter-spacing: 2px;
-}
-.fighter-text p { color: var(--text-muted); line-height: 1.8; margin-bottom: 16px; font-size: 1rem; }
-.fighter-text .highlight { color: var(--accent); font-weight: 600; }
-.fighter-stats { display: flex; gap: 28px; margin-top: 24px; }
-.fighter-stat { text-align: center; padding: 14px 20px; border: 2px solid var(--card-border); }
-.fighter-stat .num {
-  font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--accent); letter-spacing: 2px;
-}
-.fighter-stat .label {
-  font-family: 'Oswald', sans-serif; font-size: 0.7rem; color: var(--text-muted);
-  text-transform: uppercase; letter-spacing: 2px; margin-top: 2px;
-}
+/* ========== ABOUT / THE FIGHTER ========== */
+.about { background: var(--bg-alt); }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-top: 48px; }
+.about-portrait { width: 100%; aspect-ratio: 4/5; border-radius: 16px; background: linear-gradient(135deg, var(--glass-bg), rgba(var(--accent-rgb),0.12)); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.about-portrait svg { width: 140px; height: 140px; color: var(--accent); opacity: 0.3; }
+.about-portrait::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, var(--bg-alt) 100%); }
+.about-text h3 { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--heading); margin-bottom: 20px; }
+.about-text p { color: var(--text-muted); line-height: 1.8; margin-bottom: 16px; font-size: 1rem; }
+.about-text .highlight { color: var(--accent); font-weight: 600; }
+.about-stats { display: flex; gap: 32px; margin-top: 28px; }
+.about-stat { text-align: center; }
+.about-stat .num { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; color: var(--accent); }
+.about-stat .label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
 
-/* ========== NEWSPAPER CLIPPINGS (Press Links) ========== */
-.clippings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
-.clipping {
-  background: var(--bg-cream); padding: 16px 18px; position: relative;
-  border: 1px solid rgba(0,0,0,0.12); transition: all 0.3s;
-  box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
-}
-.clipping:nth-child(odd) { transform: rotate(-0.5deg); }
-.clipping:nth-child(even) { transform: rotate(0.5deg); }
-.clipping:nth-child(3) { transform: rotate(0.8deg); }
-.clipping:hover { transform: rotate(0deg) translateY(-3px); box-shadow: 4px 4px 16px rgba(0,0,0,0.15); }
-.clipping-source {
-  font-family: 'Oswald', sans-serif; font-size: 0.6rem; text-transform: uppercase;
-  letter-spacing: 3px; color: #888; border-bottom: 1px solid #CCC; padding-bottom: 6px; margin-bottom: 8px;
-}
-.clipping-headline {
-  font-family: Georgia, 'Times New Roman', serif; font-size: 0.95rem;
-  font-weight: 700; color: var(--text-dark); line-height: 1.3;
-}
-.clipping-arrow {
-  position: absolute; top: 8px; right: 10px; font-size: 0.8rem; color: #999;
-}
-.clipping.full-width { grid-column: 1 / -1; }
+/* ========== FEATURE CARDS (used for Sign Fight, Establishment, Album) ========== */
+.feature-section { }
+.feature-section.alt-bg { background: var(--bg-alt); }
+.feature-content { margin-top: 32px; }
+.feature-text { color: var(--text-muted); line-height: 1.8; font-size: 1.05rem; margin-bottom: 20px; }
+.feature-text .highlight { color: var(--accent); font-weight: 600; }
+.article-links { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+.article-link { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 10px; background: var(--card-bg); border: 1px solid var(--card-border); transition: all 0.3s; color: var(--text); font-size: 0.9rem; line-height: 1.4; }
+.article-link:hover { border-color: var(--accent); transform: translateX(4px); color: var(--accent); }
+.article-link svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--accent); }
 
-/* ========== FIGHT CARD (vs. Establishment) ========== */
-.fight-card-section { position: relative; }
-.fight-card {
-  border: 3px solid var(--accent); margin-top: 36px; position: relative; overflow: hidden;
-}
-.fight-card-header {
-  background: var(--accent); padding: 12px 24px; text-align: center;
-  font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem;
-  letter-spacing: 6px; color: #fff; text-transform: uppercase;
-}
-.fight-card-matchup {
-  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
-  padding: 36px 24px; background: var(--card-bg);
-}
-.fight-card-fighter { text-align: center; }
-.fight-card-fighter h3 {
-  font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.6rem, 4vw, 2.6rem);
-  color: var(--heading); letter-spacing: 2px; line-height: 1;
-}
-.fight-card-fighter .subtitle {
-  font-family: 'Oswald', sans-serif; font-size: 0.75rem;
-  color: var(--accent); letter-spacing: 3px; text-transform: uppercase; margin-top: 6px;
-}
-.fight-card-vs {
-  font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4rem);
-  color: var(--secondary); padding: 0 20px; line-height: 1;
-}
-.fight-card-body { padding: 28px 24px; background: var(--bg-alt); }
-
-/* ========== QUOTE SECTION ========== */
-.quote-section { text-align: center; padding: 100px 24px; position: relative; overflow: hidden; }
-.quote-section::before {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(ellipse at center, rgba(var(--accent-rgb),0.06) 0%, transparent 65%);
-}
-.quote-marks {
-  font-family: Georgia, serif; font-size: 10rem; color: var(--accent);
-  opacity: 0.15; line-height: 0.5; margin-bottom: -30px; display: block;
-  position: relative; z-index: 1;
-}
-.quote-text {
-  font-family: 'Oswald', sans-serif; font-size: clamp(1.6rem, 4vw, 2.8rem);
-  font-weight: 500; color: var(--heading); line-height: 1.3;
-  max-width: 800px; margin: 0 auto 20px; text-transform: uppercase;
-  letter-spacing: 2px; position: relative; z-index: 1;
-}
-.quote-author {
-  font-family: 'DM Sans', sans-serif; font-size: 1rem;
-  color: var(--secondary); font-weight: 700; letter-spacing: 3px;
-  text-transform: uppercase; position: relative; z-index: 1;
-}
-
-/* ========== ALBUM / CONCERT POSTER ========== */
-.album-section { background: var(--bg-alt); position: relative; overflow: hidden; }
-.album-section::before {
-  content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-  width: 600px; height: 600px;
-  background: radial-gradient(circle, rgba(var(--accent-rgb),0.08) 0%, transparent 60%);
-}
-.album-poster {
-  text-align: center; max-width: 750px; margin: 0 auto; position: relative; z-index: 1;
-}
-.album-poster .album-title-text {
-  font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 5vw, 3.5rem);
-  color: var(--heading); letter-spacing: 3px; margin-bottom: 8px;
-}
-.album-subtitle {
-  font-family: 'Oswald', sans-serif; font-size: 0.85rem;
-  color: var(--secondary); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 20px;
-}
-.video-wrapper {
-  position: relative; width: 100%; max-width: 700px; margin: 28px auto 0;
-  padding-bottom: 56.25%; height: 0; overflow: hidden;
-  border: 3px solid var(--accent);
-}
+/* YouTube Embed */
+.video-wrapper { position: relative; width: 100%; max-width: 700px; margin: 32px auto 0; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 16px; border: 2px solid var(--card-border); }
 .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-.album-links { display: flex; flex-direction: column; gap: 10px; margin-top: 28px; max-width: 700px; margin-left: auto; margin-right: auto; }
 
 /* ========== ENDORSEMENTS / IN HIS CORNER ========== */
-.endorsements-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 44px; }
-.endorsement-block { position: relative; padding: 36px 28px; border-left: 4px solid var(--accent); background: var(--card-bg); }
-.endorsement-block::before {
-  content: '\201C'; font-family: Georgia, serif; font-size: 8rem;
-  color: var(--accent); opacity: 0.12; position: absolute; top: -20px; left: 10px; line-height: 1;
-}
-.endorsement-block h3 {
-  font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem;
-  color: var(--heading); letter-spacing: 2px; margin-bottom: 12px; position: relative; z-index: 1;
-}
-.endorsement-block p {
-  color: var(--text-muted); line-height: 1.7; font-size: 0.95rem;
-  margin-bottom: 16px; position: relative; z-index: 1;
-}
-.endorsement-link {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-family: 'Oswald', sans-serif; color: var(--accent); font-weight: 600;
-  font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;
-  transition: all 0.3s; position: relative; z-index: 1;
-}
-.endorsement-link:hover { gap: 10px; }
-.endorsement-link svg { width: 14px; height: 14px; }
-
-.campaign-banner {
-  margin-top: 28px; text-align: center; padding: 20px 24px;
-  border: 2px solid var(--card-border); background: var(--card-bg);
-}
-.campaign-banner p { color: var(--text-muted); font-size: 1rem; line-height: 1.6; margin-bottom: 10px; }
+.endorsements-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px; }
+.endorsement-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 36px 28px; transition: all 0.4s ease; position: relative; overflow: hidden; text-align: center; }
+.endorsement-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--secondary)); transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease; }
+.endorsement-card:hover::before { transform: scaleX(1); }
+.endorsement-card:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 12px 40px rgba(var(--accent-rgb),0.15); }
+.endorsement-icon { width: 64px; height: 64px; border-radius: 50%; background: rgba(var(--accent-rgb),0.12); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+.endorsement-icon svg { width: 32px; height: 32px; color: var(--accent); }
+.endorsement-card h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--heading); margin-bottom: 12px; }
+.endorsement-card p { color: var(--text-muted); line-height: 1.7; font-size: 0.95rem; margin-bottom: 16px; }
+.endorsement-card .card-link { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s; }
+.endorsement-card .card-link:hover { gap: 10px; }
+.endorsement-card .card-link svg { width: 14px; height: 14px; }
+.campaign-banner { margin-top: 32px; text-align: center; padding: 24px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; }
+.campaign-banner p { color: var(--text-muted); font-size: 1rem; line-height: 1.6; margin-bottom: 12px; }
 .campaign-banner a { color: var(--accent); font-weight: 700; text-decoration: underline; }
 
-/* ========== STATS / TALE OF THE TAPE ========== */
-.stats-section { background: var(--bg-alt); }
-.tape-table { margin-top: 40px; border: 3px solid var(--accent); overflow: hidden; }
-.tape-header {
-  background: var(--accent); padding: 10px 20px;
-  display: grid; grid-template-columns: 1fr auto 1fr; text-align: center;
-  font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem;
-  letter-spacing: 4px; color: #fff;
-}
-.tape-row {
-  display: grid; grid-template-columns: 1fr auto 1fr; text-align: center;
-  border-bottom: 1px solid var(--card-border);
-}
-.tape-row:last-child { border-bottom: none; }
-.tape-row .tape-val {
-  padding: 16px 20px; font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.6rem; color: var(--heading); letter-spacing: 2px;
-}
-.tape-row .tape-val.zero { color: var(--secondary); }
-.tape-row .tape-label {
-  padding: 16px 12px; font-family: 'Oswald', sans-serif; font-size: 0.75rem;
-  text-transform: uppercase; letter-spacing: 3px; color: var(--text-muted);
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(var(--accent-rgb),0.06); border-left: 1px solid var(--card-border);
-  border-right: 1px solid var(--card-border);
-}
+/* ========== STATS ========== */
+.stats { background: var(--bg-alt); }
+.stats-bar { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; margin-top: 48px; }
+.stat-item { text-align: center; padding: 36px 16px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; transition: all 0.3s; }
+.stat-item:hover { transform: translateY(-4px); border-color: var(--accent); }
+.stat-number { font-family: 'Playfair Display', serif; font-size: clamp(2rem,4vw,2.8rem); font-weight: 900; color: var(--accent); }
+.stat-label { font-size: 0.85rem; color: var(--text-muted); margin-top: 8px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+
+/* ========== QUOTE ========== */
+.quote-section { text-align: center; padding: 120px 24px; position: relative; }
+.quote-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(var(--accent-rgb),0.08) 0%, transparent 70%); }
+.quote-mark { font-family: 'Playfair Display', serif; font-size: 6rem; color: var(--accent); opacity: 0.3; line-height: 1; margin-bottom: -20px; }
+.quote-text { font-family: 'Playfair Display', serif; font-size: clamp(1.4rem,3.5vw,2.2rem); font-weight: 700; color: var(--heading); line-height: 1.4; max-width: 800px; margin: 0 auto 24px; font-style: italic; position: relative; z-index: 1; }
+.quote-author { font-size: 1rem; color: var(--accent); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; position: relative; z-index: 1; }
 
 /* ========== GET IN THE RING (Signup) ========== */
-.signup-section { position: relative; overflow: hidden; padding: 100px 24px; }
-.signup-section::before {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(var(--accent-rgb),0.04) 0%, transparent 50%, rgba(var(--secondary-rgb),0.03) 100%);
-}
+.signup-section { background: var(--bg-alt); position: relative; overflow: hidden; padding: 120px 24px; }
+.signup-section::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(var(--accent-rgb),0.06) 0%, transparent 50%, rgba(var(--secondary-rgb),0.04) 100%); }
 .signup-inner { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; text-align: center; }
-.signup-ropes { display: flex; justify-content: center; gap: 0; margin-bottom: 20px; flex-direction: column; align-items: center; }
-.signup-ropes .s-rope { height: 3px; width: 120px; margin: 3px 0; }
-.signup-ropes .s-rope:nth-child(1) { background: var(--rope-1); }
-.signup-ropes .s-rope:nth-child(2) { background: var(--rope-2); opacity: 0.7; }
-.signup-ropes .s-rope:nth-child(3) { background: var(--rope-3); }
-
-.signup-form-card {
-  background: var(--card-bg); border: 3px solid var(--accent);
-  padding: 0; text-align: left; max-width: 520px; margin: 28px auto 0;
-  position: relative;
-}
-.signup-form-header {
-  background: var(--accent); padding: 14px 24px;
-  font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem;
-  letter-spacing: 4px; color: #fff; text-align: center;
-}
-.signup-form-body { padding: 32px 28px; }
-.signup-form-body .form-subtitle {
-  text-align: center; color: var(--text-muted); margin-bottom: 24px;
-  font-size: 0.9rem; font-family: 'DM Sans', sans-serif;
-}
+.signup-section .section-title { font-size: clamp(2.4rem,6vw,3.8rem); }
+.signup-ring { display: flex; justify-content: center; gap: 16px; margin-bottom: 24px; }
+.signup-ring .rope { height: 3px; width: 80px; border-radius: 2px; background: var(--accent); opacity: 0.4; }
+.signup-form-card { background: var(--card-bg); border: 2px solid var(--accent); border-radius: 20px; padding: 48px 40px; backdrop-filter: blur(8px); text-align: left; max-width: 560px; margin: 32px auto 0; box-shadow: 0 0 60px rgba(var(--accent-rgb),0.15); position: relative; }
+.signup-form-card::before { content: ''; position: absolute; inset: -2px; border-radius: 22px; background: linear-gradient(135deg, var(--accent), var(--secondary), var(--accent)); z-index: -1; opacity: 0.3; animation: ringGlow 3s ease-in-out infinite alternate; }
+@keyframes ringGlow { 0% { opacity: 0.2; } 100% { opacity: 0.4; } }
+.signup-form-card h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--heading); margin-bottom: 8px; text-align: center; }
+.signup-form-card .form-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 24px; font-size: 0.9rem; }
 .form-group { margin-bottom: 18px; }
-.form-group label {
-  display: block; font-family: 'Oswald', sans-serif; font-size: 0.75rem; font-weight: 600;
-  text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 6px;
-}
-.form-group input {
-  width: 100%; padding: 12px 14px; border: 2px solid var(--input-border);
-  background: var(--input-bg); color: var(--text);
-  font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 0.3s;
-}
+.form-group label { display: block; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 6px; }
+.form-group input { width: 100%; padding: 14px 16px; border-radius: 10px; border: 1px solid var(--input-border); background: var(--input-bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 0.95rem; transition: all 0.3s; }
 .form-group input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(var(--accent-rgb),0.15); }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.form-submit {
-  width: 100%; padding: 16px; border: none;
-  background: var(--accent); color: #fff;
-  font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.1rem;
-  text-transform: uppercase; letter-spacing: 3px; cursor: pointer;
-  transition: all 0.3s; margin-top: 8px;
-}
-.form-submit:hover { box-shadow: 0 6px 24px var(--accent-glow); transform: translateY(-2px); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-submit { width: 100%; padding: 18px; border: none; border-radius: 10px; background: linear-gradient(135deg, var(--accent), var(--secondary)); color: #fff; font-weight: 800; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.3s; margin-top: 8px; font-family: 'Inter', sans-serif; }
+.form-submit:hover { box-shadow: 0 8px 30px var(--accent-glow); transform: translateY(-2px); }
 
 /* ========== FOOTER ========== */
-.footer { background: var(--footer-bg); padding: 44px 24px 24px; border-top: 3px solid var(--accent); }
+.footer { background: var(--footer-bg); padding: 48px 24px 28px; border-top: 1px solid var(--card-border); }
 .footer-inner { max-width: 1100px; margin: 0 auto; text-align: center; }
-.footer-logo {
-  font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem;
-  color: var(--heading); letter-spacing: 4px; margin-bottom: 10px;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-}
-.footer-logo svg { width: 22px; height: 22px; color: var(--accent); }
-.footer-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; max-width: 500px; margin: 0 auto 18px; }
-.footer-links-row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
-.footer-links-row a {
-  font-family: 'Oswald', sans-serif; color: var(--text-muted); font-size: 0.8rem;
-  font-weight: 500; transition: color 0.3s; text-transform: uppercase; letter-spacing: 2px;
-}
+.footer-logo { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.3rem; color: var(--heading); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.footer-logo svg { width: 24px; height: 24px; color: var(--accent); }
+.footer-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; max-width: 500px; margin: 0 auto 20px; }
+.footer-links-row { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px; }
+.footer-links-row a { color: var(--text-muted); font-size: 0.85rem; font-weight: 500; transition: color 0.3s; text-transform: uppercase; letter-spacing: 1px; }
 .footer-links-row a:hover { color: var(--accent); }
-.footer-bottom {
-  border-top: 1px solid var(--card-border); padding-top: 16px;
-  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
-}
+.footer-bottom { border-top: 1px solid var(--card-border); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
 .footer-bottom p { font-size: 0.8rem; color: var(--text-muted); }
 .footer-bottom a { color: var(--accent); }
 
 /* ========== THEME SWITCHER ========== */
-.theme-switcher {
-  position: fixed; right: 18px; top: 50%; transform: translateY(-50%);
-  z-index: 9999; display: flex; flex-direction: column; align-items: center; gap: 8px;
-}
-.theme-label {
-  writing-mode: vertical-lr; font-family: 'Oswald', sans-serif;
-  font-size: 0.6rem; font-weight: 600; text-transform: uppercase;
-  letter-spacing: 4px; color: var(--text-muted); margin-bottom: 4px;
-}
-.theme-dot {
-  width: 14px; height: 14px; cursor: pointer;
-  border: 2px solid transparent; transition: all 0.3s; position: relative;
-}
-.theme-dot::after {
-  content: ''; position: absolute; inset: -4px;
-  border: 2px solid transparent; transition: border-color 0.3s;
-}
+.theme-switcher { position: fixed; right: 20px; top: 50%; transform: translateY(-50%); z-index: 9999; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.theme-label { writing-mode: vertical-lr; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: var(--text-muted); margin-bottom: 4px; }
+.theme-dot { width: 16px; height: 16px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.3s; position: relative; }
+.theme-dot::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid transparent; transition: border-color 0.3s; }
 .theme-dot[aria-checked="true"]::after { border-color: var(--heading); }
 .theme-dot:hover { transform: scale(1.3); }
 
 /* ========== VOICE SWITCHER ========== */
-.voice-switcher { position: fixed; bottom: 18px; left: 18px; z-index: 9999; }
-.voice-toggle {
-  width: 42px; height: 42px; background: var(--card-bg);
-  border: 2px solid var(--card-border); display: flex; align-items: center;
-  justify-content: center; cursor: pointer; transition: all 0.3s;
-}
+.voice-switcher { position: fixed; bottom: 20px; left: 20px; z-index: 9999; }
+.voice-toggle { width: 44px; height: 44px; border-radius: 12px; background: var(--card-bg); border: 1px solid var(--card-border); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(8px); }
 .voice-toggle:hover { border-color: var(--accent); }
-.voice-toggle svg { width: 18px; height: 18px; color: var(--text-muted); }
-.voice-panel {
-  position: absolute; bottom: 50px; left: 0; width: 200px;
-  background: var(--bg-alt); border: 2px solid var(--card-border);
-  padding: 10px; display: none; box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-}
+.voice-toggle svg { width: 20px; height: 20px; color: var(--text-muted); }
+.voice-panel { position: absolute; bottom: 54px; left: 0; width: 220px; background: var(--bg-alt); border: 1px solid var(--card-border); border-radius: 14px; padding: 12px; display: none; box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
 .voice-panel.open { display: block; }
-.voice-panel-title {
-  font-family: 'Oswald', sans-serif; font-size: 0.65rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 3px; color: var(--text-muted);
-  margin-bottom: 6px; padding: 0 4px;
-}
-.voice-option {
-  display: block; width: 100%; padding: 7px 10px; border: none; background: none;
-  color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.82rem;
-  cursor: pointer; text-align: left; transition: all 0.2s;
-}
+.voice-panel-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 8px; padding: 0 4px; }
+.voice-option { display: block; width: 100%; padding: 8px 12px; border: none; background: none; color: var(--text); font-family: 'Inter', sans-serif; font-size: 0.85rem; border-radius: 8px; cursor: pointer; text-align: left; transition: all 0.2s; }
 .voice-option:hover { background: rgba(var(--accent-rgb),0.1); }
 .voice-option.active { background: rgba(var(--accent-rgb),0.15); color: var(--accent); font-weight: 600; }
 
 /* ========== FIGHT MODE BUTTON ========== */
-.fight-mode-btn {
-  position: fixed; bottom: 18px; right: 18px; z-index: 9999;
-  display: flex; align-items: center; gap: 8px; padding: 10px 18px;
-  background: var(--card-bg); border: 2px solid var(--card-border);
-  cursor: pointer; transition: all 0.3s; font-family: 'Oswald', sans-serif;
-}
-.fight-mode-btn svg { width: 16px; height: 16px; color: var(--text-muted); transition: color 0.3s; }
-.fight-mode-btn span {
-  font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 3px; color: var(--text-muted); transition: color 0.3s;
-}
+.fight-mode-btn { position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; align-items: center; gap: 8px; padding: 10px 20px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(8px); font-family: 'Inter', sans-serif; }
+.fight-mode-btn svg { width: 18px; height: 18px; color: var(--text-muted); transition: color 0.3s; }
+.fight-mode-btn span { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); transition: color 0.3s; }
 .fight-mode-btn:hover { border-color: var(--accent); }
-.fight-mode-btn.active {
-  border-color: var(--accent); background: rgba(var(--accent-rgb),0.15);
-  box-shadow: 0 0 30px var(--accent-glow); animation: fightPulse 2s ease-in-out infinite;
-}
+.fight-mode-btn.active { border-color: var(--accent); background: rgba(var(--accent-rgb),0.15); box-shadow: 0 0 30px var(--accent-glow); animation: fightPulse 2s ease-in-out infinite; }
 .fight-mode-btn.active svg { color: var(--accent); }
 .fight-mode-btn.active span { color: var(--accent); }
 @keyframes fightPulse { 0%,100% { box-shadow: 0 0 20px var(--accent-glow); } 50% { box-shadow: 0 0 40px var(--accent-glow); } }
 
-/* Fight Mode Active */
-body.fight-mode .hero-h1-fight { animation: shimmer 1.5s linear infinite; background: linear-gradient(90deg, var(--accent) 0%, var(--secondary) 25%, var(--heading) 50%, var(--secondary) 75%, var(--accent) 100%); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-body.fight-mode .endorsement-block { animation: cardGlow 2s ease-in-out infinite alternate; }
-body.fight-mode .clipping { animation: cardGlow 2s ease-in-out infinite alternate; }
-@keyframes cardGlow { 0% { box-shadow: 0 0 8px rgba(var(--accent-rgb),0.05); } 100% { box-shadow: 0 0 24px rgba(var(--accent-rgb),0.2); } }
-body.fight-mode .tape-val { animation: numberPulse 1.5s ease-in-out infinite; }
-@keyframes numberPulse { 0%,100% { text-shadow: 0 0 8px rgba(var(--accent-rgb),0.3); } 50% { text-shadow: 0 0 20px rgba(var(--accent-rgb),0.6); } }
-body.fight-mode .section-title { text-shadow: 0 0 16px rgba(var(--accent-rgb),0.2); }
+/* Fight Mode Active Styles */
+body.fight-mode .hero h1 { animation: shimmer 1.5s linear infinite; }
+body.fight-mode .endorsement-card, body.fight-mode .article-link { animation: cardGlow 2s ease-in-out infinite alternate; }
+@keyframes cardGlow { 0% { box-shadow: 0 0 10px rgba(var(--accent-rgb),0.1); } 100% { box-shadow: 0 0 30px rgba(var(--accent-rgb),0.25); } }
+body.fight-mode .stat-number { animation: numberPulse 1.5s ease-in-out infinite; }
+@keyframes numberPulse { 0%,100% { text-shadow: 0 0 10px rgba(var(--accent-rgb),0.3); } 50% { text-shadow: 0 0 25px rgba(var(--accent-rgb),0.6); } }
+body.fight-mode .section-title { text-shadow: 0 0 20px rgba(var(--accent-rgb),0.2); }
 body.fight-mode .btn-primary, body.fight-mode .form-submit { animation: btnPulse 2s ease-in-out infinite; }
-@keyframes btnPulse { 0%,100% { box-shadow: 0 0 12px var(--accent-glow); } 50% { box-shadow: 0 0 32px var(--accent-glow); } }
-body.fight-mode .quote-text { text-shadow: 0 0 24px rgba(var(--accent-rgb),0.15); }
-body.fight-mode .round-label { animation: numberPulse 1.5s ease-in-out infinite; }
-
-/* ========== ARTICLE LINKS (used in album section) ========== */
-.article-link {
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 16px; background: var(--card-bg);
-  border: 2px solid var(--card-border); transition: all 0.3s;
-  color: var(--text); font-size: 0.9rem; line-height: 1.4;
-}
-.article-link:hover { border-color: var(--accent); transform: translateX(4px); color: var(--accent); }
-.article-link svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--accent); }
+@keyframes btnPulse { 0%,100% { box-shadow: 0 0 15px var(--accent-glow); } 50% { box-shadow: 0 0 35px var(--accent-glow); } }
+body.fight-mode .quote-text { text-shadow: 0 0 30px rgba(var(--accent-rgb),0.15); }
+body.fight-mode .round-divider span { animation: numberPulse 1.5s ease-in-out infinite; }
 
 /* ========== PARTICLE CANVAS ========== */
 #particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
@@ -692,42 +370,32 @@ body.fight-mode .round-label { animation: numberPulse 1.5s ease-in-out infinite;
 @media (max-width: 900px) {
   .nav-links { display: none; }
   .hamburger { display: flex; }
-  .fighter-grid { grid-template-columns: 1fr; gap: 32px; }
-  .fighter-portrait { max-width: 280px; margin: 0 auto; }
+  .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .about-portrait { max-width: 400px; margin: 0 auto; }
   .endorsements-grid { grid-template-columns: 1fr; }
-  .clippings-grid { grid-template-columns: 1fr; }
-  .fight-card-matchup { gap: 8px; padding: 24px 16px; }
-  .fight-card-vs { font-size: 2rem; padding: 0 10px; }
+  .stats-bar { grid-template-columns: repeat(2,1fr); }
   .footer-bottom { justify-content: center; text-align: center; }
   .form-row { grid-template-columns: 1fr; }
-  .tape-row .tape-val { font-size: 1.2rem; padding: 12px 10px; }
-  .tape-row .tape-label { font-size: 0.65rem; letter-spacing: 2px; }
 }
 @media (max-width: 480px) {
-  .hero-h1-fight { font-size: 3.5rem; }
-  .hero-h1-name { font-size: 3rem; }
+  .stats-bar { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 2.4rem; }
   .hero-buttons { flex-direction: column; align-items: center; }
-  .theme-switcher { right: 10px; }
-  .fight-mode-btn { bottom: 10px; right: 10px; padding: 8px 12px; }
+  .theme-switcher { right: 12px; }
+  .fight-mode-btn { bottom: 12px; right: 12px; padding: 8px 14px; }
   .fight-mode-btn span { display: none; }
-  .voice-switcher { bottom: 10px; left: 10px; }
-  .signup-form-body { padding: 24px 18px; }
-  .fighter-stats { flex-direction: column; gap: 12px; }
-  .fight-card-matchup { grid-template-columns: 1fr; gap: 16px; text-align: center; }
-  .fight-card-vs { padding: 8px 0; }
-  .tape-header { font-size: 0.85rem; letter-spacing: 2px; }
+  .voice-switcher { bottom: 12px; left: 12px; }
+  .signup-form-card { padding: 32px 20px; }
 }
 
 /* ========== PRINT ========== */
 @media print {
-  .nav, .theme-switcher, .voice-switcher, .fight-mode-btn, .cursor-glow, .scroll-progress,
-  #particles, .loader, .hero-scroll, .hamburger, .mobile-menu, .grain-overlay { display: none !important; }
+  .nav, .theme-switcher, .voice-switcher, .fight-mode-btn, .cursor-glow, .scroll-progress, #particles, .loader, .hero-scroll, .hamburger, .mobile-menu { display: none !important; }
   body { background: #fff !important; color: #000 !important; }
   .hero { min-height: auto; padding: 40px 0; }
   section { padding: 40px 0; }
   .reveal { opacity: 1 !important; transform: none !important; }
   * { box-shadow: none !important; text-shadow: none !important; animation: none !important; }
-  .clipping { background: #f8f8f4 !important; color: #000 !important; }
 }
 </style>
 </head>
@@ -736,39 +404,16 @@ body.fight-mode .round-label { animation: numberPulse 1.5s ease-in-out infinite;
 <!-- Skip Link -->
 <a href="#main" class="skip-link">Skip to main content</a>
 
-<!-- Grain Overlay -->
-<div class="grain-overlay" aria-hidden="true"></div>
-
 <!-- Loading Screen -->
 <div class="loader" id="loader">
-  <div class="loader-bell">
-    <!-- Detailed Boxing Ring Bell SVG -->
-    <svg viewBox="0 0 120 130" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- Mounting post (vertical) -->
-      <rect x="14" y="6" width="8" height="62" rx="1" fill="#7A6B4E" stroke="#5C5038" stroke-width="1.5"/>
-      <!-- Mounting arm (horizontal) -->
-      <rect x="14" y="6" width="52" height="8" rx="1" fill="#7A6B4E" stroke="#5C5038" stroke-width="1.5"/>
-      <!-- Bracket bolt -->
-      <circle cx="18" cy="10" r="2.5" fill="#5C5038"/>
-      <!-- Bell suspension ring -->
-      <ellipse cx="58" cy="14" rx="5" ry="4" fill="none" stroke="#8B7B5E" stroke-width="2.5"/>
-      <!-- Bell body - brass dome -->
-      <path d="M40 32 C40 24 49 18 58 18 C67 18 76 24 76 32 L80 74 C80 74 80 82 58 82 C36 82 36 74 36 74 Z" fill="#D4A017" stroke="#B8860B" stroke-width="2"/>
-      <!-- Bell rim flare -->
-      <path d="M34 74 C34 70 36 74 36 74 L80 74 C80 74 82 70 82 74 C82 80 72 86 58 86 C44 86 34 80 34 74 Z" fill="#C4960F" stroke="#B8860B" stroke-width="1.5"/>
-      <!-- Bell highlight -->
-      <path d="M46 32 C48 26 53 22 58 22 L55 52 C50 50 46 42 46 32 Z" fill="rgba(255,255,220,0.22)"/>
-      <!-- Connection rod -->
-      <rect x="56" y="14" width="4" height="8" fill="#8B7B5E"/>
-      <!-- Clapper arm mount -->
-      <rect x="86" y="20" width="4" height="8" rx="1" fill="#7A6B4E" stroke="#5C5038" stroke-width="1"/>
-      <!-- Clapper spring coil -->
-      <path d="M88 28 Q94 34 88 40 Q94 46 88 52 Q94 58 88 62" fill="none" stroke="#7A6B4E" stroke-width="2" stroke-linecap="round"/>
-      <!-- Clapper head -->
-      <circle cx="88" cy="66" r="6" fill="#555" stroke="#333" stroke-width="1.5"/>
-      <circle cx="86" cy="64" r="1.5" fill="#777"/>
-      <!-- Base mount -->
-      <rect x="10" y="65" width="16" height="5" rx="1" fill="#7A6B4E" stroke="#5C5038" stroke-width="1"/>
+  <div class="loader-icon">
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Boxing Bell -->
+      <ellipse cx="50" cy="28" rx="28" ry="8" stroke="currentColor" stroke-width="3" fill="rgba(var(--accent-rgb),0.15)" color="var(--secondary)"/>
+      <path d="M30 28 C30 28 25 70 25 75 C25 82 37 88 50 88 C63 88 75 82 75 75 C75 70 70 28 70 28" stroke="currentColor" stroke-width="3" fill="rgba(var(--accent-rgb),0.1)" color="var(--secondary)"/>
+      <line x1="50" y1="88" x2="50" y2="96" stroke="currentColor" stroke-width="3" color="var(--secondary)"/>
+      <circle cx="50" cy="98" r="3" fill="currentColor" color="var(--secondary)"/>
+      <line x1="50" y1="12" x2="50" y2="20" stroke="currentColor" stroke-width="3" color="var(--secondary)"/>
     </svg>
   </div>
   <div class="loader-text">Fight Like Constantino</div>
@@ -781,20 +426,15 @@ body.fight-mode .round-label { animation: numberPulse 1.5s ease-in-out infinite;
 <!-- Cursor Glow -->
 <div class="cursor-glow" id="cursorGlow"></div>
 
-<!-- Arena Canvas -->
+<!-- Particle Canvas -->
 <canvas id="particles"></canvas>
 
 <!-- Navigation -->
 <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
   <div class="nav-inner">
     <a href="#" class="nav-logo" aria-label="Fight Like Constantino">
-      <!-- Boxing Glove Icon (nav) -->
-      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10 28V18C10 10 16 5 22 5C28 5 33 9 33 15V20C33 23 31 25 28 25H26L22 30H14" stroke="currentColor" stroke-width="2.5" fill="rgba(196,30,58,0.15)" stroke-linecap="round"/>
-        <path d="M10 28C10 30 12 32 14 32H24C26 32 28 30 28 28V27H10Z" stroke="currentColor" stroke-width="2.5" fill="rgba(196,30,58,0.15)" stroke-linecap="round"/>
-        <path d="M14 11C18 8 26 9 30 14" stroke="currentColor" stroke-width="1" opacity="0.4" stroke-linecap="round"/>
-        <line x1="19" y1="30" x2="19" y2="28" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>
-      </svg>
+      <!-- Boxing Glove Icon -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17v-5a8 8 0 0 1 8-8h1a5 5 0 0 1 5 5v2a3 3 0 0 1-3 3h-1l-2 3H8"/><path d="M4 17a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1H4z"/><circle cx="9" cy="8" r="1" fill="currentColor" stroke="none"/></svg>
       CONSTANTINO
     </a>
     <div class="nav-links" id="navLinks">
@@ -822,36 +462,25 @@ body.fight-mode .round-label { animation: numberPulse 1.5s ease-in-out infinite;
 
 <main id="main">
 
-<!-- ===== HERO — FIGHT POSTER ===== -->
+<!-- ===== HERO ===== -->
 <section class="hero" id="hero">
   <div class="hero-bg"></div>
-  <div class="hero-stripes" aria-hidden="true"></div>
+  <div class="hero-stars" id="heroStars"></div>
   <div class="hero-content">
-    <div class="hero-badge reveal" data-voice="hero-badge">DING DING DING &bull; The Fight Is On</div>
-
-    <!-- Boxing Bell SVG (Hero) -->
-    <svg class="hero-bell reveal" viewBox="0 0 120 130" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <rect x="14" y="6" width="8" height="62" rx="1" fill="#7A6B4E" stroke="#5C5038" stroke-width="1.5"/>
-      <rect x="14" y="6" width="52" height="8" rx="1" fill="#7A6B4E" stroke="#5C5038" stroke-width="1.5"/>
-      <circle cx="18" cy="10" r="2.5" fill="#5C5038"/>
-      <ellipse cx="58" cy="14" rx="5" ry="4" fill="none" stroke="#8B7B5E" stroke-width="2.5"/>
-      <path d="M40 32 C40 24 49 18 58 18 C67 18 76 24 76 32 L80 74 C80 74 80 82 58 82 C36 82 36 74 36 74 Z" fill="#D4A017" stroke="#B8860B" stroke-width="2"/>
-      <path d="M34 74 C34 70 36 74 36 74 L80 74 C80 74 82 70 82 74 C82 80 72 86 58 86 C44 86 34 80 34 74 Z" fill="#C4960F" stroke="#B8860B" stroke-width="1.5"/>
-      <path d="M46 32 C48 26 53 22 58 22 L55 52 C50 50 46 42 46 32 Z" fill="rgba(255,255,220,0.22)"/>
-      <rect x="56" y="14" width="4" height="8" fill="#8B7B5E"/>
-      <rect x="86" y="20" width="4" height="8" rx="1" fill="#7A6B4E" stroke="#5C5038" stroke-width="1"/>
-      <path d="M88 28 Q94 34 88 40 Q94 46 88 52 Q94 58 88 62" fill="none" stroke="#7A6B4E" stroke-width="2" stroke-linecap="round"/>
-      <circle cx="88" cy="66" r="6" fill="#555" stroke="#333" stroke-width="1.5"/>
-      <circle cx="86" cy="64" r="1.5" fill="#777"/>
-      <rect x="10" y="65" width="16" height="5" rx="1" fill="#7A6B4E" stroke="#5C5038" stroke-width="1"/>
+    <div class="hero-badge reveal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10"/></svg>
+      <span data-voice="hero-badge">DING DING DING &bull; The Fight Is On</span>
+    </div>
+    <!-- Boxing Bell SVG -->
+    <svg class="hero-bell reveal" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <ellipse cx="50" cy="28" rx="28" ry="8" stroke="currentColor" stroke-width="3" fill="rgba(var(--accent-rgb),0.15)"/>
+      <path d="M30 28 C30 28 25 70 25 75 C25 82 37 88 50 88 C63 88 75 82 75 75 C75 70 70 28 70 28" stroke="currentColor" stroke-width="3" fill="rgba(var(--accent-rgb),0.1)"/>
+      <line x1="50" y1="88" x2="50" y2="96" stroke="currentColor" stroke-width="3"/>
+      <circle cx="50" cy="98" r="3" fill="currentColor"/>
+      <line x1="50" y1="12" x2="50" y2="20" stroke="currentColor" stroke-width="3"/>
     </svg>
-
-    <h1 class="reveal reveal-delay-1">
-      <span class="hero-h1-fight" data-voice="hero-h1">Fight</span>
-      <span class="hero-h1-like">Like</span>
-      <span class="hero-h1-name">Constantino</span>
-    </h1>
-    <p class="hero-tagline reveal reveal-delay-2" data-voice="hero-sub">No special interests. No corporate puppeteers. Ready to fight to put <strong>AMERICA FIRST.</strong></p>
+    <h1 class="reveal reveal-delay-1"><span class="shimmer" data-voice="hero-h1">Fight Like Constantino</span></h1>
+    <p class="hero-subtitle reveal reveal-delay-2" data-voice="hero-sub">No special interests. No corporate puppeteers. Ready to fight to put <strong>AMERICA FIRST.</strong></p>
     <div class="hero-buttons reveal reveal-delay-3">
       <a href="#signup" class="btn-primary magnetic-btn" data-voice="hero-cta1">Get in the Ring</a>
       <a href="#fighter" class="btn-secondary magnetic-btn" data-voice="hero-cta2">Meet the Fighter</a>
@@ -862,65 +491,50 @@ body.fight-mode .round-label { animation: numberPulse 1.5s ease-in-out infinite;
   </div>
 </section>
 
-<!-- ===== ROPE DIVIDER — ROUND 1 ===== -->
-<div class="rope-divider" aria-hidden="true">
-  <div class="ropes"><div class="rope-line"></div><div class="rope-line"></div><div class="rope-line"></div></div>
-  <div class="round-label">Round 1</div>
+<!-- ===== ROUND 1 DIVIDER ===== -->
+<div class="round-divider" aria-hidden="true">
+  <span>
+    <svg class="bell-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="7" rx="7" ry="2"/><path d="M7 7c0 0-1.5 10-1.5 12s3 3.5 6.5 3.5 6.5-1.5 6.5-3.5-1.5-12-1.5-12"/></svg>
+    Round 1
+    <svg class="bell-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="7" rx="7" ry="2"/><path d="M7 7c0 0-1.5 10-1.5 12s3 3.5 6.5 3.5 6.5-1.5 6.5-3.5-1.5-12-1.5-12"/></svg>
+  </span>
 </div>
 
-<!-- ===== THE FIGHTER ===== -->
-<section class="fighter-section section-angled" id="fighter">
+<!-- ===== ABOUT / THE FIGHTER ===== -->
+<section class="about" id="fighter">
   <div class="section-inner">
     <div class="section-label reveal">
-      <!-- Detailed Boxing Glove SVG -->
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M6 19V13C6 7 10 4 14 4C18 4 21 7 21 11V14C21 16 19.5 17.5 17.5 17.5H16L13 21H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-        <path d="M6 19C6 20.5 7.5 22 9 22H15C16.5 22 18 20.5 18 19V18.5H6Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-        <line x1="12" y1="21" x2="12" y2="18.5" stroke="currentColor" stroke-width="1" opacity="0.4"/>
-      </svg>
+      <!-- Boxing Glove -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17v-5a8 8 0 0 1 8-8h1a5 5 0 0 1 5 5v2a3 3 0 0 1-3 3h-1l-2 3H8"/><path d="M4 17a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1H4z"/></svg>
       The Fighter
     </div>
     <h2 class="section-title reveal reveal-delay-1" data-voice="about-title">He Didn&rsquo;t Come to Play. He Came to Fight.</h2>
-    <div class="fighter-grid">
-      <div class="fighter-portrait reveal reveal-delay-2">
-        <!-- Large Detailed Boxing Gloves SVG -->
-        <svg viewBox="0 0 100 130" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Main glove body -->
-          <path d="M25 42C25 22 40 12 55 14C70 16 80 30 80 48C80 60 74 70 64 74L58 76H35C30 76 24 68 24 58Z" fill="rgba(196,30,58,0.2)" stroke="currentColor" stroke-width="2"/>
-          <!-- Thumb -->
-          <path d="M24 48C18 44 14 48 15 55C16 62 21 66 25 64L27 58C26 54 25 50 24 48Z" fill="rgba(196,30,58,0.15)" stroke="currentColor" stroke-width="2"/>
-          <!-- Padding seams -->
-          <path d="M34 28C42 22 62 24 72 35" stroke="currentColor" stroke-width="1" opacity="0.3"/>
-          <path d="M30 48C38 42 62 44 74 52" stroke="currentColor" stroke-width="0.8" opacity="0.2"/>
-          <!-- Wrist cuff -->
-          <path d="M28 76V95C28 98 34 102 50 102C66 102 72 98 72 95V76Z" fill="rgba(212,160,23,0.2)" stroke="currentColor" stroke-width="2"/>
-          <!-- Lacing lines -->
-          <line x1="50" y1="76" x2="50" y2="100" stroke="currentColor" stroke-width="1" opacity="0.4"/>
-          <line x1="42" y1="82" x2="58" y2="82" stroke="currentColor" stroke-width="0.8" opacity="0.3"/>
-          <line x1="43" y1="87" x2="57" y2="87" stroke="currentColor" stroke-width="0.8" opacity="0.3"/>
-          <line x1="44" y1="92" x2="56" y2="92" stroke="currentColor" stroke-width="0.8" opacity="0.3"/>
-          <!-- Highlight -->
-          <path d="M38 28C44 20 56 18 66 24L62 34C55 28 44 26 38 32Z" fill="rgba(255,255,255,0.08)"/>
-          <text x="50" y="120" fill="currentColor" font-family="Bebas Neue, sans-serif" font-size="11" text-anchor="middle" letter-spacing="4" opacity="0.2">FIGHT</text>
+    <div class="about-grid">
+      <div class="about-portrait reveal reveal-delay-2">
+        <!-- Large Boxing Gloves SVG -->
+        <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M25 80V45a30 30 0 0 1 30-30h5a20 20 0 0 1 20 20v10a12 12 0 0 1-12 12h-4l-8 12H35" stroke="currentColor" stroke-width="3" fill="rgba(var(--accent-rgb),0.1)"/>
+          <path d="M25 80a8 8 0 0 0 8 8h24a8 8 0 0 0 8-8v-3H25z" stroke="currentColor" stroke-width="3" fill="rgba(var(--accent-rgb),0.15)"/>
+          <text x="60" y="110" fill="currentColor" font-family="Playfair Display, serif" font-size="10" font-weight="900" text-anchor="middle" opacity="0.3">FIGHT</text>
         </svg>
       </div>
-      <div class="fighter-text reveal reveal-delay-3">
+      <div class="about-text reveal reveal-delay-3">
         <h3 data-voice="about-h3">Anthony Constantino</h3>
         <p data-voice="about-p1">Anthony Constantino is the <span class="highlight">CEO and founder of Sticker Mule</span>, a global e-commerce powerhouse headquartered in Amsterdam, New York. He built it from nothing&mdash;no family money, no venture capital handouts, no political connections. Just relentless hustle and an iron will.</p>
         <p data-voice="about-p2">He&rsquo;s the guy who <span class="highlight">lit up a giant &ldquo;Vote for Trump&rdquo; sign</span> on his building when the mayor told him he couldn&rsquo;t. The guy who dropped a rap album thanking the President. The guy the establishment can&rsquo;t control, can&rsquo;t silence, and can&rsquo;t stop.</p>
         <p data-voice="about-p3">Constantino doesn&rsquo;t duck. He doesn&rsquo;t dodge. He doesn&rsquo;t back down. He&rsquo;s a <span class="highlight">bare-knuckle brawler for the America First movement</span>&mdash;and he&rsquo;s just getting started.</p>
-        <div class="fighter-stats">
-          <div class="fighter-stat">
+        <div class="about-stats">
+          <div class="about-stat">
             <div class="num" data-target="1000" data-suffix="+">0</div>
             <div class="label">Employees</div>
           </div>
-          <div class="fighter-stat">
+          <div class="about-stat">
             <div class="num">CEO</div>
             <div class="label">Sticker Mule</div>
           </div>
-          <div class="fighter-stat">
+          <div class="about-stat">
             <div class="num">0</div>
-            <div class="label">Times Backed Down</div>
+            <div class="label">Times He&rsquo;s Backed Down</div>
           </div>
         </div>
       </div>
@@ -928,92 +542,77 @@ body.fight-mode .round-label { animation: numberPulse 1.5s ease-in-out infinite;
   </div>
 </section>
 
-<!-- ===== ROPE DIVIDER — ROUND 2 ===== -->
-<div class="rope-divider" aria-hidden="true">
-  <div class="ropes"><div class="rope-line"></div><div class="rope-line"></div><div class="rope-line"></div></div>
-  <div class="round-label">Round 2</div>
+<!-- ===== ROUND 2 DIVIDER ===== -->
+<div class="round-divider alt-bg" aria-hidden="true">
+  <span>
+    <svg class="bell-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="7" rx="7" ry="2"/><path d="M7 7c0 0-1.5 10-1.5 12s3 3.5 6.5 3.5 6.5-1.5 6.5-3.5-1.5-12-1.5-12"/></svg>
+    Round 2
+    <svg class="bell-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="7" rx="7" ry="2"/><path d="M7 7c0 0-1.5 10-1.5 12s3 3.5 6.5 3.5 6.5-1.5 6.5-3.5-1.5-12-1.5-12"/></svg>
+  </span>
 </div>
 
 <!-- ===== THE TRUMP SIGN FIGHT ===== -->
-<section class="section-angled" id="sign-fight">
+<section class="feature-section" id="sign-fight">
   <div class="section-inner">
     <div class="section-label reveal">
+      <!-- Lightning bolt -->
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10"/></svg>
       The Sign Fight
     </div>
     <h2 class="section-title reveal reveal-delay-1" data-voice="sign-title">When They Said Take It Down, He Turned It Up</h2>
     <div class="feature-content">
-      <p class="feature-text reveal reveal-delay-2" style="color:var(--text-muted);line-height:1.8;font-size:1.05rem;margin-bottom:16px;" data-voice="sign-p1">In 2024, Anthony Constantino did what every MAGA patriot wishes they could do. When the City of Amsterdam told him his massive <span class="highlight" style="color:var(--accent);font-weight:600;">&ldquo;Vote for Trump&rdquo; sign was against code</span>, he didn&rsquo;t hire a lawyer. He didn&rsquo;t write a letter. He <span class="highlight" style="color:var(--accent);font-weight:600;">turned the lights on brighter</span>.</p>
-      <p class="feature-text reveal reveal-delay-3" style="color:var(--text-muted);line-height:1.8;font-size:1.05rem;margin-bottom:24px;" data-voice="sign-p2">Hundreds of supporters flooded Amsterdam to rally behind him. The story went national&mdash;then international. A court ruled in his favor. The message was clear: <span class="highlight" style="color:var(--accent);font-weight:600;">you can&rsquo;t bully a fighter into silence</span>. When the establishment pushes Constantino, he pushes back harder. Every. Single. Time.</p>
-
-      <!-- Newspaper Clippings -->
-      <div class="clippings-grid reveal reveal-delay-4">
-        <a href="https://cbs6albany.com/news/local/amsterdam-business-owner-defies-city-code-with-lit-vote-for-trump-sign-sticker-mule-anthony-castantino-wrgb-ny-new-york" target="_blank" rel="noopener" class="clipping">
-          <div class="clipping-source">CBS 6 Albany</div>
-          <div class="clipping-headline">Amsterdam Business Owner Defies City Code With Lit &ldquo;Vote for Trump&rdquo; Sign</div>
-          <span class="clipping-arrow">&nearr;</span>
+      <p class="feature-text reveal reveal-delay-2" data-voice="sign-p1">In 2024, Anthony Constantino did what every MAGA patriot wishes they could do. When the City of Amsterdam told him his massive <span class="highlight">&ldquo;Vote for Trump&rdquo; sign was against code</span>, he didn&rsquo;t hire a lawyer. He didn&rsquo;t write a letter. He <span class="highlight">turned the lights on brighter</span>.</p>
+      <p class="feature-text reveal reveal-delay-3" data-voice="sign-p2">Hundreds of supporters flooded Amsterdam to rally behind him. The story went national&mdash;then international. A court ruled in his favor. The message was clear: <span class="highlight">you can&rsquo;t bully a fighter into silence</span>. When the establishment pushes Constantino, he pushes back harder. Every. Single. Time.</p>
+      <div class="article-links reveal reveal-delay-4">
+        <a href="https://cbs6albany.com/news/local/amsterdam-business-owner-defies-city-code-with-lit-vote-for-trump-sign-sticker-mule-anthony-castantino-wrgb-ny-new-york" target="_blank" rel="noopener" class="article-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          CBS 6: Amsterdam Business Owner Defies City Code With Lit &ldquo;Vote for Trump&rdquo; Sign
         </a>
-        <a href="https://www.hungarianconservative.com/articles/culture_society/vote-for-trump-amsterdam-ny-ruling/" target="_blank" rel="noopener" class="clipping">
-          <div class="clipping-source">Hungarian Conservative</div>
-          <div class="clipping-headline">Court Rules in Favor of &ldquo;Vote for Trump&rdquo; Sign in Amsterdam, NY</div>
-          <span class="clipping-arrow">&nearr;</span>
+        <a href="https://www.hungarianconservative.com/articles/culture_society/vote-for-trump-amsterdam-ny-ruling/" target="_blank" rel="noopener" class="article-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Hungarian Conservative: Court Rules in Favor of Trump Sign
         </a>
-        <a href="https://cnycentral.com/news/local/new-york-business-lights-vote-for-trump-sign-despite-pushback-from-local-mayor-amsterdam-kamala-election-harris-white-house-november-president-donald-anthony-constantino-ceo-of-sticker-mule" target="_blank" rel="noopener" class="clipping">
-          <div class="clipping-source">CNY Central</div>
-          <div class="clipping-headline">New York Business Lights &ldquo;Vote for Trump&rdquo; Sign Despite Pushback From Local Mayor</div>
-          <span class="clipping-arrow">&nearr;</span>
+        <a href="https://cnycentral.com/news/local/new-york-business-lights-vote-for-trump-sign-despite-pushback-from-local-mayor-amsterdam-kamala-election-harris-white-house-november-president-donald-anthony-constantino-ceo-of-sticker-mule" target="_blank" rel="noopener" class="article-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          CNY Central: Business Lights Sign Despite Pushback From Local Mayor
         </a>
-        <a href="https://spectrumlocalnews.com/nys/central-ny/news/2024/10/07/hundreds-turn-out-in-amsterdam-to-support-company-s-trump-sign" target="_blank" rel="noopener" class="clipping">
-          <div class="clipping-source">Spectrum News</div>
-          <div class="clipping-headline">Hundreds Turn Out in Amsterdam to Support Company&rsquo;s Trump Sign</div>
-          <span class="clipping-arrow">&nearr;</span>
+        <a href="https://spectrumlocalnews.com/nys/central-ny/news/2024/10/07/hundreds-turn-out-in-amsterdam-to-support-company-s-trump-sign" target="_blank" rel="noopener" class="article-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Spectrum News: Hundreds Turn Out to Support Trump Sign
         </a>
-        <a href="https://archive.ph/9vctx" target="_blank" rel="noopener" class="clipping full-width">
-          <div class="clipping-source">Archived Coverage</div>
-          <div class="clipping-headline">The Full Story: How One CEO Stood Up to City Hall and Won</div>
-          <span class="clipping-arrow">&nearr;</span>
+        <a href="https://archive.ph/9vctx" target="_blank" rel="noopener" class="article-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Archived Coverage: The Full Story
         </a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== ROPE DIVIDER — ROUND 3 ===== -->
-<div class="rope-divider" aria-hidden="true">
-  <div class="ropes"><div class="rope-line"></div><div class="rope-line"></div><div class="rope-line"></div></div>
-  <div class="round-label">Round 3</div>
+<!-- ===== ROUND 3 DIVIDER ===== -->
+<div class="round-divider" aria-hidden="true">
+  <span>
+    <svg class="bell-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="7" rx="7" ry="2"/><path d="M7 7c0 0-1.5 10-1.5 12s3 3.5 6.5 3.5 6.5-1.5 6.5-3.5-1.5-12-1.5-12"/></svg>
+    Round 3
+    <svg class="bell-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="7" rx="7" ry="2"/><path d="M7 7c0 0-1.5 10-1.5 12s3 3.5 6.5 3.5 6.5-1.5 6.5-3.5-1.5-12-1.5-12"/></svg>
+  </span>
 </div>
 
-<!-- ===== VS. THE ESTABLISHMENT — FIGHT CARD ===== -->
-<section class="fight-card-section section-alt section-angled" id="establishment">
+<!-- ===== FIGHTING THE ESTABLISHMENT ===== -->
+<section class="feature-section alt-bg" id="establishment">
   <div class="section-inner">
     <div class="section-label reveal">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       vs. The Establishment
     </div>
     <h2 class="section-title reveal reveal-delay-1" data-voice="est-title">Fighting the GOP Machine on Behalf of MAGA</h2>
-
-    <!-- Fight Card Layout -->
-    <div class="fight-card reveal reveal-delay-2">
-      <div class="fight-card-header">MAIN EVENT &bull; NY-21 CONGRESSIONAL RACE</div>
-      <div class="fight-card-matchup">
-        <div class="fight-card-fighter">
-          <h3>Constantino</h3>
-          <div class="subtitle">Trump&rsquo;s Fighter</div>
-        </div>
-        <div class="fight-card-vs">VS</div>
-        <div class="fight-card-fighter">
-          <h3>The GOP Machine</h3>
-          <div class="subtitle">The Status Quo</div>
-        </div>
-      </div>
-      <div class="fight-card-body">
-        <p style="color:var(--text-muted);line-height:1.8;font-size:1.05rem;margin-bottom:16px;" data-voice="est-p1">The Republican establishment doesn&rsquo;t want a fighter. They want a puppet&mdash;someone who takes orders, plays nice, and protects the status quo. <span style="color:var(--accent);font-weight:600;">Constantino is their worst nightmare.</span></p>
-        <p style="color:var(--text-muted);line-height:1.8;font-size:1.05rem;margin-bottom:20px;" data-voice="est-p2">When New York&rsquo;s GOP insiders tried to handpick Elise Stefanik&rsquo;s replacement, Constantino stepped into the ring as <span style="color:var(--accent);font-weight:600;">Trump&rsquo;s preferred candidate</span>&mdash;and the party bosses panicked. They&rsquo;re digging in. He&rsquo;s swinging harder. That&rsquo;s what fighters do.</p>
-        <a href="https://www.politico.com/news/2026/04/24/new-york-republicans-dig-in-against-trumps-preferred-stefanik-successor-00889770" target="_blank" rel="noopener" class="clipping" style="display:block;max-width:550px;">
-          <div class="clipping-source">Politico</div>
-          <div class="clipping-headline">New York Republicans Dig In Against Trump&rsquo;s Preferred Stefanik Successor</div>
-          <span class="clipping-arrow">&nearr;</span>
+    <div class="feature-content">
+      <p class="feature-text reveal reveal-delay-2" data-voice="est-p1">The Republican establishment doesn&rsquo;t want a fighter. They want a puppet&mdash;someone who takes orders, plays nice, and protects the status quo. <span class="highlight">Constantino is their worst nightmare.</span></p>
+      <p class="feature-text reveal reveal-delay-3" data-voice="est-p2">When New York&rsquo;s GOP insiders tried to handpick Elise Stefanik&rsquo;s replacement, Constantino stepped into the ring as <span class="highlight">Trump&rsquo;s preferred candidate</span>&mdash;and the party bosses panicked. They&rsquo;re digging in. He&rsquo;s swinging harder. That&rsquo;s what fighters do.</p>
+      <div class="article-links reveal reveal-delay-4">
+        <a href="https://www.politico.com/news/2026/04/24/new-york-republicans-dig-in-against-trumps-preferred-stefanik-successor-00889770" target="_blank" rel="noopener" class="article-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Politico: New York Republicans Dig In Against Trump&rsquo;s Preferred Stefanik Successor
         </a>
       </div>
     </div>
@@ -1023,34 +622,37 @@ body.fight-mode .round-label { animation: numberPulse 1.5s ease-in-out infinite;
 <!-- ===== QUOTE ===== -->
 <section class="quote-section" id="quote">
   <div class="section-inner">
-    <span class="quote-marks reveal">&ldquo;</span>
+    <div class="quote-mark reveal">&ldquo;</div>
     <blockquote class="quote-text reveal reveal-delay-1" data-voice="quote-text">I am in politics to help the people, not the corrupt politicians.</blockquote>
     <cite class="quote-author reveal reveal-delay-2" data-voice="quote-author">&mdash; Anthony Constantino</cite>
   </div>
 </section>
 
-<!-- ===== ROPE DIVIDER — ROUND 4 ===== -->
-<div class="rope-divider" aria-hidden="true">
-  <div class="ropes"><div class="rope-line"></div><div class="rope-line"></div><div class="rope-line"></div></div>
-  <div class="round-label">Round 4</div>
+<!-- ===== ROUND 4 DIVIDER ===== -->
+<div class="round-divider" aria-hidden="true">
+  <span>
+    <svg class="bell-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="7" rx="7" ry="2"/><path d="M7 7c0 0-1.5 10-1.5 12s3 3.5 6.5 3.5 6.5-1.5 6.5-3.5-1.5-12-1.5-12"/></svg>
+    Round 4
+    <svg class="bell-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="7" rx="7" ry="2"/><path d="M7 7c0 0-1.5 10-1.5 12s3 3.5 6.5 3.5 6.5-1.5 6.5-3.5-1.5-12-1.5-12"/></svg>
+  </span>
 </div>
 
-<!-- ===== THE ALBUM — CONCERT POSTER ===== -->
-<section class="album-section section-angled" id="album">
+<!-- ===== THE ALBUM ===== -->
+<section class="feature-section alt-bg" id="album">
   <div class="section-inner">
-    <div class="album-poster">
-      <div class="section-label reveal" style="justify-content:center;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
-        The Album
-      </div>
-      <div class="album-subtitle reveal">Fontainebleau LIV &bull; Miami &bull; December 2025</div>
-      <h2 class="album-title-text reveal reveal-delay-1" data-voice="album-title">&ldquo;Thank You President Trump&rdquo;</h2>
-      <p style="color:var(--text-muted);line-height:1.8;font-size:1.05rem;max-width:650px;margin:16px auto 0;text-align:center;" class="reveal reveal-delay-2" data-voice="album-p1">Most people write thank-you notes. Constantino <span style="color:var(--accent);font-weight:600;">dropped a rap album</span>. &ldquo;Thank You President Trump&rdquo; debuted at Fontainebleau LIV in Miami, and the lead single &ldquo;FIGHT&rdquo; racked up <span style="color:var(--accent);font-weight:600;">over 4 million views in 5 days</span>. When you&rsquo;re grateful, you go big or go home. Constantino went nuclear.</p>
+    <div class="section-label reveal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+      The Album
+    </div>
+    <h2 class="section-title reveal reveal-delay-1" data-voice="album-title">&ldquo;Thank You President Trump&rdquo;</h2>
+    <div class="feature-content">
+      <p class="feature-text reveal reveal-delay-2" data-voice="album-p1">Most people write thank-you notes. Constantino <span class="highlight">dropped a rap album</span>. &ldquo;Thank You President Trump&rdquo; debuted at Fontainebleau LIV in Miami, and the lead single &ldquo;FIGHT&rdquo; racked up <span class="highlight">over 4 million views in 5 days</span>. When you&rsquo;re grateful, you go big or go home. Constantino went nuclear.</p>
+      <!-- YouTube Embed: FIGHT single -->
       <div class="video-wrapper reveal reveal-delay-3">
         <iframe src="https://www.youtube.com/embed/hdHg78N52E4" title="FIGHT by Anthony Constantino" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
       </div>
-      <div class="album-links reveal reveal-delay-4">
-        <a href="https://www.youtube.com/watch?v=NBcH8wzOZrU&amp;list=OLAK5uy_ke83b7ejRGsL7pVaUEygrfsxfoIt4TK3o" target="_blank" rel="noopener" class="article-link">
+      <div class="article-links reveal reveal-delay-4" style="margin-top:32px;">
+        <a href="https://www.youtube.com/watch?v=NBcH8wzOZrU&list=OLAK5uy_ke83b7ejRGsL7pVaUEygrfsxfoIt4TK3o" target="_blank" rel="noopener" class="article-link">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75,15.02 15.5,11.75 9.75,8.48" fill="currentColor" stroke="none"/></svg>
           Listen to the Full Album on YouTube
         </a>
@@ -1067,14 +669,17 @@ body.fight-mode .round-label { animation: numberPulse 1.5s ease-in-out infinite;
   </div>
 </section>
 
-<!-- ===== ROPE DIVIDER — ROUND 5 ===== -->
-<div class="rope-divider" aria-hidden="true">
-  <div class="ropes"><div class="rope-line"></div><div class="rope-line"></div><div class="rope-line"></div></div>
-  <div class="round-label">Round 5</div>
+<!-- ===== ROUND 5 DIVIDER ===== -->
+<div class="round-divider alt-bg" aria-hidden="true">
+  <span>
+    <svg class="bell-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="7" rx="7" ry="2"/><path d="M7 7c0 0-1.5 10-1.5 12s3 3.5 6.5 3.5 6.5-1.5 6.5-3.5-1.5-12-1.5-12"/></svg>
+    Round 5
+    <svg class="bell-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="7" rx="7" ry="2"/><path d="M7 7c0 0-1.5 10-1.5 12s3 3.5 6.5 3.5 6.5-1.5 6.5-3.5-1.5-12-1.5-12"/></svg>
+  </span>
 </div>
 
-<!-- ===== IN HIS CORNER / ENDORSEMENTS ===== -->
-<section class="section-angled" id="corner">
+<!-- ===== ENDORSEMENTS / IN HIS CORNER ===== -->
+<section class="feature-section" id="corner">
   <div class="section-inner">
     <div class="section-label reveal">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg>
@@ -1083,18 +688,24 @@ body.fight-mode .round-label { animation: numberPulse 1.5s ease-in-out infinite;
     <h2 class="section-title reveal reveal-delay-1" data-voice="corner-title">Heavyweight Endorsements</h2>
     <p class="section-desc reveal reveal-delay-2" data-voice="corner-desc">Every fighter needs a corner team. Constantino&rsquo;s corner is stacked with the biggest names in the America First movement.</p>
     <div class="endorsements-grid">
-      <div class="endorsement-block reveal reveal-delay-3">
+      <div class="endorsement-card reveal reveal-delay-3">
+        <div class="endorsement-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 15,9 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,9"/></svg>
+        </div>
         <h3 data-voice="endorse1-title">President Donald J. Trump</h3>
         <p data-voice="endorse1-desc">The 45th and 47th President of the United States endorsed Anthony Constantino for Congress. When Trump says &ldquo;he&rsquo;s our guy,&rdquo; it means something. It means he&rsquo;s a fighter.</p>
-        <a href="https://truthsocial.com/@realDonaldTrump/posts/116443819653096454" target="_blank" rel="noopener" class="endorsement-link">
+        <a href="https://truthsocial.com/@realDonaldTrump/posts/116443819653096454" target="_blank" rel="noopener" class="card-link">
           Read the Endorsement
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
       </div>
-      <div class="endorsement-block reveal reveal-delay-4">
+      <div class="endorsement-card reveal reveal-delay-4">
+        <div class="endorsement-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
         <h3 data-voice="endorse2-title">Mayor Rudy Giuliani</h3>
         <p data-voice="endorse2-desc">America&rsquo;s Mayor knows a fighter when he sees one. Giuliani endorsed Constantino because he&rsquo;s the real deal&mdash;tough, outspoken, and impossible to corrupt.</p>
-        <a href="https://www.dailygazette.com/cjfund/political/anthony-constantino-ny-21-giuliani/article_f4448bbe-2c9d-4089-a752-7dadc3f8b564.html" target="_blank" rel="noopener" class="endorsement-link">
+        <a href="https://www.dailygazette.com/cjfund/political/anthony-constantino-ny-21-giuliani/article_f4448bbe-2c9d-4089-a752-7dadc3f8b564.html" target="_blank" rel="noopener" class="card-link">
           Read the Endorsement
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
@@ -1107,91 +718,84 @@ body.fight-mode .round-label { animation: numberPulse 1.5s ease-in-out infinite;
   </div>
 </section>
 
-<!-- ===== STATS / TALE OF THE TAPE ===== -->
-<section class="stats-section section-alt" id="stats">
+<!-- ===== STATS BAR ===== -->
+<section class="stats" id="stats">
   <div class="section-inner">
     <div class="section-label reveal">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
       Tale of the Tape
     </div>
     <h2 class="section-title reveal reveal-delay-1" data-voice="stats-title">The Fighter&rsquo;s Record</h2>
-    <div class="tape-table reveal reveal-delay-2">
-      <div class="tape-header">
-        <span>Constantino</span>
-        <span>Stat</span>
-        <span>The Swamp</span>
+    <div class="stats-bar">
+      <div class="stat-item reveal reveal-delay-1">
+        <div class="stat-number" data-target="1000" data-suffix="+">0</div>
+        <div class="stat-label" data-voice="stat1-label">Jobs Created</div>
       </div>
-      <div class="tape-row">
-        <div class="tape-val"><span data-target="1000" data-suffix="+" class="counter-num">0</span></div>
-        <div class="tape-label" data-voice="stat1-label">Jobs Created</div>
-        <div class="tape-val zero">0</div>
+      <div class="stat-item reveal reveal-delay-2">
+        <div class="stat-number" data-target="4" data-suffix="M+">0</div>
+        <div class="stat-label" data-voice="stat2-label">Views on &ldquo;FIGHT&rdquo;</div>
       </div>
-      <div class="tape-row">
-        <div class="tape-val"><span data-target="4" data-suffix="M+" class="counter-num">0</span></div>
-        <div class="tape-label" data-voice="stat2-label">Views on &ldquo;FIGHT&rdquo;</div>
-        <div class="tape-val zero">Nothing</div>
+      <div class="stat-item reveal reveal-delay-3">
+        <div class="stat-number counter-static">0</div>
+        <div class="stat-label" data-voice="stat3-label">Special Interest Donors</div>
       </div>
-      <div class="tape-row">
-        <div class="tape-val zero">0</div>
-        <div class="tape-label" data-voice="stat3-label">Special Interest Donors</div>
-        <div class="tape-val">Countless</div>
-      </div>
-      <div class="tape-row">
-        <div class="tape-val zero">0</div>
-        <div class="tape-label" data-voice="stat4-label">Times He&rsquo;s Backed Down</div>
-        <div class="tape-val">Always</div>
+      <div class="stat-item reveal reveal-delay-4">
+        <div class="stat-number counter-static">0</div>
+        <div class="stat-label" data-voice="stat4-label">Times He&rsquo;s Backed Down</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== ROPE DIVIDER — CHAMPIONSHIP ROUND ===== -->
-<div class="rope-divider" aria-hidden="true">
-  <div class="ropes"><div class="rope-line"></div><div class="rope-line"></div><div class="rope-line"></div></div>
-  <div class="round-label">Championship Round</div>
+<!-- ===== CHAMPIONSHIP ROUND DIVIDER ===== -->
+<div class="round-divider" aria-hidden="true">
+  <span>
+    <svg class="bell-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="7" rx="7" ry="2"/><path d="M7 7c0 0-1.5 10-1.5 12s3 3.5 6.5 3.5 6.5-1.5 6.5-3.5-1.5-12-1.5-12"/></svg>
+    Championship Round
+    <svg class="bell-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="7" rx="7" ry="2"/><path d="M7 7c0 0-1.5 10-1.5 12s3 3.5 6.5 3.5 6.5-1.5 6.5-3.5-1.5-12-1.5-12"/></svg>
+  </span>
 </div>
 
-<!-- ===== GET IN THE RING (Signup) ===== -->
+<!-- ===== GET IN THE RING (Signup Form) ===== -->
 <section class="signup-section" id="signup">
   <div class="signup-inner">
     <div class="section-label reveal" style="justify-content:center;">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M6 19V13C6 7 10 4 14 4C18 4 21 7 21 11V14C21 16 19.5 17.5 17.5 17.5H16L13 21H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-        <path d="M6 19C6 20.5 7.5 22 9 22H15C16.5 22 18 20.5 18 19V18.5H6Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      </svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17v-5a8 8 0 0 1 8-8h1a5 5 0 0 1 5 5v2a3 3 0 0 1-3 3h-1l-2 3H8"/><path d="M4 17a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1H4z"/></svg>
       Join the Army
     </div>
     <h2 class="section-title reveal reveal-delay-1" data-voice="signup-title">Get in the Ring</h2>
     <p class="section-desc reveal reveal-delay-2" style="max-width:600px;margin:0 auto 8px;text-align:center;" data-voice="signup-desc">Constantino doesn&rsquo;t need your money. He needs your fight. Sign up to join <strong>Constantino&rsquo;s Army</strong>&mdash;the movement that&rsquo;s shaking the establishment to its core.</p>
-    <div class="signup-ropes reveal reveal-delay-2">
-      <div class="s-rope"></div><div class="s-rope"></div><div class="s-rope"></div>
+    <div class="signup-ring reveal reveal-delay-2">
+      <div class="rope"></div>
+      <div class="rope"></div>
+      <div class="rope"></div>
     </div>
     <div class="signup-form-card reveal reveal-delay-3">
-      <div class="signup-form-header">Join Constantino&rsquo;s Army</div>
-      <div class="signup-form-body">
-        <p class="form-subtitle">Step into the ring. The fight needs YOU.</p>
-        <form id="signupForm" onsubmit="handleSignup(event)">
+      <h3>Join Constantino&rsquo;s Army</h3>
+      <p class="form-subtitle">Step into the ring. The fight needs YOU.</p>
+      <form id="signupForm" onsubmit="handleSignup(event)">
+        <div class="form-group">
+          <label for="su-name">Full Name</label>
+          <input type="text" id="su-name" name="name" required placeholder="Your full name" autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label for="su-email">Email Address</label>
+          <input type="email" id="su-email" name="email" required placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="form-row">
           <div class="form-group">
-            <label for="su-name">Full Name</label>
-            <input type="text" id="su-name" name="name" required placeholder="Your full name" autocomplete="name">
+            <label for="su-phone">Phone Number</label>
+            <input type="tel" id="su-phone" name="phone" required placeholder="(555) 123-4567" autocomplete="tel">
           </div>
           <div class="form-group">
-            <label for="su-email">Email Address</label>
-            <input type="email" id="su-email" name="email" required placeholder="you@example.com" autocomplete="email">
+            <label for="su-zip">Zip Code</label>
+            <input type="text" id="su-zip" name="zip" required placeholder="12345" pattern="[0-9]{5}" maxlength="5" autocomplete="postal-code">
           </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="su-phone">Phone Number</label>
-              <input type="tel" id="su-phone" name="phone" required placeholder="(555) 123-4567" autocomplete="tel">
-            </div>
-            <div class="form-group">
-              <label for="su-zip">Zip Code</label>
-              <input type="text" id="su-zip" name="zip" required placeholder="12345" pattern="[0-9]{5}" maxlength="5" autocomplete="postal-code">
-            </div>
-          </div>
-          <button type="submit" class="form-submit magnetic-btn">&#x1F94A; Join the Army</button>
-        </form>
-      </div>
+        </div>
+        <button type="submit" class="form-submit magnetic-btn">
+          &#x1F94A; Join the Army
+        </button>
+      </form>
     </div>
   </div>
 </section>
@@ -1202,10 +806,7 @@ body.fight-mode .round-label { animation: numberPulse 1.5s ease-in-out infinite;
 <footer class="footer" id="footer">
   <div class="footer-inner">
     <div class="footer-logo">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
-        <path d="M6 19V13C6 7 10 4 14 4C18 4 21 7 21 11V14C21 16 19.5 17.5 17.5 17.5H16L13 21H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-        <path d="M6 19C6 20.5 7.5 22 9 22H15C16.5 22 18 20.5 18 19V18.5H6Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      </svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17v-5a8 8 0 0 1 8-8h1a5 5 0 0 1 5 5v2a3 3 0 0 1-3 3h-1l-2 3H8"/><path d="M4 17a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1H4z"/></svg>
       FIGHT LIKE CONSTANTINO
     </div>
     <p class="footer-desc" data-voice="footer-brand">No special interests. No corporate puppeteers. Ready to fight to put America First.</p>
@@ -1260,13 +861,10 @@ body.fight-mode .round-label { animation: numberPulse 1.5s ease-in-out infinite;
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10"/></svg>
   <span>Fight Mode</span>
 </button>
+
 <script>
 /* ============================================================
-   FIGHT LIKE CONSTANTINO v4 -- ALL JS INLINE
-   ============================================================ */
-
-/* ============================================================
-   FIGHT LIKE CONSTANTINO v3 â€” ALL JS INLINE
+   FIGHT LIKE CONSTANTINO v3 — ALL JS INLINE
    ============================================================ */
 
 // ===== VOICE DATA (7 boxing-themed voices) =====
@@ -1803,12 +1401,13 @@ window.addEventListener('scroll', function() {
   function applyVoice(voiceId) {
     var voice = voices[voiceId];
     if (!voice) return;
-    document.querySelectorAll('[data-voice]').forEach(function(el) {
+    var els = document.querySelectorAll('[data-voice]');
+    els.forEach(function(el) {
       var key = el.getAttribute('data-voice');
       if (voice[key] !== undefined) {
         el.style.opacity = '0';
         setTimeout(function() {
-          if (voice[key].indexOf('<span') > -1 || voice[key].indexOf('<strong') > -1 || voice[key].indexOf('<a') > -1) {
+          if (voice[key].indexOf('<span') > -1 || voice[key].indexOf('<strong') > -1) {
             el.innerHTML = voice[key];
           } else {
             el.textContent = voice[key];
@@ -1821,12 +1420,24 @@ window.addEventListener('scroll', function() {
     localStorage.setItem('constantino-voice', voiceId);
   }
 
-  toggle.addEventListener('click', function() { panel.classList.toggle('open'); });
-  options.forEach(function(opt) {
-    opt.addEventListener('click', function() { applyVoice(opt.dataset.voiceId); panel.classList.remove('open'); });
+  toggle.addEventListener('click', function() {
+    panel.classList.toggle('open');
   });
-  document.addEventListener('click', function(e) { if (!e.target.closest('.voice-switcher')) panel.classList.remove('open'); });
-  if (saved !== 'the-brawler') setTimeout(function() { applyVoice(saved); }, 100);
+
+  options.forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      applyVoice(opt.dataset.voiceId);
+      panel.classList.remove('open');
+    });
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.voice-switcher')) panel.classList.remove('open');
+  });
+
+  if (saved !== 'the-brawler') {
+    setTimeout(function() { applyVoice(saved); }, 100);
+  }
 })();
 
 // ===== FIGHT MODE =====
@@ -1854,192 +1465,45 @@ window.addEventListener('scroll', function() {
   document.head.appendChild(style);
 })();
 
-// ===== SCROLL REVEAL (IntersectionObserver) =====
-(function() {
-  var els = document.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window) {
-    var obs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('revealed');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-    els.forEach(function(el) { obs.observe(el); });
-  } else {
-    els.forEach(function(el) { el.classList.add('revealed'); });
-  }
-})();
+// ===== SIGNUP FORM =====
+function handleSignup(e) {
+  e.preventDefault();
+  var btn = e.target.querySelector('.form-submit');
+  btn.textContent = '\uD83E\uDD4A You\u2019re In the Ring!';
+  btn.style.background = '#22c55e';
+  setTimeout(function() {
+    btn.textContent = '\uD83E\uDD4A Join the Army';
+    btn.style.background = '';
+    e.target.reset();
+  }, 3000);
+}
 
-// ===== COUNTER ANIMATION =====
+// ===== CARD TILT (endorsement cards) =====
 (function() {
-  var counters = document.querySelectorAll('.counter-num');
-  if (!counters.length) return;
-  var obs = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (!entry.isIntersecting) return;
-      var el = entry.target;
-      obs.unobserve(el);
-      var target = parseInt(el.dataset.target) || 0;
-      var suffix = el.dataset.suffix || '';
-      var start = 0;
-      var duration = 2000;
-      var startTime = null;
-      function step(ts) {
-        if (!startTime) startTime = ts;
-        var progress = Math.min((ts - startTime) / duration, 1);
-        var eased = 1 - Math.pow(1 - progress, 3);
-        el.textContent = Math.floor(eased * target).toLocaleString() + suffix;
-        if (progress < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    });
-  }, { threshold: 0.3 });
-  counters.forEach(function(c) { obs.observe(c); });
-})();
-
-// ===== MAGNETIC BUTTONS =====
-(function() {
-  document.querySelectorAll('.magnetic-btn').forEach(function(btn) {
-    btn.addEventListener('mousemove', function(e) {
-      var rect = btn.getBoundingClientRect();
-      var x = e.clientX - rect.left - rect.width / 2;
-      var y = e.clientY - rect.top - rect.height / 2;
-      btn.style.transform = 'translate(' + (x * 0.15) + 'px, ' + (y * 0.15) + 'px)';
-    });
-    btn.addEventListener('mouseleave', function() {
-      btn.style.transform = '';
-    });
-  });
-})();
-
-// ===== CURSOR GLOW =====
-(function() {
-  var glow = document.querySelector('.cursor-glow');
-  if (!glow) {
-    glow = document.createElement('div');
-    glow.className = 'cursor-glow';
-    glow.style.cssText = 'position:fixed;width:600px;height:600px;border-radius:50%;pointer-events:none;z-index:0;background:radial-gradient(circle,rgba(var(--accent-rgb),0.06) 0%,transparent 70%);transform:translate(-50%,-50%);transition:left 0.15s ease-out,top 0.15s ease-out;';
-    document.body.appendChild(glow);
-  }
-  document.addEventListener('mousemove', function(e) {
-    glow.style.left = e.clientX + 'px';
-    glow.style.top = e.clientY + 'px';
-  });
-})();
-
-// ===== CARD TILT =====
-(function() {
-  document.querySelectorAll('.endorsement-card, .article-link, .clipping').forEach(function(card) {
+  var cards = document.querySelectorAll('.endorsement-card, .article-link');
+  cards.forEach(function(card) {
     card.addEventListener('mousemove', function(e) {
       var rect = card.getBoundingClientRect();
       var x = (e.clientX - rect.left) / rect.width - 0.5;
       var y = (e.clientY - rect.top) / rect.height - 0.5;
       card.style.transform = 'translateY(-4px) perspective(1000px) rotateX(' + (-y * 6) + 'deg) rotateY(' + (x * 6) + 'deg)';
     });
-    card.addEventListener('mouseleave', function() { card.style.transform = ''; });
+    card.addEventListener('mouseleave', function() {
+      card.style.transform = '';
+    });
   });
 })();
-
-// ===== CANVAS: ARENA SPOTLIGHTS =====
-(function() {
-  var canvas = document.getElementById('particles');
-  if (!canvas) return;
-  var ctx = canvas.getContext('2d');
-  var W, H, particles = [], fightMode = false;
-
-  function resize() {
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  window._setFightParticles = function(on) { fightMode = on; };
-
-  function Particle() {
-    this.x = Math.random() * W;
-    this.y = Math.random() * H;
-    this.vx = (Math.random() - 0.5) * 0.3;
-    this.vy = (Math.random() - 0.5) * 0.3;
-    this.r = Math.random() * 2 + 0.5;
-    this.alpha = Math.random() * 0.5 + 0.1;
-  }
-
-  for (var i = 0; i < 80; i++) particles.push(new Particle());
-
-  function draw() {
-    try {
-      ctx.clearRect(0, 0, W, H);
-
-      // Arena spotlight cones
-      var style = getComputedStyle(document.documentElement);
-      var pc = style.getPropertyValue('--particle-color').trim() || '196,30,58';
-      var spotAlpha = fightMode ? 0.08 : 0.03;
-
-      // Left spotlight
-      var g1 = ctx.createRadialGradient(W * 0.2, 0, 0, W * 0.2, 0, H * 0.8);
-      g1.addColorStop(0, 'rgba(' + pc + ',' + spotAlpha + ')');
-      g1.addColorStop(1, 'transparent');
-      ctx.fillStyle = g1;
-      ctx.fillRect(0, 0, W, H);
-
-      // Right spotlight
-      var g2 = ctx.createRadialGradient(W * 0.8, 0, 0, W * 0.8, 0, H * 0.8);
-      g2.addColorStop(0, 'rgba(' + pc + ',' + spotAlpha + ')');
-      g2.addColorStop(1, 'transparent');
-      ctx.fillStyle = g2;
-      ctx.fillRect(0, 0, W, H);
-
-      // Particles (dust in the arena lights)
-      var speed = fightMode ? 3 : 1;
-      for (var i = 0; i < particles.length; i++) {
-        var p = particles[i];
-        p.x += p.vx * speed;
-        p.y += p.vy * speed;
-        if (p.x < 0) p.x = W;
-        if (p.x > W) p.x = 0;
-        if (p.y < 0) p.y = H;
-        if (p.y > H) p.y = 0;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r * (fightMode ? 1.5 : 1), 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(' + pc + ',' + (p.alpha * (fightMode ? 1.5 : 1)) + ')';
-        ctx.fill();
-      }
-    } catch(e) {}
-    requestAnimationFrame(draw);
-  }
-  requestAnimationFrame(draw);
-})();
-
-// ===== SIGNUP FORM =====
-function handleSignup(e) {
-  e.preventDefault();
-  var btn = e.target.querySelector('[type="submit"]');
-  var orig = btn.innerHTML;
-  btn.innerHTML = '\uD83E\uDD4A YOU\u2019RE IN THE RING!';
-  btn.style.background = '#22c55e';
-  btn.style.borderColor = '#22c55e';
-  setTimeout(function() { btn.innerHTML = orig; btn.style.background = ''; btn.style.borderColor = ''; e.target.reset(); }, 3000);
-}
 
 // ===== SMOOTH SCROLL =====
 document.querySelectorAll('a[href^="#"]').forEach(function(a) {
   a.addEventListener('click', function(e) {
     var target = document.querySelector(a.getAttribute('href'));
-    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
   });
 });
-
-// ===== NAV SCROLL EFFECT =====
-(function() {
-  var nav = document.querySelector('.nav');
-  if (!nav) return;
-  window.addEventListener('scroll', function() {
-    nav.classList.toggle('scrolled', window.scrollY > 60);
-  });
-})();
 </script>
 </body>
 </html>
