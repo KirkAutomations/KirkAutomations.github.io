@@ -1730,6 +1730,7 @@ window.addEventListener('scroll', function() {
 // ===== HERO STARS =====
 (function() {
   var container = document.getElementById('heroStars');
+  if (!container) return;
   for (var i = 0; i < 30; i++) {
     var star = document.createElement('div');
     star.className = 'hero-star';
