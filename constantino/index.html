@@ -1824,10 +1824,6 @@ window.addEventListener('scroll', function() {
         var landX = s.originX + Math.sin(t * s.speed + s.phase) * s.drift;
         var landY = H * 0.7 + Math.cos(t * s.speed * 0.5 + s.phase) * 60;
 
-        /* Mouse pull */
-        var dx = mx - landX, dy = my - landY, dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist > 0 && dist < 300) { landX += dx * 0.08; landY += dy * 0.04; }
-
         var topW = 8;
         var botW = s.spread * Math.abs(landY + 10) + 40;
         var alpha = fightActive ? 0.22 : 0.12;
