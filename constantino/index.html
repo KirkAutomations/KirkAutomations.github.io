@@ -1592,9 +1592,9 @@ window.addEventListener('scroll', function() {
   var currentAnim = localStorage.getItem('constantino-anim') || 'particles';
   var animState = {};
 
-  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; if (ANIMS[currentAnim] && ANIMS[currentAnim].init) ANIMS[currentAnim].init(); }
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
   resize();
-  window.addEventListener('resize', resize);
+  window.addEventListener('resize', function() { resize(); if (ANIMS[currentAnim] && ANIMS[currentAnim].init) ANIMS[currentAnim].init(); });
   document.addEventListener('mousemove', function(e) { mx = e.clientX; my = e.clientY; });
 
   function getPC() { return getComputedStyle(document.documentElement).getPropertyValue('--particle-color').trim() || '196,30,58'; }
