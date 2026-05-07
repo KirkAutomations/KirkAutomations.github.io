@@ -1811,7 +1811,7 @@ window.addEventListener('scroll', function() {
         };
       });
       /* Haze particles for atmosphere */
-      animState.haze = Array.from({length: fightActive ? 100 : 30}, function() {
+      animState.haze = Array.from({length: fightActive ? 40 : 12}, function() {
         return { x: Math.random() * W, y: Math.random() * H, r: 1 + Math.random() * 2, alpha: Math.random() * 0.3, vx: (Math.random() - 0.5) * 0.2, vy: -0.1 - Math.random() * 0.3 };
       });
     },
@@ -1841,22 +1841,24 @@ window.addEventListener('scroll', function() {
 
         /* Cone from top of screen to target */
         var grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, s.radius);
-        var intensity = fightActive ? 0.12 : 0.06;
+        var intensity = fightActive ? 0.35 : 0.18;
         grad.addColorStop(0, 'rgba(' + pc + ',' + intensity + ')');
-        grad.addColorStop(0.4, 'rgba(' + pc + ',' + (intensity * 0.5) + ')');
+        grad.addColorStop(0.3, 'rgba(' + pc + ',' + (intensity * 0.6) + ')');
+        grad.addColorStop(0.7, 'rgba(' + pc + ',' + (intensity * 0.15) + ')');
         grad.addColorStop(1, 'transparent');
         ctx.fillStyle = grad;
         ctx.beginPath();
         ctx.arc(cx, cy, s.radius, 0, Math.PI * 2);
         ctx.fill();
 
-        /* Bright beam line from top to pool */
+        /* Visible beam line from top to pool */
         var beamGrad = ctx.createLinearGradient(cx, -20, cx, cy);
-        beamGrad.addColorStop(0, 'rgba(' + pc + ',' + (intensity * 0.8) + ')');
+        beamGrad.addColorStop(0, 'rgba(' + pc + ',' + (intensity * 1.5) + ')');
+        beamGrad.addColorStop(0.6, 'rgba(' + pc + ',' + (intensity * 0.5) + ')');
         beamGrad.addColorStop(1, 'transparent');
         ctx.strokeStyle = beamGrad;
-        ctx.lineWidth = s.radius * s.cone;
-        ctx.globalAlpha = 0.3;
+        ctx.lineWidth = s.radius * s.cone * 2;
+        ctx.globalAlpha = 0.6;
         ctx.beginPath();
         ctx.moveTo(cx - s.radius * 0.05, -20);
         ctx.lineTo(cx, cy);
@@ -1865,7 +1867,7 @@ window.addEventListener('scroll', function() {
 
         /* Floor pool glow */
         var poolGrad = ctx.createRadialGradient(cx, cy + s.radius * 0.3, 0, cx, cy + s.radius * 0.3, s.radius * 0.6);
-        poolGrad.addColorStop(0, 'rgba(' + pc + ',' + (intensity * 0.4) + ')');
+        poolGrad.addColorStop(0, 'rgba(' + pc + ',' + (intensity * 0.8) + ')');
         poolGrad.addColorStop(1, 'transparent');
         ctx.fillStyle = poolGrad;
         ctx.beginPath();
