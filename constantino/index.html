@@ -1796,108 +1796,88 @@ window.addEventListener('scroll', function() {
   ANIMS.spotlights = {
     init: function() {
       animState.t = 0;
-      var count = fightActive ? 6 : 3;
-      animState.spots = Array.from({length: count}, function(_, i) {
-        return {
-          x: W * (0.15 + Math.random() * 0.7),
-          y: -50,
-          targetX: W * (0.2 + Math.random() * 0.6),
-          targetY: H * (0.3 + Math.random() * 0.5),
-          radius: 120 + Math.random() * 200,
-          speed: 0.3 + Math.random() * 0.7,
+      var count = fightActive ? 5 : 3;
+      /* Fixed spotlight positions across the top like arena rigging */
+      animState.spots = [];
+      for (var i = 0; i < count; i++) {
+        var pct = (i + 0.5) / count;
+        animState.spots.push({
+          originX: W * pct,
+          originY: -10,
+          speed: 0.2 + Math.random() * 0.3,
           phase: Math.random() * Math.PI * 2,
-          drift: 30 + Math.random() * 80,
-          cone: 0.15 + Math.random() * 0.15
-        };
-      });
-      /* Haze particles for atmosphere */
-      animState.haze = Array.from({length: fightActive ? 40 : 12}, function() {
-        return { x: Math.random() * W, y: Math.random() * H, r: 1 + Math.random() * 2, alpha: Math.random() * 0.3, vx: (Math.random() - 0.5) * 0.2, vy: -0.1 - Math.random() * 0.3 };
-      });
+          drift: 60 + Math.random() * 100,
+          spread: 0.12 + Math.random() * 0.08
+        });
+      }
     },
     tick: function() {
       ctx.clearRect(0, 0, W, H);
       var pc = getPC();
-      animState.t += 0.01;
+      animState.t += 0.008;
       var t = animState.t;
       var spots = animState.spots;
-      var haze = animState.haze;
       if (!spots) return;
 
-      /* Draw spotlight cones from above */
       spots.forEach(function(s) {
-        var swayX = Math.sin(t * s.speed + s.phase) * s.drift;
-        var swayY = Math.cos(t * s.speed * 0.7 + s.phase) * s.drift * 0.3;
-        var cx = s.targetX + swayX;
-        var cy = s.targetY + swayY;
+        /* Where the beam lands — slowly sweeps */
+        var landX = s.originX + Math.sin(t * s.speed + s.phase) * s.drift;
+        var landY = H * 0.7 + Math.cos(t * s.speed * 0.5 + s.phase) * 60;
 
-        /* Mouse attraction — spotlights drift toward cursor */
-        var dx = mx - cx, dy = my - cy;
-        var dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist > 0 && dist < 400) {
-          cx += dx * 0.05;
-          cy += dy * 0.05;
-        }
+        /* Mouse pull */
+        var dx = mx - landX, dy = my - landY, dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist > 0 && dist < 300) { landX += dx * 0.08; landY += dy * 0.04; }
 
-        /* Cone from top of screen to target */
-        var grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, s.radius);
-        var intensity = fightActive ? 0.35 : 0.18;
-        grad.addColorStop(0, 'rgba(' + pc + ',' + intensity + ')');
-        grad.addColorStop(0.3, 'rgba(' + pc + ',' + (intensity * 0.6) + ')');
-        grad.addColorStop(0.7, 'rgba(' + pc + ',' + (intensity * 0.15) + ')');
-        grad.addColorStop(1, 'transparent');
-        ctx.fillStyle = grad;
+        var topW = 8;
+        var botW = s.spread * Math.abs(landY + 10) + 40;
+        var alpha = fightActive ? 0.22 : 0.12;
+
+        /* Volumetric cone — draw as a filled trapezoid with gradient */
+        ctx.save();
         ctx.beginPath();
-        ctx.arc(cx, cy, s.radius, 0, Math.PI * 2);
+        ctx.moveTo(s.originX - topW, s.originY);
+        ctx.lineTo(landX - botW, landY);
+        ctx.lineTo(landX + botW, landY);
+        ctx.lineTo(s.originX + topW, s.originY);
+        ctx.closePath();
+
+        /* Fill with a gradient from source to floor */
+        var coneGrad = ctx.createLinearGradient(s.originX, s.originY, landX, landY);
+        coneGrad.addColorStop(0, 'rgba(' + pc + ',' + (alpha * 1.2) + ')');
+        coneGrad.addColorStop(0.5, 'rgba(' + pc + ',' + (alpha * 0.7) + ')');
+        coneGrad.addColorStop(1, 'rgba(' + pc + ',' + (alpha * 0.3) + ')');
+        ctx.fillStyle = coneGrad;
         ctx.fill();
 
-        /* Visible beam line from top to pool */
-        var beamGrad = ctx.createLinearGradient(cx, -20, cx, cy);
-        beamGrad.addColorStop(0, 'rgba(' + pc + ',' + (intensity * 1.5) + ')');
-        beamGrad.addColorStop(0.6, 'rgba(' + pc + ',' + (intensity * 0.5) + ')');
-        beamGrad.addColorStop(1, 'transparent');
-        ctx.strokeStyle = beamGrad;
-        ctx.lineWidth = s.radius * s.cone * 2;
-        ctx.globalAlpha = 0.6;
+        /* Bright center line */
         ctx.beginPath();
-        ctx.moveTo(cx - s.radius * 0.05, -20);
-        ctx.lineTo(cx, cy);
+        ctx.moveTo(s.originX, s.originY);
+        ctx.lineTo(landX, landY);
+        ctx.strokeStyle = 'rgba(' + pc + ',' + (alpha * 0.6) + ')';
+        ctx.lineWidth = 2;
         ctx.stroke();
-        ctx.globalAlpha = 1;
 
-        /* Floor pool glow */
-        var poolGrad = ctx.createRadialGradient(cx, cy + s.radius * 0.3, 0, cx, cy + s.radius * 0.3, s.radius * 0.6);
-        poolGrad.addColorStop(0, 'rgba(' + pc + ',' + (intensity * 0.8) + ')');
+        /* Floor pool — bright ellipse where beam hits */
+        var poolGrad = ctx.createRadialGradient(landX, landY, 0, landX, landY, botW * 1.5);
+        poolGrad.addColorStop(0, 'rgba(' + pc + ',' + (alpha * 1.5) + ')');
+        poolGrad.addColorStop(0.5, 'rgba(' + pc + ',' + (alpha * 0.5) + ')');
         poolGrad.addColorStop(1, 'transparent');
         ctx.fillStyle = poolGrad;
         ctx.beginPath();
-        ctx.ellipse(cx, cy + s.radius * 0.3, s.radius * 0.6, s.radius * 0.2, 0, 0, Math.PI * 2);
+        ctx.ellipse(landX, landY, botW * 1.5, botW * 0.4, 0, 0, Math.PI * 2);
         ctx.fill();
-      });
 
-      /* Haze / dust in the light */
-      if (haze) {
-        haze.forEach(function(h) {
-          h.x += h.vx;
-          h.y += h.vy;
-          if (h.y < -10) { h.y = H + 10; h.x = Math.random() * W; }
-          if (h.x < -10) h.x = W + 10;
-          if (h.x > W + 10) h.x = -10;
-          /* Brighten particles inside spotlight cones */
-          var inSpot = false;
-          spots.forEach(function(s) {
-            var sx = s.targetX + Math.sin(t * s.speed + s.phase) * s.drift;
-            var sy = s.targetY + Math.cos(t * s.speed * 0.7 + s.phase) * s.drift * 0.3;
-            var dd = Math.sqrt((h.x - sx) * (h.x - sx) + (h.y - sy) * (h.y - sy));
-            if (dd < s.radius) inSpot = true;
-          });
-          var alpha = inSpot ? h.alpha * 3 : h.alpha;
-          ctx.fillStyle = 'rgba(' + pc + ',' + Math.min(alpha, 0.7) + ')';
-          ctx.beginPath();
-          ctx.arc(h.x, h.y, h.r, 0, Math.PI * 2);
-          ctx.fill();
-        });
-      }
+        /* Source glow at the top */
+        var srcGrad = ctx.createRadialGradient(s.originX, 0, 0, s.originX, 0, 30);
+        srcGrad.addColorStop(0, 'rgba(' + pc + ',' + (alpha * 2) + ')');
+        srcGrad.addColorStop(1, 'transparent');
+        ctx.fillStyle = srcGrad;
+        ctx.beginPath();
+        ctx.arc(s.originX, 0, 30, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      });
     }
   };
 
