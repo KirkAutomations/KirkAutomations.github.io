@@ -1849,14 +1849,6 @@ window.addEventListener('scroll', function() {
         ctx.fillStyle = coneGrad;
         ctx.fill();
 
-        /* Bright center line */
-        ctx.beginPath();
-        ctx.moveTo(s.originX, s.originY);
-        ctx.lineTo(landX, landY);
-        ctx.strokeStyle = 'rgba(' + pc + ',' + (alpha * 0.6) + ')';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
         /* Floor pool — bright ellipse where beam hits */
         var poolGrad = ctx.createRadialGradient(landX, landY, 0, landX, landY, botW * 1.5);
         poolGrad.addColorStop(0, 'rgba(' + pc + ',' + (alpha * 1.5) + ')');
