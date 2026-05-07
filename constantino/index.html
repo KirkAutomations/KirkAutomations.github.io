@@ -1247,6 +1247,7 @@ body.fight-mode .round-label { animation: numberPulse 1.5s ease-in-out infinite;
   <div class="anim-dot" data-anim="bubbles" role="button" tabindex="0" aria-label="Bubbles" title="Bubbles"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="6"/><circle cx="6" cy="6" r="3"/></svg></div>
   <div class="anim-dot" data-anim="dna" role="button" tabindex="0" aria-label="DNA Helix" title="DNA Helix"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2c0 8 12 8 12 16"/><path d="M18 2c0 8-12 8-12 16"/></svg></div>
   <div class="anim-dot" data-anim="blobs" role="button" tabindex="0" aria-label="Liquid Blobs" title="Liquid Blobs"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><ellipse cx="12" cy="12" rx="8" ry="6"/></svg></div>
+  <div class="anim-dot" data-anim="spotlights" role="button" tabindex="0" aria-label="Boxing Spotlights" title="Boxing Spotlights"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v6"/><circle cx="12" cy="14" r="6" fill="currentColor" opacity="0.3"/><path d="M8 2h8"/></svg></div>
 </div>
 
 <!-- ===== THEME SWITCHER ===== -->
@@ -1788,6 +1789,113 @@ window.addEventListener('scroll', function() {
         blobs.forEach(function(b){var dx=rx-b.x, dy=ry-b.y; sum+=b.r*b.r/(dx*dx+dy*dy+1)});
         var idx=(py*ow+px)*4; if (sum>0.7) { var a=Math.min(1,(sum-0.7)*1.5); id.data[idx]=pcs[0]; id.data[idx+1]=pcs[1]; id.data[idx+2]=pcs[2]; id.data[idx+3]=a*120|0; } } }
       octx.putImageData(id,0,0); ctx.clearRect(0,0,W,H); ctx.drawImage(animState.oc,0,0,W,H);
+    }
+  };
+
+  /* 11. BOXING SPOTLIGHTS */
+  ANIMS.spotlights = {
+    init: function() {
+      animState.t = 0;
+      var count = fightActive ? 6 : 3;
+      animState.spots = Array.from({length: count}, function(_, i) {
+        return {
+          x: W * (0.15 + Math.random() * 0.7),
+          y: -50,
+          targetX: W * (0.2 + Math.random() * 0.6),
+          targetY: H * (0.3 + Math.random() * 0.5),
+          radius: 120 + Math.random() * 200,
+          speed: 0.3 + Math.random() * 0.7,
+          phase: Math.random() * Math.PI * 2,
+          drift: 30 + Math.random() * 80,
+          cone: 0.15 + Math.random() * 0.15
+        };
+      });
+      /* Haze particles for atmosphere */
+      animState.haze = Array.from({length: fightActive ? 100 : 30}, function() {
+        return { x: Math.random() * W, y: Math.random() * H, r: 1 + Math.random() * 2, alpha: Math.random() * 0.3, vx: (Math.random() - 0.5) * 0.2, vy: -0.1 - Math.random() * 0.3 };
+      });
+    },
+    tick: function() {
+      ctx.clearRect(0, 0, W, H);
+      var pc = getPC();
+      animState.t += 0.01;
+      var t = animState.t;
+      var spots = animState.spots;
+      var haze = animState.haze;
+      if (!spots) return;
+
+      /* Draw spotlight cones from above */
+      spots.forEach(function(s) {
+        var swayX = Math.sin(t * s.speed + s.phase) * s.drift;
+        var swayY = Math.cos(t * s.speed * 0.7 + s.phase) * s.drift * 0.3;
+        var cx = s.targetX + swayX;
+        var cy = s.targetY + swayY;
+
+        /* Mouse attraction — spotlights drift toward cursor */
+        var dx = mx - cx, dy = my - cy;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist > 0 && dist < 400) {
+          cx += dx * 0.05;
+          cy += dy * 0.05;
+        }
+
+        /* Cone from top of screen to target */
+        var grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, s.radius);
+        var intensity = fightActive ? 0.12 : 0.06;
+        grad.addColorStop(0, 'rgba(' + pc + ',' + intensity + ')');
+        grad.addColorStop(0.4, 'rgba(' + pc + ',' + (intensity * 0.5) + ')');
+        grad.addColorStop(1, 'transparent');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(cx, cy, s.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        /* Bright beam line from top to pool */
+        var beamGrad = ctx.createLinearGradient(cx, -20, cx, cy);
+        beamGrad.addColorStop(0, 'rgba(' + pc + ',' + (intensity * 0.8) + ')');
+        beamGrad.addColorStop(1, 'transparent');
+        ctx.strokeStyle = beamGrad;
+        ctx.lineWidth = s.radius * s.cone;
+        ctx.globalAlpha = 0.3;
+        ctx.beginPath();
+        ctx.moveTo(cx - s.radius * 0.05, -20);
+        ctx.lineTo(cx, cy);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+
+        /* Floor pool glow */
+        var poolGrad = ctx.createRadialGradient(cx, cy + s.radius * 0.3, 0, cx, cy + s.radius * 0.3, s.radius * 0.6);
+        poolGrad.addColorStop(0, 'rgba(' + pc + ',' + (intensity * 0.4) + ')');
+        poolGrad.addColorStop(1, 'transparent');
+        ctx.fillStyle = poolGrad;
+        ctx.beginPath();
+        ctx.ellipse(cx, cy + s.radius * 0.3, s.radius * 0.6, s.radius * 0.2, 0, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      /* Haze / dust in the light */
+      if (haze) {
+        haze.forEach(function(h) {
+          h.x += h.vx;
+          h.y += h.vy;
+          if (h.y < -10) { h.y = H + 10; h.x = Math.random() * W; }
+          if (h.x < -10) h.x = W + 10;
+          if (h.x > W + 10) h.x = -10;
+          /* Brighten particles inside spotlight cones */
+          var inSpot = false;
+          spots.forEach(function(s) {
+            var sx = s.targetX + Math.sin(t * s.speed + s.phase) * s.drift;
+            var sy = s.targetY + Math.cos(t * s.speed * 0.7 + s.phase) * s.drift * 0.3;
+            var dd = Math.sqrt((h.x - sx) * (h.x - sx) + (h.y - sy) * (h.y - sy));
+            if (dd < s.radius) inSpot = true;
+          });
+          var alpha = inSpot ? h.alpha * 3 : h.alpha;
+          ctx.fillStyle = 'rgba(' + pc + ',' + Math.min(alpha, 0.7) + ')';
+          ctx.beginPath();
+          ctx.arc(h.x, h.y, h.r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
     }
   };
 
