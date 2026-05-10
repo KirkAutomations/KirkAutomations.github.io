@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Princess Kitty Reads! 👑🐱</title>
+  <style>
+    *, *::before, *::after {
+      margin: 0; padding: 0; box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    html, body {
+      width: 100%; min-height: 100vh;
+      font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial Rounded MT Bold', cursive;
+      background: linear-gradient(160deg, #ffd1f0 0%, #e8c3f8 35%, #c5d8ff 70%, #d0f0ff 100%);
+      overflow-x: hidden;
+    }
+
+    /* ── Layout ─────────────────────────────── */
+    .game {
+      position: relative; z-index: 10;
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 14px 12px 32px;
+      gap: 14px;
+    }
+
+    /* ── Title ─────────────────────────────── */
+    h1 {
+      font-size: clamp(1.5em, 6vw, 2.6em);
+      color: #8b25b8;
+      text-shadow: 3px 3px 0 white, 6px 6px 0 rgba(180,80,220,0.25);
+      text-align: center;
+      animation: titleFloat 3s ease-in-out infinite;
+      letter-spacing: 1px;
+      line-height: 1.2;
+    }
+    @keyframes titleFloat {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-7px); }
+    }
+
+    /* ── Princess cat character ─────────────── */
+    .cat-wrapper {
+      cursor: pointer;
+      display: flex; flex-direction: column; align-items: center;
+      animation: catBob 2.2s ease-in-out infinite;
+      position: relative;
+    }
+    .cat-crown { font-size: clamp(1.6em, 5vw, 2.2em); animation: crownRock 3s ease-in-out infinite; }
+    .cat-face  { font-size: clamp(2.8em, 9vw, 4em); transition: transform 0.15s; line-height: 1; }
+    .cat-wrapper:active .cat-face { transform: scale(0.82); }
+
+    @keyframes catBob {
+      0%,100% { transform: translateY(0) rotate(-3deg); }
+      50%      { transform: translateY(-9px) rotate(3deg); }
+    }
+    @keyframes crownRock {
+      0%,100% { transform: rotate(-6deg) translateY(2px); }
+      50%      { transform: rotate(6deg)  translateY(0px); }
+    }
+    .cat-wrapper.dancing .cat-face {
+      animation: catDance 0.38s ease-in-out 5;
+    }
+    @keyframes catDance {
+      0%,100% { transform: scale(1.1) rotate(-12deg); }
+      50%      { transform: scale(1.25) rotate(12deg); }
+    }
+
+    /* ── Stars row ──────────────────────────── */
+    .stars-row {
+      background: rgba(255,255,255,0.75);
+      border-radius: 30px; padding: 8px 20px;
+      box-shadow: 0 4px 16px rgba(160,80,220,0.18);
+      font-size: clamp(1.3em, 5vw, 1.8em);
+      min-height: 48px; display: flex; align-items: center;
+      letter-spacing: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ── Word card ──────────────────────────── */
+    .card {
+      background: rgba(255,255,255,0.93);
+      border-radius: 32px;
+      padding: 22px 18px 24px;
+      box-shadow: 0 10px 32px rgba(160,80,220,0.28), 0 0 0 3px rgba(255,255,255,0.9);
+      width: 100%; max-width: 480px;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 18px;
+    }
+
+    /* ── Picture ────────────────────────────── */
+    .word-pic {
+      font-size: clamp(5em, 20vw, 8em);
+      cursor: pointer;
+      animation: picFloat 3.5s ease-in-out infinite;
+      transition: transform 0.12s;
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,0.12));
+      line-height: 1.1;
+    }
+    .word-pic:active { transform: scale(0.86); }
+    @keyframes picFloat {
+      0%,100% { transform: scale(1)    translateY(0); }
+      50%      { transform: scale(1.06) translateY(-7px); }
+    }
+    .word-pic.pop {
+      animation: picPop 0.32s cubic-bezier(.36,.07,.19,.97) 3;
+    }
+    @keyframes picPop {
+      0%,100% { transform: scale(1); }
+      40%      { transform: scale(1.45); }
+      65%      { transform: scale(0.88); }
+    }
+
+    /* ── Hint text ──────────────────────────── */
+    .hint {
+      font-size: clamp(0.88em, 3.4vw, 1.12em);
+      color: #7b1fa2;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(255,200,255,0.55), rgba(200,155,255,0.45));
+      padding: 10px 20px;
+      border-radius: 20px;
+      max-width: 340px;
+      min-height: 44px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ── Letter buttons ─────────────────────── */
+    .letters-row {
+      display: flex; gap: 9px; flex-wrap: wrap; justify-content: center;
+    }
+    .letter-btn {
+      width:  clamp(54px, 14vw, 72px);
+      height: clamp(54px, 14vw, 72px);
+      border-radius: 18px; border: none;
+      background: linear-gradient(145deg, #ff9de2, #c484f3);
+      color: white;
+      font-size: clamp(1.7em, 5vw, 2.3em);
+      font-weight: bold; font-family: inherit;
+      cursor: pointer; text-transform: uppercase;
+      box-shadow: 0 5px 0 #8b25b8, 0 8px 16px rgba(0,0,0,0.18);
+      transition: transform 0.1s, box-shadow 0.1s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .letter-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 1px 0 #8b25b8, 0 3px 8px rgba(0,0,0,0.15);
+    }
+    .letter-btn.lit {
+      background: linear-gradient(145deg, #ffe44d, #ffb347);
+      box-shadow: 0 5px 0 #b86800, 0 0 22px rgba(255,210,0,0.55);
+      animation: letterLight 0.32s ease-out;
+    }
+    @keyframes letterLight {
+      0%  { transform: scale(1); }
+      40% { transform: scale(1.4); }
+      100%{ transform: scale(1); }
+    }
+
+    /* ── Next button ────────────────────────── */
+    .btn-next {
+      background: linear-gradient(145deg, #ffe44d, #ffb347);
+      border: none; border-radius: 28px;
+      padding: 15px 40px;
+      font-size: clamp(1.3em, 5vw, 1.9em);
+      font-family: inherit; color: white; font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #b86800, 0 10px 26px rgba(0,0,0,0.18);
+      text-shadow: 1px 1px 0 rgba(0,0,0,0.18);
+      display: none; transition: transform 0.12s, box-shadow 0.12s;
+    }
+    .btn-next:active {
+      transform: translateY(5px);
+      box-shadow: 0 1px 0 #b86800, 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .btn-next.show {
+      display: block;
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn {
+      from { transform: scale(0) rotate(-8deg); opacity: 0; }
+      to   { transform: scale(1) rotate(0);     opacity: 1; }
+    }
+
+    /* ── Sound toggle ───────────────────────── */
+    .sound-btn {
+      position: fixed; top: 12px; right: 12px; z-index: 400;
+      background: rgba(255,255,255,0.88);
+      border: none; border-radius: 50%;
+      width: 48px; height: 48px; font-size: 1.4em;
+      cursor: pointer;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+    }
+
+    /* ── VFX: sparkles ──────────────────────── */
+    .sparkle {
+      position: fixed; pointer-events: none; z-index: 300;
+      font-size: clamp(1em, 3.5vw, 1.6em);
+      animation: sparkleFly var(--dur, 0.85s) ease-out forwards;
+    }
+    @keyframes sparkleFly {
+      0%  { transform: translate(0,0) scale(0) rotate(0deg); opacity: 1; }
+      55% { opacity: 1; }
+      100%{ transform: translate(var(--tx),var(--ty)) scale(1.1) rotate(var(--rot)); opacity: 0; }
+    }
+
+    /* ── VFX: confetti ──────────────────────── */
+    .conf {
+      position: fixed; pointer-events: none; z-index: 300;
+      border-radius: 4px;
+      animation: confFall var(--dur) linear forwards;
+    }
+    @keyframes confFall {
+      from { transform: translateY(-20px) rotate(0deg);   opacity: 1; }
+      to   { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* ── Background twinkling stars ─────────── */
+    .bg-star {
+      position: fixed; border-radius: 50%;
+      background: white; pointer-events: none; z-index: 1;
+      animation: twinkle var(--dur) infinite alternate;
+    }
+    @keyframes twinkle {
+      from { opacity: 0.12; transform: scale(0.7); }
+      to   { opacity: 0.9;  transform: scale(1.4); }
+    }
+
+    /* ── Win overlay ────────────────────────── */
+    .win-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: linear-gradient(160deg, rgba(180,60,230,0.92), rgba(100,40,180,0.92));
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 22px; padding: 24px;
+      opacity: 0; pointer-events: none; transition: opacity 0.4s;
+    }
+    .win-overlay.show { opacity: 1; pointer-events: all; }
+
+    .win-title {
+      font-size: clamp(2em, 8vw, 3.5em);
+      color: white;
+      text-shadow: 3px 3px 0 rgba(0,0,0,0.22);
+      text-align: center; line-height: 1.3;
+      animation: winPulse 0.7s ease-in-out infinite alternate;
+    }
+    @keyframes winPulse {
+      from { transform: scale(1);    }
+      to   { transform: scale(1.07); }
+    }
+    .win-cats {
+      font-size: clamp(2.5em, 9vw, 4.5em);
+      animation: catSpin 1.8s linear infinite;
+    }
+    @keyframes catSpin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* ── Responsive ─────────────────────────── */
+    @media (max-height: 620px) {
+      .game { gap: 8px; padding-top: 8px; }
+      h1    { font-size: 1.3em; }
+      .cat-crown { font-size: 1.4em; }
+      .cat-face  { font-size: 2.4em; }
+      .card { padding: 14px 14px 18px; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<button class="sound-btn" id="soundBtn" onclick="toggleSound()">🔊</button>
+
+<!-- VFX layer -->
+<div id="vfx" style="position:fixed;inset:0;pointer-events:none;z-index:300;"></div>
+
+<!-- Game -->
+<main class="game">
+  <h1>👑 Princess Kitty Reads! 🐱</h1>
+
+  <div class="cat-wrapper" id="kitty" onclick="kittyTap()">
+    <div class="cat-crown">👑</div>
+    <div class="cat-face" id="catFace">🐱</div>
+  </div>
+
+  <div class="stars-row" id="starsRow">✨ Let's read! ✨</div>
+
+  <div class="card">
+    <div class="word-pic" id="wordPic" onclick="picTap()">🐱</div>
+    <div class="hint" id="hint">Tap the picture to hear the word! 👆</div>
+    <div class="letters-row" id="lettersRow"></div>
+  </div>
+
+  <button class="btn-next" id="btnNext" onclick="nextWord()">Next Word ➡️</button>
+</main>
+
+<!-- Win screen -->
+<div class="win-overlay" id="winOverlay">
+  <div style="font-size:clamp(3em,10vw,5em)">🌟 👑 🌟</div>
+  <div class="win-title">You read ALL the words!<br>You're a reading princess! 👑</div>
+  <div class="win-cats">🐱✨🐱</div>
+  <button class="btn-next show" onclick="restart()" style="display:block;margin-top:8px">
+    Play Again! 🎉
+  </button>
+</div>
+
+<script>
+'use strict';
+
+// ── Word list ─────────────────────────────────────────────────────────────────
+const WORDS = [
+  { w:'CAT',   e:'🐱', s:'cat'           },
+  { w:'BOW',   e:'🎀', s:'bow'           },
+  { w:'SUN',   e:'☀️',  s:'sun'           },
+  { w:'STAR',  e:'⭐', s:'star'          },
+  { w:'MOON',  e:'🌙', s:'moon'          },
+  { w:'ROSE',  e:'🌹', s:'rose'          },
+  { w:'CAKE',  e:'🎂', s:'cake'          },
+  { w:'WAND',  e:'🪄', s:'magic wand'    },
+  { w:'FISH',  e:'🐟', s:'fish'          },
+  { w:'MILK',  e:'🥛', s:'milk'          },
+  { w:'RING',  e:'💍', s:'ring'          },
+  { w:'LOVE',  e:'❤️',  s:'love'          },
+  { w:'GOWN',  e:'👗', s:'princess gown' },
+  { w:'CROWN', e:'👑', s:'crown'         },
+  { w:'DANCE', e:'💃', s:'dance'         },
+  { w:'FAIRY', e:'🧚', s:'fairy'         },
+  { w:'CANDY', e:'🍬', s:'candy'         },
+  { w:'PAWS',  e:'🐾', s:'paws'          },
+];
+
+const KITTY_LINES = [
+  s => `The word is ${s}! Can you say it?`,
+  s => `${s}! Meow!`,
+  s => `Ooh, ${s}! Tap the letters!`,
+  s => `I love ${s}! Keep going!`,
+  () => 'Meow! You are a reading superstar!',
+  () => 'You are amazing! Keep going, princess!',
+  () => "Meow meow! Let's read together!",
+  () => 'Purrrr! You are doing so well!',
+];
+
+const CONF_COLORS = ['#ff9de2','#c484f3','#ffe44d','#ff6b9d','#a8c8ff','#ffffff','#ffd700','#ff9966'];
+const SPARKLE_EMS = ['✨','⭐','💫','🌟','🎀','💖','🌸'];
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let order      = [];
+let wordIdx    = 0;
+let litSet     = new Set();
+let totalStars = 0;
+let soundOn    = true;
+
+// ── Bootstrap ─────────────────────────────────────────────────────────────────
+if (window.speechSynthesis && speechSynthesis.getVoices().length === 0) {
+  speechSynthesis.addEventListener('voiceschanged', () => {}, { once: true });
+}
+
+buildBgStars();
+restart();
+
+// ── Setup ─────────────────────────────────────────────────────────────────────
+function buildBgStars() {
+  for (let i = 0; i < 36; i++) {
+    const el = document.createElement('div');
+    el.className = 'bg-star';
+    const sz = 2 + Math.random() * 5;
+    el.style.cssText = `
+      width:${sz}px; height:${sz}px;
+      left:${Math.random()*100}vw; top:${Math.random()*100}vh;
+      --dur:${1.2 + Math.random() * 2.2}s;
+      animation-delay:${Math.random() * 2.5}s;
+    `;
+    document.body.appendChild(el);
+  }
+}
+
+function restart() {
+  document.getElementById('winOverlay').classList.remove('show');
+  order = shuffle(WORDS.map((_, i) => i));
+  wordIdx = 0;
+  totalStars = 0;
+  updateStars();
+  loadWord();
+  // Welcome message
+  setTimeout(() => say("Let's read! Tap the picture!"), 1100);
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ── Word loading ──────────────────────────────────────────────────────────────
+function loadWord() {
+  const { w, e } = current();
+  litSet.clear();
+
+  const pic = document.getElementById('wordPic');
+  pic.textContent = e;
+  pic.classList.remove('pop');
+
+  document.getElementById('catFace').textContent = '🐱';
+  document.getElementById('hint').textContent = 'Tap the picture to hear the word! 👆';
+  document.getElementById('btnNext').classList.remove('show');
+
+  // Build letter buttons
+  const row = document.getElementById('lettersRow');
+  row.innerHTML = '';
+  for (let i = 0; i < w.length; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'letter-btn';
+    btn.textContent = w[i];
+    btn.onclick = () => tapLetter(i, w[i], w);
+    row.appendChild(btn);
+  }
+
+  // Auto-speak after brief pause
+  setTimeout(() => say(current().s), 850);
+}
+
+function current() { return WORDS[order[wordIdx]]; }
+
+// ── Player interactions ───────────────────────────────────────────────────────
+function picTap() {
+  const pic = document.getElementById('wordPic');
+  pic.classList.remove('pop');
+  void pic.offsetWidth;
+  pic.classList.add('pop');
+
+  say(current().s);
+  burstSparkles(pic);
+  document.getElementById('hint').textContent = 'Now tap each letter! 👆';
+}
+
+function tapLetter(idx, letter, word) {
+  const btns = document.getElementById('lettersRow').querySelectorAll('.letter-btn');
+
+  if (litSet.has(idx)) {
+    // Tapped again → just repeat the letter
+    say(letter);
+    btns[idx].style.animation = 'none';
+    void btns[idx].offsetWidth;
+    btns[idx].style.animation = 'letterLight 0.32s ease-out';
+    return;
+  }
+
+  litSet.add(idx);
+  btns[idx].classList.add('lit');
+  say(letter);
+
+  const rect = btns[idx].getBoundingClientRect();
+  spawnSparkles(rect.left + rect.width / 2, rect.top + rect.height / 2, 5);
+
+  if (litSet.size === word.length) {
+    setTimeout(() => wordComplete(), 480);
+  } else {
+    const left = word.length - litSet.size;
+    document.getElementById('hint').textContent =
+      left === 1 ? 'One more letter! 🌟' : `${left} more letters! Keep going! 🌟`;
+  }
+}
+
+function wordComplete() {
+  // Cat reacts
+  const kitty = document.getElementById('kitty');
+  kitty.classList.add('dancing');
+  document.getElementById('catFace').textContent = '😻';
+  setTimeout(() => {
+    kitty.classList.remove('dancing');
+    document.getElementById('catFace').textContent = '🐱';
+  }, 2100);
+
+  // Bounce picture
+  const pic = document.getElementById('wordPic');
+  pic.classList.remove('pop');
+  void pic.offsetWidth;
+  pic.classList.add('pop');
+
+  launchConfetti(42);
+  setTimeout(() => say(current().s + '! Amazing!'), 280);
+
+  totalStars++;
+  updateStars();
+  document.getElementById('hint').textContent = '⭐ You did it! Tap Next for the next word! ⭐';
+  setTimeout(() => document.getElementById('btnNext').classList.add('show'), 950);
+}
+
+function nextWord() {
+  wordIdx++;
+  if (wordIdx >= order.length) {
+    showWin();
+  } else {
+    loadWord();
+  }
+}
+
+function showWin() {
+  document.getElementById('winOverlay').classList.add('show');
+  launchConfetti(130);
+  setTimeout(() => say('You are a reading princess! You read every single word! Amazing!'), 700);
+}
+
+function kittyTap() {
+  const fn = KITTY_LINES[Math.floor(Math.random() * KITTY_LINES.length)];
+  say(fn(current().s));
+
+  const kitty = document.getElementById('kitty');
+  kitty.classList.remove('dancing');
+  void kitty.offsetWidth;
+  kitty.classList.add('dancing');
+  setTimeout(() => kitty.classList.remove('dancing'), 2200);
+}
+
+// ── Speech ────────────────────────────────────────────────────────────────────
+function say(text) {
+  if (!soundOn || !window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate   = 0.78;
+  u.pitch  = 1.28;
+  u.volume = 1;
+
+  const voices = window.speechSynthesis.getVoices();
+  const pick =
+    voices.find(v => /Samantha|Karen|Moira|Fiona|Victoria/.test(v.name)) ||
+    voices.find(v => v.lang.startsWith('en') && v.localService) ||
+    null;
+  if (pick) u.voice = pick;
+
+  window.speechSynthesis.speak(u);
+}
+
+function toggleSound() {
+  soundOn = !soundOn;
+  document.getElementById('soundBtn').textContent = soundOn ? '🔊' : '🔇';
+  if (!soundOn) window.speechSynthesis?.cancel();
+}
+
+// ── Stars ─────────────────────────────────────────────────────────────────────
+function updateStars() {
+  const row = document.getElementById('starsRow');
+  row.textContent = totalStars
+    ? '⭐'.repeat(Math.min(totalStars, 18))
+    : '✨ Let\'s read! ✨';
+}
+
+// ── VFX ───────────────────────────────────────────────────────────────────────
+function burstSparkles(el) {
+  const r = el.getBoundingClientRect();
+  spawnSparkles(r.left + r.width / 2, r.top + r.height / 2, 12);
+}
+
+function spawnSparkles(cx, cy, count) {
+  const vfx = document.getElementById('vfx');
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('div');
+    el.className = 'sparkle';
+    el.textContent = SPARKLE_EMS[Math.floor(Math.random() * SPARKLE_EMS.length)];
+    const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.8;
+    const dist  = 55 + Math.random() * 75;
+    el.style.cssText = `
+      left:${cx}px; top:${cy}px;
+      --tx:${Math.cos(angle) * dist}px;
+      --ty:${Math.sin(angle) * dist}px;
+      --rot:${Math.random() * 400 - 200}deg;
+      --dur:${0.6 + Math.random() * 0.55}s;
+      animation-delay:${Math.random() * 0.18}s;
+    `;
+    vfx.appendChild(el);
+    setTimeout(() => el.remove(), 1600);
+  }
+}
+
+function launchConfetti(n) {
+  const vfx = document.getElementById('vfx');
+  for (let i = 0; i < n; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'conf';
+      const sz = 8 + Math.random() * 11;
+      el.style.cssText = `
+        left:${Math.random() * 100}vw; top:-20px;
+        width:${sz}px; height:${sz}px;
+        background:${CONF_COLORS[Math.floor(Math.random() * CONF_COLORS.length)]};
+        --dur:${1.9 + Math.random() * 2.3}s;
+        animation-delay:${Math.random() * 0.25}s;
+      `;
+      vfx.appendChild(el);
+      setTimeout(() => el.remove(), 5500);
+    }, i * 22);
+  }
+}
+</script>
+</body>
+</html>
