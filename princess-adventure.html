@@ -151,6 +151,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Ch
 }
 #wc-row{display:flex;gap:clamp(6px,2vw,12px);flex-wrap:wrap;justify-content:center}
 
+/* letter buttons — same feel as reading game */
 .wc-btn{
   width:clamp(52px,14vw,72px);height:clamp(52px,14vw,72px);
   border-radius:16px;border:none;
@@ -255,12 +256,14 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Ch
     <span class="gs" id="g2">💎</span>
   </div>
 
-  <button class="nav off" id="nl" onclick="go(-1)">◄</button>
-  <button class="nav" id="nr" onclick="go(1)">►</button>
+  <button class="nav off" id="nl" onclick="go(-1)">◀</button>
+  <button class="nav" id="nr" onclick="go(1)">▶</button>
   <button id="snd" onclick="toggleSnd()">🔊</button>
 
+  <!-- Word card overlay -->
   <div id="overlay"></div>
 
+  <!-- Word card -->
   <div id="wcard">
     <div id="wc-emoji">🌳</div>
     <div id="wc-prompt">Tap each letter!</div>
@@ -269,6 +272,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Ch
   </div>
 </div>
 
+<!-- WIN -->
 <div id="win">
   <div style="font-size:clamp(3em,11vw,6em)">👑✨👑</div>
   <div class="wcat">😻</div>
@@ -280,6 +284,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Ch
 <script>
 'use strict';
 
+// ── DATA ─────────────────────────────────────────────────────────────────────
 const SCENES = ['garden','forest','castle'];
 const LABELS = {garden:'🌸 Royal Garden', forest:'🌲 Magic Forest', castle:'🏰 Candy Castle'};
 
@@ -324,166 +329,198 @@ const GEM_NAME  = ['Ruby','Sapphire','Emerald'];
 const CONF_CLR  = ['#ff9de2','#c484f3','#ffe44d','#ff6b9d','#a8c8ff','#fff','#ffd700'];
 const SPARK_E   = ['✨','⭐','💫','🌟','💖'];
 
-let scene=0,gems=[false,false,false],soundOn=true,cardOpen=false;
-let cardObj=null,cardEl=null,cardLit=new Set(),actx=null,mTimer=null;
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let scene    = 0;
+let gems     = [false, false, false];
+let soundOn  = true;
+let cardOpen = false;
+let cardObj  = null;
+let cardEl   = null;
+let cardLit  = new Set();
+let actx     = null;
+let mTimer   = null;
 
-function ctx(){
-  if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();
+// ── AUDIO ─────────────────────────────────────────────────────────────────────
+function ctx() {
+  if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
   return actx;
 }
-function tone(f,d,type='triangle',vol=.16,delay=0){
-  if(!soundOn)return;
-  try{
-    const c=ctx(),o=c.createOscillator(),g=c.createGain();
-    o.connect(g);g.connect(c.destination);
-    o.type=type;o.frequency.value=f;
+function tone(f, d, type='triangle', vol=.16, delay=0) {
+  if (!soundOn) return;
+  try {
+    const c=ctx(), o=c.createOscillator(), g=c.createGain();
+    o.connect(g); g.connect(c.destination);
+    o.type=type; o.frequency.value=f;
     const t=c.currentTime+delay;
     g.gain.setValueAtTime(vol,t);
     g.gain.exponentialRampToValueAtTime(.001,t+d);
-    o.start(t);o.stop(t+d+.05);
-  }catch(e){}
+    o.start(t); o.stop(t+d+.05);
+  } catch(e) {}
 }
-function sndClick() {tone(880,.08,'sine',.18);tone(1100,.08,'sine',.14,.07);}
-function sndLetter(){tone(660,.12,'sine',.2);}
-function sndAllLit(){[523,659,784,1047,1319].forEach((f,i)=>tone(f,.35,'sine',.22,i*.09));}
-function sndGemGet(){[523,659,784,1047,1319,1568].forEach((f,i)=>tone(f,.4,'triangle',.28,i*.1));}
-function sndWin(){[[523,0],[659,.15],[784,.3],[1047,.45],[784,.65],[1047,.8],[1319,.95],[1047,1.2],[1319,1.45],[1568,1.7]].forEach(([f,t])=>tone(f,.5,'triangle',.28,t));}
-function sndNav(){[392,523].forEach((f,i)=>tone(f,.12,'square',.1,i*.07));}
+function sndClick()  { tone(880,.08,'sine',.18); tone(1100,.08,'sine',.14,.07); }
+function sndLetter() { tone(660,.12,'sine',.2); }
+function sndAllLit() { [523,659,784,1047,1319].forEach((f,i) => tone(f,.35,'sine',.22,i*.09)); }
+function sndGemGet() { [523,659,784,1047,1319,1568].forEach((f,i) => tone(f,.4,'triangle',.28,i*.1)); }
+function sndWin()    { [[523,0],[659,.15],[784,.3],[1047,.45],[784,.65],[1047,.8],[1319,.95],[1047,1.2],[1319,1.45],[1568,1.7]].forEach(([f,t])=>tone(f,.5,'triangle',.28,t)); }
+function sndNav()    { [392,523].forEach((f,i) => tone(f,.12,'square',.1,i*.07)); }
 
-const MELODIES={
-  garden:[[392,.25],[440,.2],[494,.2],[523,.35],[494,.2],[440,.2],[392,.4],[349,.2],[392,.2],[440,.2],[392,.55]],
-  forest:[[294,.3],[330,.25],[370,.3],[330,.2],[294,.4],[262,.2],[294,.25],[330,.2],[370,.5]],
-  castle:[[523,.2],[587,.2],[659,.2],[698,.3],[659,.2],[587,.2],[523,.5],[587,.2],[659,.2],[784,.55]],
+const MELODIES = {
+  garden: [[392,.25],[440,.2],[494,.2],[523,.35],[494,.2],[440,.2],[392,.4],[349,.2],[392,.2],[440,.2],[392,.55]],
+  forest: [[294,.3],[330,.25],[370,.3],[330,.2],[294,.4],[262,.2],[294,.25],[330,.2],[370,.5]],
+  castle: [[523,.2],[587,.2],[659,.2],[698,.3],[659,.2],[587,.2],[523,.5],[587,.2],[659,.2],[784,.55]],
 };
-function playMusic(){
+function playMusic() {
   clearTimeout(mTimer);
-  if(!soundOn)return;
-  const notes=MELODIES[SCENES[scene]];
-  let d=0;
-  notes.forEach(([f,dur])=>{tone(f,dur*.8,'triangle',.07,d);d+=dur;});
-  mTimer=setTimeout(playMusic,(d+.6)*1000);
+  if (!soundOn) return;
+  const notes = MELODIES[SCENES[scene]];
+  let d = 0;
+  notes.forEach(([f, dur]) => { tone(f, dur*.8, 'triangle', .07, d); d += dur; });
+  mTimer = setTimeout(playMusic, (d + .6) * 1000);
 }
 
-function say(txt){
-  if(!soundOn||!window.speechSynthesis)return;
+// ── SPEECH ────────────────────────────────────────────────────────────────────
+function say(txt) {
+  if (!soundOn || !window.speechSynthesis) return;
   speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(txt.replace(/[✨💎❤️💙💚🌟⭐👑⭐]/g,''));
-  u.rate=.82;u.pitch=1.25;u.volume=1;
-  const vs=speechSynthesis.getVoices();
-  const v=vs.find(v=>/Samantha|Karen|Moira|Fiona/.test(v.name))||vs.find(v=>v.lang.startsWith('en')&&v.localService)||null;
-  if(v)u.voice=v;
+  const u = new SpeechSynthesisUtterance(txt.replace(/[✨💎❤️💙💚🌟⭐👑⭐]/g, ''));
+  u.rate = .82; u.pitch = 1.25; u.volume = 1;
+  const vs = speechSynthesis.getVoices();
+  const v  = vs.find(v => /Samantha|Karen|Moira|Fiona/.test(v.name))
+          || vs.find(v => v.lang.startsWith('en') && v.localService) || null;
+  if (v) u.voice = v;
   speechSynthesis.speak(u);
 }
-function toggleSnd(){
-  soundOn=!soundOn;
-  document.getElementById('snd').textContent=soundOn?'🔊':'🔇';
-  if(!soundOn){speechSynthesis?.cancel();clearTimeout(mTimer);}
-  else{ctx().resume();playMusic();}
+function toggleSnd() {
+  soundOn = !soundOn;
+  document.getElementById('snd').textContent = soundOn ? '🔊' : '🔇';
+  if (!soundOn) { speechSynthesis?.cancel(); clearTimeout(mTimer); }
+  else { ctx().resume(); playMusic(); }
 }
 
-function renderScene(name){
-  const el=document.getElementById('sc-'+name);
-  el.querySelectorAll('.obj').forEach(e=>e.remove());
-  OBJS[name].forEach(o=>{
-    if(o.gem!==undefined&&gems[o.gem])return;
-    const div=document.createElement('div');
-    div.className='obj '+(o.a||'')+(o.gem!==undefined?' gem-obj':'');
-    div.style.cssText=`left:${o.x}%;top:${o.y}%;font-size:${o.sz}vmin`;
-    if(o.gem!==undefined){
-      const hint=document.createElement('span');
-      hint.className='gem-hint';hint.textContent='✨';
+// ── SCENE RENDER ──────────────────────────────────────────────────────────────
+function renderScene(name) {
+  const el = document.getElementById('sc-' + name);
+  el.querySelectorAll('.obj').forEach(e => e.remove());
+  OBJS[name].forEach(o => {
+    if (o.gem !== undefined && gems[o.gem]) return;
+    const div = document.createElement('div');
+    div.className = 'obj ' + (o.a||'') + (o.gem !== undefined ? ' gem-obj' : '');
+    div.style.cssText = `left:${o.x}%;top:${o.y}%;font-size:${o.sz}vmin`;
+    if (o.gem !== undefined) {
+      const hint = document.createElement('span');
+      hint.className = 'gem-hint'; hint.textContent = '✨';
       div.appendChild(hint);
     }
-    const ic=document.createElement('span');
-    ic.className='ic';ic.textContent=o.e;
+    const ic = document.createElement('span');
+    ic.className = 'ic'; ic.textContent = o.e;
     div.appendChild(ic);
-    div.onclick=()=>objClick(o,div);
+    div.onclick = () => objClick(o, div);
     el.appendChild(div);
   });
 }
 
-function objClick(obj,el){
-  if(cardOpen)return;
+// ── OBJECT CLICK → shows word card ────────────────────────────────────────────
+function objClick(obj, el) {
+  if (cardOpen) return;
   sndClick();
-  el.classList.remove('boing');void el.offsetWidth;el.classList.add('boing');
-  el.addEventListener('animationend',()=>el.classList.remove('boing'),{once:true});
-  const r=el.getBoundingClientRect();
-  sparks(r.left+r.width/2,r.top+r.height/2,6);
-  showCard(obj,el);
+  el.classList.remove('boing'); void el.offsetWidth; el.classList.add('boing');
+  el.addEventListener('animationend', () => el.classList.remove('boing'), {once:true});
+  const r = el.getBoundingClientRect();
+  sparks(r.left + r.width/2, r.top + r.height/2, 6);
+  showCard(obj, el);
 }
 
-function showCard(obj,el){
-  cardOpen=true;cardObj=obj;cardEl=el;cardLit=new Set();
-  document.getElementById('wc-emoji').textContent=obj.e;
-  document.getElementById('wc-prompt').textContent=`It's a ${obj.w.toLowerCase()}! Tap each letter!`;
-  document.getElementById('wc-skip').style.opacity='0';
-  const row=document.getElementById('wc-row');
-  row.innerHTML='';
-  [...obj.w].forEach((letter,i)=>{
-    const btn=document.createElement('button');
-    btn.className='wc-btn';btn.textContent=letter;
-    btn.onclick=()=>tapLetter(i,letter,btn);
+// ── WORD CARD ─────────────────────────────────────────────────────────────────
+function showCard(obj, el) {
+  cardOpen = true; cardObj = obj; cardEl = el; cardLit = new Set();
+
+  document.getElementById('wc-emoji').textContent  = obj.e;
+  document.getElementById('wc-prompt').textContent = `It's a ${obj.w.toLowerCase()}! Tap each letter!`;
+  document.getElementById('wc-skip').style.opacity = '0';
+
+  const row = document.getElementById('wc-row');
+  row.innerHTML = '';
+  [...obj.w].forEach((letter, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'wc-btn';
+    btn.textContent = letter;
+    btn.onclick = () => tapLetter(i, letter, btn);
     row.appendChild(btn);
   });
+
   document.getElementById('wcard').classList.add('show');
   document.getElementById('overlay').classList.add('show');
-  document.getElementById('kf').textContent=obj.f||'😊';
+  document.getElementById('kf').textContent = obj.f || '😊';
+
   say(`${obj.w.toLowerCase()}! Tap each letter!`);
 }
 
-function tapLetter(i,letter,btn){
-  if(cardLit.has(i)){
+function tapLetter(i, letter, btn) {
+  if (cardLit.has(i)) {
     sndLetter();
-    btn.style.animation='none';void btn.offsetWidth;btn.style.animation='ll .32s ease-out';
-    say(letter);return;
+    btn.style.animation = 'none'; void btn.offsetWidth; btn.style.animation = 'll .32s ease-out';
+    say(letter);
+    return;
   }
+
   cardLit.add(i);
   btn.classList.add('lit');
-  sndLetter();say(letter);
-  const r=btn.getBoundingClientRect();
-  sparks(r.left+r.width/2,r.top+r.height/2,5);
-  if(cardObj.gem===undefined&&cardLit.size===1){
-    document.getElementById('wc-skip').style.opacity='0.55';
+  sndLetter();
+  say(letter);
+  const r = btn.getBoundingClientRect();
+  sparks(r.left + r.width/2, r.top + r.height/2, 5);
+
+  if (cardObj.gem === undefined && cardLit.size === 1) {
+    document.getElementById('wc-skip').style.opacity = '0.55';
   }
-  if(cardLit.size===cardObj.w.length){
-    document.getElementById('wc-prompt').textContent=`⭐ ${cardObj.w}! Amazing! ⭐`;
-    document.getElementById('kf').textContent='😻';
-    sparks(window.innerWidth/2,window.innerHeight*.72,14);
-    confetti(26);sndAllLit();
+
+  if (cardLit.size === cardObj.w.length) {
+    document.getElementById('wc-prompt').textContent = `⭐ ${cardObj.w}! Amazing! ⭐`;
+    document.getElementById('kf').textContent = '😻';
+    sparks(window.innerWidth/2, window.innerHeight * .72, 14);
+    confetti(26);
+    sndAllLit();
     say(`${cardObj.w.toLowerCase()}! You did it! Amazing!`);
-    if(cardObj.gem!==undefined&&!gems[cardObj.gem]){
-      setTimeout(()=>{hideCard();collectGem(cardObj,cardEl);},1500);
-    }else{
-      setTimeout(hideCard,2000);
+
+    if (cardObj.gem !== undefined && !gems[cardObj.gem]) {
+      setTimeout(() => { hideCard(); collectGem(cardObj, cardEl); }, 1500);
+    } else {
+      setTimeout(hideCard, 2000);
     }
   }
 }
 
-function hideCard(){
+function hideCard() {
   document.getElementById('wcard').classList.remove('show');
   document.getElementById('overlay').classList.remove('show');
-  document.getElementById('kf').textContent='🐱';
-  setTimeout(()=>{cardOpen=false;},420);
+  document.getElementById('kf').textContent = '🐱';
+  setTimeout(() => { cardOpen = false; }, 420);
 }
 
-function collectGem(obj,el){
-  gems[obj.gem]=true;
+// ── GEM COLLECTION ────────────────────────────────────────────────────────────
+function collectGem(obj, el) {
+  gems[obj.gem] = true;
   sndGemGet();
-  if(el&&el.parentNode){el.classList.add('flyup');setTimeout(()=>el.remove(),600);}
-  setTimeout(()=>{
-    const slot=document.getElementById('g'+obj.gem);
-    slot.textContent=GEM_EMOJI[obj.gem];slot.classList.add('got');
+  if (el && el.parentNode) {
+    el.classList.add('flyup');
+    setTimeout(() => el.remove(), 600);
+  }
+  setTimeout(() => {
+    const slot = document.getElementById('g' + obj.gem);
+    slot.textContent = GEM_EMOJI[obj.gem];
+    slot.classList.add('got');
     confetti(38);
-    const sr=slot.getBoundingClientRect();
-    sparks(sr.left+20,sr.top+20,12);
+    const sr = slot.getBoundingClientRect();
+    sparks(sr.left + 20, sr.top + 20, 12);
     say(`You spelled ${GEM_NAME[obj.gem]}! The ${GEM_NAME[obj.gem]} gem is yours! ${gems.filter(Boolean).length} of 3 gems found!`);
-    if(gems.every(Boolean))setTimeout(winGame,2000);
-  },400);
+    if (gems.every(Boolean)) setTimeout(winGame, 2000);
+  }, 400);
 }
 
-function kittyTap(){
-  if(cardOpen)return;
-  const lines=[
+// ── KITTY TAP ─────────────────────────────────────────────────────────────────
+function kittyTap() {
+  if (cardOpen) return;
+  const lines = [
     "Meow! Tap every single thing you see! Each one has a word to learn!",
     `I have ${gems.filter(Boolean).length} gem${gems.filter(Boolean).length!==1?'s':''} so far! Help me find all three!`,
     "You are such a great reader! Purrrr!",
@@ -491,94 +528,104 @@ function kittyTap(){
     "Every word you learn makes my crown glow brighter! Meow!",
   ];
   sndClick();
-  say(lines[Math.floor(Math.random()*lines.length)]);
-  document.getElementById('kf').textContent='😻';
-  const r=document.getElementById('kitty').getBoundingClientRect();
-  sparks(r.left+r.width/2,r.top+r.height/2,7);
-  setTimeout(()=>document.getElementById('kf').textContent='🐱',2500);
+  say(lines[Math.floor(Math.random() * lines.length)]);
+  document.getElementById('kf').textContent = '😻';
+  const r = document.getElementById('kitty').getBoundingClientRect();
+  sparks(r.left + r.width/2, r.top + r.height/2, 7);
+  setTimeout(() => document.getElementById('kf').textContent = '🐱', 2500);
 }
 
-function go(dir){
-  if(cardOpen)return;
-  const next=scene+dir;
-  if(next<0||next>=SCENES.length)return;
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+function go(dir) {
+  if (cardOpen) return;
+  const next = scene + dir;
+  if (next < 0 || next >= SCENES.length) return;
   sndNav();
-  const tr=document.getElementById('trans');
+  const tr = document.getElementById('trans');
   tr.classList.add('dark');
-  setTimeout(()=>{
-    document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
-    scene=next;
-    const name=SCENES[scene];
-    document.getElementById('sc-'+name).classList.add('active');
-    document.getElementById('slabel').textContent=LABELS[name];
-    document.getElementById('nl').classList.toggle('off',scene===0);
-    document.getElementById('nr').classList.toggle('off',scene===SCENES.length-1);
-    renderScene(name);playMusic();
+  setTimeout(() => {
+    document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+    scene = next;
+    const name = SCENES[scene];
+    document.getElementById('sc-' + name).classList.add('active');
+    document.getElementById('slabel').textContent = LABELS[name];
+    document.getElementById('nl').classList.toggle('off', scene === 0);
+    document.getElementById('nr').classList.toggle('off', scene === SCENES.length - 1);
+    renderScene(name);
+    playMusic();
     tr.classList.remove('dark');
-    const intros={garden:"Tap everything! Each object has a word to learn!",forest:"The magic forest! Tap things to learn their words!",castle:"The Candy Castle! Can you spell CROWN to get the last gem?"};
-    setTimeout(()=>{if(!cardOpen)say(intros[name]);},450);
-  },380);
+    const intros = {
+      garden: "Tap everything! Each object has a word to learn!",
+      forest: "The magic forest! Tap things to learn their words!",
+      castle: "The Candy Castle! Can you spell CROWN to get the last gem?",
+    };
+    setTimeout(() => { if (!cardOpen) say(intros[name]); }, 450);
+  }, 380);
 }
 
-function winGame(){
-  sndWin();confetti(130);
+// ── WIN ───────────────────────────────────────────────────────────────────────
+function winGame() {
+  sndWin(); confetti(130);
   document.getElementById('win').classList.add('show');
-  setTimeout(()=>say("You spelled RUBY, BLUE, and CROWN! You found all three crown jewels! Princess Kitty's crown is restored! You are an amazing reader! Hooray!"),700);
+  setTimeout(() => say("You spelled RUBY, BLUE, and CROWN! You found all three crown jewels! Princess Kitty's crown is restored! You are an amazing reader! Hooray!"), 700);
 }
 
-function restart(){
-  gems=[false,false,false];scene=0;cardOpen=false;
-  ['g0','g1','g2'].forEach(id=>{
-    const e=document.getElementById(id);
-    e.classList.remove('got');e.textContent='💎';
+function restart() {
+  gems = [false, false, false]; scene = 0; cardOpen = false;
+  ['g0','g1','g2'].forEach(id => {
+    const e = document.getElementById(id);
+    e.classList.remove('got'); e.textContent = '💎';
   });
   document.getElementById('win').classList.remove('show');
-  document.getElementById('kf').textContent='🐱';
-  document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
+  document.getElementById('kf').textContent = '🐱';
+  document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
   document.getElementById('sc-garden').classList.add('active');
-  document.getElementById('slabel').textContent=LABELS.garden;
+  document.getElementById('slabel').textContent = LABELS.garden;
   document.getElementById('nl').classList.add('off');
   document.getElementById('nr').classList.remove('off');
-  renderScene('garden');playMusic();
-  setTimeout(()=>say("Let's find the gems again! Tap everything to learn their words!"),500);
+  renderScene('garden');
+  playMusic();
+  setTimeout(() => say("Let's find the gems again! Tap everything to learn their words!"), 500);
 }
 
-function sparks(cx,cy,n){
-  const v=document.getElementById('vfx');
-  for(let i=0;i<n;i++){
-    const e=document.createElement('div');
-    e.className='spark';
-    e.textContent=SPARK_E[Math.floor(Math.random()*SPARK_E.length)];
-    const a=(Math.PI*2*i/n)+(Math.random()-.5);
-    const d=55+Math.random()*70;
-    e.style.cssText=`left:${cx}px;top:${cy}px;font-size:clamp(1em,3vw,1.5em);--tx:${Math.cos(a)*d}px;--ty:${Math.sin(a)*d}px;--d:${.6+Math.random()*.5}s;animation-delay:${Math.random()*.15}s`;
-    v.appendChild(e);setTimeout(()=>e.remove(),1600);
+// ── VFX ───────────────────────────────────────────────────────────────────────
+function sparks(cx, cy, n) {
+  const v = document.getElementById('vfx');
+  for (let i = 0; i < n; i++) {
+    const e = document.createElement('div');
+    e.className = 'spark';
+    e.textContent = SPARK_E[Math.floor(Math.random() * SPARK_E.length)];
+    const a = (Math.PI * 2 * i / n) + (Math.random() - .5);
+    const d = 55 + Math.random() * 70;
+    e.style.cssText = `left:${cx}px;top:${cy}px;font-size:clamp(1em,3vw,1.5em);--tx:${Math.cos(a)*d}px;--ty:${Math.sin(a)*d}px;--d:${.6+Math.random()*.5}s;animation-delay:${Math.random()*.15}s`;
+    v.appendChild(e); setTimeout(() => e.remove(), 1600);
   }
 }
-function confetti(n){
-  const v=document.getElementById('vfx');
-  for(let i=0;i<n;i++){
-    setTimeout(()=>{
-      const e=document.createElement('div');
-      e.className='conf';
-      const sz=8+Math.random()*10;
-      e.style.cssText=`left:${Math.random()*100}vw;top:-20px;width:${sz}px;height:${sz}px;background:${CONF_CLR[Math.floor(Math.random()*CONF_CLR.length)]};--d:${1.9+Math.random()*2.2}s;animation-delay:${Math.random()*.3}s`;
-      v.appendChild(e);setTimeout(()=>e.remove(),5000);
-    },i*18);
+function confetti(n) {
+  const v = document.getElementById('vfx');
+  for (let i = 0; i < n; i++) {
+    setTimeout(() => {
+      const e = document.createElement('div');
+      e.className = 'conf';
+      const sz = 8 + Math.random() * 10;
+      e.style.cssText = `left:${Math.random()*100}vw;top:-20px;width:${sz}px;height:${sz}px;background:${CONF_CLR[Math.floor(Math.random()*CONF_CLR.length)]};--d:${1.9+Math.random()*2.2}s;animation-delay:${Math.random()*.3}s`;
+      v.appendChild(e); setTimeout(() => e.remove(), 5000);
+    }, i * 18);
   }
 }
 
-if(window.speechSynthesis&&speechSynthesis.getVoices().length===0){
-  speechSynthesis.addEventListener('voiceschanged',()=>{},{once:true});
+// ── BOOT ──────────────────────────────────────────────────────────────────────
+if (window.speechSynthesis && speechSynthesis.getVoices().length === 0) {
+  speechSynthesis.addEventListener('voiceschanged', () => {}, {once: true});
 }
 
-function startGame(){
-  document.getElementById('start').style.display='none';
+function startGame() {
+  document.getElementById('start').style.display = 'none';
   document.getElementById('sc-garden').classList.add('active');
   renderScene('garden');
   ctx().resume();
   playMusic();
-  setTimeout(()=>say("Hello! I'm Princess Kitty! My crown gems are lost! Tap everything you see to learn its word! Find all three gems! Let's go!"),600);
+  setTimeout(() => say("Hello! I'm Princess Kitty! My crown gems are lost! Tap everything you see to learn its word! Find all three gems! Let's go!"), 600);
 }
 </script>
 </body>
