@@ -604,6 +604,81 @@ section { padding: 90px 24px; position: relative; }
   * { box-shadow: none !important; text-shadow: none !important; animation: none !important; }
   .clipping { background: #f8f8f4 !important; color: #000 !important; }
 }
+
+/* ========== ENTRY POPUP ========== */
+.entry-popup-overlay {
+  position: fixed; inset: 0; z-index: 99999;
+  background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.4s ease;
+  padding: 20px;
+}
+.entry-popup-overlay.visible { opacity: 1; }
+.entry-popup {
+  background: linear-gradient(145deg, #111 0%, #1a1a1a 100%);
+  border: 1px solid rgba(196,30,58,0.3);
+  border-radius: 12px; max-width: 520px; width: 100%;
+  padding: 40px 36px; position: relative;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 40px rgba(196,30,58,0.1);
+  transform: translateY(20px) scale(0.97); transition: transform 0.4s ease;
+}
+.entry-popup-overlay.visible .entry-popup { transform: translateY(0) scale(1); }
+.entry-popup-close {
+  position: absolute; top: 14px; right: 18px;
+  background: none; border: none; color: #666; font-size: 28px;
+  cursor: pointer; line-height: 1; transition: color 0.2s;
+}
+.entry-popup-close:hover { color: #fff; }
+.entry-popup-badge {
+  font-family: 'Oswald', sans-serif; font-size: 0.75rem;
+  text-transform: uppercase; letter-spacing: 3px;
+  color: var(--accent); margin-bottom: 12px; font-weight: 600;
+}
+.entry-popup-title {
+  font-family: 'Bebas Neue', sans-serif; font-size: 2rem;
+  color: #fff; margin-bottom: 16px; line-height: 1.1;
+}
+.entry-popup-text {
+  color: #aaa; font-size: 0.95rem; line-height: 1.6; margin-bottom: 10px;
+}
+.entry-popup-video-placeholder {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.1);
+  border-radius: 8px; padding: 16px 20px; margin: 18px 0;
+  color: #555; font-size: 0.85rem; font-style: italic;
+}
+.entry-popup-form { margin-top: 20px; }
+.entry-popup-form-row {
+  display: flex; gap: 10px; margin-bottom: 12px;
+}
+.entry-popup-form-row input {
+  flex: 1; padding: 12px 16px; border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05);
+  color: #fff; font-size: 0.95rem; font-family: inherit;
+  transition: border-color 0.2s;
+}
+.entry-popup-form-row input:focus {
+  outline: none; border-color: var(--accent);
+}
+.entry-popup-form-row input::placeholder { color: #555; }
+.entry-popup-submit {
+  width: 100%; padding: 14px; border: none; border-radius: 6px;
+  background: var(--accent); color: #fff; font-family: 'Oswald', sans-serif;
+  font-size: 1.1rem; font-weight: 600; letter-spacing: 1px;
+  text-transform: uppercase; cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+.entry-popup-submit:hover { background: #d42240; transform: translateY(-1px); }
+.entry-popup-submit:active { transform: translateY(0); }
+.entry-popup-fine {
+  text-align: center; color: #444; font-size: 0.75rem;
+  margin-top: 12px; font-style: italic;
+}
+@media (max-width: 480px) {
+  .entry-popup { padding: 28px 20px; }
+  .entry-popup-title { font-size: 1.6rem; }
+  .entry-popup-form-row { flex-direction: column; }
+}
 </style>
 </head>
 <body>
@@ -648,6 +723,30 @@ section { padding: 90px 24px; position: relative; }
   </div>
   <div class="loader-text">Fight Like Constantino</div>
   <div class="loader-ding">DING DING DING</div>
+</div>
+
+<!-- ===== ENTRY POPUP — Message from Anthony Constantino ===== -->
+<div id="entryPopup" class="entry-popup-overlay" style="display:none;">
+  <div class="entry-popup">
+    <button class="entry-popup-close" onclick="closeEntryPopup()" aria-label="Close">&times;</button>
+    <div class="entry-popup-badge">A Message from Anthony</div>
+    <h2 class="entry-popup-title">Trump Can&rsquo;t Do It Alone.</h2>
+    <p class="entry-popup-text">The swamp isn&rsquo;t draining itself. President Trump needs fighters in Congress who won&rsquo;t back down, won&rsquo;t sell out, and won&rsquo;t play nice with the establishment.</p>
+    <p class="entry-popup-text">I&rsquo;m Anthony Constantino. I built a company from nothing. I fought my own city for the right to fly a Trump sign&mdash;and I won. Now I&rsquo;m running for Congress in New York&rsquo;s 21st District.</p>
+    <p class="entry-popup-text" style="font-weight:600;color:var(--accent);">I need patriots like you in my corner.</p>
+    <div class="entry-popup-video-placeholder" id="videoPlaceholder">
+      <svg viewBox="0 0 24 24" fill="none" width="48" height="48"><circle cx="12" cy="12" r="11" stroke="var(--accent)" stroke-width="1.5" opacity="0.3"/><path d="M10 8l6 4-6 4V8z" fill="var(--accent)" opacity="0.5"/></svg>
+      <span>Video message coming soon</span>
+    </div>
+    <form id="popupForm" class="entry-popup-form" onsubmit="handlePopupSignup(event)">
+      <div class="entry-popup-form-row">
+        <input type="text" name="name" placeholder="Your Name" required autocomplete="name">
+        <input type="email" name="email" placeholder="Email Address" required autocomplete="email">
+      </div>
+      <button type="submit" class="entry-popup-submit">&#x1F94A; Join the Fight</button>
+    </form>
+    <p class="entry-popup-fine">No spam. No selling your info. Just the fight.</p>
+  </div>
 </div>
 
 <!-- Scroll Progress -->
@@ -1942,6 +2041,39 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a) {
 });
 
 // (nav scroll duplicate removed — handled above)
+
+// ===== ENTRY POPUP =====
+function showEntryPopup() {
+  if (localStorage.getItem('constantino_popup_seen')) return;
+  var overlay = document.getElementById('entryPopup');
+  if (!overlay) return;
+  overlay.style.display = 'flex';
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { overlay.classList.add('visible'); });
+  });
+}
+function closeEntryPopup() {
+  var overlay = document.getElementById('entryPopup');
+  overlay.classList.remove('visible');
+  setTimeout(function() { overlay.style.display = 'none'; }, 400);
+  localStorage.setItem('constantino_popup_seen', '1');
+}
+function handlePopupSignup(e) {
+  e.preventDefault();
+  var form = e.target;
+  var name = form.querySelector('[name=name]').value;
+  var email = form.querySelector('[name=email]').value;
+  console.log('Popup signup:', name, email);
+  form.innerHTML = '<div style="text-align:center;padding:20px 0;"><div style="font-family:Bebas Neue,sans-serif;font-size:1.8rem;color:#fff;margin-bottom:8px;">You\'re In The Ring.</div><div style="color:#aaa;font-size:0.95rem;">Welcome to Constantino\'s Army, ' + name.split(' ')[0] + '.</div></div>';
+  localStorage.setItem('constantino_popup_seen', '1');
+  setTimeout(closeEntryPopup, 2500);
+}
+// Show after 3 second delay
+setTimeout(showEntryPopup, 3000);
+// Close on overlay click
+document.getElementById('entryPopup').addEventListener('click', function(e) {
+  if (e.target === this) closeEntryPopup();
+});
 </script>
 </body>
 </html>
