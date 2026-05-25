@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dumb Solid Converter — Kirk Automations</title>
+<style>
+  :root {
+    --bg: #1e1e2e;
+    --bg-light: #2a2a3d;
+    --bg-card: #313244;
+    --fg: #cdd6f4;
+    --fg-dim: #6c7086;
+    --accent: #89b4fa;
+    --green: #a6e3a1;
+    --red: #f38ba8;
+    --yellow: #f9e2af;
+    --border: #45475a;
+    --radius: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    letter-spacing: -0.5px;
+  }
+
+  .subtitle {
+    color: var(--fg-dim);
+    font-size: 14px;
+    margin-bottom: 32px;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Loading overlay */
+  #loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: opacity 0.4s;
+  }
+  #loading-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .loader-ring {
+    width: 56px; height: 56px;
+    border: 4px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loader-text { color: var(--fg-dim); font-size: 14px; }
+  #loading-detail { color: var(--fg-dim); font-size: 12px; margin-top: 8px; }
+
+  /* Converting overlay */
+  #converting-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(30,30,46,0.88);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    backdrop-filter: blur(4px);
+  }
+  #converting-overlay.show { display: flex; }
+
+  /* Drop zone */
+  .drop-zone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--bg-light);
+    position: relative;
+  }
+  .drop-zone:hover, .drop-zone.dragover {
+    border-color: var(--accent);
+    background: rgba(137,180,250,0.06);
+  }
+  .drop-zone.has-file {
+    border-color: var(--green);
+    border-style: solid;
+  }
+  .drop-zone-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+    opacity: 0.7;
+  }
+  .drop-zone-text {
+    font-size: 15px;
+    color: var(--fg-dim);
+  }
+  .drop-zone-text strong {
+    color: var(--accent);
+    cursor: pointer;
+  }
+  .file-info {
+    font-size: 13px;
+    color: var(--green);
+    margin-top: 8px;
+  }
+  input[type="file"] { display: none; }
+
+  /* Controls row */
+  .controls {
+    display: flex;
+    gap: 16px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+  }
+  .control-group {
+    flex: 1;
+    min-width: 200px;
+  }
+  .control-group label {
+    display: block;
+    font-size: 12px;
+    color: var(--fg-dim);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .tolerance-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px; height: 16px;
+    background: var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 16px; height: 16px;
+    background: var(--accent);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .tol-value {
+    font-family: 'Consolas', monospace;
+    font-size: 14px;
+    min-width: 60px;
+    text-align: right;
+    color: var(--fg);
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 32px;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+  }
+  .btn-primary:hover:not(:disabled) {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+  }
+  .btn-primary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .btn-download {
+    background: var(--green);
+    color: var(--bg);
+    display: none;
+  }
+  .btn-download.show { display: inline-flex; }
+  .btn-download:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+  }
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  /* Log */
+  .log-container {
+    background: var(--bg-light);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .log-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+  }
+  .log-header span {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--fg-dim);
+  }
+  .log-clear {
+    background: none;
+    border: none;
+    color: var(--fg-dim);
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .log-clear:hover { color: var(--fg); }
+  #log {
+    padding: 12px 16px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    max-height: 400px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  #log:empty::after {
+    content: 'Waiting for file...';
+    color: var(--fg-dim);
+    font-style: italic;
+  }
+  .log-ok { color: var(--green); }
+  .log-warn { color: var(--yellow); }
+  .log-fail { color: var(--red); }
+  .log-done { color: var(--green); font-weight: bold; }
+  .log-info { color: var(--fg); }
+  .log-dim { color: var(--fg-dim); }
+
+  /* Stats bar */
+  .stats {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 20px;
+    flex: 1;
+    min-width: 140px;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--fg-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    font-family: 'Consolas', monospace;
+  }
+  .stat-value.green { color: var(--green); }
+  .stat-value.accent { color: var(--accent); }
+  .stat-value.yellow { color: var(--yellow); }
+
+  /* Footer */
+  .footer {
+    margin-top: 32px;
+    color: var(--fg-dim);
+    font-size: 12px;
+    text-align: center;
+  }
+  .footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--fg-dim); }
+</style>
+</head>
+<body>
+
+<!-- Loading overlay -->
+<div id="loading-overlay">
+  <div class="loader-ring"></div>
+  <div class="loader-text">Loading OpenCASCADE Engine...</div>
+  <div id="loading-detail">Downloading ~49 MB WebAssembly module</div>
+</div>
+
+<!-- Converting overlay -->
+<div id="converting-overlay">
+  <div class="loader-ring"></div>
+  <div class="loader-text">Converting...</div>
+  <div style="color: var(--fg-dim); font-size: 12px; margin-top: 8px;">UI may be unresponsive during heavy operations</div>
+</div>
+
+<div style="margin-bottom:24px;"><a href="index.html" style="color:var(--accent);text-decoration:none;font-size:13px;opacity:0.7;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.7">← Kirk Automations</a></div>
+<h1>⚡ Dumb Solid Converter</h1>
+<p class="subtitle">Drop a STEP file → get 1 solid out. No tree, no surfaces, no history. Runs entirely in your browser.</p>
+
+<div class="container">
+  <!-- Drop zone -->
+  <div class="drop-zone" id="dropZone">
+    <div class="drop-zone-icon">📦</div>
+    <div class="drop-zone-text">
+      Drag &amp; drop a STEP file here, or <strong id="browseBtn">browse</strong>
+    </div>
+    <div class="file-info" id="fileInfo"></div>
+    <input type="file" id="fileInput" accept=".step,.stp,.STEP,.STP">
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="control-group">
+      <label>Tolerance (mm)</label>
+      <div class="tolerance-row">
+        <input type="range" id="tolerance" min="0.01" max="2.0" step="0.01" value="0.25">
+        <span class="tol-value" id="tolValue">0.25 mm</span>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="convertBtn" disabled>CONVERT</button>
+      <button class="btn btn-download" id="downloadBtn">⬇ Download</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats" id="statsRow" style="display:none;">
+    <div class="stat">
+      <div class="stat-label">Input Bodies</div>
+      <div class="stat-value accent" id="statInput">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Output Solids</div>
+      <div class="stat-value green" id="statOutput">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Volume Kept</div>
+      <div class="stat-value yellow" id="statVolume">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Time</div>
+      <div class="stat-value" id="statTime">—</div>
+    </div>
+  </div>
+
+  <!-- Log -->
+  <div class="log-container">
+    <div class="log-header">
+      <span>Log</span>
+      <button class="log-clear" id="clearLog">Clear</button>
+    </div>
+    <div id="log"></div>
+  </div>
+</div>
+
+<div class="footer">
+  Built by <a href="index.html">Kirk Automations</a> &middot; Powered by <a href="https://ocjs.org" target="_blank">OpenCascade.js</a> (OCCT via WebAssembly) &middot; No server, no uploads — everything runs locally.
+</div>
+
+<script type="module">
+// ============================================================
+// Dumb Solid Converter — Browser Edition
+// Port of dumb_solid.py using opencascade.js (WASM)
+// ============================================================
+
+const CDN_BASE = 'https://cdn.jsdelivr.net/npm/opencascade.js@2.0.0-beta.533428a/dist';
+
+// ---- DOM refs ----
+const loadingOverlay = document.getElementById('loading-overlay');
+const loadingDetail = document.getElementById('loading-detail');
+const convertingOverlay = document.getElementById('converting-overlay');
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+const fileInfo = document.getElementById('fileInfo');
+const tolSlider = document.getElementById('tolerance');
+const tolValue = document.getElementById('tolValue');
+const convertBtn = document.getElementById('convertBtn');
+const downloadBtn = document.getElementById('downloadBtn');
+const logEl = document.getElementById('log');
+const clearLogBtn = document.getElementById('clearLog');
+const statsRow = document.getElementById('statsRow');
+const statInput = document.getElementById('statInput');
+const statOutput = document.getElementById('statOutput');
+const statVolume = document.getElementById('statVolume');
+const statTime = document.getElementById('statTime');
+
+let oc = null;          // OpenCascade instance
+window.__oc_ref_setter = (ref) => { oc = ref; };
+let inputFile = null;   // { name, bytes: Uint8Array }
+let outputBytes = null; // Uint8Array result
+let outputName = '';
+
+// ---- Logging ----
+function log(msg, cls = 'log-info') {
+  const line = document.createElement('div');
+  line.className = cls;
+  line.textContent = msg;
+  logEl.appendChild(line);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+function logAuto(msg) {
+  const ml = msg.toLowerCase();
+  let cls = 'log-info';
+  if (/done.*solid|done.*→|complete/i.test(ml)) cls = 'log-done';
+  else if (/warn|discard|timeout|skip/i.test(ml)) cls = 'log-warn';
+  else if (/fail|error/i.test(ml)) cls = 'log-fail';
+  else if (/read |wrote|output:|fuse ok|1 solid|already 1|ok\b/i.test(ml)) cls = 'log-ok';
+  else if (/^\s*body |group |total /i.test(ml)) cls = 'log-dim';
+  log(msg, cls);
+}
+
+function clearLog() {
+  logEl.innerHTML = '';
+}
+
+// ---- Time formatting ----
+function fmtTime(sec) {
+  if (sec < 1) return `${(sec * 1000).toFixed(0)}ms`;
+  if (sec < 60) return `${sec.toFixed(1)}s`;
+  return `${(sec / 60).toFixed(1)}min`;
+}
+
+// ---- Initialize OpenCascade.js ----
+async function initOC() {
+  loadingDetail.textContent = 'Downloading ~49 MB WebAssembly module...';
+
+  try {
+    const module = await import(`${CDN_BASE}/opencascade.full.js`);
+    const ocFactory = module.default;
+
+    loadingDetail.textContent = 'Compiling WebAssembly...';
+
+    oc = await new ocFactory({
+      locateFile(path) {
+        if (path.endsWith('.wasm')) {
+          return `${CDN_BASE}/opencascade.full.wasm`;
+        }
+        return path;
+      }
+    });
+
+    window.__oc = oc;
+    loadingOverlay.classList.add('hidden');
+    log('OpenCASCADE engine loaded — ready.', 'log-ok');
+  } catch (err) {
+    loadingDetail.textContent = `Failed to load: ${err.message}`;
+    console.error(err);
+  }
+}
+
+// ============================================================
+// OCCT Helper Functions
+// ============================================================
+
+function extractSolids(shape) {
+  const solids = [];
+  const exp = new oc.TopExp_Explorer_2(
+    shape,
+    oc.TopAbs_ShapeEnum.TopAbs_SOLID,
+    oc.TopAbs_ShapeEnum.TopAbs_SHAPE
+  );
+  while (exp.More()) {
+    solids.push(oc.TopoDS.Solid_1(exp.Current()));
+    exp.Next();
+  }
+  exp.delete();
+  return solids;
+}
+
+function extractShells(shape) {
+  const shells = [];
+  const exp = new oc.TopExp_Explorer_2(
+    shape,
+    oc.TopAbs_ShapeEnum.TopAbs_SHELL,
+    oc.TopAbs_ShapeEnum.TopAbs_SHAPE
+  );
+  while (exp.More()) {
+    shells.push(exp.Current());
+    exp.Next();
+  }
+  exp.delete();
+  return shells;
+}
+
+function countShapes(shape, shapeEnum) {
+  let n = 0;
+  const exp = new oc.TopExp_Explorer_2(shape, shapeEnum, oc.TopAbs_ShapeEnum.TopAbs_SHAPE);
+  while (exp.More()) { n++; exp.Next(); }
+  exp.delete();
+  return n;
+}
+
+function computeVolume(shape) {
+  const props = new oc.GProp_GProps_1();
+  // _2 = (S, VProps, Eps, OnlyClosed, SkipShared) returning accuracy
+  // _1 = (S, VProps, OnlyClosed, SkipShared, UseTriangulation) void
+  try {
+    oc.BRepGProp.VolumeProperties_1(shape, props, false, false, false);
+  } catch {
+    try { oc.BRepGProp.VolumeProperties_2(shape, props, 0.001, false, false); } catch { /* fallback */ }
+  }
+  const vol = Math.abs(props.Mass());
+  props.delete();
+  return vol;
+}
+
+function getCenter(shape) {
+  const props = new oc.GProp_GProps_1();
+  try {
+    oc.BRepGProp.VolumeProperties_1(shape, props, false, false, false);
+  } catch {
+    try { oc.BRepGProp.VolumeProperties_2(shape, props, 0.001, false, false); } catch { /* fallback */ }
+  }
+  const c = props.CentreOfMass();
+  const result = { x: c.X(), y: c.Y(), z: c.Z() };
+  props.delete();
+  return result;
+}
+
+function getBBox(shape) {
+  const box = new oc.Bnd_Box_1();
+  oc.BRepBndLib.Add(shape, box, true);
+  const pMin = box.CornerMin();
+  const pMax = box.CornerMax();
+  const result = {
+    xmin: pMin.X(), ymin: pMin.Y(), zmin: pMin.Z(),
+    xmax: pMax.X(), ymax: pMax.Y(), zmax: pMax.Z()
+  };
+  box.delete();
+  return result;
+}
+
+function bboxesOverlap(a, b, gap = 1.0) {
+  return !(
+    a.xmax + gap < b.xmin || b.xmax + gap < a.xmin ||
+    a.ymax + gap < b.ymin || b.ymax + gap < a.ymin ||
+    a.zmax + gap < b.zmin || b.zmax + gap < a.zmin
+  );
+}
+
+function fixShape(shape, tolerance) {
+  try {
+    const fixer = new oc.ShapeFix_Shape_2(shape);
+    fixer.SetPrecision(tolerance);
+    fixer.SetMaxTolerance(tolerance * 2);
+    const pr = new oc.Message_ProgressRange_1();
+    fixer.Perform(pr);
+    pr.delete();
+    const result = fixer.Shape();
+    fixer.delete();
+    return result;
+  } catch (e) {
+    // If ShapeFix fails, return original
+    return shape;
+  }
+}
+
+// ============================================================
+// Grouping: find bodies that touch/overlap and fuse them
+// ============================================================
+
+function groupTouchingSolids(solids) {
+  const n = solids.length;
+  const bboxes = solids.map(s => getBBox(s));
+
+  // Union-Find
+  const parent = Array.from({ length: n }, (_, i) => i);
+  function find(x) {
+    while (parent[x] !== x) { parent[x] = parent[parent[x]]; x = parent[x]; }
+    return x;
+  }
+  function union(a, b) {
+    const ra = find(a), rb = find(b);
+    if (ra !== rb) parent[ra] = rb;
+  }
+
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      if (bboxesOverlap(bboxes[i], bboxes[j])) {
+        union(i, j);
+      }
+    }
+  }
+
+  const groups = {};
+  for (let i = 0; i < n; i++) {
+    const r = find(i);
+    if (!groups[r]) groups[r] = [];
+    groups[r].push(i);
+  }
+
+  const result = Object.values(groups).map(indices => {
+    const groupSolids = indices.map(i => solids[i]);
+    const vol = groupSolids.reduce((sum, s) => sum + computeVolume(s), 0);
+    return { vol, solids: groupSolids, indices };
+  });
+
+  result.sort((a, b) => b.vol - a.vol);
+
+  logAuto(`Found ${result.length} group(s) of touching bodies:`);
+  result.forEach((g, gi) => {
+    const nums = g.indices.map(i => i + 1);
+    logAuto(`  Group ${gi + 1}: bodies [${nums.join(', ')}], ${g.solids.length} solid(s), vol=${g.vol.toFixed(0)} mm³`);
+  });
+
+  return result;
+}
+
+// ============================================================
+// Boolean Fuse
+// ============================================================
+
+function tryFuseGroup(solids, tolerance) {
+  if (solids.length === 1) return solids[0];
+
+  logAuto(`  Attempting boolean fuse of ${solids.length} bodies...`);
+  const t0 = performance.now();
+
+  try {
+    // Use the multi-argument fuse API
+    const fuser = new oc.BRepAlgoAPI_Fuse_1();
+    fuser.SetFuzzyValue(tolerance);
+    fuser.SetRunParallel(false); // WASM is single-threaded
+
+    const args = new oc.TopTools_ListOfShape_1();
+    args.Append(solids[0]);
+    fuser.SetArguments(args);
+
+    const tools = new oc.TopTools_ListOfShape_1();
+    for (let i = 1; i < solids.length; i++) {
+      tools.Append(solids[i]);
+    }
+    fuser.SetTools(tools);
+
+    fuser.Build(new oc.Message_ProgressRange_1());
+
+    if (!fuser.IsDone()) {
+      throw new Error('Fuse IsDone=false');
+    }
+
+    const result = fuser.Shape();
+    const elapsed = (performance.now() - t0) / 1000;
+
+    const outSolids = extractSolids(result);
+    const nShells = countShapes(result, oc.TopAbs_ShapeEnum.TopAbs_SHELL);
+
+    if (outSolids.length === 1 && nShells === 1) {
+      logAuto(`  Fuse OK in ${fmtTime(elapsed)} — 1 solid, 1 shell`);
+      args.delete(); tools.delete(); fuser.delete();
+      return outSolids[0];
+    }
+
+    logAuto(`  Fuse produced ${outSolids.length} solid(s) in ${fmtTime(elapsed)}`);
+    if (outSolids.length > 0) {
+      let best = outSolids[0], bestVol = computeVolume(outSolids[0]);
+      for (let i = 1; i < outSolids.length; i++) {
+        const v = computeVolume(outSolids[i]);
+        if (v > bestVol) { best = outSolids[i]; bestVol = v; }
+      }
+      logAuto(`  Keeping largest fused solid: ${bestVol.toFixed(0)} mm³`);
+      args.delete(); tools.delete(); fuser.delete();
+      return best;
+    }
+
+    throw new Error('Fuse produced 0 solids');
+  } catch (e) {
+    const elapsed = (performance.now() - t0) / 1000;
+    logAuto(`  Fuse FAIL in ${fmtTime(elapsed)}: ${e.message || e}`);
+
+    // Fallback: sequential 2-at-a-time fuse
+    logAuto(`  Trying sequential 2-at-a-time fuse...`);
+    try {
+      let accumulated = solids[0];
+      let successCount = 0;
+      for (let i = 1; i < solids.length; i++) {
+        try {
+          const f = new oc.BRepAlgoAPI_Fuse_3(accumulated, solids[i], new oc.Message_ProgressRange_1());
+          f.Build(new oc.Message_ProgressRange_1());
+          if (f.IsDone()) {
+            accumulated = f.Shape();
+            successCount++;
+          }
+        } catch (e2) {
+          logAuto(`  WARN: Could not fuse body ${i + 1}: ${e2.message || e2}`);
+        }
+      }
+      if (successCount > 0) {
+        logAuto(`  Sequential fuse: ${successCount}/${solids.length - 1} succeeded`);
+        const resultSolids = extractSolids(accumulated);
+        if (resultSolids.length > 0) {
+          let best = resultSolids[0], bestVol = computeVolume(resultSolids[0]);
+          for (const rs of resultSolids) {
+            const v = computeVolume(rs);
+            if (v > bestVol) { best = rs; bestVol = v; }
+          }
+          return best;
+        }
+        return accumulated;
+      }
+    } catch (e3) {
+      logAuto(`  Sequential fuse also failed: ${e3.message || e3}`);
+    }
+
+    // Ultimate fallback: keep largest individual
+    let best = solids[0], bestVol = computeVolume(solids[0]);
+    for (let i = 1; i < solids.length; i++) {
+      const v = computeVolume(solids[i]);
+      if (v > bestVol) { best = solids[i]; bestVol = v; }
+    }
+    logAuto(`  Keeping largest individual body: ${bestVol.toFixed(0)} mm³`);
+    return best;
+  }
+}
+
+// ============================================================
+// Shell → Solid conversion
+// ============================================================
+
+function shellsToSolids(shells, tolerance) {
+  const solids = [];
+  for (let i = 0; i < shells.length; i++) {
+    try {
+      // Try direct MakeSolid from shell
+      const shellShape = oc.TopoDS.Shell_1(shells[i]);
+      const maker = new oc.BRepBuilderAPI_MakeSolid_3(shellShape);
+      if (maker.IsDone()) {
+        const solid = maker.Solid();
+        // Fix the solid
+        const sf = new oc.ShapeFix_Solid_2(solid);
+        sf.SetPrecision(tolerance);
+        sf.Perform(new oc.Message_ProgressRange_1());
+        solids.push(sf.Solid());
+        logAuto(`  Converted shell ${i + 1} to solid`);
+        sf.delete();
+      } else {
+        // Fallback: try MakeSolid_1 + Add
+        const maker2 = new oc.BRepBuilderAPI_MakeSolid_1();
+        maker2.Add(shellShape);
+        if (maker2.IsDone()) {
+          solids.push(maker2.Solid());
+          logAuto(`  Converted shell ${i + 1} to solid (fallback)`);
+        } else {
+          logAuto(`  WARN: MakeSolid failed for shell ${i + 1}`);
+        }
+        maker2.delete();
+      }
+      maker.delete();
+    } catch (e) {
+      logAuto(`  WARN: Could not convert shell ${i + 1}: ${e.message || e}`);
+    }
+  }
+  return solids;
+}
+
+// ============================================================
+// Main Conversion Pipeline
+// ============================================================
+
+function convert(fileBytes, tolerance) {
+  const t0 = performance.now();
+  const fileName = '/input.stp';
+  const outFileName = '/output.stp';
+
+  logAuto(`Tolerance: ${tolerance} mm`);
+  logAuto('');
+
+  // 1. Write file to virtual FS and read
+  logAuto(`Reading STEP file (${(fileBytes.length / 1024).toFixed(0)} KB)...`);
+  oc.FS.writeFile(fileName, fileBytes);
+
+  const reader = new oc.STEPControl_Reader_1();
+  const readT0 = performance.now();
+  const readStatus = reader.ReadFile(fileName);
+
+  // Check status - IFSelect_RetDone
+  // In opencascade.js, enum comparison varies. Try multiple approaches.
+  let readOk = false;
+  try {
+    if (typeof readStatus === 'object' && readStatus.value !== undefined) {
+      readOk = (readStatus.value === oc.IFSelect_ReturnStatus.IFSelect_RetDone.value);
+    } else {
+      readOk = (readStatus === oc.IFSelect_ReturnStatus.IFSelect_RetDone);
+    }
+  } catch {
+    // If enum comparison fails, assume success if we get here without exception
+    readOk = true;
+  }
+
+  if (!readOk) {
+    oc.FS.unlink(fileName);
+    reader.delete();
+    throw new Error('Failed to read STEP file');
+  }
+
+  logAuto(`  ReadFile in ${fmtTime((performance.now() - readT0) / 1000)}`);
+
+  const transT0 = performance.now();
+  const pr1 = new oc.Message_ProgressRange_1();
+  reader.TransferRoots(pr1);
+  pr1.delete();
+  logAuto(`  TransferRoots in ${fmtTime((performance.now() - transT0) / 1000)}`);
+
+  const shape = reader.OneShape();
+  oc.FS.unlink(fileName);
+  reader.delete();
+  logAuto(`Read complete in ${fmtTime((performance.now() - readT0) / 1000)}`);
+  logAuto('');
+
+  // 2. Extract solids
+  let solids = extractSolids(shape);
+  logAuto(`Found ${solids.length} solid(s)`);
+
+  // 2b. Try shells if no solids
+  if (solids.length === 0) {
+    logAuto('No solids found, looking for shells...');
+    const shells = extractShells(shape);
+    logAuto(`Found ${shells.length} shell(s)`);
+    if (shells.length > 0) {
+      solids = shellsToSolids(shells, tolerance);
+    }
+    if (solids.length === 0) {
+      throw new Error('No geometry found in STEP file!');
+    }
+  }
+
+  // 3. Heal
+  logAuto(`Healing ${solids.length} bodies...`);
+  const healT0 = performance.now();
+  for (let i = 0; i < solids.length; i++) {
+    solids[i] = fixShape(solids[i], tolerance);
+  }
+  logAuto(`Healed in ${fmtTime((performance.now() - healT0) / 1000)}`);
+  logAuto('');
+
+  // 4. Body info
+  let totalVol = 0;
+  for (let i = 0; i < solids.length; i++) {
+    const vol = computeVolume(solids[i]);
+    const nSh = countShapes(solids[i], oc.TopAbs_ShapeEnum.TopAbs_SHELL);
+    const nFa = countShapes(solids[i], oc.TopAbs_ShapeEnum.TopAbs_FACE);
+    const c = getCenter(solids[i]);
+    totalVol += vol;
+    logAuto(`Body ${i + 1}: vol=${vol.toFixed(1)} mm³, ${nSh} shell, ${nFa} faces, center=(${c.x.toFixed(1)},${c.y.toFixed(1)},${c.z.toFixed(1)})`);
+  }
+  logAuto(`Total input volume: ${totalVol.toFixed(0)} mm³`);
+  logAuto('');
+
+  let result;
+  if (solids.length === 1) {
+    logAuto('Already 1 solid — writing directly.');
+    result = solids[0];
+  } else {
+    // 5. Group and fuse
+    const groups = groupTouchingSolids(solids);
+    logAuto('');
+
+    const largest = groups[0];
+    const bodyNums = largest.indices.map(i => i + 1);
+    logAuto(`Processing largest group: bodies [${bodyNums.join(', ')}]`);
+    result = tryFuseGroup(largest.solids, tolerance);
+
+    // Report discarded
+    if (groups.length > 1) {
+      logAuto('');
+      let discardedVol = 0;
+      for (let gi = 1; gi < groups.length; gi++) {
+        for (const idx of groups[gi].indices) {
+          const v = computeVolume(solids[idx]);
+          discardedVol += v;
+          logAuto(`Discarded body ${idx + 1}: ${v.toFixed(1)} mm³`);
+        }
+      }
+      const pct = totalVol > 0 ? (discardedVol / totalVol * 100) : 0;
+      logAuto(`Total discarded: ${discardedVol.toFixed(1)} mm³ (${pct.toFixed(1)}% of input)`);
+    }
+  }
+
+  logAuto('');
+
+  // 6. Verify
+  const nSolids = countShapes(result, oc.TopAbs_ShapeEnum.TopAbs_SOLID);
+  const nShells = countShapes(result, oc.TopAbs_ShapeEnum.TopAbs_SHELL);
+  const nFaces = countShapes(result, oc.TopAbs_ShapeEnum.TopAbs_FACE);
+  const outVol = computeVolume(result);
+  logAuto(`Output: ${nSolids} solid, ${nShells} shell, ${nFaces} faces`);
+  logAuto(`Output volume: ${outVol.toFixed(0)} mm³`);
+
+  let volumeRatio = 0;
+  if (totalVol > 0) {
+    volumeRatio = outVol / totalVol;
+    logAuto(`Volume kept: ${(volumeRatio * 100).toFixed(1)}%`);
+  }
+  logAuto('');
+
+  // 7. Write
+  logAuto('Writing STEP...');
+  const writeT0 = performance.now();
+  const writer = new oc.STEPControl_Writer_1();
+  const pr2 = new oc.Message_ProgressRange_1();
+
+  writer.Transfer(
+    result,
+    oc.STEPControl_StepModelType.STEPControl_ManifoldSolidBrep,
+    true,
+    pr2
+  );
+
+  writer.Write(outFileName);
+  pr2.delete();
+
+  const rawFile = oc.FS.readFile(outFileName);
+  // CRITICAL: copy bytes OUT of WASM memory immediately.
+  // FS.readFile may return a view into the WASM heap buffer;
+  // any subsequent OCCT allocation can detach it.
+  const outFile = new Uint8Array(rawFile);
+  oc.FS.unlink(outFileName);
+
+  const outSizeKB = outFile.length / 1024;
+  logAuto(`Wrote: output.stp (${outSizeKB.toFixed(0)} KB) in ${fmtTime((performance.now() - writeT0) / 1000)}`);
+
+  writer.delete();
+
+  const totalTime = (performance.now() - t0) / 1000;
+  logAuto('');
+  logAuto(`DONE — ${solids.length} input bodies → 1 dumb solid in ${fmtTime(totalTime)}`);
+
+  return {
+    outputBytes: outFile,
+    inputCount: solids.length,
+    outputCount: 1,
+    volumeRatio,
+    totalTime
+  };
+}
+
+// ============================================================
+// UI Wiring
+// ============================================================
+
+// Tolerance slider
+tolSlider.addEventListener('input', () => {
+  tolValue.textContent = `${parseFloat(tolSlider.value).toFixed(2)} mm`;
+});
+
+// File input
+function handleFile(file) {
+  if (!file) return;
+  const ext = file.name.split('.').pop().toLowerCase();
+  if (ext !== 'step' && ext !== 'stp') {
+    log('Not a STEP file. Please select a .step or .stp file.', 'log-fail');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    inputFile = {
+      name: file.name,
+      bytes: new Uint8Array(reader.result)
+    };
+    fileInfo.textContent = `${file.name} (${(file.size / 1024).toFixed(0)} KB)`;
+    dropZone.classList.add('has-file');
+    convertBtn.disabled = !oc;
+    downloadBtn.classList.remove('show');
+    outputBytes = null;
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+fileInput.addEventListener('change', (e) => {
+  if (e.target.files.length) handleFile(e.target.files[0]);
+});
+
+document.getElementById('browseBtn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  fileInput.click();
+});
+
+dropZone.addEventListener('click', () => fileInput.click());
+
+dropZone.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  dropZone.classList.add('dragover');
+});
+dropZone.addEventListener('dragleave', () => {
+  dropZone.classList.remove('dragover');
+});
+dropZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+});
+
+// Clear log
+clearLogBtn.addEventListener('click', clearLog);
+
+// Convert button
+convertBtn.addEventListener('click', async () => {
+  if (!oc || !inputFile) return;
+
+  clearLog();
+  convertBtn.disabled = true;
+  downloadBtn.classList.remove('show');
+  statsRow.style.display = 'none';
+  convertingOverlay.classList.add('show');
+
+  // Yield to let the overlay render
+  await new Promise(r => setTimeout(r, 50));
+
+  try {
+    const tolerance = parseFloat(tolSlider.value);
+    logAuto(`=== DUMB SOLID CONVERTER ===`);
+    logAuto(`Input: ${inputFile.name}`);
+
+    const result = convert(inputFile.bytes, tolerance);
+
+    outputBytes = result.outputBytes;
+    const base = inputFile.name.replace(/\.(step|stp)$/i, '');
+    outputName = `${base}_dumb.stp`;
+
+    // Show stats
+    statsRow.style.display = 'flex';
+    statInput.textContent = result.inputCount;
+    statOutput.textContent = result.outputCount;
+    statVolume.textContent = result.volumeRatio > 0 ? `${(result.volumeRatio * 100).toFixed(1)}%` : '—';
+    statTime.textContent = fmtTime(result.totalTime);
+
+    // Show download button
+    downloadBtn.classList.add('show');
+  } catch (err) {
+    logAuto(`ERROR: ${err.message || err}`);
+    console.error(err);
+  } finally {
+    convertBtn.disabled = false;
+    convertingOverlay.classList.remove('show');
+  }
+});
+
+// Download button
+downloadBtn.addEventListener('click', () => {
+  if (!outputBytes || outputBytes.length === 0) {
+    log('No output data available — try converting again.', 'log-fail');
+    return;
+  }
+  // Copy bytes to a fresh buffer to guarantee independence from WASM heap
+  const safeCopy = new Uint8Array(outputBytes);
+  const blob = new Blob([safeCopy], { type: 'application/octet-stream' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = outputName;
+  document.body.appendChild(a);
+  a.click();
+  // Delay cleanup so the browser finishes reading the blob URL
+  setTimeout(() => {
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 3000);
+});
+
+// ---- Boot ----
+initOC();
+</script>
+</body>
+</html>
