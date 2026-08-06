@@ -244,13 +244,6 @@ section{position:relative;z-index:2;padding:100px 40px}
 .theme-dot[data-theme="warmth"]{background:#e8a838}
 .theme-dot[data-theme="clarity"]{background:#1a5276}
 
-/* ============ ANIMATION SWITCHER ============ */
-.anim-switcher{position:fixed;left:20px;top:50%;transform:translateY(-50%);z-index:900;display:flex;flex-direction:column;align-items:center;gap:8px;background:rgba(0,0,0,0.35);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:14px 8px}
-.anim-label{writing-mode:vertical-rl;font-size:0.6rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted);opacity:0.7;margin-bottom:6px}
-.anim-dot{width:28px;height:28px;border-radius:50%;border:2px solid rgba(var(--accent-rgb),0.3);background:rgba(0,0,0,0.3);cursor:pointer;transition:all 0.3s;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--text-muted)}
-.anim-dot:hover{border-color:rgba(var(--accent-rgb),0.6)}
-.anim-dot.active{border-color:var(--accent);background:rgba(var(--accent-rgb),0.15);color:var(--accent)}
-
 /* ============ VOICE SWITCHER ============ */
 .voice-switcher{position:fixed;bottom:20px;left:20px;z-index:900;background:rgba(0,0,0,0.35);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:12px;max-width:200px}
 .voice-toggle{display:flex;align-items:center;gap:8px;cursor:pointer;padding:6px 10px;border-radius:10px;transition:background 0.3s;font-size:0.8rem;font-weight:600;color:var(--text-muted)}
@@ -307,8 +300,6 @@ body.restore-active .icon-wrap{box-shadow:0 0 16px rgba(var(--accent-rgb),0.2)}
   .services-grid{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr}
   .form-row{grid-template-columns:1fr}
-  .anim-switcher{left:10px;padding:10px 6px}
-  .anim-dot{width:24px;height:24px;font-size:11px}
   .theme-switcher{right:10px;padding:10px 6px}
   .theme-dot{width:24px;height:24px}
   .voice-switcher{bottom:10px;left:10px;max-width:180px}
@@ -323,7 +314,7 @@ body.restore-active .icon-wrap{box-shadow:0 0 16px rgba(var(--accent-rgb),0.2)}
 
 /* ============ PRINT ============ */
 @media print{
-  .nav,.theme-switcher,.anim-switcher,.voice-switcher,.restore-btn,#cursor-glow,#particles,#scroll-progress,#loader,.hamburger,.mobile-menu,.hero-neural{display:none!important}
+  .nav,.theme-switcher,.voice-switcher,.restore-btn,#cursor-glow,#particles,#scroll-progress,#loader,.hamburger,.mobile-menu,.hero-neural{display:none!important}
   body{background:#fff!important;color:#000!important}
   *{color:#000!important;border-color:#ccc!important;background:transparent!important}
   .hero{min-height:auto;padding:40px 20px}
@@ -771,15 +762,6 @@ body.restore-active .icon-wrap{box-shadow:0 0 16px rgba(var(--accent-rgb),0.2)}
   <button class="theme-dot" data-theme="clarity" role="radio" aria-checked="false" aria-label="Clarity theme" title="Clarity"></button>
 </div>
 
-<!-- ANIMATION SWITCHER -->
-<div class="anim-switcher" role="radiogroup" aria-label="Background animation">
-  <span class="anim-label">BG</span>
-  <button class="anim-dot active" data-anim="neural" role="radio" aria-checked="true" aria-label="Neural pathways" title="Neural Pathways">&#10036;</button>
-  <button class="anim-dot" data-anim="waves" role="radio" aria-checked="false" aria-label="Healing waves" title="Healing Waves">&#8767;</button>
-  <button class="anim-dot" data-anim="cellular" role="radio" aria-checked="false" aria-label="Cellular" title="Cellular">&#9678;</button>
-  <button class="anim-dot" data-anim="drift" role="radio" aria-checked="false" aria-label="Calm drift" title="Calm Drift">&#9679;</button>
-</div>
-
 <!-- VOICE SWITCHER -->
 <div class="voice-switcher">
   <div class="voice-toggle" id="voice-toggle" role="button" aria-expanded="false" aria-label="Change copy voice">
@@ -1099,25 +1081,6 @@ function drawDrift(color){
 }
 
 drawParticles();
-
-/* ============ ANIMATION SWITCHER ============ */
-var savedAnim=localStorage.getItem('nr-anim')||'neural';
-currentAnim=savedAnim;
-document.querySelectorAll('.anim-dot').forEach(function(d){
-  d.classList.toggle('active',d.getAttribute('data-anim')===savedAnim);
-  d.setAttribute('aria-checked',d.getAttribute('data-anim')===savedAnim);
-});
-document.querySelectorAll('.anim-dot').forEach(function(dot){
-  dot.addEventListener('click',function(){
-    var anim=dot.getAttribute('data-anim');
-    currentAnim=anim;
-    localStorage.setItem('nr-anim',anim);
-    document.querySelectorAll('.anim-dot').forEach(function(d){
-      d.classList.toggle('active',d.getAttribute('data-anim')===anim);
-      d.setAttribute('aria-checked',d.getAttribute('data-anim')===anim);
-    });
-  });
-});
 
 /* ============ RESTORE BUTTON ============ */
 var restoreBtn=document.getElementById('restore-btn');
