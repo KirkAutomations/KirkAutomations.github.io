@@ -255,21 +255,6 @@ section{position:relative;z-index:2;padding:100px 40px}
 .voice-option:hover{background:rgba(var(--accent-rgb),0.1);color:var(--text)}
 .voice-option.active{background:rgba(var(--accent-rgb),0.15);color:var(--accent);font-weight:600}
 
-/* ============ RESTORE BUTTON ============ */
-.restore-btn{position:fixed;bottom:20px;right:20px;z-index:900;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:2px solid rgba(var(--accent-rgb),0.3);border-radius:14px;padding:10px 18px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:all 0.4s;font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted)}
-.restore-btn:hover{border-color:rgba(var(--accent-rgb),0.6);transform:scale(1.05)}
-.restore-btn.active{background:rgba(var(--accent-rgb),0.2);border-color:var(--accent);color:var(--accent);box-shadow:0 0 24px rgba(var(--accent-rgb),0.3);animation:restorePulse 2s ease-in-out infinite}
-.restore-btn svg{width:18px;height:18px;transition:color 0.3s}
-.restore-btn.active svg{color:var(--accent)}
-@keyframes restorePulse{0%,100%{box-shadow:0 0 24px rgba(var(--accent-rgb),0.3)}50%{box-shadow:0 0 40px rgba(var(--accent-rgb),0.5)}}
-
-/* ============ RESTORE ENHANCEMENTS ============ */
-body.restore-active .service-card:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 16px 50px rgba(var(--accent-rgb),0.2)}
-body.restore-active .hero h1{animation:textPulse 3s ease-in-out infinite}
-@keyframes textPulse{0%,100%{text-shadow:0 0 0 transparent}50%{text-shadow:0 0 30px rgba(var(--accent-rgb),0.3)}}
-body.restore-active .stat-number{text-shadow:0 0 20px rgba(var(--accent-rgb),0.4)}
-body.restore-active .icon-wrap{box-shadow:0 0 16px rgba(var(--accent-rgb),0.2)}
-
 /* ============ SCROLL REVEAL ============ */
 .reveal{opacity:0;transform:translateY(30px);transition:opacity 0.8s ease,transform 0.8s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
@@ -303,7 +288,6 @@ body.restore-active .icon-wrap{box-shadow:0 0 16px rgba(var(--accent-rgb),0.2)}
   .theme-switcher{right:10px;padding:10px 6px}
   .theme-dot{width:24px;height:24px}
   .voice-switcher{bottom:10px;left:10px;max-width:180px}
-  .restore-btn{bottom:10px;right:10px;padding:8px 14px;font-size:0.65rem}
 }
 @media(max-width:480px){
   .hero h1{font-size:1.7rem}
@@ -314,7 +298,7 @@ body.restore-active .icon-wrap{box-shadow:0 0 16px rgba(var(--accent-rgb),0.2)}
 
 /* ============ PRINT ============ */
 @media print{
-  .nav,.theme-switcher,.voice-switcher,.restore-btn,#cursor-glow,#particles,#scroll-progress,#loader,.hamburger,.mobile-menu,.hero-neural{display:none!important}
+  .nav,.theme-switcher,.voice-switcher,#cursor-glow,#particles,#scroll-progress,#loader,.hamburger,.mobile-menu,.hero-neural{display:none!important}
   body{background:#fff!important;color:#000!important}
   *{color:#000!important;border-color:#ccc!important;background:transparent!important}
   .hero{min-height:auto;padding:40px 20px}
@@ -779,12 +763,6 @@ body.restore-active .icon-wrap{box-shadow:0 0 16px rgba(var(--accent-rgb),0.2)}
   </div>
 </div>
 
-<!-- RESTORE BUTTON -->
-<button class="restore-btn" id="restore-btn" aria-label="Toggle enhanced animations" title="RESTORE mode">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-  RESTORE
-</button>
-
 <script>
 /* ============ LOADING SCREEN ============ */
 window.addEventListener('load',function(){
@@ -950,7 +928,6 @@ document.querySelectorAll('.theme-dot').forEach(function(dot){
       d.classList.toggle('active',d.getAttribute('data-theme')===theme);
       d.setAttribute('aria-checked',d.getAttribute('data-theme')===theme);
     });
-    updateParticles();
   });
 });
 
@@ -960,7 +937,6 @@ var ctx=canvas.getContext('2d');
 var particles=[];
 var mouseX=-1000,mouseY=-1000;
 var baseCount=50;
-var restoreActive=false;
 
 function getParticleColor(){
   var s=getComputedStyle(document.documentElement);
@@ -988,11 +964,6 @@ function createParticles(count){
   }
 }
 createParticles(baseCount);
-
-function updateParticles(){
-  var count=restoreActive?baseCount*3:baseCount;
-  if(particles.length!==count)createParticles(count);
-}
 
 var currentAnim='neural';
 
@@ -1081,18 +1052,6 @@ function drawDrift(color){
 }
 
 drawParticles();
-
-/* ============ RESTORE BUTTON ============ */
-var restoreBtn=document.getElementById('restore-btn');
-var savedRestore=localStorage.getItem('nr-restore')==='true';
-if(savedRestore){restoreBtn.classList.add('active');document.body.classList.add('restore-active');restoreActive=true;updateParticles()}
-restoreBtn.addEventListener('click',function(){
-  restoreActive=!restoreActive;
-  restoreBtn.classList.toggle('active',restoreActive);
-  document.body.classList.toggle('restore-active',restoreActive);
-  localStorage.setItem('nr-restore',restoreActive);
-  updateParticles();
-});
 
 /* ============ VOICE SWITCHER ============ */
 var voices={
