@@ -1,0 +1,924 @@
+{
+  "type": "FeatureCollection",
+  "name": "Troy School District restaurant point checks",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.14882391279,
+          42.557809987365
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Alex's Royal Grill",
+        "street_address": "2495 Livernois Road",
+        "city_state_zip": "Troy, MI 48083",
+        "geocoder_score": 100,
+        "matched_address": "2495 Livernois Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.129533633184,
+          42.618692318266
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Alibi of Troy",
+        "street_address": "6700 Rochester Road",
+        "city_state_zip": "Troy, MI 48085",
+        "geocoder_score": 100,
+        "matched_address": "6700 Rochester Rd, Troy, Michigan, 48085",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.126989977028,
+          42.571781865587
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Ashoka Indian Cuisine",
+        "street_address": "3642 Rochester Road",
+        "city_state_zip": "Troy, MI 48083",
+        "geocoder_score": 100,
+        "matched_address": "3642 Rochester Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.129721723092,
+          42.56226610046
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Burger King",
+        "street_address": "950 East Big Beaver Road",
+        "city_state_zip": "Troy, MI 48083",
+        "geocoder_score": 100,
+        "matched_address": "950 E Big Beaver Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.130180548471,
+          42.602725421359
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Camp Ticonderoga",
+        "street_address": "5725 Rochester Road",
+        "city_state_zip": "Troy, MI 48085",
+        "geocoder_score": 100,
+        "matched_address": "5725 Rochester Rd, Troy, Michigan, 48085",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.169726870567,
+          42.596552904042
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Cedar Grille",
+        "street_address": "5377 Crooks Road",
+        "city_state_zip": "Troy, MI 48098",
+        "geocoder_score": 100,
+        "matched_address": "5377 Crooks Rd, Troy, Michigan, 48098",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.168234305069,
+          42.563530175278
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Chipotle Mexican Grill",
+        "street_address": "3129 Crooks Road",
+        "city_state_zip": "Troy, MI 48084",
+        "geocoder_score": 100,
+        "matched_address": "3129 Crooks Rd, Troy, Michigan, 48084",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.167912104711,
+          42.595499131175
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Chipotle Mexican Grill",
+        "street_address": "5322 Crooks Road",
+        "city_state_zip": "Troy, MI 48098",
+        "geocoder_score": 100,
+        "matched_address": "5322 Crooks Rd, Troy, Michigan, 48098",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.163537673263,
+          42.562447442935
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Condado Tacos",
+        "street_address": "724 West Big Beaver Road",
+        "city_state_zip": "Troy, MI 48084",
+        "geocoder_score": 100,
+        "matched_address": "724 W Big Beaver Rd, Troy, Michigan, 48084",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.14470680577,
+          42.563033463696
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Cooper's Hawk Winery & Restaurant",
+        "street_address": "151 East Big Beaver Road",
+        "city_state_zip": "Troy, MI 48083",
+        "geocoder_score": 100,
+        "matched_address": "151 E Big Beaver Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.184582285203,
+          42.546773158268
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Dairy Queen Grill & Chill",
+        "street_address": "2879 West Maple Road",
+        "city_state_zip": "Troy, MI 48084",
+        "geocoder_score": 100,
+        "matched_address": "2879 W Maple Rd, Troy, Michigan, 48084",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.129099199143,
+          42.574902280502
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Domino's Pizza",
+        "street_address": "3843 Rochester Road",
+        "city_state_zip": "Troy, MI 48083",
+        "geocoder_score": 100,
+        "matched_address": "3843 Rochester Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.14679825825,
+          42.549311827193
+        ]
+      },
+      "properties": {
+        "restaurant_name": "El Guanaco",
+        "street_address": "1710 Livernois Road",
+        "city_state_zip": "Troy, MI 48083",
+        "geocoder_score": 100,
+        "matched_address": "1710 Livernois Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.127539997514,
+          42.572110017097
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Euro Brunch Troy",
+        "street_address": "3672 Rochester Road",
+        "city_state_zip": "Troy, MI 48083",
+        "geocoder_score": 100,
+        "matched_address": "3672 Rochester Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.152643713706,
+          42.56118659515
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Fogo de Chao",
+        "street_address": "301 West Big Beaver Road",
+        "city_state_zip": "Troy, MI 48084",
+        "geocoder_score": 100,
+        "matched_address": "301 W Big Beaver Rd, Troy, Michigan, 48084",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.162158766371,
+          42.562581804843
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Jersey Mike's Subs",
+        "street_address": "644 West Big Beaver Road",
+        "city_state_zip": "Troy, MI 48084",
+        "geocoder_score": 100,
+        "matched_address": "644 W Big Beaver Rd, Troy, Michigan, 48084",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.146268605788,
+          42.544771266424
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Arby's",
+        "street_address": "1150 Livernois Road",
+        "city_state_zip": "Troy, MI 48084",
+        "geocoder_score": 99.51,
+        "matched_address": "1150 Livernois Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.169726870567,
+          42.596552904042
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Jimmy John's",
+        "street_address": "5373 Crooks Road",
+        "city_state_zip": "Troy, MI 48098",
+        "geocoder_score": 100,
+        "matched_address": "5373 Crooks Rd, Troy, Michigan, 48098",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.108613408687,
+          42.591707409635
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Jonny Cakes Cafe",
+        "street_address": "4916 John R Road",
+        "city_state_zip": "Troy, MI 48085",
+        "geocoder_score": 100,
+        "matched_address": "4916 John R Rd, Troy, Michigan, 48085",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.110908876691,
+          42.606522172041
+        ]
+      },
+      "properties": {
+        "restaurant_name": "La Botana",
+        "street_address": "5947 John R Road",
+        "city_state_zip": "Troy, MI 48085",
+        "geocoder_score": 100,
+        "matched_address": "5947 John R Rd, Troy, Michigan, 48085",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.129520725054,
+          42.563544173056
+        ]
+      },
+      "properties": {
+        "restaurant_name": "McDonald's",
+        "street_address": "3039 Rochester Road",
+        "city_state_zip": "Troy, MI 48083",
+        "geocoder_score": 100,
+        "matched_address": "3039 Rochester Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.1297556698,
+          42.589487085393
+        ]
+      },
+      "properties": {
+        "restaurant_name": "McDonald's",
+        "street_address": "4819 Rochester Road",
+        "city_state_zip": "Troy, MI 48098",
+        "geocoder_score": 98.21,
+        "matched_address": "4819 Rochester Rd, Troy, Michigan, 48085",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.148297026357,
+          42.548784354026
+        ]
+      },
+      "properties": {
+        "restaurant_name": "McDonald's",
+        "street_address": "70 West Maple Road",
+        "city_state_zip": "Troy, MI 48084",
+        "geocoder_score": 100,
+        "matched_address": "70 W Maple Rd, Troy, Michigan, 48084",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.131252677707,
+          42.564127763065
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Miso Sushi & Grill",
+        "street_address": "817 East Big Beaver Road",
+        "city_state_zip": "Troy, MI 48083",
+        "geocoder_score": 100,
+        "matched_address": "817 E Big Beaver Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.121108311751,
+          42.549610013398
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Mon Jin Lau",
+        "street_address": "1515 East Maple Road",
+        "city_state_zip": "Troy, MI 48083",
+        "geocoder_score": 100,
+        "matched_address": "1515 E Maple Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.16526577024,
+          42.562688632199
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Morton's The Steakhouse",
+        "street_address": "888 West Big Beaver Road",
+        "city_state_zip": "Troy, MI 48084",
+        "geocoder_score": 100,
+        "matched_address": "888 W Big Beaver Rd, Troy, Michigan, 48084",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.187395922461,
+          42.560460554697
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Ocean Prime Detroit",
+        "street_address": "2915 Coolidge Highway",
+        "city_state_zip": "Troy, MI 48084",
+        "geocoder_score": 100,
+        "matched_address": "2915 Coolidge Hwy, Troy, Michigan, 48084",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.127832274478,
+          42.56446144663
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Panda Express",
+        "street_address": "3110 Rochester Road",
+        "city_state_zip": "Troy, MI 48083",
+        "geocoder_score": 100,
+        "matched_address": "3110 Rochester Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.185349061706,
+          42.546178797514
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Panera Bread",
+        "street_address": "1484 Coolidge Highway",
+        "city_state_zip": "Troy, MI 48084",
+        "geocoder_score": 100,
+        "matched_address": "1484 Coolidge Hwy, Troy, Michigan, 48084",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.169651852534,
+          42.599688783567
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Panera Bread",
+        "street_address": "5569 Crooks Road",
+        "city_state_zip": "Troy, MI 48098",
+        "geocoder_score": 100,
+        "matched_address": "5569 Crooks Rd, Troy, Michigan, 48098",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.128460079026,
+          42.590303566582
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Paradise Biryani Pointe",
+        "street_address": "4880 Rochester Road",
+        "city_state_zip": "Troy, MI 48085",
+        "geocoder_score": 100,
+        "matched_address": "4880 Rochester Rd, Troy, Michigan, 48085",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.17183198555,
+          42.546312321232
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Renee's Gourmet Pizzeria",
+        "street_address": "1937 West Maple Road",
+        "city_state_zip": "Troy, MI 48084",
+        "geocoder_score": 100,
+        "matched_address": "1937 W Maple Rd, Troy, Michigan, 48084",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.127530106868,
+          42.578548156926
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Ridley's Bakery Cafe",
+        "street_address": "4054 Rochester Road",
+        "city_state_zip": "Troy, MI 48085",
+        "geocoder_score": 100,
+        "matched_address": "4054 Rochester Rd, Troy, Michigan, 48085",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.129097103667,
+          42.575615538552
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Royal Indian Cuisine",
+        "street_address": "3877 Rochester Road",
+        "city_state_zip": "Troy, MI 48083",
+        "geocoder_score": 100,
+        "matched_address": "3877 Rochester Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.166837963819,
+          42.562790639961
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Seasons 52",
+        "street_address": "1000 West Big Beaver Road",
+        "city_state_zip": "Troy, MI 48084",
+        "geocoder_score": 100,
+        "matched_address": "1000 W Big Beaver Rd, Troy, Michigan, 48084",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.167265273243,
+          42.548385291616
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Starbucks",
+        "street_address": "1470 West Maple Road",
+        "city_state_zip": "Troy, MI 48084",
+        "geocoder_score": 100,
+        "matched_address": "1470 W Maple Rd, Troy, Michigan, 48084",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.110256345528,
+          42.564665839339
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Starbucks",
+        "street_address": "1921 East Big Beaver Road",
+        "city_state_zip": "Troy, MI 48083",
+        "geocoder_score": 100,
+        "matched_address": "1921 E Big Beaver Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.16977422832,
+          42.599238298181
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Starbucks",
+        "street_address": "5531 Crooks Road",
+        "city_state_zip": "Troy, MI 48098",
+        "geocoder_score": 100,
+        "matched_address": "5531 Crooks Rd, Troy, Michigan, 48098",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.146349239697,
+          42.54791142072
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Subway",
+        "street_address": "20 East Maple Road",
+        "city_state_zip": "Troy, MI 48083",
+        "geocoder_score": 100,
+        "matched_address": "20 E Maple Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.150995663903,
+          42.607085016839
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Subway",
+        "street_address": "34 West Square Lake Road",
+        "city_state_zip": "Troy, MI 48098",
+        "geocoder_score": 100,
+        "matched_address": "34 W Square Lake Rd, Troy, Michigan, 48098",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.127102126892,
+          42.567108493562
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Taco Bell",
+        "street_address": "3268 Rochester Road",
+        "city_state_zip": "Troy, MI 48083",
+        "geocoder_score": 100,
+        "matched_address": "3268 Rochester Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.090617546388,
+          42.594196331964
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Taco Bell",
+        "street_address": "41167 Dequindre Road",
+        "city_state_zip": "Troy, MI 48085",
+        "geocoder_score": 100,
+        "matched_address": "41167 Dequindre Rd, Troy, Michigan, 48085",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.163537673263,
+          42.562447442935
+        ]
+      },
+      "properties": {
+        "restaurant_name": "The Great Greek Mediterranean Grill",
+        "street_address": "708 West Big Beaver Road",
+        "city_state_zip": "Troy, MI 48084",
+        "geocoder_score": 100,
+        "matched_address": "708 W Big Beaver Rd, Troy, Michigan, 48084",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.128554207798,
+          42.567857332792
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Tim Hortons",
+        "street_address": "3331 Rochester Road",
+        "city_state_zip": "Troy, MI 48083",
+        "geocoder_score": 100,
+        "matched_address": "3331 Rochester Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.129098780048,
+          42.577243346058
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Wendy's",
+        "street_address": "3995 Rochester Road",
+        "city_state_zip": "Troy, MI 48083",
+        "geocoder_score": 100,
+        "matched_address": "3995 Rochester Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.110256345528,
+          42.564665839339
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Buffalo Wild Wings",
+        "street_address": "1873 East Big Beaver Road",
+        "city_state_zip": "Troy, MI 48083",
+        "geocoder_score": 100,
+        "matched_address": "1873 E Big Beaver Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.148447900614,
+          42.557865936569
+        ]
+      },
+      "properties": {
+        "restaurant_name": "CJ Mahoney's Sports Bar and Grill",
+        "street_address": "2511 Livernois Road",
+        "city_state_zip": "Troy, MI 48083",
+        "geocoder_score": 100,
+        "matched_address": "2511 Livernois Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.143223292727,
+          42.562109945604
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Sedona Taphouse",
+        "street_address": "198 East Big Beaver Road",
+        "city_state_zip": "Troy, MI 48083",
+        "geocoder_score": 100,
+        "matched_address": "198 E Big Beaver Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.146924322074,
+          42.56179859981
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Kona Grill",
+        "street_address": "30 East Big Beaver Road",
+        "city_state_zip": "Troy, MI 48083",
+        "geocoder_score": 100,
+        "matched_address": "30 E Big Beaver Rd, Troy, Michigan, 48083",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.161111531389,
+          42.561522751377
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Granite City Food & Brewery",
+        "street_address": "699 West Big Beaver Road",
+        "city_state_zip": "Troy, MI 48084",
+        "geocoder_score": 100,
+        "matched_address": "699 W Big Beaver Rd, Troy, Michigan, 48084",
+        "inside_or_on_boundary": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.166910802558,
+          42.563676565217
+        ]
+      },
+      "properties": {
+        "restaurant_name": "Buddy's Pizza",
+        "street_address": "987 Wilshire Drive",
+        "city_state_zip": "Troy, MI 48084",
+        "geocoder_score": 100,
+        "matched_address": "987 Wilshire Dr, Troy, Michigan, 48084",
+        "inside_or_on_boundary": true
+      }
+    }
+  ]
+}

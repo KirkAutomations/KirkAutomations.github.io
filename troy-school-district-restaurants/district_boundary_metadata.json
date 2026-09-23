@@ -1,0 +1,14 @@
+{
+  "source_url": "https://www2.census.gov/geo/tiger/TIGER2025/UNSD/tl_2025_26_unsd.zip",
+  "year": 2025,
+  "geoid": "2634260",
+  "name": "Troy School District",
+  "legal_statistical_area_description": "00",
+  "bounds": [
+    -83.20768,
+    42.53977,
+    -83.088776,
+    42.624208
+  ],
+  "loaded_at": "2026-09-23T20:15:30+00:00"
+}

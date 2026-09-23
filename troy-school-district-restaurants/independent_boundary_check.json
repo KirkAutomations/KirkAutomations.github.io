@@ -1,0 +1,372 @@
+{
+  "district_name": "Troy School District",
+  "district_geoid": "2634260",
+  "boundary_bounds": [
+    -83.20768,
+    42.53977,
+    -83.088776,
+    42.624208
+  ],
+  "points_checked": 51,
+  "points_inside_or_on_boundary": 51,
+  "all_pass": true,
+  "checks": [
+    {
+      "restaurant_name": "Alex's Royal Grill",
+      "input_address": "2495 Livernois Road, Troy, MI 48083",
+      "latitude": 42.557809987365,
+      "longitude": -83.14882391279,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Alibi of Troy",
+      "input_address": "6700 Rochester Road, Troy, MI 48085",
+      "latitude": 42.618692318266,
+      "longitude": -83.129533633184,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Ashoka Indian Cuisine",
+      "input_address": "3642 Rochester Road, Troy, MI 48083",
+      "latitude": 42.571781865587,
+      "longitude": -83.126989977028,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Burger King",
+      "input_address": "950 East Big Beaver Road, Troy, MI 48083",
+      "latitude": 42.56226610046,
+      "longitude": -83.129721723092,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Camp Ticonderoga",
+      "input_address": "5725 Rochester Road, Troy, MI 48085",
+      "latitude": 42.602725421359,
+      "longitude": -83.130180548471,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Cedar Grille",
+      "input_address": "5377 Crooks Road, Troy, MI 48098",
+      "latitude": 42.596552904042,
+      "longitude": -83.169726870567,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Chipotle Mexican Grill",
+      "input_address": "3129 Crooks Road, Troy, MI 48084",
+      "latitude": 42.563530175278,
+      "longitude": -83.168234305069,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Chipotle Mexican Grill",
+      "input_address": "5322 Crooks Road, Troy, MI 48098",
+      "latitude": 42.595499131175,
+      "longitude": -83.167912104711,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Condado Tacos",
+      "input_address": "724 West Big Beaver Road, Troy, MI 48084",
+      "latitude": 42.562447442935,
+      "longitude": -83.163537673263,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Cooper's Hawk Winery & Restaurant",
+      "input_address": "151 East Big Beaver Road, Troy, MI 48083",
+      "latitude": 42.563033463696,
+      "longitude": -83.14470680577,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Dairy Queen Grill & Chill",
+      "input_address": "2879 West Maple Road, Troy, MI 48084",
+      "latitude": 42.546773158268,
+      "longitude": -83.184582285203,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Domino's Pizza",
+      "input_address": "3843 Rochester Road, Troy, MI 48083",
+      "latitude": 42.574902280502,
+      "longitude": -83.129099199143,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "El Guanaco",
+      "input_address": "1710 Livernois Road, Troy, MI 48083",
+      "latitude": 42.549311827193,
+      "longitude": -83.14679825825,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Euro Brunch Troy",
+      "input_address": "3672 Rochester Road, Troy, MI 48083",
+      "latitude": 42.572110017097,
+      "longitude": -83.127539997514,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Fogo de Chao",
+      "input_address": "301 West Big Beaver Road, Troy, MI 48084",
+      "latitude": 42.56118659515,
+      "longitude": -83.152643713706,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Jersey Mike's Subs",
+      "input_address": "644 West Big Beaver Road, Troy, MI 48084",
+      "latitude": 42.562581804843,
+      "longitude": -83.162158766371,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Arby's",
+      "input_address": "1150 Livernois Road, Troy, MI 48084",
+      "latitude": 42.544771266424,
+      "longitude": -83.146268605788,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Jimmy John's",
+      "input_address": "5373 Crooks Road, Troy, MI 48098",
+      "latitude": 42.596552904042,
+      "longitude": -83.169726870567,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Jonny Cakes Cafe",
+      "input_address": "4916 John R Road, Troy, MI 48085",
+      "latitude": 42.591707409635,
+      "longitude": -83.108613408687,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "La Botana",
+      "input_address": "5947 John R Road, Troy, MI 48085",
+      "latitude": 42.606522172041,
+      "longitude": -83.110908876691,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "McDonald's",
+      "input_address": "3039 Rochester Road, Troy, MI 48083",
+      "latitude": 42.563544173056,
+      "longitude": -83.129520725054,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "McDonald's",
+      "input_address": "4819 Rochester Road, Troy, MI 48098",
+      "latitude": 42.589487085393,
+      "longitude": -83.1297556698,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "McDonald's",
+      "input_address": "70 West Maple Road, Troy, MI 48084",
+      "latitude": 42.548784354026,
+      "longitude": -83.148297026357,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Miso Sushi & Grill",
+      "input_address": "817 East Big Beaver Road, Troy, MI 48083",
+      "latitude": 42.564127763065,
+      "longitude": -83.131252677707,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Mon Jin Lau",
+      "input_address": "1515 East Maple Road, Troy, MI 48083",
+      "latitude": 42.549610013398,
+      "longitude": -83.121108311751,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Morton's The Steakhouse",
+      "input_address": "888 West Big Beaver Road, Troy, MI 48084",
+      "latitude": 42.562688632199,
+      "longitude": -83.16526577024,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Ocean Prime Detroit",
+      "input_address": "2915 Coolidge Highway, Troy, MI 48084",
+      "latitude": 42.560460554697,
+      "longitude": -83.187395922461,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Panda Express",
+      "input_address": "3110 Rochester Road, Troy, MI 48083",
+      "latitude": 42.56446144663,
+      "longitude": -83.127832274478,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Panera Bread",
+      "input_address": "1484 Coolidge Highway, Troy, MI 48084",
+      "latitude": 42.546178797514,
+      "longitude": -83.185349061706,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Panera Bread",
+      "input_address": "5569 Crooks Road, Troy, MI 48098",
+      "latitude": 42.599688783567,
+      "longitude": -83.169651852534,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Paradise Biryani Pointe",
+      "input_address": "4880 Rochester Road, Troy, MI 48085",
+      "latitude": 42.590303566582,
+      "longitude": -83.128460079026,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Renee's Gourmet Pizzeria",
+      "input_address": "1937 West Maple Road, Troy, MI 48084",
+      "latitude": 42.546312321232,
+      "longitude": -83.17183198555,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Ridley's Bakery Cafe",
+      "input_address": "4054 Rochester Road, Troy, MI 48085",
+      "latitude": 42.578548156926,
+      "longitude": -83.127530106868,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Royal Indian Cuisine",
+      "input_address": "3877 Rochester Road, Troy, MI 48083",
+      "latitude": 42.575615538552,
+      "longitude": -83.129097103667,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Seasons 52",
+      "input_address": "1000 West Big Beaver Road, Troy, MI 48084",
+      "latitude": 42.562790639961,
+      "longitude": -83.166837963819,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Starbucks",
+      "input_address": "1470 West Maple Road, Troy, MI 48084",
+      "latitude": 42.548385291616,
+      "longitude": -83.167265273243,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Starbucks",
+      "input_address": "1921 East Big Beaver Road, Troy, MI 48083",
+      "latitude": 42.564665839339,
+      "longitude": -83.110256345528,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Starbucks",
+      "input_address": "5531 Crooks Road, Troy, MI 48098",
+      "latitude": 42.599238298181,
+      "longitude": -83.16977422832,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Subway",
+      "input_address": "20 East Maple Road, Troy, MI 48083",
+      "latitude": 42.54791142072,
+      "longitude": -83.146349239697,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Subway",
+      "input_address": "34 West Square Lake Road, Troy, MI 48098",
+      "latitude": 42.607085016839,
+      "longitude": -83.150995663903,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Taco Bell",
+      "input_address": "3268 Rochester Road, Troy, MI 48083",
+      "latitude": 42.567108493562,
+      "longitude": -83.127102126892,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Taco Bell",
+      "input_address": "41167 Dequindre Road, Troy, MI 48085",
+      "latitude": 42.594196331964,
+      "longitude": -83.090617546388,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "The Great Greek Mediterranean Grill",
+      "input_address": "708 West Big Beaver Road, Troy, MI 48084",
+      "latitude": 42.562447442935,
+      "longitude": -83.163537673263,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Tim Hortons",
+      "input_address": "3331 Rochester Road, Troy, MI 48083",
+      "latitude": 42.567857332792,
+      "longitude": -83.128554207798,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Wendy's",
+      "input_address": "3995 Rochester Road, Troy, MI 48083",
+      "latitude": 42.577243346058,
+      "longitude": -83.129098780048,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Buffalo Wild Wings",
+      "input_address": "1873 East Big Beaver Road, Troy, MI 48083",
+      "latitude": 42.564665839339,
+      "longitude": -83.110256345528,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "CJ Mahoney's Sports Bar and Grill",
+      "input_address": "2511 Livernois Road, Troy, MI 48083",
+      "latitude": 42.557865936569,
+      "longitude": -83.148447900614,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Sedona Taphouse",
+      "input_address": "198 East Big Beaver Road, Troy, MI 48083",
+      "latitude": 42.562109945604,
+      "longitude": -83.143223292727,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Kona Grill",
+      "input_address": "30 East Big Beaver Road, Troy, MI 48083",
+      "latitude": 42.56179859981,
+      "longitude": -83.146924322074,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Granite City Food & Brewery",
+      "input_address": "699 West Big Beaver Road, Troy, MI 48084",
+      "latitude": 42.561522751377,
+      "longitude": -83.161111531389,
+      "inside_or_on_boundary": true
+    },
+    {
+      "restaurant_name": "Buddy's Pizza",
+      "input_address": "987 Wilshire Drive, Troy, MI 48084",
+      "latitude": 42.563676565217,
+      "longitude": -83.166910802558,
+      "inside_or_on_boundary": true
+    }
+  ]
+}

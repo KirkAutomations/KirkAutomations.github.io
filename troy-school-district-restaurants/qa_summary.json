@@ -1,0 +1,20 @@
+{
+  "status": "pass",
+  "csv_sha256": "b12d1160556390854583db25d93de0ef5b27b08bea2134cd0c722a3c3d0b6322",
+  "data_rows": 51,
+  "exact_headers": true,
+  "blank_required_cells": 0,
+  "unique_normalized_addresses": 51,
+  "source_records": 51,
+  "source_failures": 0,
+  "geocoded_rows": 51,
+  "census_point_in_polygon_passes": 51,
+  "city_of_troy_geocoded_rows": 51,
+  "city_of_troy_point_in_polygon_passes": 51,
+  "sports_likelihood_counts": {
+    "High": 2,
+    "Medium": 12,
+    "Low": 37
+  },
+  "errors": []
+}

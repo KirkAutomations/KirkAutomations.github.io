@@ -1,0 +1,24 @@
+{
+  "csv_path": "C:\\Users\\micha\\.openclaw\\workspace\\deliverables\\mary-gunn-restaurant-list\\restaurants.csv",
+  "data_rows": 51,
+  "exactly_51_rows": true,
+  "headers_exactly_required": true,
+  "missing_headers": [],
+  "blank_required_cells": [],
+  "duplicate_normalized_addresses": [],
+  "sports_likelihood_counts": {
+    "High": 2,
+    "Medium": 12,
+    "Low": 37
+  },
+  "invalid_sports_values_rows": [],
+  "official_boundary_app": "https://cityoftroy.maps.arcgis.com/apps/webappviewer/index.html?id=55db916864ba43e0b15fd3470f67e4ef",
+  "official_boundary_layer": "https://gis1.troymi.gov/portal/sharing/servers/2fe73fda32db489ebc93d603e84ad1f7/rest/services/Administrative/MapServer/3",
+  "official_boundary_feature": "NAME='TROY SCHOOLS'",
+  "geocoded_rows": 51,
+  "city_locator_rows": 15,
+  "esri_evidence_fallback_rows": 36,
+  "all_geocoded_points_inside_official_polygon": true,
+  "outside_or_unmatched_rows": [],
+  "PASS": true
+}

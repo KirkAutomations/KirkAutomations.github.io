@@ -1,0 +1,1764 @@
+{
+  "generated_at": "2026-09-23T20:16:07+00:00",
+  "service": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates",
+  "records": [
+    {
+      "restaurant_name": "Alex's Royal Grill",
+      "input_address": "2495 Livernois Road, Troy, MI 48083",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=2495+Livernois+Road%2C+Troy%2C+MI+48083&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:43+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "2495 Livernois Rd, Troy, Michigan, 48083",
+        "longitude": -83.14882391279,
+        "latitude": 42.557809987365,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "2495 Livernois Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "2495 Livernois Rd, Troy, Michigan, 48083",
+          "longitude": -83.14882391279,
+          "latitude": 42.557809987365,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "2495 Livernois Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Alibi of Troy",
+      "input_address": "6700 Rochester Road, Troy, MI 48085",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=6700+Rochester+Road%2C+Troy%2C+MI+48085&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:43+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "6700 Rochester Rd, Troy, Michigan, 48085",
+        "longitude": -83.129533633184,
+        "latitude": 42.618692318266,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "6700 Rochester Rd, Troy, Michigan, 48085",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "6700 Rochester Rd, Troy, Michigan, 48085",
+          "longitude": -83.129533633184,
+          "latitude": 42.618692318266,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "6700 Rochester Rd, Troy, Michigan, 48085",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Ashoka Indian Cuisine",
+      "input_address": "3642 Rochester Road, Troy, MI 48083",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=3642+Rochester+Road%2C+Troy%2C+MI+48083&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:43+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "3642 Rochester Rd, Troy, Michigan, 48083",
+        "longitude": -83.126989977028,
+        "latitude": 42.571781865587,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "3642 Rochester Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "3642 Rochester Rd, Troy, Michigan, 48083",
+          "longitude": -83.126989977028,
+          "latitude": 42.571781865587,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "3642 Rochester Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Burger King",
+      "input_address": "950 East Big Beaver Road, Troy, MI 48083",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=950+East+Big+Beaver+Road%2C+Troy%2C+MI+48083&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:44+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "950 E Big Beaver Rd, Troy, Michigan, 48083",
+        "longitude": -83.129721723092,
+        "latitude": 42.56226610046,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "950 E Big Beaver Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "950 E Big Beaver Rd, Troy, Michigan, 48083",
+          "longitude": -83.129721723092,
+          "latitude": 42.56226610046,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "950 E Big Beaver Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Camp Ticonderoga",
+      "input_address": "5725 Rochester Road, Troy, MI 48085",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=5725+Rochester+Road%2C+Troy%2C+MI+48085&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:45+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "5725 Rochester Rd, Troy, Michigan, 48085",
+        "longitude": -83.130180548471,
+        "latitude": 42.602725421359,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "5725 Rochester Rd, Troy, Michigan, 48085",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "5725 Rochester Rd, Troy, Michigan, 48085",
+          "longitude": -83.130180548471,
+          "latitude": 42.602725421359,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "5725 Rochester Rd, Troy, Michigan, 48085",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Cedar Grille",
+      "input_address": "5377 Crooks Road, Troy, MI 48098",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=5377+Crooks+Road%2C+Troy%2C+MI+48098&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:46+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "5377 Crooks Rd, Troy, Michigan, 48098",
+        "longitude": -83.169726870567,
+        "latitude": 42.596552904042,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "5377 Crooks Rd, Troy, Michigan, 48098",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "5377 Crooks Rd, Troy, Michigan, 48098",
+          "longitude": -83.169726870567,
+          "latitude": 42.596552904042,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "5377 Crooks Rd, Troy, Michigan, 48098",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Chipotle Mexican Grill",
+      "input_address": "3129 Crooks Road, Troy, MI 48084",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=3129+Crooks+Road%2C+Troy%2C+MI+48084&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:47+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "3129 Crooks Rd, Troy, Michigan, 48084",
+        "longitude": -83.168234305069,
+        "latitude": 42.563530175278,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "3129 Crooks Rd, Troy, Michigan, 48084",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "3129 Crooks Rd, Troy, Michigan, 48084",
+          "longitude": -83.168234305069,
+          "latitude": 42.563530175278,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "3129 Crooks Rd, Troy, Michigan, 48084",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Chipotle Mexican Grill",
+      "input_address": "5322 Crooks Road, Troy, MI 48098",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=5322+Crooks+Road%2C+Troy%2C+MI+48098&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:47+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "5322 Crooks Rd, Troy, Michigan, 48098",
+        "longitude": -83.167912104711,
+        "latitude": 42.595499131175,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "5322 Crooks Rd, Troy, Michigan, 48098",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "5322 Crooks Rd, Troy, Michigan, 48098",
+          "longitude": -83.167912104711,
+          "latitude": 42.595499131175,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "5322 Crooks Rd, Troy, Michigan, 48098",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Condado Tacos",
+      "input_address": "724 West Big Beaver Road, Troy, MI 48084",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=724+West+Big+Beaver+Road%2C+Troy%2C+MI+48084&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:48+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "724 W Big Beaver Rd, Troy, Michigan, 48084",
+        "longitude": -83.163537673263,
+        "latitude": 42.562447442935,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "724 W Big Beaver Rd, Troy, Michigan, 48084",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "724 W Big Beaver Rd, Troy, Michigan, 48084",
+          "longitude": -83.163537673263,
+          "latitude": 42.562447442935,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "724 W Big Beaver Rd, Troy, Michigan, 48084",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Cooper's Hawk Winery & Restaurant",
+      "input_address": "151 East Big Beaver Road, Troy, MI 48083",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=151+East+Big+Beaver+Road%2C+Troy%2C+MI+48083&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:48+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "151 E Big Beaver Rd, Troy, Michigan, 48083",
+        "longitude": -83.14470680577,
+        "latitude": 42.563033463696,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "151 E Big Beaver Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "151 E Big Beaver Rd, Troy, Michigan, 48083",
+          "longitude": -83.14470680577,
+          "latitude": 42.563033463696,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "151 E Big Beaver Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Dairy Queen Grill & Chill",
+      "input_address": "2879 West Maple Road, Troy, MI 48084",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=2879+West+Maple+Road%2C+Troy%2C+MI+48084&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:48+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "2879 W Maple Rd, Troy, Michigan, 48084",
+        "longitude": -83.184582285203,
+        "latitude": 42.546773158268,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "2879 W Maple Rd, Troy, Michigan, 48084",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "2879 W Maple Rd, Troy, Michigan, 48084",
+          "longitude": -83.184582285203,
+          "latitude": 42.546773158268,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "2879 W Maple Rd, Troy, Michigan, 48084",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Domino's Pizza",
+      "input_address": "3843 Rochester Road, Troy, MI 48083",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=3843+Rochester+Road%2C+Troy%2C+MI+48083&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:49+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "3843 Rochester Rd, Troy, Michigan, 48083",
+        "longitude": -83.129099199143,
+        "latitude": 42.574902280502,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "3843 Rochester Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "3843 Rochester Rd, Troy, Michigan, 48083",
+          "longitude": -83.129099199143,
+          "latitude": 42.574902280502,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "3843 Rochester Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "El Guanaco",
+      "input_address": "1710 Livernois Road, Troy, MI 48083",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=1710+Livernois+Road%2C+Troy%2C+MI+48083&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:49+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "1710 Livernois Rd, Troy, Michigan, 48083",
+        "longitude": -83.14679825825,
+        "latitude": 42.549311827193,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "1710 Livernois Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "1710 Livernois Rd, Troy, Michigan, 48083",
+          "longitude": -83.14679825825,
+          "latitude": 42.549311827193,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "1710 Livernois Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Euro Brunch Troy",
+      "input_address": "3672 Rochester Road, Troy, MI 48083",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=3672+Rochester+Road%2C+Troy%2C+MI+48083&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:49+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "3672 Rochester Rd, Troy, Michigan, 48083",
+        "longitude": -83.127539997514,
+        "latitude": 42.572110017097,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "3672 Rochester Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "3672 Rochester Rd, Troy, Michigan, 48083",
+          "longitude": -83.127539997514,
+          "latitude": 42.572110017097,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "3672 Rochester Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Fogo de Chao",
+      "input_address": "301 West Big Beaver Road, Troy, MI 48084",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=301+West+Big+Beaver+Road%2C+Troy%2C+MI+48084&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:50+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "301 W Big Beaver Rd, Troy, Michigan, 48084",
+        "longitude": -83.152643713706,
+        "latitude": 42.56118659515,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "301 W Big Beaver Rd, Troy, Michigan, 48084",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "301 W Big Beaver Rd, Troy, Michigan, 48084",
+          "longitude": -83.152643713706,
+          "latitude": 42.56118659515,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "301 W Big Beaver Rd, Troy, Michigan, 48084",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Jersey Mike's Subs",
+      "input_address": "644 West Big Beaver Road, Troy, MI 48084",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=644+West+Big+Beaver+Road%2C+Troy%2C+MI+48084&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:50+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "644 W Big Beaver Rd, Troy, Michigan, 48084",
+        "longitude": -83.162158766371,
+        "latitude": 42.562581804843,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "644 W Big Beaver Rd, Troy, Michigan, 48084",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "644 W Big Beaver Rd, Troy, Michigan, 48084",
+          "longitude": -83.162158766371,
+          "latitude": 42.562581804843,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "644 W Big Beaver Rd, Troy, Michigan, 48084",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Arby's",
+      "input_address": "1150 Livernois Road, Troy, MI 48084",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=1150+Livernois+Road%2C+Troy%2C+MI+48084&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:50+00:00",
+      "chosen": {
+        "score": 99.51,
+        "matched_address": "1150 Livernois Rd, Troy, Michigan, 48083",
+        "longitude": -83.146268605788,
+        "latitude": 42.544771266424,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "1150 Livernois Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "score": 99.51,
+          "matched_address": "1150 Livernois Rd, Troy, Michigan, 48083",
+          "longitude": -83.146268605788,
+          "latitude": 42.544771266424,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "1150 Livernois Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        },
+        {
+          "score": 95,
+          "matched_address": "Livernois Rd, Troy, Michigan, 48084",
+          "longitude": -83.148323094076,
+          "latitude": 42.576985455852,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "Livernois Rd, Troy, Michigan, 48084",
+            "Addr_type": "StreetName",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Jimmy John's",
+      "input_address": "5373 Crooks Road, Troy, MI 48098",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=5373+Crooks+Road%2C+Troy%2C+MI+48098&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:51+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "5373 Crooks Rd, Troy, Michigan, 48098",
+        "longitude": -83.169726870567,
+        "latitude": 42.596552904042,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "5373 Crooks Rd, Troy, Michigan, 48098",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "5373 Crooks Rd, Troy, Michigan, 48098",
+          "longitude": -83.169726870567,
+          "latitude": 42.596552904042,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "5373 Crooks Rd, Troy, Michigan, 48098",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Jonny Cakes Cafe",
+      "input_address": "4916 John R Road, Troy, MI 48085",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=4916+John+R+Road%2C+Troy%2C+MI+48085&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:51+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "4916 John R Rd, Troy, Michigan, 48085",
+        "longitude": -83.108613408687,
+        "latitude": 42.591707409635,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "4916 John R Rd, Troy, Michigan, 48085",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "4916 John R Rd, Troy, Michigan, 48085",
+          "longitude": -83.108613408687,
+          "latitude": 42.591707409635,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "4916 John R Rd, Troy, Michigan, 48085",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "La Botana",
+      "input_address": "5947 John R Road, Troy, MI 48085",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=5947+John+R+Road%2C+Troy%2C+MI+48085&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:52+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "5947 John R Rd, Troy, Michigan, 48085",
+        "longitude": -83.110908876691,
+        "latitude": 42.606522172041,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "5947 John R Rd, Troy, Michigan, 48085",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "5947 John R Rd, Troy, Michigan, 48085",
+          "longitude": -83.110908876691,
+          "latitude": 42.606522172041,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "5947 John R Rd, Troy, Michigan, 48085",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "McDonald's",
+      "input_address": "3039 Rochester Road, Troy, MI 48083",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=3039+Rochester+Road%2C+Troy%2C+MI+48083&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:52+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "3039 Rochester Rd, Troy, Michigan, 48083",
+        "longitude": -83.129520725054,
+        "latitude": 42.563544173056,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "3039 Rochester Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "3039 Rochester Rd, Troy, Michigan, 48083",
+          "longitude": -83.129520725054,
+          "latitude": 42.563544173056,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "3039 Rochester Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "McDonald's",
+      "input_address": "4819 Rochester Road, Troy, MI 48098",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=4819+Rochester+Road%2C+Troy%2C+MI+48098&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:53+00:00",
+      "chosen": {
+        "score": 98.21,
+        "matched_address": "4819 Rochester Rd, Troy, Michigan, 48085",
+        "longitude": -83.1297556698,
+        "latitude": 42.589487085393,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "4819 Rochester Rd, Troy, Michigan, 48085",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 98.21,
+          "matched_address": "4819 Rochester Rd, Troy, Michigan, 48085",
+          "longitude": -83.1297556698,
+          "latitude": 42.589487085393,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "4819 Rochester Rd, Troy, Michigan, 48085",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "McDonald's",
+      "input_address": "70 West Maple Road, Troy, MI 48084",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=70+West+Maple+Road%2C+Troy%2C+MI+48084&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:54+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "70 W Maple Rd, Troy, Michigan, 48084",
+        "longitude": -83.148297026357,
+        "latitude": 42.548784354026,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "70 W Maple Rd, Troy, Michigan, 48084",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "70 W Maple Rd, Troy, Michigan, 48084",
+          "longitude": -83.148297026357,
+          "latitude": 42.548784354026,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "70 W Maple Rd, Troy, Michigan, 48084",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Miso Sushi & Grill",
+      "input_address": "817 East Big Beaver Road, Troy, MI 48083",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=817+East+Big+Beaver+Road%2C+Troy%2C+MI+48083&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:55+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "817 E Big Beaver Rd, Troy, Michigan, 48083",
+        "longitude": -83.131252677707,
+        "latitude": 42.564127763065,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "817 E Big Beaver Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "817 E Big Beaver Rd, Troy, Michigan, 48083",
+          "longitude": -83.131252677707,
+          "latitude": 42.564127763065,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "817 E Big Beaver Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Mon Jin Lau",
+      "input_address": "1515 East Maple Road, Troy, MI 48083",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=1515+East+Maple+Road%2C+Troy%2C+MI+48083&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:56+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "1515 E Maple Rd, Troy, Michigan, 48083",
+        "longitude": -83.121108311751,
+        "latitude": 42.549610013398,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "1515 E Maple Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "1515 E Maple Rd, Troy, Michigan, 48083",
+          "longitude": -83.121108311751,
+          "latitude": 42.549610013398,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "1515 E Maple Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Morton's The Steakhouse",
+      "input_address": "888 West Big Beaver Road, Troy, MI 48084",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=888+West+Big+Beaver+Road%2C+Troy%2C+MI+48084&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:56+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "888 W Big Beaver Rd, Troy, Michigan, 48084",
+        "longitude": -83.16526577024,
+        "latitude": 42.562688632199,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "888 W Big Beaver Rd, Troy, Michigan, 48084",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "888 W Big Beaver Rd, Troy, Michigan, 48084",
+          "longitude": -83.16526577024,
+          "latitude": 42.562688632199,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "888 W Big Beaver Rd, Troy, Michigan, 48084",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Ocean Prime Detroit",
+      "input_address": "2915 Coolidge Highway, Troy, MI 48084",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=2915+Coolidge+Highway%2C+Troy%2C+MI+48084&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:56+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "2915 Coolidge Hwy, Troy, Michigan, 48084",
+        "longitude": -83.187395922461,
+        "latitude": 42.560460554697,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "2915 Coolidge Hwy, Troy, Michigan, 48084",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "2915 Coolidge Hwy, Troy, Michigan, 48084",
+          "longitude": -83.187395922461,
+          "latitude": 42.560460554697,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "2915 Coolidge Hwy, Troy, Michigan, 48084",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Panda Express",
+      "input_address": "3110 Rochester Road, Troy, MI 48083",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=3110+Rochester+Road%2C+Troy%2C+MI+48083&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:57+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "3110 Rochester Rd, Troy, Michigan, 48083",
+        "longitude": -83.127832274478,
+        "latitude": 42.56446144663,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "3110 Rochester Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "3110 Rochester Rd, Troy, Michigan, 48083",
+          "longitude": -83.127832274478,
+          "latitude": 42.56446144663,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "3110 Rochester Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Panera Bread",
+      "input_address": "1484 Coolidge Highway, Troy, MI 48084",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=1484+Coolidge+Highway%2C+Troy%2C+MI+48084&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:57+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "1484 Coolidge Hwy, Troy, Michigan, 48084",
+        "longitude": -83.185349061706,
+        "latitude": 42.546178797514,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "1484 Coolidge Hwy, Troy, Michigan, 48084",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "1484 Coolidge Hwy, Troy, Michigan, 48084",
+          "longitude": -83.185349061706,
+          "latitude": 42.546178797514,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "1484 Coolidge Hwy, Troy, Michigan, 48084",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Panera Bread",
+      "input_address": "5569 Crooks Road, Troy, MI 48098",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=5569+Crooks+Road%2C+Troy%2C+MI+48098&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:58+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "5569 Crooks Rd, Troy, Michigan, 48098",
+        "longitude": -83.169651852534,
+        "latitude": 42.599688783567,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "5569 Crooks Rd, Troy, Michigan, 48098",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "5569 Crooks Rd, Troy, Michigan, 48098",
+          "longitude": -83.169651852534,
+          "latitude": 42.599688783567,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "5569 Crooks Rd, Troy, Michigan, 48098",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Paradise Biryani Pointe",
+      "input_address": "4880 Rochester Road, Troy, MI 48085",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=4880+Rochester+Road%2C+Troy%2C+MI+48085&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:58+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "4880 Rochester Rd, Troy, Michigan, 48085",
+        "longitude": -83.128460079026,
+        "latitude": 42.590303566582,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "4880 Rochester Rd, Troy, Michigan, 48085",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "4880 Rochester Rd, Troy, Michigan, 48085",
+          "longitude": -83.128460079026,
+          "latitude": 42.590303566582,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "4880 Rochester Rd, Troy, Michigan, 48085",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Renee's Gourmet Pizzeria",
+      "input_address": "1937 West Maple Road, Troy, MI 48084",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=1937+West+Maple+Road%2C+Troy%2C+MI+48084&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:58+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "1937 W Maple Rd, Troy, Michigan, 48084",
+        "longitude": -83.17183198555,
+        "latitude": 42.546312321232,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "1937 W Maple Rd, Troy, Michigan, 48084",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "1937 W Maple Rd, Troy, Michigan, 48084",
+          "longitude": -83.17183198555,
+          "latitude": 42.546312321232,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "1937 W Maple Rd, Troy, Michigan, 48084",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Ridley's Bakery Cafe",
+      "input_address": "4054 Rochester Road, Troy, MI 48085",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=4054+Rochester+Road%2C+Troy%2C+MI+48085&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:58+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "4054 Rochester Rd, Troy, Michigan, 48085",
+        "longitude": -83.127530106868,
+        "latitude": 42.578548156926,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "4054 Rochester Rd, Troy, Michigan, 48085",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "4054 Rochester Rd, Troy, Michigan, 48085",
+          "longitude": -83.127530106868,
+          "latitude": 42.578548156926,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "4054 Rochester Rd, Troy, Michigan, 48085",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Royal Indian Cuisine",
+      "input_address": "3877 Rochester Road, Troy, MI 48083",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=3877+Rochester+Road%2C+Troy%2C+MI+48083&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:59+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "3877 Rochester Rd, Troy, Michigan, 48083",
+        "longitude": -83.129097103667,
+        "latitude": 42.575615538552,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "3877 Rochester Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "3877 Rochester Rd, Troy, Michigan, 48083",
+          "longitude": -83.129097103667,
+          "latitude": 42.575615538552,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "3877 Rochester Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Seasons 52",
+      "input_address": "1000 West Big Beaver Road, Troy, MI 48084",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=1000+West+Big+Beaver+Road%2C+Troy%2C+MI+48084&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:15:59+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "1000 W Big Beaver Rd, Troy, Michigan, 48084",
+        "longitude": -83.166837963819,
+        "latitude": 42.562790639961,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "1000 W Big Beaver Rd, Troy, Michigan, 48084",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "1000 W Big Beaver Rd, Troy, Michigan, 48084",
+          "longitude": -83.166837963819,
+          "latitude": 42.562790639961,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "1000 W Big Beaver Rd, Troy, Michigan, 48084",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Starbucks",
+      "input_address": "1470 West Maple Road, Troy, MI 48084",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=1470+West+Maple+Road%2C+Troy%2C+MI+48084&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:16:00+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "1470 W Maple Rd, Troy, Michigan, 48084",
+        "longitude": -83.167265273243,
+        "latitude": 42.548385291616,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "1470 W Maple Rd, Troy, Michigan, 48084",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "1470 W Maple Rd, Troy, Michigan, 48084",
+          "longitude": -83.167265273243,
+          "latitude": 42.548385291616,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "1470 W Maple Rd, Troy, Michigan, 48084",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Starbucks",
+      "input_address": "1921 East Big Beaver Road, Troy, MI 48083",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=1921+East+Big+Beaver+Road%2C+Troy%2C+MI+48083&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:16:01+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "1921 E Big Beaver Rd, Troy, Michigan, 48083",
+        "longitude": -83.110256345528,
+        "latitude": 42.564665839339,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "1921 E Big Beaver Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "1921 E Big Beaver Rd, Troy, Michigan, 48083",
+          "longitude": -83.110256345528,
+          "latitude": 42.564665839339,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "1921 E Big Beaver Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Starbucks",
+      "input_address": "5531 Crooks Road, Troy, MI 48098",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=5531+Crooks+Road%2C+Troy%2C+MI+48098&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:16:01+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "5531 Crooks Rd, Troy, Michigan, 48098",
+        "longitude": -83.16977422832,
+        "latitude": 42.599238298181,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "5531 Crooks Rd, Troy, Michigan, 48098",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "5531 Crooks Rd, Troy, Michigan, 48098",
+          "longitude": -83.16977422832,
+          "latitude": 42.599238298181,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "5531 Crooks Rd, Troy, Michigan, 48098",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Subway",
+      "input_address": "20 East Maple Road, Troy, MI 48083",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=20+East+Maple+Road%2C+Troy%2C+MI+48083&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:16:02+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "20 E Maple Rd, Troy, Michigan, 48083",
+        "longitude": -83.146349239697,
+        "latitude": 42.54791142072,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "20 E Maple Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "20 E Maple Rd, Troy, Michigan, 48083",
+          "longitude": -83.146349239697,
+          "latitude": 42.54791142072,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "20 E Maple Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Subway",
+      "input_address": "34 West Square Lake Road, Troy, MI 48098",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=34+West+Square+Lake+Road%2C+Troy%2C+MI+48098&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:16:02+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "34 W Square Lake Rd, Troy, Michigan, 48098",
+        "longitude": -83.150995663903,
+        "latitude": 42.607085016839,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "34 W Square Lake Rd, Troy, Michigan, 48098",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "34 W Square Lake Rd, Troy, Michigan, 48098",
+          "longitude": -83.150995663903,
+          "latitude": 42.607085016839,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "34 W Square Lake Rd, Troy, Michigan, 48098",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        },
+        {
+          "score": 97.74,
+          "matched_address": "W Square Lake Rd, Troy, Michigan, 48098",
+          "longitude": -83.150008862442,
+          "latitude": 42.606421107243,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "W Square Lake Rd, Troy, Michigan, 48098",
+            "Addr_type": "StreetName",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Taco Bell",
+      "input_address": "3268 Rochester Road, Troy, MI 48083",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=3268+Rochester+Road%2C+Troy%2C+MI+48083&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:16:03+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "3268 Rochester Rd, Troy, Michigan, 48083",
+        "longitude": -83.127102126892,
+        "latitude": 42.567108493562,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "3268 Rochester Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "3268 Rochester Rd, Troy, Michigan, 48083",
+          "longitude": -83.127102126892,
+          "latitude": 42.567108493562,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "3268 Rochester Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Taco Bell",
+      "input_address": "41167 Dequindre Road, Troy, MI 48085",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=41167+Dequindre+Road%2C+Troy%2C+MI+48085&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:16:03+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "41167 Dequindre Rd, Troy, Michigan, 48085",
+        "longitude": -83.090617546388,
+        "latitude": 42.594196331964,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "41167 Dequindre Rd, Troy, Michigan, 48085",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "41167 Dequindre Rd, Troy, Michigan, 48085",
+          "longitude": -83.090617546388,
+          "latitude": 42.594196331964,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "41167 Dequindre Rd, Troy, Michigan, 48085",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "The Great Greek Mediterranean Grill",
+      "input_address": "708 West Big Beaver Road, Troy, MI 48084",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=708+West+Big+Beaver+Road%2C+Troy%2C+MI+48084&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:16:03+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "708 W Big Beaver Rd, Troy, Michigan, 48084",
+        "longitude": -83.163537673263,
+        "latitude": 42.562447442935,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "708 W Big Beaver Rd, Troy, Michigan, 48084",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "708 W Big Beaver Rd, Troy, Michigan, 48084",
+          "longitude": -83.163537673263,
+          "latitude": 42.562447442935,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "708 W Big Beaver Rd, Troy, Michigan, 48084",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Tim Hortons",
+      "input_address": "3331 Rochester Road, Troy, MI 48083",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=3331+Rochester+Road%2C+Troy%2C+MI+48083&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:16:04+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "3331 Rochester Rd, Troy, Michigan, 48083",
+        "longitude": -83.128554207798,
+        "latitude": 42.567857332792,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "3331 Rochester Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "3331 Rochester Rd, Troy, Michigan, 48083",
+          "longitude": -83.128554207798,
+          "latitude": 42.567857332792,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "3331 Rochester Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Wendy's",
+      "input_address": "3995 Rochester Road, Troy, MI 48083",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=3995+Rochester+Road%2C+Troy%2C+MI+48083&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:16:04+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "3995 Rochester Rd, Troy, Michigan, 48083",
+        "longitude": -83.129098780048,
+        "latitude": 42.577243346058,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "3995 Rochester Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "3995 Rochester Rd, Troy, Michigan, 48083",
+          "longitude": -83.129098780048,
+          "latitude": 42.577243346058,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "3995 Rochester Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Buffalo Wild Wings",
+      "input_address": "1873 East Big Beaver Road, Troy, MI 48083",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=1873+East+Big+Beaver+Road%2C+Troy%2C+MI+48083&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:16:04+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "1873 E Big Beaver Rd, Troy, Michigan, 48083",
+        "longitude": -83.110256345528,
+        "latitude": 42.564665839339,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "1873 E Big Beaver Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "1873 E Big Beaver Rd, Troy, Michigan, 48083",
+          "longitude": -83.110256345528,
+          "latitude": 42.564665839339,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "1873 E Big Beaver Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "CJ Mahoney's Sports Bar and Grill",
+      "input_address": "2511 Livernois Road, Troy, MI 48083",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=2511+Livernois+Road%2C+Troy%2C+MI+48083&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:16:05+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "2511 Livernois Rd, Troy, Michigan, 48083",
+        "longitude": -83.148447900614,
+        "latitude": 42.557865936569,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "2511 Livernois Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "2511 Livernois Rd, Troy, Michigan, 48083",
+          "longitude": -83.148447900614,
+          "latitude": 42.557865936569,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "2511 Livernois Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Sedona Taphouse",
+      "input_address": "198 East Big Beaver Road, Troy, MI 48083",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=198+East+Big+Beaver+Road%2C+Troy%2C+MI+48083&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:16:06+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "198 E Big Beaver Rd, Troy, Michigan, 48083",
+        "longitude": -83.143223292727,
+        "latitude": 42.562109945604,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "198 E Big Beaver Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "198 E Big Beaver Rd, Troy, Michigan, 48083",
+          "longitude": -83.143223292727,
+          "latitude": 42.562109945604,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "198 E Big Beaver Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Kona Grill",
+      "input_address": "30 East Big Beaver Road, Troy, MI 48083",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=30+East+Big+Beaver+Road%2C+Troy%2C+MI+48083&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:16:06+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "30 E Big Beaver Rd, Troy, Michigan, 48083",
+        "longitude": -83.146924322074,
+        "latitude": 42.56179859981,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "30 E Big Beaver Rd, Troy, Michigan, 48083",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "30 E Big Beaver Rd, Troy, Michigan, 48083",
+          "longitude": -83.146924322074,
+          "latitude": 42.56179859981,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "30 E Big Beaver Rd, Troy, Michigan, 48083",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Granite City Food & Brewery",
+      "input_address": "699 West Big Beaver Road, Troy, MI 48084",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=699+West+Big+Beaver+Road%2C+Troy%2C+MI+48084&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:16:07+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "699 W Big Beaver Rd, Troy, Michigan, 48084",
+        "longitude": -83.161111531389,
+        "latitude": 42.561522751377,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "699 W Big Beaver Rd, Troy, Michigan, 48084",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "699 W Big Beaver Rd, Troy, Michigan, 48084",
+          "longitude": -83.161111531389,
+          "latitude": 42.561522751377,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "699 W Big Beaver Rd, Troy, Michigan, 48084",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    },
+    {
+      "restaurant_name": "Buddy's Pizza",
+      "input_address": "987 Wilshire Drive, Troy, MI 48084",
+      "request_url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=987+Wilshire+Drive%2C+Troy%2C+MI+48084&f=json&outFields=Match_addr%2CAddr_type%2CPlaceName&maxLocations=8&location=-83.148%2C42.578&distance=20000",
+      "provider": "Esri World Geocoding Service",
+      "geocoded_at": "2026-09-23T20:16:07+00:00",
+      "chosen": {
+        "score": 100,
+        "matched_address": "987 Wilshire Dr, Troy, Michigan, 48084",
+        "longitude": -83.166910802558,
+        "latitude": 42.563676565217,
+        "inside_or_on_boundary": true,
+        "attributes": {
+          "Match_addr": "987 Wilshire Dr, Troy, Michigan, 48084",
+          "Addr_type": "PointAddress",
+          "PlaceName": ""
+        }
+      },
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "score": 100,
+          "matched_address": "987 Wilshire Dr, Troy, Michigan, 48084",
+          "longitude": -83.166910802558,
+          "latitude": 42.563676565217,
+          "inside_or_on_boundary": true,
+          "attributes": {
+            "Match_addr": "987 Wilshire Dr, Troy, Michigan, 48084",
+            "Addr_type": "PointAddress",
+            "PlaceName": ""
+          }
+        }
+      ]
+    }
+  ]
+}

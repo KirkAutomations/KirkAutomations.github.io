@@ -1,0 +1,52 @@
+﻿csv_row,restaurant name,input_address,coordinate_source,matched_address,geocode_score,latitude,longitude,inside_official_Troy_Schools_polygon
+2,Alex's Royal Grill,"2495 Livernois Road, Troy, MI 48083",Esri World Geocoder evidence fallback,"2495 Livernois Rd, Troy, Michigan, 48083",100,42.557809987365,-83.14882391279,True
+3,Alibi of Troy,"6700 Rochester Road, Troy, MI 48085",Esri World Geocoder evidence fallback,"6700 Rochester Rd, Troy, Michigan, 48085",100,42.618692318266,-83.129533633184,True
+4,Ashoka Indian Cuisine,"3642 Rochester Road, Troy, MI 48083",Esri World Geocoder evidence fallback,"3642 Rochester Rd, Troy, Michigan, 48083",100,42.571781865587,-83.126989977028,True
+5,Burger King,"950 East Big Beaver Road, Troy, MI 48083",City of Troy SiteAddressLocator,950 E BIG BEAVER,70.97,42.562268363576,-83.129710239886,True
+6,Camp Ticonderoga,"5725 Rochester Road, Troy, MI 48085",Esri World Geocoder evidence fallback,"5725 Rochester Rd, Troy, Michigan, 48085",100,42.602725421359,-83.130180548471,True
+7,Cedar Grille,"5377 Crooks Road, Troy, MI 48098",Esri World Geocoder evidence fallback,"5377 Crooks Rd, Troy, Michigan, 48098",100,42.596552904042,-83.169726870567,True
+8,Chipotle Mexican Grill,"3129 Crooks Road, Troy, MI 48084",Esri World Geocoder evidence fallback,"3129 Crooks Rd, Troy, Michigan, 48084",100,42.563530175278,-83.168234305069,True
+9,Chipotle Mexican Grill,"5322 Crooks Road, Troy, MI 48098",Esri World Geocoder evidence fallback,"5322 Crooks Rd, Troy, Michigan, 48098",100,42.595499131175,-83.167912104711,True
+10,Condado Tacos,"724 West Big Beaver Road, Troy, MI 48084",City of Troy SiteAddressLocator,724 W BIG BEAVER,70.97,42.562448867861,-83.163495931386,True
+11,Cooper's Hawk Winery & Restaurant,"151 East Big Beaver Road, Troy, MI 48083",City of Troy SiteAddressLocator,151 E BIG BEAVER,70.97,42.563110870574,-83.144724659225,True
+12,Dairy Queen Grill & Chill,"2879 West Maple Road, Troy, MI 48084",Esri World Geocoder evidence fallback,"2879 W Maple Rd, Troy, Michigan, 48084",100,42.546773158268,-83.184582285203,True
+13,Domino's Pizza,"3843 Rochester Road, Troy, MI 48083",Esri World Geocoder evidence fallback,"3843 Rochester Rd, Troy, Michigan, 48083",100,42.574902280502,-83.129099199143,True
+14,El Guanaco,"1710 Livernois Road, Troy, MI 48083",Esri World Geocoder evidence fallback,"1710 Livernois Rd, Troy, Michigan, 48083",100,42.549311827193,-83.14679825825,True
+15,Euro Brunch Troy,"3672 Rochester Road, Troy, MI 48083",Esri World Geocoder evidence fallback,"3672 Rochester Rd, Troy, Michigan, 48083",100,42.572110017097,-83.127539997514,True
+16,Fogo de Chao,"301 West Big Beaver Road, Troy, MI 48084",City of Troy SiteAddressLocator,301 W BIG BEAVER,70.97,42.561195815246,-83.152597948516,True
+17,Jersey Mike's Subs,"644 West Big Beaver Road, Troy, MI 48084",City of Troy SiteAddressLocator,644 W BIG BEAVER,70.97,42.562581804846,-83.162158766373,True
+18,Arby's,"1150 Livernois Road, Troy, MI 48084",Esri World Geocoder evidence fallback,"1150 Livernois Rd, Troy, Michigan, 48083",99.51,42.544771266424,-83.146268605788,True
+19,Jimmy John's,"5373 Crooks Road, Troy, MI 48098",Esri World Geocoder evidence fallback,"5373 Crooks Rd, Troy, Michigan, 48098",100,42.596552904042,-83.169726870567,True
+20,Jonny Cakes Cafe,"4916 John R Road, Troy, MI 48085",Esri World Geocoder evidence fallback,"4916 John R Rd, Troy, Michigan, 48085",100,42.591707409635,-83.108613408687,True
+21,La Botana,"5947 John R Road, Troy, MI 48085",Esri World Geocoder evidence fallback,"5947 John R Rd, Troy, Michigan, 48085",100,42.606522172041,-83.110908876691,True
+22,McDonald's,"3039 Rochester Road, Troy, MI 48083",Esri World Geocoder evidence fallback,"3039 Rochester Rd, Troy, Michigan, 48083",100,42.563544173056,-83.129520725054,True
+23,McDonald's,"4819 Rochester Road, Troy, MI 48098",Esri World Geocoder evidence fallback,"4819 Rochester Rd, Troy, Michigan, 48085",98.21,42.589487085393,-83.1297556698,True
+24,McDonald's,"70 West Maple Road, Troy, MI 48084",Esri World Geocoder evidence fallback,"70 W Maple Rd, Troy, Michigan, 48084",100,42.548784354026,-83.148297026357,True
+25,Miso Sushi & Grill,"817 East Big Beaver Road, Troy, MI 48083",City of Troy SiteAddressLocator,817 E BIG BEAVER,70.97,42.564028060329,-83.131699516967,True
+26,Mon Jin Lau,"1515 East Maple Road, Troy, MI 48083",Esri World Geocoder evidence fallback,"1515 E Maple Rd, Troy, Michigan, 48083",100,42.549610013398,-83.121108311751,True
+27,Morton's The Steakhouse,"888 West Big Beaver Road, Troy, MI 48084",City of Troy SiteAddressLocator,888 W BIG BEAVER,70.97,42.562763105411,-83.165235511571,True
+28,Ocean Prime Detroit,"2915 Coolidge Highway, Troy, MI 48084",Esri World Geocoder evidence fallback,"2915 Coolidge Hwy, Troy, Michigan, 48084",100,42.560460554697,-83.187395922461,True
+29,Panda Express,"3110 Rochester Road, Troy, MI 48083",Esri World Geocoder evidence fallback,"3110 Rochester Rd, Troy, Michigan, 48083",100,42.56446144663,-83.127832274478,True
+30,Panera Bread,"1484 Coolidge Highway, Troy, MI 48084",Esri World Geocoder evidence fallback,"1484 Coolidge Hwy, Troy, Michigan, 48084",100,42.546178797514,-83.185349061706,True
+31,Panera Bread,"5569 Crooks Road, Troy, MI 48098",Esri World Geocoder evidence fallback,"5569 Crooks Rd, Troy, Michigan, 48098",100,42.599688783567,-83.169651852534,True
+32,Paradise Biryani Pointe,"4880 Rochester Road, Troy, MI 48085",Esri World Geocoder evidence fallback,"4880 Rochester Rd, Troy, Michigan, 48085",100,42.590303566582,-83.128460079026,True
+33,Renee's Gourmet Pizzeria,"1937 West Maple Road, Troy, MI 48084",Esri World Geocoder evidence fallback,"1937 W Maple Rd, Troy, Michigan, 48084",100,42.546312321232,-83.17183198555,True
+34,Ridley's Bakery Cafe,"4054 Rochester Road, Troy, MI 48085",Esri World Geocoder evidence fallback,"4054 Rochester Rd, Troy, Michigan, 48085",100,42.578548156926,-83.127530106868,True
+35,Royal Indian Cuisine,"3877 Rochester Road, Troy, MI 48083",Esri World Geocoder evidence fallback,"3877 Rochester Rd, Troy, Michigan, 48083",100,42.575615538552,-83.129097103667,True
+36,Seasons 52,"1000 West Big Beaver Road, Troy, MI 48084",City of Troy SiteAddressLocator,1000 W BIG BEAVER,71.88,42.562741061006,-83.166855230541,True
+37,Starbucks,"1470 West Maple Road, Troy, MI 48084",Esri World Geocoder evidence fallback,"1470 W Maple Rd, Troy, Michigan, 48084",100,42.548385291616,-83.167265273243,True
+38,Starbucks,"1921 East Big Beaver Road, Troy, MI 48083",City of Troy SiteAddressLocator,1921 E BIG BEAVER,71.88,42.564774762174,-83.109693333094,True
+39,Starbucks,"5531 Crooks Road, Troy, MI 48098",Esri World Geocoder evidence fallback,"5531 Crooks Rd, Troy, Michigan, 48098",100,42.599238298181,-83.16977422832,True
+40,Subway,"20 East Maple Road, Troy, MI 48083",Esri World Geocoder evidence fallback,"20 E Maple Rd, Troy, Michigan, 48083",100,42.54791142072,-83.146349239697,True
+41,Subway,"34 West Square Lake Road, Troy, MI 48098",City of Troy SiteAddressLocator,34 W SQUARE LAKE,70.97,42.607103666576,-83.150766837948,True
+42,Taco Bell,"3268 Rochester Road, Troy, MI 48083",Esri World Geocoder evidence fallback,"3268 Rochester Rd, Troy, Michigan, 48083",100,42.567108493562,-83.127102126892,True
+43,Taco Bell,"41167 Dequindre Road, Troy, MI 48085",Esri World Geocoder evidence fallback,"41167 Dequindre Rd, Troy, Michigan, 48085",100,42.594196331964,-83.090617546388,True
+44,The Great Greek Mediterranean Grill,"708 West Big Beaver Road, Troy, MI 48084",City of Troy SiteAddressLocator,708 W BIG BEAVER,70.97,42.562456243936,-83.163280600294,True
+45,Tim Hortons,"3331 Rochester Road, Troy, MI 48083",Esri World Geocoder evidence fallback,"3331 Rochester Rd, Troy, Michigan, 48083",100,42.567857332792,-83.128554207798,True
+46,Wendy's,"3995 Rochester Road, Troy, MI 48083",Esri World Geocoder evidence fallback,"3995 Rochester Rd, Troy, Michigan, 48083",100,42.577243346058,-83.129098780048,True
+47,Buffalo Wild Wings,"1873 East Big Beaver Road, Troy, MI 48083",City of Troy SiteAddressLocator,1873 E BIG BEAVER,71.88,42.564695595098,-83.1108146641,True
+48,CJ Mahoney's Sports Bar and Grill,"2511 Livernois Road, Troy, MI 48083",Esri World Geocoder evidence fallback,"2511 Livernois Rd, Troy, Michigan, 48083",100,42.557865936569,-83.148447900614,True
+49,Sedona Taphouse,"198 East Big Beaver Road, Troy, MI 48083",City of Troy SiteAddressLocator,198 E BIG BEAVER,70.97,42.562183748264,-83.143241146182,True
+50,Kona Grill,"30 East Big Beaver Road, Troy, MI 48083",City of Troy SiteAddressLocator,30 E BIG BEAVER,70,42.56178154264,-83.146959358431,True
+51,Granite City Food & Brewery,"699 West Big Beaver Road, Troy, MI 48084",City of Troy SiteAddressLocator,699 W BIG BEAVER,70.97,42.561536246244,-83.16114447227,True
+52,Buddy's Pizza,"987 Wilshire Drive, Troy, MI 48084",Esri World Geocoder evidence fallback,"987 Wilshire Dr, Troy, Michigan, 48084",100,42.563676565217,-83.166910802558,True
