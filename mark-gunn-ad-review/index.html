@@ -1,9 +1,9 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mark Gunn Ad Review</title>
+<title>Mary Gunn Ad Review</title>
 <style>
 :root{--ink:#eaf2ff;--muted:#90a3bd;--panel:#101c2d;--panel2:#14243a;--line:#29415e;--blue:#2ea8ff;--gold:#f6bd22;--red:#ff5c6c;--green:#42d392}
 *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:#07111f;color:var(--ink);font:15px/1.45 Inter,Segoe UI,Arial,sans-serif}
@@ -23,7 +23,7 @@ main{max-width:1500px;margin:auto;padding:28px 24px 180px}.intro{margin:0 0 26px
 </style>
 </head>
 <body>
-<header><div class="top"><div><h1>Mark Gunn Ad Review</h1><div class="sub">Comment directly under any image that needs adjustment.</div></div><div class="status"><div class="pill"><strong id="count">0</strong> of 16 commented</div><button class="danger" id="clear">Clear comments</button></div></div></header>
+<header><div class="top"><div><h1>Mary Gunn Ad Review</h1><div class="sub">Comment directly under any image that needs adjustment.</div></div><div class="status"><div class="pill"><strong id="count">0</strong> of 16 commented</div><button class="danger" id="clear">Clear comments</button></div></div></header>
 <main>
 <p class="intro">Your comments save automatically in this browser. When finished, click <strong>Copy Feedback</strong> and paste the text back into our chat. The output names the exact image and includes your comment.</p>
 <div id="app"></div>
@@ -32,34 +32,34 @@ main{max-width:1500px;margin:auto;padding:28px 24px 180px}.intro{margin:0 0 26px
 <div id="toast">Copied</div>
 <script>
 const ads=[
- {concept:'Academic Rigor',size:'320×50',file:'mary-gunn-academic-rigor-320x50.jpg',src:'assets/proof-01.jpg'},
- {concept:'Academic Rigor',size:'300×250',file:'mary-gunn-academic-rigor-300x250.jpg',src:'assets/proof-02.jpg'},
- {concept:'Academic Rigor',size:'728×90',file:'mary-gunn-academic-rigor-728x90.jpg',src:'assets/proof-03.jpg'},
- {concept:'Academic Rigor',size:'160×600',file:'mary-gunn-academic-rigor-160x600.jpg',src:'assets/proof-04.jpg'},
- {concept:'Academic Rigor',size:'300×50',file:'mary-gunn-academic-rigor-300x50.jpg',src:'assets/proof-05.jpg'},
- {concept:'Academic Rigor',size:'320×480',file:'mary-gunn-academic-rigor-320x480.jpg',src:'assets/proof-06.jpg'},
- {concept:'Academic Rigor',size:'300×600',file:'mary-gunn-academic-rigor-300x600.jpg',src:'assets/proof-07.jpg'},
- {concept:'Academic Rigor',size:'468×60',file:'mary-gunn-academic-rigor-468x60.jpg',src:'assets/proof-08.jpg'},
- {concept:'Leadership',size:'320×50',file:'mary-gunn-leadership-320x50.jpg',src:'assets/proof-09.jpg'},
- {concept:'Leadership',size:'300×250',file:'mary-gunn-leadership-300x250.jpg',src:'assets/proof-10.jpg'},
- {concept:'Leadership',size:'728×90',file:'mary-gunn-leadership-728x90.jpg',src:'assets/proof-11.jpg'},
- {concept:'Leadership',size:'160×600',file:'mary-gunn-leadership-160x600.jpg',src:'assets/proof-12.jpg'},
- {concept:'Leadership',size:'300×50',file:'mary-gunn-leadership-300x50.jpg',src:'assets/proof-13.jpg'},
- {concept:'Leadership',size:'320×480',file:'mary-gunn-leadership-320x480.jpg',src:'assets/proof-14.jpg'},
- {concept:'Leadership',size:'300×600',file:'mary-gunn-leadership-300x600.jpg',src:'assets/proof-15.jpg'},
- {concept:'Leadership',size:'468×60',file:'mary-gunn-leadership-468x60.jpg',src:'assets/proof-16.jpg'}
+ {concept:'Academic Rigor',size:'320Ã—50',file:'mary-gunn-academic-rigor-320x50.jpg',src:'assets/proof-01.jpg'},
+ {concept:'Academic Rigor',size:'300Ã—250',file:'mary-gunn-academic-rigor-300x250.jpg',src:'assets/proof-02.jpg'},
+ {concept:'Academic Rigor',size:'728Ã—90',file:'mary-gunn-academic-rigor-728x90.jpg',src:'assets/proof-03.jpg'},
+ {concept:'Academic Rigor',size:'160Ã—600',file:'mary-gunn-academic-rigor-160x600.jpg',src:'assets/proof-04.jpg'},
+ {concept:'Academic Rigor',size:'300Ã—50',file:'mary-gunn-academic-rigor-300x50.jpg',src:'assets/proof-05.jpg'},
+ {concept:'Academic Rigor',size:'320Ã—480',file:'mary-gunn-academic-rigor-320x480.jpg',src:'assets/proof-06.jpg'},
+ {concept:'Academic Rigor',size:'300Ã—600',file:'mary-gunn-academic-rigor-300x600.jpg',src:'assets/proof-07.jpg'},
+ {concept:'Academic Rigor',size:'468Ã—60',file:'mary-gunn-academic-rigor-468x60.jpg',src:'assets/proof-08.jpg'},
+ {concept:'Leadership',size:'320Ã—50',file:'mary-gunn-leadership-320x50.jpg',src:'assets/proof-09.jpg'},
+ {concept:'Leadership',size:'300Ã—250',file:'mary-gunn-leadership-300x250.jpg',src:'assets/proof-10.jpg'},
+ {concept:'Leadership',size:'728Ã—90',file:'mary-gunn-leadership-728x90.jpg',src:'assets/proof-11.jpg'},
+ {concept:'Leadership',size:'160Ã—600',file:'mary-gunn-leadership-160x600.jpg',src:'assets/proof-12.jpg'},
+ {concept:'Leadership',size:'300Ã—50',file:'mary-gunn-leadership-300x50.jpg',src:'assets/proof-13.jpg'},
+ {concept:'Leadership',size:'320Ã—480',file:'mary-gunn-leadership-320x480.jpg',src:'assets/proof-14.jpg'},
+ {concept:'Leadership',size:'300Ã—600',file:'mary-gunn-leadership-300x600.jpg',src:'assets/proof-15.jpg'},
+ {concept:'Leadership',size:'468Ã—60',file:'mary-gunn-leadership-468x60.jpg',src:'assets/proof-16.jpg'}
 ];
 const KEY='mark-gunn-review-v1'; let notes={}; try{notes=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
 const app=document.getElementById('app');
 for(const concept of ['Academic Rigor','Leadership']){
  const section=document.createElement('section');section.className='group';section.innerHTML=`<h2>${concept}</h2><div class="grid"></div>`;const grid=section.querySelector('.grid');
- ads.forEach((ad,i)=>{if(ad.concept!==concept)return;const card=document.createElement('article');card.className='card';card.dataset.index=i;card.innerHTML=`<div class="card-head"><div><div class="name">${ad.concept}</div><div class="file">${ad.file}</div></div><div class="dimensions">${ad.size}</div></div><div class="preview"><img src="${ad.src}?v=20260929a" alt="${ad.concept} ${ad.size}"></div><div class="comment"><label for="note-${i}">Adjustment notes</label><textarea id="note-${i}" placeholder="Example: Make the headline larger and move the portrait left."></textarea><div class="hint">Saved automatically</div></div>`;
+ ads.forEach((ad,i)=>{if(ad.concept!==concept)return;const card=document.createElement('article');card.className='card';card.dataset.index=i;card.innerHTML=`<div class="card-head"><div><div class="name">${ad.concept}</div><div class="file">${ad.file}</div></div><div class="dimensions">${ad.size}</div></div><div class="preview"><img src="${ad.src}?v=20260928b" alt="${ad.concept} ${ad.size}"></div><div class="comment"><label for="note-${i}">Adjustment notes</label><textarea id="note-${i}" placeholder="Example: Make the headline larger and move the portrait left."></textarea><div class="hint">Saved automatically</div></div>`;
  const ta=card.querySelector('textarea');ta.value=notes[ad.file]||'';ta.addEventListener('input',()=>{notes[ad.file]=ta.value;save();refresh()});grid.appendChild(card);
  });app.appendChild(section);
 }
 function save(){localStorage.setItem(KEY,JSON.stringify(notes))}
 function entries(){return ads.filter(a=>(notes[a.file]||'').trim())}
-function feedback(){const chosen=entries();if(!chosen.length)return 'MARK GUNN AD REVISION NOTES\n\nNo images were marked for adjustment.';return 'MARK GUNN AD REVISION NOTES\n\n'+chosen.map((a,i)=>`${i+1}. IMAGE: ${a.file}\n   CONCEPT: ${a.concept}\n   SIZE: ${a.size}\n   COMMENT: ${(notes[a.file]||'').trim()}`).join('\n\n');}
+function feedback(){const chosen=entries();if(!chosen.length)return 'MARY GUNN AD REVISION NOTES\n\nNo images were marked for adjustment.';return 'MARY GUNN AD REVISION NOTES\n\n'+chosen.map((a,i)=>`${i+1}. IMAGE: ${a.file}\n   CONCEPT: ${a.concept}\n   SIZE: ${a.size}\n   COMMENT: ${(notes[a.file]||'').trim()}`).join('\n\n');}
 function refresh(){const n=entries().length;document.getElementById('count').textContent=n;document.getElementById('bottomCount').textContent=n;document.querySelectorAll('.card').forEach(c=>c.classList.toggle('has-note',!!(notes[ads[+c.dataset.index].file]||'').trim()))}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1500)}
 document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(feedback());toast('Feedback copied')}catch(e){prompt('Copy this feedback:',feedback())}};
@@ -70,3 +70,4 @@ refresh();
 </script>
 </body>
 </html>
+
