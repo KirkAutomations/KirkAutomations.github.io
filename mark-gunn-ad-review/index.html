@@ -32,28 +32,28 @@ main{max-width:1500px;margin:auto;padding:28px 24px 180px}.intro{margin:0 0 26px
 <div id="toast">Copied</div>
 <script>
 const ads=[
- {concept:'Academic Rigor',size:'320Ã—50',file:'mary-gunn-academic-rigor-320x50.jpg',src:'assets/proof-01.jpg'},
- {concept:'Academic Rigor',size:'300Ã—250',file:'mary-gunn-academic-rigor-300x250.jpg',src:'assets/proof-02.jpg'},
- {concept:'Academic Rigor',size:'728Ã—90',file:'mary-gunn-academic-rigor-728x90.jpg',src:'assets/proof-03.jpg'},
- {concept:'Academic Rigor',size:'160Ã—600',file:'mary-gunn-academic-rigor-160x600.jpg',src:'assets/proof-04.jpg'},
- {concept:'Academic Rigor',size:'300Ã—50',file:'mary-gunn-academic-rigor-300x50.jpg',src:'assets/proof-05.jpg'},
- {concept:'Academic Rigor',size:'320Ã—480',file:'mary-gunn-academic-rigor-320x480.jpg',src:'assets/proof-06.jpg'},
- {concept:'Academic Rigor',size:'300Ã—600',file:'mary-gunn-academic-rigor-300x600.jpg',src:'assets/proof-07.jpg'},
- {concept:'Academic Rigor',size:'468Ã—60',file:'mary-gunn-academic-rigor-468x60.jpg',src:'assets/proof-08.jpg'},
- {concept:'Leadership',size:'320Ã—50',file:'mary-gunn-leadership-320x50.jpg',src:'assets/proof-09.jpg'},
- {concept:'Leadership',size:'300Ã—250',file:'mary-gunn-leadership-300x250.jpg',src:'assets/proof-10.jpg'},
- {concept:'Leadership',size:'728Ã—90',file:'mary-gunn-leadership-728x90.jpg',src:'assets/proof-11.jpg'},
- {concept:'Leadership',size:'160Ã—600',file:'mary-gunn-leadership-160x600.jpg',src:'assets/proof-12.jpg'},
- {concept:'Leadership',size:'300Ã—50',file:'mary-gunn-leadership-300x50.jpg',src:'assets/proof-13.jpg'},
- {concept:'Leadership',size:'320Ã—480',file:'mary-gunn-leadership-320x480.jpg',src:'assets/proof-14.jpg'},
- {concept:'Leadership',size:'300Ã—600',file:'mary-gunn-leadership-300x600.jpg',src:'assets/proof-15.jpg'},
- {concept:'Leadership',size:'468Ã—60',file:'mary-gunn-leadership-468x60.jpg',src:'assets/proof-16.jpg'}
+ {concept:'Academic Rigor',size:'320×50',file:'mary-gunn-academic-rigor-320x50.jpg',src:'assets/proof-01.jpg'},
+ {concept:'Academic Rigor',size:'300×250',file:'mary-gunn-academic-rigor-300x250.jpg',src:'assets/proof-02.jpg'},
+ {concept:'Academic Rigor',size:'728×90',file:'mary-gunn-academic-rigor-728x90.jpg',src:'assets/proof-03.jpg'},
+ {concept:'Academic Rigor',size:'160×600',file:'mary-gunn-academic-rigor-160x600.jpg',src:'assets/proof-04.jpg'},
+ {concept:'Academic Rigor',size:'300×50',file:'mary-gunn-academic-rigor-300x50.jpg',src:'assets/proof-05.jpg'},
+ {concept:'Academic Rigor',size:'320×480',file:'mary-gunn-academic-rigor-320x480.jpg',src:'assets/proof-06.jpg'},
+ {concept:'Academic Rigor',size:'300×600',file:'mary-gunn-academic-rigor-300x600.jpg',src:'assets/proof-07.jpg'},
+ {concept:'Academic Rigor',size:'468×60',file:'mary-gunn-academic-rigor-468x60.jpg',src:'assets/proof-08.jpg'},
+ {concept:'Leadership',size:'320×50',file:'mary-gunn-leadership-320x50.jpg',src:'assets/proof-09.jpg'},
+ {concept:'Leadership',size:'300×250',file:'mary-gunn-leadership-300x250.jpg',src:'assets/proof-10.jpg'},
+ {concept:'Leadership',size:'728×90',file:'mary-gunn-leadership-728x90.jpg',src:'assets/proof-11.jpg'},
+ {concept:'Leadership',size:'160×600',file:'mary-gunn-leadership-160x600.jpg',src:'assets/proof-12.jpg'},
+ {concept:'Leadership',size:'300×50',file:'mary-gunn-leadership-300x50.jpg',src:'assets/proof-13.jpg'},
+ {concept:'Leadership',size:'320×480',file:'mary-gunn-leadership-320x480.jpg',src:'assets/proof-14.jpg'},
+ {concept:'Leadership',size:'300×600',file:'mary-gunn-leadership-300x600.jpg',src:'assets/proof-15.jpg'},
+ {concept:'Leadership',size:'468×60',file:'mary-gunn-leadership-468x60.jpg',src:'assets/proof-16.jpg'}
 ];
 const KEY='mark-gunn-review-v1'; let notes={}; try{notes=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
 const app=document.getElementById('app');
 for(const concept of ['Academic Rigor','Leadership']){
  const section=document.createElement('section');section.className='group';section.innerHTML=`<h2>${concept}</h2><div class="grid"></div>`;const grid=section.querySelector('.grid');
- ads.forEach((ad,i)=>{if(ad.concept!==concept)return;const card=document.createElement('article');card.className='card';card.dataset.index=i;card.innerHTML=`<div class="card-head"><div><div class="name">${ad.concept}</div><div class="file">${ad.file}</div></div><div class="dimensions">${ad.size}</div></div><div class="preview"><img src="${ad.src}?v=20260928b" alt="${ad.concept} ${ad.size}"></div><div class="comment"><label for="note-${i}">Adjustment notes</label><textarea id="note-${i}" placeholder="Example: Make the headline larger and move the portrait left."></textarea><div class="hint">Saved automatically</div></div>`;
+ ads.forEach((ad,i)=>{if(ad.concept!==concept)return;const card=document.createElement('article');card.className='card';card.dataset.index=i;card.innerHTML=`<div class="card-head"><div><div class="name">${ad.concept}</div><div class="file">${ad.file}</div></div><div class="dimensions">${ad.size}</div></div><div class="preview"><img src="${ad.src}?v=20261002c" alt="${ad.concept} ${ad.size}"></div><div class="comment"><label for="note-${i}">Adjustment notes</label><textarea id="note-${i}" placeholder="Example: Make the headline larger and move the portrait left."></textarea><div class="hint">Saved automatically</div></div>`;
  const ta=card.querySelector('textarea');ta.value=notes[ad.file]||'';ta.addEventListener('input',()=>{notes[ad.file]=ta.value;save();refresh()});grid.appendChild(card);
  });app.appendChild(section);
 }
