@@ -1,0 +1,24 @@
+STATUS: PASS
+Ads checked: 16/16
+Exact dimensions: 16/16
+Below 150,000 bytes: 16/16
+Largest file: 71641 bytes
+Smallest legal font: 8 px
+Exact disclaimer in manifest: True
+
+PASS    320x50   13586 bytes  legal 8px/1L  academic-rigor/mary-gunn-academic-rigor-320x50.jpg
+PASS   300x250   40940 bytes  legal 8px/1L  academic-rigor/mary-gunn-academic-rigor-300x250.jpg
+PASS    728x90   33204 bytes  legal 8px/1L  academic-rigor/mary-gunn-academic-rigor-728x90.jpg
+PASS   160x600   49111 bytes  legal 12px/3L  academic-rigor/mary-gunn-academic-rigor-160x600.jpg
+PASS    300x50   12644 bytes  legal 8px/1L  academic-rigor/mary-gunn-academic-rigor-300x50.jpg
+PASS   320x480   59655 bytes  legal 8px/1L  academic-rigor/mary-gunn-academic-rigor-320x480.jpg
+PASS   300x600   71641 bytes  legal 8px/1L  academic-rigor/mary-gunn-academic-rigor-300x600.jpg
+PASS    468x60   17572 bytes  legal 8px/1L  academic-rigor/mary-gunn-academic-rigor-468x60.jpg
+PASS    320x50   13140 bytes  legal 8px/1L  leadership/mary-gunn-leadership-320x50.jpg
+PASS   300x250   39275 bytes  legal 8px/1L  leadership/mary-gunn-leadership-300x250.jpg
+PASS    728x90   30289 bytes  legal 8px/1L  leadership/mary-gunn-leadership-728x90.jpg
+PASS   160x600   47288 bytes  legal 12px/3L  leadership/mary-gunn-leadership-160x600.jpg
+PASS    300x50   12539 bytes  legal 8px/1L  leadership/mary-gunn-leadership-300x50.jpg
+PASS   320x480   55758 bytes  legal 8px/1L  leadership/mary-gunn-leadership-320x480.jpg
+PASS   300x600   66799 bytes  legal 8px/1L  leadership/mary-gunn-leadership-300x600.jpg
+PASS    468x60   16404 bytes  legal 8px/1L  leadership/mary-gunn-leadership-468x60.jpg

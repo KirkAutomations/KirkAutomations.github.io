@@ -1,0 +1,192 @@
+{
+  "status": "PASS",
+  "ads_checked": 16,
+  "dimension_passes": 16,
+  "under_150kb": 16,
+  "largest_bytes": 71641,
+  "smallest_legal_font_px": 8,
+  "disclaimer_exact": true,
+  "contact_sheets": [
+    "output/academic-rigor-contact-sheet.jpg",
+    "output/leadership-contact-sheet.jpg"
+  ],
+  "failures": [],
+  "files": [
+    {
+      "file": "academic-rigor/mary-gunn-academic-rigor-320x50.jpg",
+      "dimensions": "320x50",
+      "bytes": 13586,
+      "kilobytes": 13.27,
+      "sha256": "6901153d42e753b5fb40b6f220a6ca91a67807ca3c85cadf460da48c4d4ae4b6",
+      "family": "micro",
+      "legal_font_px": 8,
+      "legal_lines": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "academic-rigor/mary-gunn-academic-rigor-300x250.jpg",
+      "dimensions": "300x250",
+      "bytes": 40940,
+      "kilobytes": 39.98,
+      "sha256": "dbf910a7c41fdf137d03e65fc71f95e9994de59965c6b8c415d5c5234c573093",
+      "family": "square",
+      "legal_font_px": 8,
+      "legal_lines": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "academic-rigor/mary-gunn-academic-rigor-728x90.jpg",
+      "dimensions": "728x90",
+      "bytes": 33204,
+      "kilobytes": 32.43,
+      "sha256": "47b0de2259ae9e8593fa6017fc5411f9f46d5f5ecb4070937bee0714f2983818",
+      "family": "leaderboard",
+      "legal_font_px": 8,
+      "legal_lines": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "academic-rigor/mary-gunn-academic-rigor-160x600.jpg",
+      "dimensions": "160x600",
+      "bytes": 49111,
+      "kilobytes": 47.96,
+      "sha256": "5fadcf5c3925435a277345ddbf8051d4db3eab6013dd9871fae4d8ab816de000",
+      "family": "tower",
+      "legal_font_px": 12,
+      "legal_lines": 3,
+      "status": "PASS"
+    },
+    {
+      "file": "academic-rigor/mary-gunn-academic-rigor-300x50.jpg",
+      "dimensions": "300x50",
+      "bytes": 12644,
+      "kilobytes": 12.35,
+      "sha256": "eb210832db1f6ae46408158af518f998663056800efa90cc8718dcb5bf094d8b",
+      "family": "micro",
+      "legal_font_px": 8,
+      "legal_lines": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "academic-rigor/mary-gunn-academic-rigor-320x480.jpg",
+      "dimensions": "320x480",
+      "bytes": 59655,
+      "kilobytes": 58.26,
+      "sha256": "d0540d2cadf2d47a7ce11a3d6a3bc98565951a5282856e277afd3cb5fdf1b031",
+      "family": "vertical-card",
+      "legal_font_px": 8,
+      "legal_lines": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "academic-rigor/mary-gunn-academic-rigor-300x600.jpg",
+      "dimensions": "300x600",
+      "bytes": 71641,
+      "kilobytes": 69.96,
+      "sha256": "d65d7c4fc79b49518ac18b9d498db4b777a12f011f8e2b6aeefbae66625f6a80",
+      "family": "vertical-card",
+      "legal_font_px": 8,
+      "legal_lines": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "academic-rigor/mary-gunn-academic-rigor-468x60.jpg",
+      "dimensions": "468x60",
+      "bytes": 17572,
+      "kilobytes": 17.16,
+      "sha256": "1314483a46ddc052bbc6cf14ef3ee35171315bb860dda86e9b9f321a8b45e012",
+      "family": "micro",
+      "legal_font_px": 8,
+      "legal_lines": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "leadership/mary-gunn-leadership-320x50.jpg",
+      "dimensions": "320x50",
+      "bytes": 13140,
+      "kilobytes": 12.83,
+      "sha256": "8d0d513eb380d6e11bc30611b279cc9a2ce3e0efd25928830285f6e6f9c5b6bf",
+      "family": "micro",
+      "legal_font_px": 8,
+      "legal_lines": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "leadership/mary-gunn-leadership-300x250.jpg",
+      "dimensions": "300x250",
+      "bytes": 39275,
+      "kilobytes": 38.35,
+      "sha256": "dd174c7a022c89ae188e3d3d419da14f0d0e21bea0362b9de64de749efe00d7e",
+      "family": "square",
+      "legal_font_px": 8,
+      "legal_lines": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "leadership/mary-gunn-leadership-728x90.jpg",
+      "dimensions": "728x90",
+      "bytes": 30289,
+      "kilobytes": 29.58,
+      "sha256": "433158e082b88ef70d8d587d46fbd7264d802e395fe7a9a2008b834ef892bf3b",
+      "family": "leaderboard",
+      "legal_font_px": 8,
+      "legal_lines": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "leadership/mary-gunn-leadership-160x600.jpg",
+      "dimensions": "160x600",
+      "bytes": 47288,
+      "kilobytes": 46.18,
+      "sha256": "e917f6578445736ad4a7f0fa7db9068a9e060ea654041abd5afd3f5978aa0503",
+      "family": "tower",
+      "legal_font_px": 12,
+      "legal_lines": 3,
+      "status": "PASS"
+    },
+    {
+      "file": "leadership/mary-gunn-leadership-300x50.jpg",
+      "dimensions": "300x50",
+      "bytes": 12539,
+      "kilobytes": 12.25,
+      "sha256": "3ceedfc581425f33fb0d3acbce0e7ca8e7ef014cb58eb28b066a36055fb1c59a",
+      "family": "micro",
+      "legal_font_px": 8,
+      "legal_lines": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "leadership/mary-gunn-leadership-320x480.jpg",
+      "dimensions": "320x480",
+      "bytes": 55758,
+      "kilobytes": 54.45,
+      "sha256": "a1b2f2b133aa1974fb993df0c843b8b49be75b3d598bfa68cf5006e554338ca0",
+      "family": "vertical-card",
+      "legal_font_px": 8,
+      "legal_lines": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "leadership/mary-gunn-leadership-300x600.jpg",
+      "dimensions": "300x600",
+      "bytes": 66799,
+      "kilobytes": 65.23,
+      "sha256": "d90bc170d6eda27a3eaf8a5cc518cef2902a860afa94dfcdd3476b23efe4c71a",
+      "family": "vertical-card",
+      "legal_font_px": 8,
+      "legal_lines": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "leadership/mary-gunn-leadership-468x60.jpg",
+      "dimensions": "468x60",
+      "bytes": 16404,
+      "kilobytes": 16.02,
+      "sha256": "cc30fea3066b3aebb855239eb4608884331b3d3d3bcb5603bd8a15a805c22b5e",
+      "family": "micro",
+      "legal_font_px": 8,
+      "legal_lines": 1,
+      "status": "PASS"
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "status": "PASS",
+  "ads_checked": 16,
+  "release_sha256": "85255c0ce555486d4ec810fd285bf2f9977bf0bf442d2210ff3726b0cdb57c2b",
+  "files": [
+    {
+      "file": "academic-rigor/mary-gunn-academic-rigor-320x50.jpg",
+      "sha256": "6901153d42e753b5fb40b6f220a6ca91a67807ca3c85cadf460da48c4d4ae4b6",
+      "bytes": 13586
+    },
+    {
+      "file": "academic-rigor/mary-gunn-academic-rigor-300x250.jpg",
+      "sha256": "dbf910a7c41fdf137d03e65fc71f95e9994de59965c6b8c415d5c5234c573093",
+      "bytes": 40940
+    },
+    {
+      "file": "academic-rigor/mary-gunn-academic-rigor-728x90.jpg",
+      "sha256": "47b0de2259ae9e8593fa6017fc5411f9f46d5f5ecb4070937bee0714f2983818",
+      "bytes": 33204
+    },
+    {
+      "file": "academic-rigor/mary-gunn-academic-rigor-160x600.jpg",
+      "sha256": "5fadcf5c3925435a277345ddbf8051d4db3eab6013dd9871fae4d8ab816de000",
+      "bytes": 49111
+    },
+    {
+      "file": "academic-rigor/mary-gunn-academic-rigor-300x50.jpg",
+      "sha256": "eb210832db1f6ae46408158af518f998663056800efa90cc8718dcb5bf094d8b",
+      "bytes": 12644
+    },
+    {
+      "file": "academic-rigor/mary-gunn-academic-rigor-320x480.jpg",
+      "sha256": "d0540d2cadf2d47a7ce11a3d6a3bc98565951a5282856e277afd3cb5fdf1b031",
+      "bytes": 59655
+    },
+    {
+      "file": "academic-rigor/mary-gunn-academic-rigor-300x600.jpg",
+      "sha256": "d65d7c4fc79b49518ac18b9d498db4b777a12f011f8e2b6aeefbae66625f6a80",
+      "bytes": 71641
+    },
+    {
+      "file": "academic-rigor/mary-gunn-academic-rigor-468x60.jpg",
+      "sha256": "1314483a46ddc052bbc6cf14ef3ee35171315bb860dda86e9b9f321a8b45e012",
+      "bytes": 17572
+    },
+    {
+      "file": "leadership/mary-gunn-leadership-320x50.jpg",
+      "sha256": "8d0d513eb380d6e11bc30611b279cc9a2ce3e0efd25928830285f6e6f9c5b6bf",
+      "bytes": 13140
+    },
+    {
+      "file": "leadership/mary-gunn-leadership-300x250.jpg",
+      "sha256": "dd174c7a022c89ae188e3d3d419da14f0d0e21bea0362b9de64de749efe00d7e",
+      "bytes": 39275
+    },
+    {
+      "file": "leadership/mary-gunn-leadership-728x90.jpg",
+      "sha256": "433158e082b88ef70d8d587d46fbd7264d802e395fe7a9a2008b834ef892bf3b",
+      "bytes": 30289
+    },
+    {
+      "file": "leadership/mary-gunn-leadership-160x600.jpg",
+      "sha256": "e917f6578445736ad4a7f0fa7db9068a9e060ea654041abd5afd3f5978aa0503",
+      "bytes": 47288
+    },
+    {
+      "file": "leadership/mary-gunn-leadership-300x50.jpg",
+      "sha256": "3ceedfc581425f33fb0d3acbce0e7ca8e7ef014cb58eb28b066a36055fb1c59a",
+      "bytes": 12539
+    },
+    {
+      "file": "leadership/mary-gunn-leadership-320x480.jpg",
+      "sha256": "a1b2f2b133aa1974fb993df0c843b8b49be75b3d598bfa68cf5006e554338ca0",
+      "bytes": 55758
+    },
+    {
+      "file": "leadership/mary-gunn-leadership-300x600.jpg",
+      "sha256": "d90bc170d6eda27a3eaf8a5cc518cef2902a860afa94dfcdd3476b23efe4c71a",
+      "bytes": 66799
+    },
+    {
+      "file": "leadership/mary-gunn-leadership-468x60.jpg",
+      "sha256": "cc30fea3066b3aebb855239eb4608884331b3d3d3bcb5603bd8a15a805c22b5e",
+      "bytes": 16404
+    }
+  ],
+  "failures": []
+}
